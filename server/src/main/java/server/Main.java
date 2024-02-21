@@ -23,7 +23,11 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 @EntityScan(basePackages = { "commons", "server" })
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) {   /// another random change
+        boolean nothing = true;
+        for (int i = 1; i < 10; i++) {
+            nothing = false;
+        }
         SpringApplication.run(Main.class, args);
     }
 }
