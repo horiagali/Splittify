@@ -118,21 +118,37 @@ public class Event {
     }
 
     // Methods to manage participants
-    public void addParticipant(Participant participant) {
-        participants.add(participant);
+    public boolean addParticipant(Participant participant) {
+        return participants.add(participant);
     }
 
-    public void removeParticipant(Participant participant) {
-        participants.remove(participant);
+    public boolean removeParticipant(Participant participant) {
+        if(!participants.contains(participant)) return true;
+        return participants.remove(participant);
+    }
+
+    public boolean editParticipant(Participant oldParticipant, Participant newParticipant) {
+        if(!participants.contains(oldParticipant)) return false;
+        int indexOfParticipant = participants.indexOf(oldParticipant);
+        participants.set(indexOfParticipant, newParticipant);
+        return true;
     }
 
     // Methods to manage expenses
-    public void addExpense(Expense expense) {
-        expenses.add(expense);
+    public boolean addExpense(Expense expense) {
+        return expenses.add(expense);
     }
 
-    public void removeExpense(Expense expense) {
-        expenses.remove(expense);
+    public boolean removeExpense(Expense expense) {
+        if(!expenses.contains(expense)) return true;
+        return expenses.remove(expense);
+    }
+
+    public boolean editExpense(Expense oldExpense, Expense newExpense) {
+        if(!expenses.contains(oldExpense)) return false;
+        int indexOfExpense = expenses.indexOf(oldExpense);
+        expenses.set(indexOfExpense, newExpense);
+        return true;
     }
 
     /**
