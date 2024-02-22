@@ -38,9 +38,13 @@ public class MainCtrl {
     private AddExpensesCtrl addExpensesCtrl;
     private Scene addExpenses;
 
+    private Scene contactDetails;
+    private ContactDetailsCtrl contactDetailsCtrl;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
-                           Pair<StartPageCtrl, Parent> startPage, Pair<AddExpensesCtrl, Parent> addExpense) {
+                           Pair<StartPageCtrl, Parent> startPage, Pair<AddExpensesCtrl, Parent> addExpense,
+                           Pair<ContactDetailsCtrl, Parent> contactDetails) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -56,6 +60,9 @@ public class MainCtrl {
 
         this.addExpensesCtrl = addExpense.getKey();
         this.addExpenses = new Scene(addExpense.getValue());
+
+        this.contactDetailsCtrl = contactDetails.getKey();
+        this.contactDetails = new Scene(contactDetails.getValue());
 
         showOverview();
         primaryStage.show();
@@ -87,5 +94,10 @@ public class MainCtrl {
         primaryStage.setTitle("Expenses: Add Expense");
         primaryStage.setScene(addExpenses);
         // Additional setup for the Add Expense page, if needed
+    }
+
+    public void goToContact() {
+        primaryStage.setTitle("Contact Details");
+        primaryStage.setScene(contactDetails);
     }
 }
