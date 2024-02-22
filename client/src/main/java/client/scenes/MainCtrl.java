@@ -83,7 +83,7 @@ public class MainCtrl {
         primaryStage.setScene(startPage);
     }
 
-    public void showAddExpense() {
+    public void showAddExpenses() {
         primaryStage.setTitle("Expenses: Add Expense");
         primaryStage.setScene(addExpenses);
         // Additional setup for the Add Expense page, if needed

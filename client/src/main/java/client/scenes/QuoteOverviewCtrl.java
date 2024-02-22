@@ -74,4 +74,9 @@ public class QuoteOverviewCtrl implements Initializable {
     public void startPage(){
         mainCtrl.startPage();
     }
+
+
+    public void showAddExpenses(){
+        mainCtrl.showAddExpenses();
+    }
 }
