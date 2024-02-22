@@ -6,24 +6,34 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpensesCtrl">
+<?import javafx.scene.control.CheckBox?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="client.scenes.AddExpensesCtrl">
     <children>
+        <Text layoutX="30.0" layoutY="50.0" text="Who paid?"/>
+        <TextField layoutX="180.0" layoutY="50.0" promptText="Enter name"/>
 
-        <Button layoutX="530.0" layoutY="349.0" mnemonicParsing="false" onAction="#back" text="Back" />
+        <Text layoutX="30.0" layoutY="100.0" text="What for?"/>
+        <TextField layoutX="180.0" layoutY="100.0" promptText="Enter purpose"/>
+
+        <Text layoutX="30.0" layoutY="150.0" text="How Much?"/>
+        <TextField layoutX="180.0" layoutY="150.0" promptText="Enter amount"/>
+
+        <Text layoutX="30.0" layoutY="200.0" text="When?"/>
+        <TextField layoutX="180.0" layoutY="200.0" promptText="Enter date"/>
+
+        <Text layoutX="30.0" layoutY="250.0" text="How to split?"/>
+        <CheckBox layoutX="180.0" layoutY="250.0" text="Equally"/>
+        <CheckBox layoutX="280.0" layoutY="250.0" text="Only some people"/>
+
+        <Button layoutX="30.0" layoutY="300.0" mnemonicParsing="false" onAction="#back" text="Add"/>
+
+        <Button layoutX="120.0" layoutY="300.0" mnemonicParsing="false" onAction="#back"
+                text="Abort"/>  <!--            TODO add actual functionality -->
+        <Button layoutX="530.0" layoutY="349.0" mnemonicParsing="false" onAction="#back" text="Back"/>
     </children>
 </AnchorPane>
 
-        <!--<?xml version="1.0" encoding="UTF-8"?>-->
 
-<!--<?import java.lang.*?>-->
-<!--<?import java.util.*?>-->
-<!--<?import javafx.scene.*?>-->
-<!--<?import javafx.scene.control.*?>-->
-<!--<?import javafx.scene.layout.*?>-->
 
-<!--<AnchorPane xmlns="http://javafx.com/javafx"-->
-<!--            xmlns:fx="http://javafx.com/fxml"-->
-<!--            fx:controller="client.scenes.AddExpenses"-->
-<!--            prefHeight="400.0" prefWidth="600.0">-->
-
-<!--</AnchorPane>-->
