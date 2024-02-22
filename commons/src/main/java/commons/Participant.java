@@ -18,6 +18,9 @@ public class Participant {
     private String name;
     private String email;
 
+    @ManyToOne
+    private Event event;
+
     /**
      * Creates a participant
      * @param name name of participant
@@ -56,6 +59,14 @@ public class Participant {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     // Equals, hashCode, and toString methods
