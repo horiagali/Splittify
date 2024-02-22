@@ -20,7 +20,7 @@ public class Participant {
 
     private String name;
     private String email;
-    private int debt;
+    private double debt;
 
     @ManyToOne
     private Event event;
@@ -74,11 +74,11 @@ public class Participant {
         this.event = event;
     }
 
-    public int getDebt() {
+    public double getDebt() {
         return debt;
     }
 
-    public void setDebt(int debt) {
+    public void setDebt(double debt) {
         this.debt = debt;
     }
     
