@@ -20,6 +20,7 @@ public class Participant {
 
     private String name;
     private String email;
+    private int debt;
 
     @ManyToOne
     private Event event;
@@ -32,6 +33,7 @@ public class Participant {
     public Participant(String name, String email) {
         this.name = name;
         this.email = email;
+        this.debt = 0;
     }
 
     public Participant() {
@@ -71,6 +73,15 @@ public class Participant {
     public void setEvent(Event event) {
         this.event = event;
     }
+
+    public int getDebt() {
+        return debt;
+    }
+
+    public void setDebt(int debt) {
+        this.debt = debt;
+    }
+    
 
     // Equals, hashCode, and toString methods
 
