@@ -12,9 +12,8 @@ public class StartPageCtrl {
         this.server = server;
 
     }
-
-    ///public void okay() {
-     ///   mainCtrl.showOverview();
-    /// }
+    public void back() {
+        mainCtrl.showOverview();
+    }
 
 }
