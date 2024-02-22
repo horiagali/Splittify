@@ -136,16 +136,20 @@ public class Event {
 
     // Methods to manage expenses
     public boolean addExpense(Expense expense) {
+        expense.settleDebts(); //make sure the debts of people involved are recalculated
         return expenses.add(expense);
     }
 
     public boolean removeExpense(Expense expense) {
+        expense.reverseSettleDebts(); //recalculate debts to the state before this expense
         if(!expenses.contains(expense)) return true;
         return expenses.remove(expense);
     }
 
     public boolean editExpense(Expense oldExpense, Expense newExpense) {
         if(!expenses.contains(oldExpense)) return false;
+        oldExpense.reverseSettleDebts(); //recover old debts
+        newExpense.settleDebts(); //update debts of involved people
         int indexOfExpense = expenses.indexOf(oldExpense);
         expenses.set(indexOfExpense, newExpense);
         return true;

@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +15,9 @@ public class EventTest {
     private Event event2;
     private Event event3;
     private Participant participant;
+    private Participant participant2;
     private Expense expense;
+    private ArrayList<Participant> payors;
 
     @BeforeEach
     void setup() {
@@ -21,7 +25,10 @@ public class EventTest {
         event2 = new Event("ABC123", "Ski Trip", null, null, "abcpretendthisisacode" );
         event3 = new Event("ABC123", "Party", null, null, "abcpretendthisisacode" );
         participant = new Participant("Martijn", "martijn@gmail.com");
-        expense = new Expense("Bought flowers for the group", 20.5);
+        participant2 = new Participant("Iulia", "iulia@gmail.com");
+        payors = new ArrayList<>();
+        payors.add(participant2);
+        expense = new Expense("Bought flowers for the group", 20.5,participant,payors);
         
     }
 
