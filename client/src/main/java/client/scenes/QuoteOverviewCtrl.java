@@ -71,4 +71,7 @@ public class QuoteOverviewCtrl implements Initializable {
     public void page(){
         mainCtrl.showPage();
     }
+    public void startPage(){
+        mainCtrl.startPage();
+    }
 }

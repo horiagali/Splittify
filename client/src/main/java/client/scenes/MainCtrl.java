@@ -32,9 +32,11 @@ public class MainCtrl {
 
     private PageCtrl pageCtrl;
     private Scene page;
+    private StartPageCtrl startPageCtrl;
+    private Scene startPage;
 
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
-            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page) {
+            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page, Pair<StartPageCtrl, Parent> startPage) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -45,6 +47,8 @@ public class MainCtrl {
         this.pageCtrl = page.getKey();
         this.page = new Scene(page.getValue());
 
+        this.startPageCtrl = startPage.getKey();
+        this.startPage = new Scene(startPage.getValue());
         showOverview();
         primaryStage.show();
     }
@@ -64,5 +68,10 @@ public class MainCtrl {
     public void showPage() {
         primaryStage.setTitle("Iulia's Page");
         primaryStage.setScene(page);
+    }
+
+    public void startPage() {
+        primaryStage.setTitle("Start Screen");
+        primaryStage.setScene(startPage);
     }
 }
