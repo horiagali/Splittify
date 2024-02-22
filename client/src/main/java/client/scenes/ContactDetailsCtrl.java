@@ -12,6 +12,9 @@ public class ContactDetailsCtrl {
         this.server = server;
 
     }
+    public void abort() {
+        mainCtrl.showOverview();
+    }
 
 
 }
