@@ -15,6 +15,9 @@ public class Expense {
     private String title;
     private double amount;
 
+    @ManyToOne
+    private Event event;
+
     // Constructors
     public Expense() {
         // Default constructor for JPA
