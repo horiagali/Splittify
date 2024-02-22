@@ -14,7 +14,9 @@ public class Expense {
     private long id;
 
     private String title;
+    @ManyToOne
     private Participant payee; //payee is person who should get money from payors
+    @OneToMany
     private ArrayList<Participant> payors; //the people who owe money
 
     private double amount;
