@@ -17,5 +17,6 @@
             <TableColumn fx:id="colQuote" prefWidth="344.0" text="Quote" />
         </columns>
       </TableView>
+      <Button layoutX="274.0" layoutY="360.0" mnemonicParsing="false" onAction="#startPage" text="Start Page" />
    </children>
 </AnchorPane>
