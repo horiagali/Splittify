@@ -6,7 +6,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import jakarta.persistence.*;
 
-
+@jakarta.persistence.Table(indexes = {
+        @Index(columnList = "name"),
+        @Index(columnList = "email")
+})
 
 @Entity
 public class Participant {
