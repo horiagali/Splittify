@@ -32,9 +32,14 @@ public class Expense {
     
     public Expense(String title, double amount, Participant payee, ArrayList<Participant> payors) {
         this.title = title;
-        this.amount = amount;
         this.payee = payee;
         this.payors = payors;
+
+        if (amount < 0) {
+            throw new IllegalArgumentException("Expense can not be negative.");
+        }
+        this.amount = amount;
+
     }
 
     // Getters and Setters

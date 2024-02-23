@@ -12,7 +12,12 @@ public class Debt {
         this.id = id;
         this.owed = owed;
         this.indebted = indebted;
+
+        if (amount < 0) {
+            throw new IllegalArgumentException("Expense can not be negative.");
+        }
         this.amount = amount;
+
     }
 
     public Integer getId() {
