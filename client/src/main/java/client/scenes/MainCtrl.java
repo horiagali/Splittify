@@ -74,13 +74,22 @@ public class MainCtrl {
     }
 
     public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
+        primaryStage.setTitle("Events: Overview");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
+//        startPageCtrl.refresh();  doesn't work (yet!)
+
+
     }
 
     public void showAdd() {
         primaryStage.setTitle("Quotes: Adding Quote");
+        primaryStage.setScene(add);
+        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    public void addEvent() {
+        primaryStage.setTitle("Event: Adding Events");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
