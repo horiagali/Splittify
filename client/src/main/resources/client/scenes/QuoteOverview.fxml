@@ -6,22 +6,25 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.QuoteOverviewCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="client.scenes.QuoteOverviewCtrl">
     <children>
-<!--        <Button layoutX="503.0" layoutY="360.0" mnemonicParsing="false" onAction="#addQuote" text="Add New Quote"   now you add events through start page   />-->
-             <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="337.0" prefWidth="572.0">
+        <!--        <Button layoutX="503.0" layoutY="360.0" mnemonicParsing="false" onAction="#addQuote" text="Add New Quote"   now you add events through start page   />-->
+        <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="337.0" prefWidth="572.0">
             <columns>
-                <TableColumn fx:id="colFirstName" prefWidth="113.0" text="Event name" />
-                <TableColumn fx:id="colLastName" prefWidth="114.0" text="Event location" />
-                <TableColumn fx:id="colQuote" prefWidth="344.0" text="Event date" />
+                <TableColumn fx:id="colFirstName" prefWidth="113.0" text="Event name"/>
+                <TableColumn fx:id="colLastName" prefWidth="114.0" text="Event location"/>
+                <TableColumn fx:id="colQuote" prefWidth="344.0" text="Event date"/>
             </columns>
         </TableView>
         <HBox layoutX="2.0" layoutY="359.0" spacing="10">
-            <Button mnemonicParsing="false" onAction="#showAddExpenses" text="Add Expenses Page" />
-            <Button mnemonicParsing="false" onAction="#startPage" text="Start Page" />
-            <Button mnemonicParsing="false" onAction="#goToOverview" text="Overview" />
-            <Button layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-            <Button layoutX="383.0" layoutY="359.0" mnemonicParsing="false" onAction="#page" prefHeight="26.0" prefWidth="60.0" text="Page" />
+            <Button mnemonicParsing="false" onAction="#showAddExpenses" text="Add Expenses Page"/>
+            <Button mnemonicParsing="false" onAction="#startPage" text="Start Page"/>
+            <Button mnemonicParsing="false" onAction="#goToOverview" text="Overview"/>
+            <Button layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh"/>
+            <Button layoutX="383.0" layoutY="359.0" mnemonicParsing="false" onAction="#page" prefHeight="26.0"
+                    prefWidth="60.0" text="Page"/>
 
         </HBox>
     </children>

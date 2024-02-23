@@ -42,7 +42,7 @@ public class EventController {
         this.repo = repo;
     }
 
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = {"", "/"})
     public List<Event> getAll() {
         return repo.findAll();
     }
@@ -55,11 +55,10 @@ public class EventController {
         return ResponseEntity.ok(repo.findById(id).get());
     }   //// this is a random change
 
-    @PostMapping(path = { "", "/" })
+    @PostMapping(path = {"", "/"})
     public ResponseEntity<Event> add(@RequestBody Event event) {
 
-        if (event.getTitle() == null || isNullOrEmpty(event.getTitle()))
-        {
+        if (event.getTitle() == null || isNullOrEmpty(event.getTitle())) {
             return ResponseEntity.badRequest().build();
         }
 

@@ -33,15 +33,16 @@ public class StartPageCtrl {
         this.server = server;
 
     }
+
     public void back() {
         mainCtrl.showOverview();
     }
+
     public void refresh() {
         var events = server.getEvents();
         data = FXCollections.observableList(events);
         table.setItems(data);
     }
-
 
 
     public void addEvent() {
@@ -61,7 +62,7 @@ public class StartPageCtrl {
     }
 
     private Quote getEvent() {   /// couldn t get the http request to work with event entity
-        return new Quote(new Person(eventName.getText(),"no location added"),"no date added");    /// temporary here should be all event attributes
+        return new Quote(new Person(eventName.getText(), "no location added"), "no date added");    /// temporary here should be all event attributes
 
     }
 
@@ -81,11 +82,11 @@ public class StartPageCtrl {
                 break;
         }
     }
+
     public void cancel() {
         clearFields();
         mainCtrl.showOverview();
     }
-
 
 
 }

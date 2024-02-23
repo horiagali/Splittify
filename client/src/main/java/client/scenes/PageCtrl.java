@@ -6,6 +6,7 @@ import com.google.inject.Inject;
 public class PageCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
     @Inject
     public PageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
