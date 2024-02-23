@@ -7,14 +7,12 @@ public class User {
     private String name;
     private String email;
     private BankAccount bankAccount;
-    private String bic;
 
-    public User(Integer id, String name, String email, BankAccount bankAccount, String bic) {
+    public User(Integer id, String name, String email, BankAccount bankAccount) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.bankAccount = bankAccount;
-        this.bic = bic;
     }
 
     public Integer getId() {
@@ -31,9 +29,6 @@ public class User {
 
     public BankAccount getBank() {return bankAccount; }
 
-    public String getBic() {
-        return bic;
-    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -51,21 +46,17 @@ public class User {
         this.bankAccount = bankAccount;
     }
 
-    public void setBic(String bic) {
-        this.bic = bic;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(bankAccount, user.bankAccount) && Objects.equals(getBic(), user.getBic());
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(bankAccount, user.bankAccount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getEmail(), bankAccount, getBic());
+        return Objects.hash(getId(), getName(), getEmail(), bankAccount);
     }
 
     @Override
@@ -75,7 +66,6 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", bankAccount=" + bankAccount +
-                ", bic='" + bic + '\'' +
                 '}';
     }
 }
