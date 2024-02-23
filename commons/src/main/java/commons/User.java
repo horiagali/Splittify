@@ -6,15 +6,13 @@ public class User {
     private Integer id;
     private String name;
     private String email;
-    private String iban;
-    private String bic;
+    private BankAccount bankAccount;
 
-    public User(Integer id, String name, String email, String iban, String bic) {
+    public User(Integer id, String name, String email, BankAccount bankAccount) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.iban = iban;
-        this.bic = bic;
+        this.bankAccount = bankAccount;
     }
 
     public Integer getId() {
@@ -29,12 +27,23 @@ public class User {
         return email;
     }
 
-    public String getIban() {
-        return iban;
+    public BankAccount getBank() {return bankAccount; }
+
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getBic() {
-        return bic;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
     }
 
     @Override
@@ -42,12 +51,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(iban, user.iban) && Objects.equals(bic, user.bic);
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(bankAccount, user.bankAccount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, iban, bic);
+        return Objects.hash(getId(), getName(), getEmail(), bankAccount);
     }
 
     @Override
@@ -56,8 +65,7 @@ public class User {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", iban='" + iban + '\'' +
-                ", bic='" + bic + '\'' +
+                ", bankAccount=" + bankAccount +
                 '}';
     }
 }
