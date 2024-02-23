@@ -18,6 +18,7 @@ package server.api;
 import java.util.List;
 import java.util.Random;
 
+import commons.Event;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,28 +27,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import commons.Quote;
-import server.database.QuoteRepository;
+import commons.Event;
+import server.database.EventRepository;
 
 @RestController
-@RequestMapping("/api/quotes")
-public class QuoteController {
+@RequestMapping("/api/events")
+public class EventController {
 
     private final Random random;
-    private final QuoteRepository repo;
+    private final EventRepository repo;
 
-    public QuoteController(Random random, QuoteRepository repo) {
+    public EventController(Random random, EventRepository repo) {
         this.random = random;
         this.repo = repo;
     }
 
     @GetMapping(path = {"", "/"})
-    public List<Quote> getAll() {
+    public List<Event> getAll() {
         return repo.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Quote> getById(@PathVariable("id") long id) {
+    public ResponseEntity<Event> getById(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
@@ -55,14 +56,13 @@ public class QuoteController {
     }   //// this is a random change
 
     @PostMapping(path = {"", "/"})
-    public ResponseEntity<Quote> add(@RequestBody Quote quote) {
+    public ResponseEntity<Event> add(@RequestBody Event event) {
 
-        if (quote.person == null || isNullOrEmpty(quote.person.firstName) || isNullOrEmpty(quote.person.lastName)
-                || isNullOrEmpty(quote.quote)) {
+        if (event.getTitle() == null || isNullOrEmpty(event.getTitle())) {
             return ResponseEntity.badRequest().build();
         }
 
-        Quote saved = repo.save(quote);
+        Event saved = repo.save(event);
         return ResponseEntity.ok(saved);
     }
 
@@ -71,9 +71,9 @@ public class QuoteController {
     }
 
     @GetMapping("rnd")
-    public ResponseEntity<Quote> getRandom() {
-        var quotes = repo.findAll();
+    public ResponseEntity<Event> getRandom() {
+        var events = repo.findAll();
         var idx = random.nextInt((int) repo.count());
-        return ResponseEntity.ok(quotes.get(idx));
+        return ResponseEntity.ok(events.get(idx));
     }
 }

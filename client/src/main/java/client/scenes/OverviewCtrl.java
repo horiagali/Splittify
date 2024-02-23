@@ -22,19 +22,23 @@ public class OverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
     @Inject
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
 
     }
+
     public void back() {
         mainCtrl.showOverview();
     }
-    public void addExpense(){
+
+    public void addExpense() {
         mainCtrl.showAddExpenses();
     }
-    public void goToContact(){
+
+    public void goToContact() {
         mainCtrl.goToContact();
     }
 

@@ -68,21 +68,25 @@ public class QuoteOverviewCtrl implements Initializable {
         data = FXCollections.observableList(quotes);
         table.setItems(data);
     }
-    public void page(){
+
+    public void page() {
         mainCtrl.showPage();
     }
-    public void startPage(){
+
+    public void startPage() {
         mainCtrl.startPage();
     }
 
 
-    public void showAddExpenses(){
+    public void showAddExpenses() {
         mainCtrl.showAddExpenses();
     }
-    public void goToContact(){
+
+    public void goToContact() {
         mainCtrl.goToContact();
     }
-    public void goToOverview(){
+
+    public void goToOverview() {
         mainCtrl.goToOverview();
     }
 }
