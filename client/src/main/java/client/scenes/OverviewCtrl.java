@@ -15,6 +15,8 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private Label myLabel;
     @FXML
+    private Label myLabel2;
+    @FXML
     private ChoiceBox<String> myChoiceBox;
 
     private String[] names = {"name1", "name2", "name3"};
@@ -46,7 +48,9 @@ public class OverviewCtrl implements Initializable {
 
     private void getName(javafx.event.ActionEvent actionEvent) {
         String name = myChoiceBox.getValue();
-        myLabel.setText(name);
+        myLabel.setText("From " + name);
+        myLabel2.setText("Including " + name);
     }
+
 
 }

@@ -16,7 +16,7 @@ public class AddExpensesCtrl {
     }
 
     public void back() {
-        mainCtrl.showOverview();
+        mainCtrl.goToOverview();
     }
 }
 
