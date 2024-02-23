@@ -41,10 +41,13 @@ public class MainCtrl {
     private Scene contactDetails;
     private ContactDetailsCtrl contactDetailsCtrl;
 
+    private Scene overviewApp;
+    private OverviewCtrl overviewAppCtrl;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
                            Pair<StartPageCtrl, Parent> startPage, Pair<AddExpensesCtrl, Parent> addExpense,
-                           Pair<ContactDetailsCtrl, Parent> contactDetails) {
+                           Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<OverviewCtrl, Parent> overviewApp) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -64,6 +67,8 @@ public class MainCtrl {
         this.contactDetailsCtrl = contactDetails.getKey();
         this.contactDetails = new Scene(contactDetails.getValue());
 
+        this.overviewAppCtrl = overviewApp.getKey();
+        this.overviewApp = new Scene(overviewApp.getValue());
         showOverview();
         primaryStage.show();
     }
@@ -99,5 +104,10 @@ public class MainCtrl {
     public void goToContact() {
         primaryStage.setTitle("Contact Details");
         primaryStage.setScene(contactDetails);
+    }
+
+    public void goToOverview() {
+        primaryStage.setTitle("Overview");
+        primaryStage.setScene(overviewApp);
     }
 }

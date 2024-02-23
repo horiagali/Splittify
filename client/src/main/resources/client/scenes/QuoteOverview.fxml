@@ -7,21 +7,21 @@
 <?import javafx.scene.layout.HBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.QuoteOverviewCtrl">
-   <children>
-      <Button layoutX="503.0" layoutY="360.0" mnemonicParsing="false" onAction="#addQuote" text="Add New Quote" />
-      <Button layoutX="431.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-      <Button layoutX="358.0" layoutY="361.0" mnemonicParsing="false" onAction="#page" prefHeight="26.0" prefWidth="60.0" text="Page" />
-      <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="337.0" prefWidth="572.0">
-        <columns>
-          <TableColumn fx:id="colFirstName" prefWidth="113.0" text="First Name" />
-          <TableColumn fx:id="colLastName" prefWidth="114.0" text="Last Name" />
-            <TableColumn fx:id="colQuote" prefWidth="344.0" text="Quote" />
-        </columns>
-      </TableView>
-       <HBox layoutX="74.0" layoutY="360.0" spacing="10" />
-      <Button layoutX="232.0" layoutY="361.0" mnemonicParsing="false" onAction="#goToContact" text="Contact Details" />
+    <children>
+        <Button layoutX="503.0" layoutY="360.0" mnemonicParsing="false" onAction="#addQuote" text="Add New Quote" />
+        <Button layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+        <Button layoutX="383.0" layoutY="359.0" mnemonicParsing="false" onAction="#page" prefHeight="26.0" prefWidth="60.0" text="Page" />
+        <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="337.0" prefWidth="572.0">
+            <columns>
+                <TableColumn fx:id="colFirstName" prefWidth="113.0" text="First Name" />
+                <TableColumn fx:id="colLastName" prefWidth="114.0" text="Last Name" />
+                <TableColumn fx:id="colQuote" prefWidth="344.0" text="Quote" />
+            </columns>
+        </TableView>
+        <HBox layoutX="74.0" layoutY="360.0" spacing="10" />
         <Button layoutX="2.0" layoutY="359.0" mnemonicParsing="false" onAction="#showAddExpenses" text="Add Expenses Page" />
-        <Button layoutX="151.0" layoutY="359.0" mnemonicParsing="false" onAction="#startPage" text="Start Page" />
+        <Button layoutX="128.0" layoutY="359.0" mnemonicParsing="false" onAction="#startPage" text="Start Page" />
+      <Button layoutX="303.0" layoutY="359.0" mnemonicParsing="false" onAction="#goToOverview" text="Overview" />
 
-   </children>
+    </children>
 </AnchorPane>
