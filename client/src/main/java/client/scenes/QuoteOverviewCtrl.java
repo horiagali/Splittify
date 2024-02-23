@@ -82,4 +82,7 @@ public class QuoteOverviewCtrl implements Initializable {
     public void goToContact(){
         mainCtrl.goToContact();
     }
+    public void goToOverview(){
+        mainCtrl.goToOverview();
+    }
 }
