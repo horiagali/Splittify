@@ -14,7 +14,7 @@ public class Debt {
         this.indebted = indebted;
 
         if (amount < 0) {
-            throw new IllegalArgumentException("Expense can not be negative.");
+            throw new IllegalArgumentException("Debt can not be negative.");
         }
         this.amount = amount;
 
