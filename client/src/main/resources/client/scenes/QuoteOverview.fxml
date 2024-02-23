@@ -19,9 +19,8 @@
             </columns>
         </TableView>
         <HBox layoutX="74.0" layoutY="360.0" spacing="10" />
-        <Button layoutX="2.0" layoutY="359.0" mnemonicParsing="false" onAction="#showAddExpenses" text="Add Expenses Page" />
         <Button layoutX="128.0" layoutY="359.0" mnemonicParsing="false" onAction="#startPage" text="Start Page" />
-      <Button layoutX="303.0" layoutY="359.0" mnemonicParsing="false" onAction="#goToOverview" text="Overview" />
+        <Button layoutX="303.0" layoutY="359.0" mnemonicParsing="false" onAction="#goToOverview" text="Overview" />
 
     </children>
 </AnchorPane>
