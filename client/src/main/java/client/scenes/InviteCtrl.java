@@ -23,9 +23,10 @@ public class InviteCtrl implements Initializable {
         this.server = server;
     }
 
-    public void setName(){
+    public void setName(Label eventName){
         ///temporary, we should get it from the database
-        name.setText("New Year Party");
+        name.setText(eventName.getText());
+        //name.setText("New Year Party");
         name.setStyle("-fx-font-weight: bold");
     }
     public void setCode(){
@@ -36,7 +37,6 @@ public class InviteCtrl implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setName();
         setCode();
     }
 }

@@ -26,7 +26,8 @@ public class OverviewCtrl implements Initializable {
     private String[] names = {"Iulia", "Martijn", "Horia", "Amanda", "Fayaz", "Mihnea"};
     @FXML
     private ArrayList<Label> labels;
-
+    @FXML
+    private Label eventName;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -50,7 +51,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     public void sendInvites(){
-        mainCtrl.sendInvites();
+        mainCtrl.sendInvites(eventName);
     }
     public HBox getHbox() {
         return hbox;
@@ -69,6 +70,7 @@ public class OverviewCtrl implements Initializable {
             labels.add(label);
         }
         hbox.getChildren().addAll(labels);
+        eventName.setText("New Year Party");
     }
 
     private void getName(javafx.event.ActionEvent actionEvent) {

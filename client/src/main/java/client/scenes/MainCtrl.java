@@ -17,6 +17,7 @@ package client.scenes;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -127,8 +128,9 @@ public class MainCtrl {
         primaryStage.setScene(overviewApp);
     }
 
-    public void sendInvites() {
+    public void sendInvites(Label eventName) {
         primaryStage.setTitle("Send Invites");
+        inviteCtrl.setName(eventName);
         primaryStage.setScene(invite);
     }
 }
