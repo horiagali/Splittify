@@ -44,10 +44,14 @@ public class MainCtrl {
     private Scene overviewApp;
     private OverviewCtrl overviewAppCtrl;
 
+    private Scene invite;
+    private InviteCtrl inviteCtrl;
+
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
                            Pair<StartPageCtrl, Parent> startPage, Pair<AddExpensesCtrl, Parent> addExpense,
-                           Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<OverviewCtrl, Parent> overviewApp) {
+                           Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<OverviewCtrl, Parent> overviewApp,
+                            Pair<InviteCtrl, Parent> invite) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -69,6 +73,9 @@ public class MainCtrl {
 
         this.overviewAppCtrl = overviewApp.getKey();
         this.overviewApp = new Scene(overviewApp.getValue());
+
+        this.inviteCtrl = invite.getKey();
+        this.invite = new Scene(invite.getValue());
         showOverview();
         primaryStage.show();
     }
@@ -118,5 +125,10 @@ public class MainCtrl {
     public void goToOverview() {
         primaryStage.setTitle("Overview");
         primaryStage.setScene(overviewApp);
+    }
+
+    public void sendInvites() {
+        primaryStage.setTitle("Send Invites");
+        primaryStage.setScene(invite);
     }
 }
