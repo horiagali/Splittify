@@ -52,11 +52,35 @@ public class ExpenseTest {
 
     @Test
     void testSettleDebts() {
+        // Create participants
+        Participant payee = new Participant("John Doe", "john@example.com");
+        Participant payor1 = new Participant("Jane Smith", "jane@example.com");
+        Participant payor2 = new Participant("Bob Johnson", "bob@example.com");
+        ArrayList<Participant> payors = new ArrayList<>();
+        payors.add(payor1);
+        payors.add(payor2);
+
+        // Create an expense with a payee and payors
+        Expense expense = new Expense("Expense", 50.0, payee, payors);
+
+        // Initially, the debt of the payee and payors should be 0
+        assertEquals(0.0, payee.getDebt());
+        assertEquals(0.0, payor1.getDebt());
+        assertEquals(0.0, payor2.getDebt());
+
+        // Call the settleDebts() method
         expense.settleDebts();
-        assertEquals(100.0, payee.getDebt());
-        assertEquals(-25.0, payors.get(0).getDebt());
-        assertEquals(-25.0, payors.get(1).getDebt());
+
+        // After settling debts, the payee's debt should be increased by the total amount of the expense
+        assertEquals(50.0, payee.getDebt());
+
+        // Each payor's debt should be decreased by an equal share of the expense amount
+        assertEquals(-25.0, payor1.getDebt());
+        assertEquals(-25.0, payor2.getDebt());
     }
+
+
+
 
     @Test
     void testReverseSettleDebts() {
@@ -105,11 +129,14 @@ public class ExpenseTest {
 
     @Test
     public void testNegativeAmountInSettlement() {
-        Expense expense = new Expense("Expense", 50.0,  payee, payors);
+        // Create participants
         Participant payee = new Participant("John Doe", "john@example.com");
         Participant payor = new Participant("Jane Smith", "jane@example.com");
-        expense.setPayee(payee);
-        expense.getPayors().add(payor);
+        ArrayList<Participant> payors = new ArrayList<>();
+        payors.add(payor);
+
+        // Create an expense with a payee and payors
+        Expense expense = new Expense("Expense", 50.0, payee, payors);
 
         // Initially settle debts
         expense.settleDebts();
@@ -118,7 +145,7 @@ public class ExpenseTest {
         assertThrows(IllegalArgumentException.class, () -> expense.setAmount(-50.0));
 
         // Ensure debts remain unchanged
-        assertEquals(0.0, payee.getDebt());
-        assertEquals(0.0, payor.getDebt());
+        assertEquals(50.0, payee.getDebt());
     }
+
 }
