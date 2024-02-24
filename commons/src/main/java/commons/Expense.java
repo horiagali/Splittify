@@ -64,6 +64,9 @@ public class Expense {
     }
 
     public void setAmount(double amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
         this.amount = amount;
     }
 
