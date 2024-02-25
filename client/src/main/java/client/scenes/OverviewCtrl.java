@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -23,7 +24,7 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private HBox hbox;
 
-    private String[] names = {"Iulia", "Martijn", "Horia", "Amanda", "Fayaz", "Mihnea"};
+    private ArrayList<String> names;
     @FXML
     private ArrayList<Label> labels;
     @FXML
@@ -35,11 +36,15 @@ public class OverviewCtrl implements Initializable {
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-
+        this.names = new ArrayList<>();
     }
 
     public void back() {
         mainCtrl.showOverview();
+    }
+
+    public void addName(String name) {
+        names.add(name);
     }
 
     public void addExpense() {
@@ -53,23 +58,29 @@ public class OverviewCtrl implements Initializable {
     public void sendInvites(){
         mainCtrl.sendInvites(eventName);
     }
-    public HBox getHbox() {
+   /* public HBox getHbox() {
         return hbox;
-    }
+    }*/
     ///tried to create an hbox but it is not done
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        myChoiceBox.getItems().addAll(names);
+        refresh();
+    }
+
+    public void refresh() {
+        if (names != null && !names.isEmpty())
+          myChoiceBox.getItems().add(names.getLast());
         myChoiceBox.setOnAction(this::getName);
-        hbox = new HBox();
+        hbox.setSpacing(5);
         labels = new ArrayList<>();
-        for (String s: names){
+       /* for (String s: names){
             Label label = new Label(s);
             label.setText(s);
             label.setTextFill(Color.web("#000000"));
             labels.add(label);
-        }
-        hbox.getChildren().addAll(labels);
+        }*/
+        if (names != null && !names.isEmpty())
+            hbox.getChildren().addAll(new Label(names.getLast()));
         eventName.setText("New Year Party");
     }
 
