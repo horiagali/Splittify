@@ -4,11 +4,8 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.BankAccount;
 import commons.Participant;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 
 
 public class ContactDetailsCtrl {
