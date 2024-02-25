@@ -19,13 +19,13 @@
       <Text fill="#fffbfb" layoutX="19.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" />
       <Text fill="#f8f6f6" layoutX="19.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="IBAN" wrappingWidth="28.12646484375" />
       <Text fill="#f8f5f5" layoutX="24.0" layoutY="199.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BIC" />
-      <TextField layoutX="60.0" layoutY="78.0" promptText="Enter Name" />
-      <TextField layoutX="60.0" layoutY="111.0" promptText="Enter Name" />
-      <TextField layoutX="60.0" layoutY="182.0" promptText="Enter Name" />
-      <TextField layoutX="60.0" layoutY="149.0" promptText="Enter Name" />
+      <TextField fx:id="nameField" layoutX="60.0" layoutY="78.0" promptText="Enter Name" />
+      <TextField fx:id="emailField" layoutX="60.0" layoutY="111.0" promptText="Enter Name" />
+      <TextField fx:id="bicField" layoutX="60.0" layoutY="182.0" promptText="Enter Name" />
+      <TextField fx:id="ibanField" layoutX="60.0" layoutY="149.0" promptText="Enter Name" />
       <ButtonBar prefHeight="40.0" prefWidth="200.0" />
       <Button layoutX="425.0" layoutY="349.0" mnemonicParsing="false" onAction="#abort" style="-fx-background-color: WHITE;" text="ABORT" textFill="PINK" />
-      <Button layoutX="508.0" layoutY="349.0" mnemonicParsing="false" style="-fx-background-color: WHITE;" text="ADD" textFill="PINK" />
+      <Button layoutX="508.0" layoutY="349.0" mnemonicParsing="false" onAction="#ok" style="-fx-background-color: WHITE;" text="ADD" textFill="PINK" />
    </children>
    <effect>
       <Blend />

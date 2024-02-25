@@ -86,10 +86,11 @@ public class MainCtrl {
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
 //        startPageCtrl.refresh();  doesn't work (yet!)
-
-
     }
-
+    public void addToOverview(String name) {
+        overviewAppCtrl.addName(name);
+        overviewAppCtrl.refresh();
+    }
     public void showAdd() {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
