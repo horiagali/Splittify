@@ -25,7 +25,7 @@ public class PersonController {
     }
 
     /**
-     * GET request -> returns all persons in database
+     * GET -> returns all persons in database
      * @return List with persons in database
      */
     @GetMapping("/persons")
@@ -34,7 +34,7 @@ public class PersonController {
     }
 
     /**
-     * GET request for specific person
+     * GET -> for specific person by ID
      * @param id Person ID
      * @return badRequest if person does not exist, else ok
      */
@@ -47,7 +47,7 @@ public class PersonController {
     }
 
     /**
-     * POST request to create person
+     * POST -> create person
      * @param person Parsed from request body
      * @return Ok response
      */
@@ -59,7 +59,7 @@ public class PersonController {
     }
 
     /**
-     * DELETE for deleting a person by ID
+     * DELETE -> deleting a person by ID
      * @param id ID of person to delete
      * @return badRequest if person not found, else ok
      */
