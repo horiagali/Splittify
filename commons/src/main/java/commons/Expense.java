@@ -64,6 +64,9 @@ public class Expense {
     }
 
     public void setAmount(double amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
         this.amount = amount;
     }
 
@@ -92,12 +95,35 @@ public class Expense {
     }
 
     //method for settling debts of event. When this is called, people matched to this expense will pay up (in debt, not real time)
+//    public void settleDebts() {
+//        payee.setDebt(payee.getDebt() + amount); //increase the debt of the person who paid (positive is surplus)
+//        for(Participant payor : payors) {
+//            payor.setDebt(payor.getDebt() - amount/payors.size()); //decrease the debt of person who now settles their debt to payee
+//        }
+//    }
     public void settleDebts() {
-        payee.setDebt(payee.getDebt() + amount); //increase the debt of the person who paid (positive is surplus)
-        for(Participant payor : payors) {
-            payor.setDebt(payor.getDebt() - amount/payors.size()); //decrease the debt of person who now settles their debt to payee
+        payee.setDebt(payee.getDebt() + amount); // Increase the debt of the payee by the full amount
+
+        // Calculate the individual share for each payor
+        double individualShare = amount / payors.size();
+
+        // Distribute the amount among payors without rounding errors
+        for (Participant payor : payors) {
+            double updatedDebt = payor.getDebt() - individualShare;
+            payor.setDebt(updatedDebt);
+        }
+
+        // Handle any remaining amount due to rounding errors by distributing it to the first payor
+        double remainingAmount = amount - (individualShare * payors.size());
+        if (!payors.isEmpty()) {
+            double firstPayorDebt = payors.get(0).getDebt();
+            payors.get(0).setDebt(firstPayorDebt - remainingAmount);
         }
     }
+
+
+
+
 
     //this method does the same as the previous one in reverse. This is needed when editing an expense or deleting it alltogether.
     //when editing an expense, you remove the debts of the old one and add the new one.
