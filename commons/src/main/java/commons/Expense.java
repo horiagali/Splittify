@@ -32,7 +32,7 @@ public class Expense {
     public Expense() {
         // Default constructor for JPA
     }
-    // creates an expense an modifies everyone's balance accordingly
+    // creates an expense and modifies everyone's balance accordingly
     
     public Expense(String title, double amount, Participant payer, ArrayList<Participant> owers) {
         this.title = title;
@@ -150,5 +150,9 @@ public class Expense {
                 "  owers=" + owersList + "\n" +
                 "]";
     }
+
+
+
+
 }
 
