@@ -1,39 +1,43 @@
 package commons;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import jakarta.persistence.*;
 
-@jakarta.persistence.Table(indexes = {
-        @Index(columnList = "name"),
-        @Index(columnList = "email")
-})
+import java.util.Objects;
 
 @Entity
+@Table(indexes = {
+        @Index(columnList = "Nickname"),
+        @Index(columnList = "email")
+})
 public class Participant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long participantID;
 
-    private String name;
+    private String nickname; // Changed name to nickname
     private String email;
-    private double debt;
-
-    @ManyToOne
-    private Event event;
+    private String BIC;
+    private String IBAN;
+    private double balance;
 
     /**
      * Creates a participant
-     * @param name name of participant
-     * @param email email of participant
+     *
+     * @param nickname nickname of participant
+     * @param email    email of participant
+     * @param BIC      BIC of participant
+     * @param IBAN     IBAN of participant
+     * @param balance  initial balance of participant
      */
-    public Participant(String name, String email) {
-        this.name = name;
+    public Participant(String nickname, String email, String BIC, String IBAN, double balance) {
+        this.nickname = nickname;
         this.email = email;
-        this.debt = 0;
+        this.BIC = BIC;
+        this.IBAN = IBAN;
+        this.balance = balance;
     }
 
     public Participant() {
@@ -42,20 +46,20 @@ public class Participant {
 
     // Getters and setters
 
-    public long getId() {
-        return id;
+    public Long getParticipantID() {
+        return participantID;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setParticipantID(Long participantID) {
+        this.participantID = participantID;
     }
 
-    public String getName() {
-        return name;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getEmail() {
@@ -66,50 +70,68 @@ public class Participant {
         this.email = email;
     }
 
-    public Event getEvent() {
-        return event;
+    public String getBIC() {
+        return BIC;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setBIC(String BIC) {
+        this.BIC = BIC;
     }
 
-    public double getDebt() {
-        return debt;
+    public String getIBAN() {
+        return IBAN;
     }
 
-    public void setDebt(double debt) {
-        this.debt = debt;
+    public void setIBAN(String IBAN) {
+        this.IBAN = IBAN;
     }
-    
 
-    // Equals, hashCode, and toString methods
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    /**
+     * toString method
+     *
+     * @return String in a human friendly format
+     */
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("participantID", participantID)
+                .append("nickname", nickname)
+                .append("email", email)
+                .append("BIC", BIC)
+                .append("IBAN", IBAN)
+                .append("balance", balance)
+                .toString();
+    }
+
 
     /**
      * Equals method
-     * @param obj object to compare to
-     * @return true iff same
+     *
+     * @param o the reference object with which to compare
+     * @return true if this object is the same as the obj argument; false otherwise
      */
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Participant that = (Participant) o;
+        return Double.compare(balance, that.balance) == 0 && Objects.equals(participantID, that.participantID) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(BIC, that.BIC) && Objects.equals(IBAN, that.IBAN);
     }
 
     /**
-     * hash
+     * Hash code method
      * @return hash code
      */
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    /**
-     * To String method
-     * @return a string
-     */
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+        return Objects.hash(participantID, nickname, email, BIC, IBAN, balance);
     }
 }
