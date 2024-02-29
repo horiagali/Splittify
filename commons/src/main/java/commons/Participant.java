@@ -20,7 +20,7 @@ public class Participant {
 
     private String name;
     private String email;
-    private double debt;
+    private double balance;
 
     @ManyToOne
     private Event event;
@@ -33,7 +33,7 @@ public class Participant {
     public Participant(String name, String email) {
         this.name = name;
         this.email = email;
-        this.debt = 0;
+        this.balance = 0;
     }
 
     public Participant() {
@@ -74,14 +74,14 @@ public class Participant {
         this.event = event;
     }
 
-    public double getDebt() {
-        return debt;
+    public double getBalance() {
+        return balance;
     }
 
-    public void setDebt(double debt) {
-        this.debt = debt;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
-    
+
 
     // Equals, hashCode, and toString methods
 
@@ -110,6 +110,12 @@ public class Participant {
      */
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+        return "Participant{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", balance=" + balance +
+                ", event=" + (event != null ? event.toString() : null) +
+                '}';
     }
 }
