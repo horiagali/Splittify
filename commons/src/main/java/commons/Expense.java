@@ -142,7 +142,7 @@ public class Expense {
 
     @Override
     public String toString() {
-        String payerName = payer != null ? payer.getName() : null;
+        String payerName = payer != null ? payer.getNickname() : null;
         String owersList = owers != null ? owers.toString() : null;
 
         return "Expense{" +

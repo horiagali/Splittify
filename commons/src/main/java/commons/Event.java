@@ -18,9 +18,9 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String title;
-    private Date creationDate;
-    private Date lastActivityDate;
-    private String inviteCode;
+    private Date date;
+    private String description;
+    private String location;
 
     @OneToMany  //(mappedBy = "event")
     private List<Expense> expenses; // List of expenses associated with the event
@@ -245,7 +245,7 @@ public class Event {
      * @return the list of expenses the participant paid for
      */
     public List<Expense> myExpenses(Participant participant){
-        return expenses.stream().filter(x -> x.getPayee().equals(participant)).toList();
+        return expenses.stream().filter(x -> x.getPayer().equals(participant)).toList();
 
     }
 
@@ -255,7 +255,7 @@ public class Event {
      * @return the filtered list of expenses
      */
     public List<Expense> includingExpenses(Participant participant){
-        return expenses.stream().filter(x -> (x.getPayors().contains(participant) || x.getPayee().equals(participant))).toList();
+        return expenses.stream().filter(x -> (x.getOwers().contains(participant) || x.getOwers().equals(participant))).toList();
     }
 
     /**

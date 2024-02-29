@@ -1,14 +1,9 @@
 package commons;
 
-<<<<<<< commons/src/main/java/commons/Participant.java
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import jakarta.persistence.*;
-=======
+
 import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
->>>>>>> commons/src/main/java/commons/Participant.java
 
 import java.util.Objects;
 
@@ -25,16 +20,12 @@ public class Participant {
 
     private String nickname; // Changed name to nickname
     private String email;
-<<<<<<< commons/src/main/java/commons/Participant.java
     private double balance;
 
     @ManyToOne
     private Event event;
-=======
     private String BIC;
     private String IBAN;
-    private double balance;
->>>>>>> commons/src/main/java/commons/Participant.java
 
     /**
      * Creates a participant
@@ -48,13 +39,10 @@ public class Participant {
     public Participant(String nickname, String email, String BIC, String IBAN, double balance) {
         this.nickname = nickname;
         this.email = email;
-<<<<<<< commons/src/main/java/commons/Participant.java
         this.balance = 0;
-=======
         this.BIC = BIC;
         this.IBAN = IBAN;
         this.balance = balance;
->>>>>>> commons/src/main/java/commons/Participant.java
     }
 
     /**
@@ -130,31 +118,6 @@ public class Participant {
         this.BIC = BIC;
     }
 
-<<<<<<< commons/src/main/java/commons/Participant.java
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
-
-=======
-    /**
-     * Getter
-     * @return IBAN
-     */
-    public String getIBAN() {
-        return IBAN;
-    }
-
-    /**
-     * Setter
-     * @param IBAN
-     */
-    public void setIBAN(String IBAN) {
-        this.IBAN = IBAN;
-    }
 
     /**
      * Getter
@@ -173,6 +136,23 @@ public class Participant {
     }
 
     /**
+     * Getter
+     * @return IBAN
+     */
+    public String getIBAN() {
+        return IBAN;
+    }
+
+    /**
+     * Setter
+     * @param IBAN
+     */
+    public void setIBAN(String IBAN) {
+        this.IBAN = IBAN;
+    }
+
+
+    /**
      * toString method
      *
      * @return String in a human friendly format
@@ -188,7 +168,6 @@ public class Participant {
                 .append("balance", balance)
                 .toString();
     }
->>>>>>> commons/src/main/java/commons/Participant.java
 
 
     /**
@@ -215,20 +194,7 @@ public class Participant {
     }
 
 
-    /**
-     * To String method
-     * @return a string
-     */
-    @Override
-    public String toString() {
-        return "Participant{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", balance=" + balance +
-                ", event=" + (event != null ? event.toString() : null) +
-                '}';
 
-    }
+
     
 }
