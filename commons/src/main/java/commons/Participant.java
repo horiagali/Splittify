@@ -1,5 +1,6 @@
 package commons;
 
+
 import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -19,9 +20,12 @@ public class Participant {
 
     private String nickname; // Changed name to nickname
     private String email;
+    private double balance;
+
+    @ManyToOne
+    private Event event;
     private String BIC;
     private String IBAN;
-    private double balance;
 
     /**
      * Creates a participant
@@ -35,6 +39,7 @@ public class Participant {
     public Participant(String nickname, String email, String BIC, String IBAN, double balance) {
         this.nickname = nickname;
         this.email = email;
+        this.balance = 0;
         this.BIC = BIC;
         this.IBAN = IBAN;
         this.balance = balance;
@@ -113,21 +118,6 @@ public class Participant {
         this.BIC = BIC;
     }
 
-    /**
-     * Getter
-     * @return IBAN
-     */
-    public String getIBAN() {
-        return IBAN;
-    }
-
-    /**
-     * Setter
-     * @param IBAN
-     */
-    public void setIBAN(String IBAN) {
-        this.IBAN = IBAN;
-    }
 
     /**
      * Getter
@@ -144,6 +134,23 @@ public class Participant {
     public void setBalance(double balance) {
         this.balance = balance;
     }
+
+    /**
+     * Getter
+     * @return IBAN
+     */
+    public String getIBAN() {
+        return IBAN;
+    }
+
+    /**
+     * Setter
+     * @param IBAN
+     */
+    public void setIBAN(String IBAN) {
+        this.IBAN = IBAN;
+    }
+
 
     /**
      * toString method
@@ -185,4 +192,9 @@ public class Participant {
     public int hashCode() {
         return Objects.hash(participantID, nickname, email, BIC, IBAN, balance);
     }
+
+
+
+
+    
 }
