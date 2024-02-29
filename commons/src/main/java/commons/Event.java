@@ -262,7 +262,7 @@ public class Event {
      * @return the list of participants
      */
     public List<Participant> owers(){
-        return participants.stream().filter(x -> x.getDebt() < 0).toList();
+        return participants.stream().filter(x -> x.getBalance() < 0).toList();
     }
 
     /**
@@ -277,24 +277,24 @@ public class Event {
 
 
         for (Participant participant : participants){
-            if (participant.getDebt() > 0)
+            if (participant.getBalance() > 0)
                 owe.add(participant);
-            if (participant.getDebt() < 0)
+            if (participant.getBalance() < 0)
                 is_owed.add(participant);
         }
-        owe = owe.stream().sorted((a, b) -> (int) (a.getDebt() - b.getDebt())).toList();
-        is_owed = is_owed.stream().sorted((b, a) -> (int) (a.getDebt() - b.getDebt())).toList();
+        owe = owe.stream().sorted((a, b) -> (int) (a.getBalance() - b.getBalance())).toList();
+        is_owed = is_owed.stream().sorted((b, a) -> (int) (a.getBalance() - b.getBalance())).toList();
         for (Participant p1 : owe) {
             for (Participant p2 : is_owed) {
-                if (p1.getDebt() >= -p2.getDebt()) {
-                    int x = (int) Math.min(p1.getDebt(), -p2.getDebt());
-                    p1.setDebt(p1.getDebt() - x);
-                    p2.setDebt(0);
+                if (p1.getBalance() >= -p2.getBalance()) {
+                    int x = (int) Math.min(p1.getBalance(), -p2.getBalance());
+                    p1.setBalance(p1.getBalance() - x);
+                    p2.setBalance(0);
                     is_owed.remove(p2);
                 } else {
-                    int x = (int) Math.min(p1.getDebt(), -p2.getDebt());
-                    p1.setDebt(p1.getDebt() - x);
-                    p2.setDebt(p2.getDebt() + x);
+                    int x = (int) Math.min(p1.getBalance(), -p2.getBalance());
+                    p1.setBalance(p1.getBalance() - x);
+                    p2.setBalance(p2.getBalance() + x);
                 }
             }
 
