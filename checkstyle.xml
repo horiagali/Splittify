@@ -1,12 +1,68 @@
-<?xml version="1.0"?>
-<!DOCTYPE module PUBLIC
-        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
-        "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN" "https://checkstyle.org/dtds/configuration_1_3.dtd">
+<module name="Checker">
 
-<module name = "Checker">
-    <module name="TreeWalker">
-        <module name="UnusedImports" />
+    <module name="LineLength">
+        <!--Makes sure a line cannot be longer than 100 characters-->
+        <property name="max" value="100" />
     </module>
 
-    <!-- TODO: decide in your team with other checkers to add! -->
+    <module name="TreeWalker">
+
+        <module name="FileSetChecks">
+            <!-- Add FileSetChecks module to exclude test directories -->
+            <property name="fileExtensions" value="java"/>
+            <property name="excludes" value="src/test/**, test/**, **/test/**"/>
+        </module>
+
+        <module name="UnusedImports" />
+
+        <module name="ParameterNumber">
+            <!--Maximum amount of parameters in a method-->
+            <property name="max" value="6" />
+            <property name="tokens" value="METHOD_DEF" />
+        </module>
+
+        <module name="MethodLength">
+            <!--Maximum amount of lines in one method-->
+            <property name="tokens" value="METHOD_DEF" />
+            <property name="max" value="50" />
+        </module>
+
+        <module name="JavadocMethod"/>
+        <!--Checks if the return statement in a Javadoc comments has a description-->
+
+        <module name="MissingJavadocMethod"/>
+        <!--Checks if methods have Javadoc comments-->
+
+        <module name="ParenPad" />
+        <!--Checks that there are no spaces after ( and before )-->
+
+        <module name="CyclomaticComplexity">
+            <!--Checks that the cyclomatic complexity is not higher than 6.-->
+            <property name="max" value="6" />
+        </module>
+
+        <module name="AbbreviationAsWordInName">
+            <!--Makes sure a name consists of no more than 2 consecutive capital letters-->
+            <property name="allowedAbbreviations" value="XML,URL,O"/>
+            <property name="allowedAbbreviationLength" value="1"/>
+            <property name="ignoreStatic" value="false"/>
+            <property name="ignoreOverriddenMethods" value="false" />
+        </module>
+
+        <module name="MethodName">
+            <!--Checks whether a method starts with a lowercase letter (allowing for camelCase)-->
+            <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$"/>
+        </module>
+
+        <module name="ParameterName"/>
+        <!--Checks whether a parameter starts with a lowercase letter (allowing for camelCase)-->
+
+        <module name="LocalVariableName">
+            <!--Checks if local variables start with a lowercase letter-->
+            <property name="format" value="^[a-z](_?[a-zA-Z0-9]+)*$"/>
+        </module>
+
+    </module>
 </module>

@@ -31,10 +31,23 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
+    /**
+     * The entry point of the application.
+     *
+     * @param args Command-line arguments.
+     * @throws URISyntaxException If a URI syntax error occurs.
+     * @throws IOException        If an I/O error occurs.
+     */
     public static void main(String[] args) throws URISyntaxException, IOException {
         launch();
     }
 
+    /**
+     * Starts the JavaFX application.
+     *
+     * @param primaryStage The primary stage of the application.
+     * @throws IOException If an I/O error occurs.
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
 

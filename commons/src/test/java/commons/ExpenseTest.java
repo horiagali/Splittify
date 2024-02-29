@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("checkstyle:*")
 public class ExpenseTest {
 
     @Test
@@ -55,8 +56,8 @@ public class ExpenseTest {
         Expense expense2 = new Expense("Dinner", 50, payer, owers);
         Expense expense3 = new Expense("Lunch", 30, payer, owers);
 
-        assertTrue(expense1.equals(expense2));
-        assertFalse(expense1.equals(expense3));
+        assertEquals(expense1, expense2);
+        assertNotEquals(expense1, expense3);
     }
 
     @Test
