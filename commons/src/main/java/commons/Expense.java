@@ -112,22 +112,22 @@ public class Expense {
 //        }
 //    }
     public void settleDebts() {
-        payee.setDebt(payee.getDebt() + amount); // Increase the debt of the payee by the full amount
+        payee.setBalance(payee.getBalance() + amount); // Increase the debt of the payee by the full amount
 
         // Calculate the individual share for each payor
         double individualShare = amount / payors.size();
 
         // Distribute the amount among payors without rounding errors
         for (Participant payor : payors) {
-            double updatedDebt = payor.getDebt() - individualShare;
-            payor.setDebt(updatedDebt);
+            double updatedDebt = payor.getBalance() - individualShare;
+            payor.setBalance(updatedDebt);
         }
 
         // Handle any remaining amount due to rounding errors by distributing it to the first payor
         double remainingAmount = amount - (individualShare * payors.size());
         if (!payors.isEmpty()) {
-            double firstPayorDebt = payors.get(0).getDebt();
-            payors.get(0).setDebt(firstPayorDebt - remainingAmount);
+            double firstPayorDebt = payors.get(0).getBalance();
+            payors.get(0).setBalance(firstPayorDebt - remainingAmount);
         }
     }
 
@@ -135,9 +135,9 @@ public class Expense {
     //this method does the same as the previous one in reverse. This is needed when editing an expense or deleting it alltogether.
     //when editing an expense, you remove the debts of the old one and add the new one.
     public void reverseSettleDebts() {
-        payee.setDebt(payee.getDebt() - amount); //decrease the debt of the person who paid (positive is surplus)
+        payee.setBalance(payee.getBalance() - amount); //decrease the debt of the person who paid (positive is surplus)
         for(Participant payor : payors) {
-            payor.setDebt(payor.getDebt() + amount/payors.size()); //increase the debt of person who now settles their debt to payee
+            payor.setBalance(payor.getBalance() + amount/payors.size()); //increase the debt of person who now settles their debt to payee
         }
     }
 
