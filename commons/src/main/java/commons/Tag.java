@@ -20,8 +20,8 @@ public class Tag {
 
     /**
      * constructor to create a Tag
-     * @param name
-     * @param color
+     * @param name name of tag
+     * @param color colour of tag
      */
     public Tag(String name, Color color){
         this.name = name;
@@ -29,16 +29,23 @@ public class Tag {
     }
 
     /**
-     * Set the id of a tag
-     * @param id
+     * Empty constructor
      */
-    public void setId(long id) {
+    public Tag() {
+
+    }
+
+    /**
+     * Sets the ID of the tag.
+     * @param id The ID of the tag.
+     */
+    public void setId(Integer id) {
         this.id = id;
     }
 
     /**
-     * get the ID of a tag
-     * @return
+     * Retrieves the ID of the tag.
+     * @return The ID of the tag.
      */
     public long getId() {
         return id;
@@ -62,7 +69,7 @@ public class Tag {
 
     /**
      * change the name of this tag
-     * @param name
+     * @param name name of tag
      */
     public void setName(String name) {
         this.name = name;
@@ -71,7 +78,7 @@ public class Tag {
 
     /**
      * change the color of a tag
-     * @param color
+     * @param color colour of tag
      */
     public void setColor(Color color) {
         this.color = color;
@@ -79,7 +86,7 @@ public class Tag {
 
     /**
      * get the color of a tag
-     * @return
+     * @return colour of tag
      */
     public Color getColor() {
         return color;

@@ -1,8 +1,6 @@
 package commons;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -10,6 +8,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import java.awt.*;
+import java.util.List;
 
 @Entity
 @Table(name = "event")
@@ -272,40 +271,85 @@ public class Event {
     }
 
     /**
-     * the settling of debts
-     * owe = the array of users that owe money to someone (have positive debt).
-     * are_owed = the array of all users that are owed money (have negative debt).
-     *So now, we sort both 'owe' and 'are_owed' in increasing order. Then, just iterate from left to right for both arrays.
+     * Sets the balances between participants to settle debts.
      */
     public void settleDebts() {
-        List<Participant> owe = participants;
-        List<Participant> is_owed = participants;
+        List<Participant> owe = new ArrayList<>();
+        List<Participant> isOwed = new ArrayList<>();
+
+        // Separate participants into two lists based on their balance
+        separateParticipantsByBalance(owe, isOwed);
+
+        // Sort the lists based on the balance
+        sortParticipantsByBalance(owe);
+        sortParticipantsByBalanceDescending(isOwed);
+
+        // Settle debts between participants
+        settleDebtsBetweenParticipants(owe, isOwed);
+    }
 
 
-        for (Participant participant : participants){
+    /**
+     * Separates participants into two lists: those who owe money and those who are owed money.
+     *
+     * @param owe    The list to store participants who owe money.
+     * @param isOwed The list to store participants who are owed money.
+     */
+    private void separateParticipantsByBalance(List<Participant> owe, List<Participant> isOwed) {
+        for (Participant participant : participants) {
             if (participant.getBalance() > 0)
                 owe.add(participant);
-            if (participant.getBalance() < 0)
-                is_owed.add(participant);
-        }
-        owe = owe.stream().sorted((a, b) -> (int) (a.getBalance() - b.getBalance())).toList();
-        is_owed = is_owed.stream().sorted((b, a) -> (int) (a.getBalance() - b.getBalance())).toList();
-        for (Participant p1 : owe) {
-            for (Participant p2 : is_owed) {
-                if (p1.getBalance() >= -p2.getBalance()) {
-                    int x = (int) Math.min(p1.getBalance(), -p2.getBalance());
-                    p1.setBalance(p1.getBalance() - x);
-                    p2.setBalance(0);
-                    is_owed.remove(p2);
-                } else {
-                    int x = (int) Math.min(p1.getBalance(), -p2.getBalance());
-                    p1.setBalance(p1.getBalance() - x);
-                    p2.setBalance(p2.getBalance() + x);
-                }
-            }
-
+            else if (participant.getBalance() < 0)
+                isOwed.add(participant);
         }
     }
+
+    /**
+     * Sorts a list of participants based on their balance in ascending order.
+     *
+     * @param participants The list of participants to be sorted.
+     */
+    private void sortParticipantsByBalance(List<Participant> participants) {
+        participants.sort(Comparator.comparingDouble(Participant::getBalance));
+    }
+
+    /**
+     * Sorts a list of participants based on their balance in descending order.
+     *
+     * @param participants The list of participants to be sorted.
+     */
+    private void sortParticipantsByBalanceDescending(List<Participant> participants) {
+        participants.sort((a, b) -> Double.compare(b.getBalance(), a.getBalance()));
+    }
+
+    /**
+     * Sets the balances between participants to settle debts.
+     *
+     * @param owe    The list of participants who owe money.
+     * @param isOwed The list of participants who are owed money.
+     */
+    private void settleDebtsBetweenParticipants(List<Participant> owe, List<Participant> isOwed) {
+        for (Participant p1 : owe) {
+            for (Iterator<Participant> iterator = isOwed.iterator(); iterator.hasNext();) {
+                Participant p2 = iterator.next();
+                double p1Balance = p1.getBalance();
+                double p2Balance = p2.getBalance();
+
+                if (p1Balance >= -p2Balance) {
+                    double x = Math.min(p1Balance, -p2Balance);
+                    p1.setBalance(p1Balance - x);
+                    p2.setBalance(0);
+                    iterator.remove();
+                } else {
+                    double x = Math.min(p1Balance, -p2Balance);
+                    p1.setBalance(p1Balance - x);
+                    p2.setBalance(p2Balance + x);
+                }
+            }
+        }
+    }
+
+
     /**
      * Equals method
      *

@@ -67,7 +67,7 @@ public class OverviewCtrl implements Initializable {
 
     public void refresh() {
         if (names != null && !names.isEmpty())
-          myChoiceBox.getItems().add(names.getLast());
+          myChoiceBox.getItems().add(names.get(names.size() - 1));
         myChoiceBox.setOnAction(this::getName);
         hbox.setSpacing(5);
         labels = new ArrayList<>();
@@ -78,7 +78,7 @@ public class OverviewCtrl implements Initializable {
             labels.add(label);
         }*/
         if (names != null && !names.isEmpty())
-            hbox.getChildren().addAll(new Label(names.getLast()));
+            hbox.getChildren().addAll(new Label(names.get(names.size() - 1)));
         eventName.setText("New Year Party");
     }
 

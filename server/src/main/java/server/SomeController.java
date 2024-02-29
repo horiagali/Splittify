@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/")
 public class SomeController {
 
+    /**
+     * Handle GET requests for the root URL ("/") and returns a greeting message.
+     * @return A greeting message.
+     */
     @GetMapping("/")
     @ResponseBody
     public String index() {

@@ -36,26 +36,48 @@ public class Person {
 	public String firstName;
 	public String lastName;
 
+	/**
+	 * Default constructor. Used for object mapper.
+	 */
 	@SuppressWarnings("unused")
-	private Person() {
+	public Person() {
 		// for object mapper
 	}
 
+	/**
+	 * Constructs a new Person object with the given first name and last name.
+	 * @param firstName The first name of the person.
+	 * @param lastName The last name of the person.
+	 */
 	public Person(String firstName, String lastName) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
 
+	/**
+	 * Checks if this Person object is equal to another object.
+	 * @param obj The object to compare with.
+	 * @return true if the objects are equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj);
 	}
 
+	/**
+	 * Generates a hash code value for this Person object.
+	 * @return The hash code value.
+	 */
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
 
+
+	/**
+	 * Generates a string representation of this Person object.
+	 * @return The string representation.
+	 */
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);

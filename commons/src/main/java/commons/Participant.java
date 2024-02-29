@@ -24,24 +24,24 @@ public class Participant {
 
     @ManyToOne
     private Event event;
-    private String BIC;
-    private String IBAN;
+    private String bic;
+    private String iban;
 
     /**
      * Creates a participant
      *
      * @param nickname nickname of participant
      * @param email    email of participant
-     * @param BIC      BIC of participant
-     * @param IBAN     IBAN of participant
+     * @param bic      BIC of participant
+     * @param iban     IBAN of participant
      * @param balance  initial balance of participant
      */
-    public Participant(String nickname, String email, String BIC, String IBAN, double balance) {
+    public Participant(String nickname, String email, String bic, String iban, double balance) {
         this.nickname = nickname;
         this.email = email;
         this.balance = 0;
-        this.BIC = BIC;
-        this.IBAN = IBAN;
+        this.bic = bic;
+        this.iban = iban;
         this.balance = balance;
     }
 
@@ -106,16 +106,16 @@ public class Participant {
      * Getter
      * @return BIC
      */
-    public String getBIC() {
-        return BIC;
+    public String getBic() {
+        return bic;
     }
 
     /**
      * Setter
-     * @param BIC BIC
+     * @param BiC BIC
      */
-    public void setBIC(String BIC) {
-        this.BIC = BIC;
+    public void setBic(String BiC) {
+        this.bic = BiC;
     }
 
 
@@ -137,18 +137,18 @@ public class Participant {
 
     /**
      * Getter
-     * @return IBAN
+     * @return iban
      */
-    public String getIBAN() {
-        return IBAN;
+    public String getIban() {
+        return iban;
     }
 
     /**
      * Setter
-     * @param IBAN
+     * @param iban iban number
      */
-    public void setIBAN(String IBAN) {
-        this.IBAN = IBAN;
+    public void setIban(String iban) {
+        this.iban = iban;
     }
 
 
@@ -163,8 +163,8 @@ public class Participant {
                 .append("participantID", participantID)
                 .append("nickname", nickname)
                 .append("email", email)
-                .append("BIC", BIC)
-                .append("IBAN", IBAN)
+                .append("BIC", bic)
+                .append("IBAN", iban)
                 .append("balance", balance)
                 .toString();
     }
@@ -181,7 +181,9 @@ public class Participant {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Participant that = (Participant) o;
-        return Double.compare(balance, that.balance) == 0 && Objects.equals(participantID, that.participantID) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(BIC, that.BIC) && Objects.equals(IBAN, that.IBAN);
+        return Double.compare(balance, that.balance) == 0
+                && Objects.equals(participantID, that.participantID)
+                && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(bic, that.bic) && Objects.equals(iban, that.iban);
     }
 
     /**
@@ -190,7 +192,7 @@ public class Participant {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(participantID, nickname, email, BIC, IBAN, balance);
+        return Objects.hash(participantID, nickname, email, bic, iban, balance);
     }
 
 

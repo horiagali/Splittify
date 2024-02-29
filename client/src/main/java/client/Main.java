@@ -31,10 +31,23 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
+    /**
+     * The entry point of the application.
+     *
+     * @param args Command-line arguments.
+     * @throws URISyntaxException If a URI syntax error occurs.
+     * @throws IOException        If an I/O error occurs.
+     */
     public static void main(String[] args) throws URISyntaxException, IOException {
         launch();
     }
 
+    /**
+     * Starts the JavaFX application.
+     *
+     * @param primaryStage The primary stage of the application.
+     * @throws IOException If an I/O error occurs.
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
 
@@ -42,9 +55,12 @@ public class Main extends Application {
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
         var page = FXML.load(PageCtrl.class, "client", "scenes", "Page.fxml");
         var startPage = FXML.load(StartPageCtrl.class, "client", "scenes", "StartPage.fxml");
-        var addExpense = FXML.load(AddExpensesCtrl.class, "client", "scenes", "AddExpenses.fxml");
-        var contactDetails = FXML.load(ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
-        var overviewApp = FXML.load(OverviewCtrl.class, "client", "scenes", "Overview.fxml");
+        var addExpense = FXML.load
+                (AddExpensesCtrl.class, "client", "scenes", "AddExpenses.fxml");
+        var contactDetails = FXML.load
+                (ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
+        var overviewApp = FXML.load
+                (OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var invite = FXML.load(InviteCtrl.class, "client", "scenes", "Invite.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
