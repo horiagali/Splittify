@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 public class ExpenseTest {
@@ -15,7 +16,8 @@ public class ExpenseTest {
         owers.add(new Participant("Alice", "alice@example.com","bic","iban",12));
         owers.add(new Participant("Bob", "bob@example.com","bic","iban",12));
         double amount = 50;
-        Expense expense = new Expense("Dinner", amount, payer, owers);
+        Tag tag = new Tag("testTag", Color.yellow);
+        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
         assertEquals(62, payer.getBalance());
         for (Participant ower : owers) {
             assertEquals(-13, ower.getBalance());
@@ -35,7 +37,8 @@ public class ExpenseTest {
         owers.add(new Participant("Alice", "alice@example.com","bic","iban",12));
         owers.add(new Participant("Bob", "bob@example.com","bic","iban",12));
         double amount = 50;
-        Expense expense = new Expense("Dinner", amount, payer, owers);
+        Tag tag = new Tag("testTag", Color.yellow);
+        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
         expense.settleBalance();
         expense.reverseSettleBalance();
 
@@ -51,9 +54,10 @@ public class ExpenseTest {
         ArrayList<Participant> owers = new ArrayList<>();
         owers.add(new Participant("Alice", "alice@example.com","bic","iban",12));
         owers.add(new Participant("Bob", "bob@example.com","bic","iban",12));
-        Expense expense1 = new Expense("Dinner", 50, payer, owers);
-        Expense expense2 = new Expense("Dinner", 50, payer, owers);
-        Expense expense3 = new Expense("Lunch", 30, payer, owers);
+        Tag tag = new Tag("testTag", Color.yellow);
+        Expense expense1 = new Expense("Dinner", 50, payer, owers, tag);
+        Expense expense2 = new Expense("Dinner", 50, payer, owers, tag);
+        Expense expense3 = new Expense("Lunch", 30, payer, owers, tag);
 
         assertTrue(expense1.equals(expense2));
         assertFalse(expense1.equals(expense3));
@@ -65,12 +69,12 @@ public class ExpenseTest {
         ArrayList<Participant> owers = new ArrayList<>();
         owers.add(new Participant("Alice", "alice@example.com","bic","iban",12));
         owers.add(new Participant("Bob", "bob@example.com","bic","iban",12));
-        Expense expense1 = new Expense("Dinner", 50, payer, owers);
-        Expense expense2 = new Expense("Dinner", 50, payer, owers);
+        Tag tag = new Tag("testTag", Color.yellow);
+        Expense expense1 = new Expense("Dinner", 50, payer, owers, tag);
+        Expense expense2 = new Expense("Dinner", 50, payer, owers, tag);
 
         assertEquals(expense1.hashCode(), expense2.hashCode());
     }
-
 //    @Test
 //    public void testToString() {
 //        Participant payer = new Participant("John", "john@example.com","bic","iban",12);
@@ -97,7 +101,8 @@ public class ExpenseTest {
         owers.add(new Participant("Alice", "alice@example.com","bic","iban",12));
         owers.add(new Participant("Bob", "bob@example.com","bic","iban",12));
         double amount = 50;
-        Expense expense = new Expense("Dinner", amount, payer, owers);
+        Tag tag = new Tag("testTag", Color.yellow);
+        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
 
         // Test getters
         assertEquals("Dinner", expense.getTitle());
@@ -128,9 +133,9 @@ public class ExpenseTest {
         ArrayList<Participant> owers = new ArrayList<>();
         owers.add(new Participant("Alice", "alice@example.com","bic","iban",12));
         owers.add(new Participant("Bob", "bob@example.com","bic","iban",12));
-
+        Tag tag = new Tag("testTag", Color.yellow);
         // Test if creating an expense with negative amount throws IllegalArgumentException
-        assertThrows(IllegalArgumentException.class, () -> new Expense("Dinner", -50, payer, owers));
+        assertThrows(IllegalArgumentException.class, () -> new Expense("Dinner", -50, payer, owers, tag));
     }
 
     @Test
@@ -140,7 +145,8 @@ public class ExpenseTest {
         owers.add(new Participant("Alice", "alice@example.com","bic","iban",12));
         owers.add(new Participant("Bob", "bob@example.com","bic","iban",12));
         double amount = 50;
-        Expense expense = new Expense("Dinner", amount, payer, owers);
+        Tag tag = new Tag("testTag", Color.yellow);
+        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
 
         // Test getId() method
         assertEquals(0, expense.getId());

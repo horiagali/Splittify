@@ -29,6 +29,7 @@ public class Expense {
     private List<Participant> owers; //the people who owe money
 
     private double amount;
+    private Tag tag;
 
 
     // Constructors
@@ -37,10 +38,12 @@ public class Expense {
     }
     // creates an expense and modifies everyone's balance accordingly
 
-    public Expense(String title, double amount, Participant payer, ArrayList<Participant> owers) {
+
+    public Expense(String title, double amount, Participant payer, ArrayList<Participant> owers, Tag tag) {
         this.title = title;
         this.owers = owers;
         this.payer = payer;
+        this.tag = tag;
 
         if (amount < 0) {
             throw new IllegalArgumentException("Expense can not be negative.");
@@ -82,9 +85,16 @@ public class Expense {
         this.amount = amount;
     }
 
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
 
     public Participant getPayer() {
-        return payer;
+        return payer;   
     }
 
     public void setPayer(Participant payer) {
