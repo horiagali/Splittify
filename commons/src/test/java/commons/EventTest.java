@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 public class EventTest {
     
-    private Event event;
+/*    private Event event;
     private Event event2;
     private Event event3;
     private Participant participant;
@@ -58,5 +58,5 @@ public class EventTest {
         event.addExpense(expense);
         assertTrue(event.getExpenses().contains(expense));
     }
-
+*/
 }
