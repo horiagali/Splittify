@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 public class EventTest {
     
-/*    private Event event;
+    private Event event;
     private Event event2;
     private Event event3;
     private Participant participant;
@@ -21,9 +21,9 @@ public class EventTest {
 
     @BeforeEach
     void setup() {
-        event = new Event("ABC123", "Ski Trip", null, null, "abcpretendthisisacode" );
-        event2 = new Event("ABC123", "Ski Trip", null, null, "abcpretendthisisacode" );
-        event3 = new Event("ABC123", "Party", null, null, "abcpretendthisisacode" );
+        event = new Event(1, "Ski Trip", null, null, null );
+        event = new Event(2, "Ski Trip", null, null, null );
+        event = new Event(1, "Party", null, null, null );
         participant = new Participant("Martijn", "martijn@gmail.com");
         participant2 = new Participant("Iulia", "iulia@gmail.com");
         payors = new ArrayList<>();
@@ -58,5 +58,5 @@ public class EventTest {
         event.addExpense(expense);
         assertTrue(event.getExpenses().contains(expense));
     }
-*/
+
 }
