@@ -122,9 +122,6 @@ public class Expense {
     }
 
 
-
-
-
     //this method does the same as the previous one in reverse. This is needed when editing an expense or deleting it alltogether.
     //when editing an expense, you remove the debts of the old one and add the new one.
     public void reverseSettleDebts() {
