@@ -40,56 +40,107 @@ public class Participant {
         this.balance = balance;
     }
 
+    /**
+     * Default constructor required by JPA
+     */
     public Participant() {
         // Default constructor required by JPA
     }
 
     // Getters and setters
 
+    /**
+     * Getter
+     * @return participantID
+     */
     public Long getParticipantID() {
         return participantID;
     }
 
+    /**
+     * Setter
+     * @param participantID participantID
+     */
     public void setParticipantID(Long participantID) {
         this.participantID = participantID;
     }
 
+    /**
+     * Getter
+     * @return nickname
+     */
     public String getNickname() {
         return nickname;
     }
 
+    /**
+     * Setter
+     * @param nickname nickname of participant
+     */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
+    /**
+     * Getter
+     * @return email
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Setter
+     * @param email email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Getter
+     * @return BIC
+     */
     public String getBIC() {
         return BIC;
     }
 
+    /**
+     * Setter
+     * @param BIC BIC
+     */
     public void setBIC(String BIC) {
         this.BIC = BIC;
     }
 
+    /**
+     * Getter
+     * @return IBAN
+     */
     public String getIBAN() {
         return IBAN;
     }
 
+    /**
+     * Setter
+     * @param IBAN
+     */
     public void setIBAN(String IBAN) {
         this.IBAN = IBAN;
     }
 
+    /**
+     * Getter
+     * @return Balance
+     */
     public double getBalance() {
         return balance;
     }
 
+    /**
+     * Setter
+     * @param balance balance
+     */
     public void setBalance(double balance) {
         this.balance = balance;
     }
