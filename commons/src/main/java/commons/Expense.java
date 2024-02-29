@@ -29,6 +29,8 @@ public class Expense {
     private List<Participant> owers; //the people who owe money
 
     private double amount;
+    @OneToOne
+    private Tag tag;
 
     /**
      * Constructors
@@ -44,12 +46,15 @@ public class Expense {
      * @param amount The amount of the expense.
      * @param payer The participant who paid the expense.
      * @param owers The list of participants who owe money for the expense.
+     * @param tag tag for expense
      * @throws IllegalArgumentException if the amount is negative.
+     *
      */
-    public Expense(String title, double amount, Participant payer, ArrayList<Participant> owers) {
+    public Expense(String title, double amount, Participant payer, ArrayList<Participant> owers, Tag tag) {
         this.title = title;
         this.owers = owers;
         this.payer = payer;
+        this.tag = tag;
 
         if (amount < 0) {
             throw new IllegalArgumentException("Expense can not be negative.");
@@ -117,13 +122,20 @@ public class Expense {
         this.amount = amount;
     }
 
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
 
     /**
      * Returns the payer of the expense.
      * @return The payer of the expense.
      */
     public Participant getPayer() {
-        return payer;
+        return payer;   
     }
 
     /**
