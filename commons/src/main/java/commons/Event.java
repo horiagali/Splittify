@@ -9,6 +9,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import java.awt.*;
 
 @Entity
 @Table(name = "event")
@@ -46,6 +47,10 @@ public class Event {
         this.expenses = new ArrayList<>();
         this.participants = new ArrayList<>();
         this.tags = new ArrayList<>();
+        tags.add(new Tag("food", Color.green)); // fills the list of tags with the standard 4
+        tags.add(new Tag("entrance fees", Color.blue));
+        tags.add(new Tag("travel", Color.red));
+        tags.add(new Tag("no tag", Color.gray));
     }
 
     /**

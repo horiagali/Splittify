@@ -20,6 +20,7 @@ public class Expense {
     private ArrayList<Participant> payors; //the people who owe money
 
     private double amount;
+    private Tag tag;
 
     @ManyToOne
     private Event event;
@@ -30,10 +31,11 @@ public class Expense {
     }
 
     
-    public Expense(String title, double amount, Participant payee, ArrayList<Participant> payors) {
+    public Expense(String title, double amount, Participant payee, ArrayList<Participant> payors, Tag tag) {
         this.title = title;
         this.payee = payee;
         this.payors = payors;
+        this.tag = tag;
 
         if (amount < 0) {
             throw new IllegalArgumentException("Expense can not be negative.");
@@ -68,6 +70,14 @@ public class Expense {
             throw new IllegalArgumentException("Amount cannot be negative");
         }
         this.amount = amount;
+    }
+
+    public Tag getTag() {
+        return tag;
+    }
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
     }
 
     public Event getEvent() {
