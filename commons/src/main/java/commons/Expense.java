@@ -1,11 +1,20 @@
 package commons;
+
 import jakarta.persistence.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+/*
+-ExpenseID (long) (ID)
+- Title (String)
+- Payer (Participant)
+- Amount (double)
+- owers (List<Participants>) (Many to Many?)
+        - Date of transaction (figure out another name, maybe just date) (Date)
+        - Tag (tag)
+*/
 @Entity
 public class Expense {
 
@@ -15,30 +24,33 @@ public class Expense {
 
     private String title;
     @ManyToOne
-    private Participant payee; //payee is person who should get money from payors
-    @OneToMany
-    private ArrayList<Participant> payors; //the people who owe money
+    private Participant payer;
+    @OneToMany(targetEntity = Participant.class)
+    private List<Participant> owers; //the people who owe money
 
     private double amount;
 
-    @ManyToOne
-    private Event event;
 
     // Constructors
     public Expense() {
         // Default constructor for JPA
     }
+    // creates an expense and modifies everyone's balance accordingly
 
-    
-    public Expense(String title, double amount, Participant payee, ArrayList<Participant> payors) {
+    public Expense(String title, double amount, Participant payer, ArrayList<Participant> owers) {
         this.title = title;
-        this.payee = payee;
-        this.payors = payors;
+        this.owers = owers;
+        this.payer = payer;
 
         if (amount < 0) {
             throw new IllegalArgumentException("Expense can not be negative.");
         }
         this.amount = amount;
+
+        payer.setBalance(payer.getBalance() + amount); //increase the balance of the person who paid
+        for (Participant ower : owers) {
+            ower.setBalance(ower.getBalance() - amount / owers.size()); //decrease the balance of person who now settles their balance to payee
+        }
 
     }
 
@@ -70,64 +82,45 @@ public class Expense {
         this.amount = amount;
     }
 
-    public Event getEvent() {
-        return event;
+
+    public Participant getPayer() {
+        return payer;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setPayer(Participant payer) {
+        this.payer = payer;
     }
 
-    public Participant getPayee() {
-        return payee;
+    public List<Participant> getOwers() {
+        return owers;
     }
 
-    public void setPayee(Participant payee) {
-        this.payee = payee;
+    public void setOwers(ArrayList<Participant> owers) {
+        this.owers = owers;
     }
 
-    public ArrayList<Participant> getPayors() {
-        return payors;
-    }
+    /*
 
-    public void setPayors(ArrayList<Participant> payors) {
-        this.payors = payors;
-    }
+   When this method is called the balance of all people involved in the expense is adjusted as if everyone
+   paid what they owe.
 
-    //method for settling debts of event. When this is called, people matched to this expense will pay up (in debt, not real time)
-//    public void settleDebts() {
-//        payee.setDebt(payee.getDebt() + amount); //increase the debt of the person who paid (positive is surplus)
-//        for(Participant payor : payors) {
-//            payor.setDebt(payor.getDebt() - amount/payors.size()); //decrease the debt of person who now settles their debt to payee
-//        }
-//    }
-    public void settleDebts() {
-        payee.setBalance(payee.getBalance() + amount); // Increase the debt of the payee by the full amount
+     */
 
-        // Calculate the individual share for each payor
-        double individualShare = amount / payors.size();
 
-        // Distribute the amount among payors without rounding errors
-        for (Participant payor : payors) {
-            double updatedDebt = payor.getBalance() - individualShare;
-            payor.setBalance(updatedDebt);
-        }
-
-        // Handle any remaining amount due to rounding errors by distributing it to the first payor
-        double remainingAmount = amount - (individualShare * payors.size());
-        if (!payors.isEmpty()) {
-            double firstPayorDebt = payors.get(0).getBalance();
-            payors.get(0).setBalance(firstPayorDebt - remainingAmount);
+    public void settleBalance() {
+        payer.setBalance(payer.getBalance() - amount);  // payer is no longer owed the money
+        for (Participant ower : owers) {
+            ower.setBalance((ower.getBalance()) + amount * 1.0 / owers.size());  // each ower no longers owes his part of the expense
         }
     }
 
 
     //this method does the same as the previous one in reverse. This is needed when editing an expense or deleting it alltogether.
-    //when editing an expense, you remove the debts of the old one and add the new one.
-    public void reverseSettleDebts() {
-        payee.setBalance(payee.getBalance() - amount); //decrease the debt of the person who paid (positive is surplus)
-        for(Participant payor : payors) {
-            payor.setBalance(payor.getBalance() + amount/payors.size()); //increase the debt of person who now settles their debt to payee
+    //when editing an expense, you remove the balances of the old one and add the new one.
+    public void reverseSettleBalance() {
+        payer.setBalance(payer.getBalance() + amount); //increase the balance of the person who paid
+        for (Participant ower : owers) {
+            ower.setBalance(ower.getBalance() - amount / owers.size()); //decrease the balance of person who now settles their balance to payee
         }
     }
 
@@ -149,11 +142,18 @@ public class Expense {
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("id", id)
-                .append("title", title)
-                .append("amount", amount)
-                .toString();
+        String payerName = payer != null ? payer.getNickname() : null;
+        String owersList = owers != null ? owers.toString() : null;
+
+        return "Expense{" +
+                " id=" + id + "\n" +
+                "  title=" + title + "\n" +
+                "  amount=" + amount + "\n" +
+                "  payer=" + payerName + "\n" +
+                "  owers=" + owersList + "\n" +
+                "]";
     }
+
+
 }
 
