@@ -24,8 +24,8 @@ public class EventTest {
         event = new Event("ABC123", "Ski Trip", null, null, "abcpretendthisisacode" );
         event2 = new Event("ABC123", "Ski Trip", null, null, "abcpretendthisisacode" );
         event3 = new Event("ABC123", "Party", null, null, "abcpretendthisisacode" );
-        participant = new Participant("Martijn", "martijn@gmail.com");
-        participant2 = new Participant("Iulia", "iulia@gmail.com");
+        participant = new Participant("Martijn", "martijn@gmail.com", "ABCDUS33", "E89370400440532013000", 102.75);
+        participant2 = new Participant("Iulia", "iulia@gmail.com", "DEUTDEFF", "FR1420041010050500013M02606", 50.50);
         payors = new ArrayList<>();
         payors.add(participant2);
         expense = new Expense("Bought flowers for the group", 20.5,participant,payors);
