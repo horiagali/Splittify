@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EventTest {
-    
+
     private Event event;
     private Event event2;
     private Event event3;
@@ -19,15 +19,15 @@ public class EventTest {
 
     @BeforeEach
     void setup() {
-        event = new Event("ABC123", "Ski Trip", null, null, "abcpretendthisisacode" );
-        event2 = new Event("ABC123", "Ski Trip", null, null, "abcpretendthisisacode" );
-        event3 = new Event("ABC123", "Party", null, null, "abcpretendthisisacode" );
+        event = new Event("ABC123", "Ski Trip", null, null, "abcpretendthisisacode");
+        event2 = new Event("ABC123", "Ski Trip", null, null, "abcpretendthisisacode");
+        event3 = new Event("ABC123", "Party", null, null, "abcpretendthisisacode");
         participant = new Participant("Martijn", "martijn@gmail.com");
         participant2 = new Participant("Iulia", "iulia@gmail.com");
         payors = new ArrayList<>();
         payors.add(participant2);
-        expense = new Expense("Bought flowers for the group", 20.5,participant,payors);
-        
+        expense = new Expense("Bought flowers for the group", 20.5, participant, payors);
+
     }
 
     @Test

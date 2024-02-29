@@ -1,5 +1,7 @@
 package commons;
+
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -86,6 +88,7 @@ public class ExpenseTest {
                 "]";
         assertEquals(expected, expense.toString());
     }
+
     @Test
     public void testGettersAndSetters() {
         // Create sample data
@@ -118,6 +121,7 @@ public class ExpenseTest {
         assertEquals(newPayer, expense.getPayer());
         assertEquals(newOwers, expense.getOwers());
     }
+
     @Test
     public void testNegativeAmount() {
         Participant payer = new Participant("John", "john@example.com");

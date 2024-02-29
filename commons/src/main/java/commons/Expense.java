@@ -1,6 +1,9 @@
 package commons;
+
 import jakarta.persistence.*;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /*
@@ -22,8 +25,8 @@ public class Expense {
     private String title;
     @ManyToOne
     private Participant payer;
-    @OneToMany
-    private ArrayList<Participant> owers; //the people who owe money
+    @OneToMany(targetEntity = Participant.class)
+    private List<Participant> owers; //the people who owe money
 
     private double amount;
 
@@ -33,7 +36,7 @@ public class Expense {
         // Default constructor for JPA
     }
     // creates an expense and modifies everyone's balance accordingly
-    
+
     public Expense(String title, double amount, Participant payer, ArrayList<Participant> owers) {
         this.title = title;
         this.owers = owers;
@@ -45,8 +48,8 @@ public class Expense {
         this.amount = amount;
 
         payer.setBalance(payer.getBalance() + amount); //increase the balance of the person who paid
-        for(Participant ower : owers) {
-            ower.setBalance(ower.getBalance() - amount/owers.size()); //decrease the balance of person who now settles their balance to payee
+        for (Participant ower : owers) {
+            ower.setBalance(ower.getBalance() - amount / owers.size()); //decrease the balance of person who now settles their balance to payee
         }
 
     }
@@ -77,7 +80,6 @@ public class Expense {
     }
 
 
-
     public Participant getPayer() {
         return payer;
     }
@@ -86,7 +88,7 @@ public class Expense {
         this.payer = payer;
     }
 
-    public ArrayList<Participant> getOwers() {
+    public List<Participant> getOwers() {
         return owers;
     }
 
@@ -110,14 +112,12 @@ public class Expense {
     }
 
 
-
-
     //this method does the same as the previous one in reverse. This is needed when editing an expense or deleting it alltogether.
     //when editing an expense, you remove the balances of the old one and add the new one.
     public void reverseSettleBalance() {
         payer.setBalance(payer.getBalance() + amount); //increase the balance of the person who paid
-        for(Participant ower : owers) {
-            ower.setBalance(ower.getBalance() - amount/owers.size()); //decrease the balance of person who now settles their balance to payee
+        for (Participant ower : owers) {
+            ower.setBalance(ower.getBalance() - amount / owers.size()); //decrease the balance of person who now settles their balance to payee
         }
     }
 
@@ -150,8 +150,6 @@ public class Expense {
                 "  owers=" + owersList + "\n" +
                 "]";
     }
-
-
 
 
 }

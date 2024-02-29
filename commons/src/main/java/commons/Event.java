@@ -24,18 +24,19 @@ public class Event {
     private Date lastActivityDate;
     private String inviteCode;
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany  //(mappedBy = "event")
     private List<Expense> expenses; // List of expenses associated with the event
     @OneToMany(mappedBy = "event")
     private List<Participant> participants; // List of participants in the event
 
     /**
      * Creates an Event
-     * @param eventId Unique identifier for the event
-     * @param title Title of the event
-     * @param creationDate Date when the event was created
+     *
+     * @param eventId          Unique identifier for the event
+     * @param title            Title of the event
+     * @param creationDate     Date when the event was created
      * @param lastActivityDate Date of the last activity related to the event
-     * @param inviteCode Invite code for others to join the event
+     * @param inviteCode       Invite code for others to join the event
      */
     public Event(String eventId, String title, Date creationDate, Date lastActivityDate, String inviteCode) {
         this.eventId = eventId;
@@ -123,12 +124,12 @@ public class Event {
     }
 
     public boolean removeParticipant(Participant participant) {
-        if(!participants.contains(participant)) return true;
+        if (!participants.contains(participant)) return true;
         return participants.remove(participant);
     }
 
     public boolean editParticipant(Participant oldParticipant, Participant newParticipant) {
-        if(!participants.contains(oldParticipant)) return false;
+        if (!participants.contains(oldParticipant)) return false;
         int indexOfParticipant = participants.indexOf(oldParticipant);
         participants.set(indexOfParticipant, newParticipant);
         return true;
@@ -142,12 +143,12 @@ public class Event {
 
     public boolean removeExpense(Expense expense) {
         expense.reverseSettleBalance(); //recalculate balances to the state before this expense
-        if(!expenses.contains(expense)) return true;
+        if (!expenses.contains(expense)) return true;
         return expenses.remove(expense);
     }
 
     public boolean editExpense(Expense oldExpense, Expense newExpense) {
-        if(!expenses.contains(oldExpense)) return false;
+        if (!expenses.contains(oldExpense)) return false;
         oldExpense.reverseSettleBalance(); //recover old debts
         newExpense.settleBalance(); //update debts of involved people
         int indexOfExpense = expenses.indexOf(oldExpense);
@@ -157,6 +158,7 @@ public class Event {
 
     /**
      * Equals method
+     *
      * @param obj object to compare to
      * @return true iff same
      */
@@ -167,6 +169,7 @@ public class Event {
 
     /**
      * hash
+     *
      * @return hash code
      */
     @Override
@@ -176,6 +179,7 @@ public class Event {
 
     /**
      * To String method
+     *
      * @return a string
      */
     @Override
