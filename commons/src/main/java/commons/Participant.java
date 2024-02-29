@@ -112,10 +112,10 @@ public class Participant {
 
     /**
      * Setter
-     * @param BIC BIC
+     * @param BiC BIC
      */
-    public void setBic(String BIC) {
-        this.bic = BIC;
+    public void setBic(String BiC) {
+        this.bic = BiC;
     }
 
 
@@ -181,7 +181,9 @@ public class Participant {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Participant that = (Participant) o;
-        return Double.compare(balance, that.balance) == 0 && Objects.equals(participantID, that.participantID) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(bic, that.bic) && Objects.equals(iban, that.iban);
+        return Double.compare(balance, that.balance) == 0
+                && Objects.equals(participantID, that.participantID)
+                && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(bic, that.bic) && Objects.equals(iban, that.iban);
     }
 
     /**

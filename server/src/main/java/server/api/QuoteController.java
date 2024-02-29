@@ -36,16 +36,31 @@ public class QuoteController {
     private final Random random;
     private final QuoteRepository repo;
 
+    /**
+     * Constructs a new QuoteController.
+     * @param random Random object for generating random numbers.
+     * @param repo QuoteRepository for accessing quote data.
+     */
     public QuoteController(Random random, QuoteRepository repo) {
         this.random = random;
         this.repo = repo;
     }
 
+    /**
+     * Retrieves all quotes.
+     * @return List of all quotes.
+     */
     @GetMapping(path = {"", "/"})
     public List<Quote> getAll() {
         return repo.findAll();
     }
 
+    /**
+     * Retrieves a quote by its ID.
+     * @param id The ID of the quote to retrieve.
+     * @return ResponseEntity containing the retrieved quote,
+     * or a bad request response if the ID is invalid.
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Quote> getById(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
@@ -54,10 +69,17 @@ public class QuoteController {
         return ResponseEntity.ok(repo.findById(id).get());
     }   //// this is a random change
 
+    /**
+     * Adds a new quote.
+     * @param quote The quote to add.
+     * @return ResponseEntity containing the added quote,
+     * or a bad request response if the quote is invalid.
+     */
     @PostMapping(path = {"", "/"})
     public ResponseEntity<Quote> add(@RequestBody Quote quote) {
 
-        if (quote.person == null || isNullOrEmpty(quote.person.firstName) || isNullOrEmpty(quote.person.lastName)
+        if (quote.person == null || isNullOrEmpty(quote.person.firstName)
+                || isNullOrEmpty(quote.person.lastName)
                 || isNullOrEmpty(quote.quote)) {
             return ResponseEntity.badRequest().build();
         }
@@ -66,10 +88,19 @@ public class QuoteController {
         return ResponseEntity.ok(saved);
     }
 
+    /**
+     * Checks if a string is null or empty.
+     * @param s The string to check.
+     * @return True if the string is null or empty, false otherwise.
+     */
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
 
+    /**
+     * Retrieves a random quote.
+     * @return ResponseEntity containing a random quote.
+     */
     @GetMapping("rnd")
     public ResponseEntity<Quote> getRandom() {
         var quotes = repo.findAll();

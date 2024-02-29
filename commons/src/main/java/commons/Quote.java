@@ -39,26 +39,47 @@ public class Quote {
 	public Person person;
 	public String quote;
 
+	/**
+	 * Default constructor. Used for object mappers.
+	 */
 	@SuppressWarnings("unused")
-	private Quote() {
+	public Quote() {
 		// for object mappers
 	}
 
+	/**
+	 * Constructs a new Quote object with the given person and quote.
+	 * @param person The person associated with the quote.
+	 * @param quote The quote text.
+	 */
 	public Quote(Person person, String quote) {
 		this.person = person;
 		this.quote = quote;
 	}
 
+	/**
+	 * Checks if this Quote object is equal to another object.
+	 * @param obj The object to compare with.
+	 * @return true if the objects are equal, false otherwise.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		return EqualsBuilder.reflectionEquals(this, obj);
 	}
 
+	/**
+	 * Generates a hash code value for this Quote object.
+	 * @return The hash code value.
+	 */
 	@Override
 	public int hashCode() {
 		return HashCodeBuilder.reflectionHashCode(this);
 	}
 
+	/**
+	 * Generates a string representation of this Quote object.
+	 * @return The string representation.
+	 */
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
