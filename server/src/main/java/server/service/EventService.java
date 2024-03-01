@@ -19,7 +19,7 @@ public class EventService {
     }
 
     /**
-     * create a event
+     * create an event
      * @param event the new Event
      * @return the new Event
      */
@@ -60,7 +60,7 @@ public class EventService {
 
     /**
      * update an existing event
-     * @param event
+     * @param event the event to be updated
      * @param id an integer
      * @return the new event
      */
