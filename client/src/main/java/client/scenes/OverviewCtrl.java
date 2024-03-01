@@ -30,6 +30,11 @@ public class OverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    /**
+     * 
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -37,22 +42,38 @@ public class OverviewCtrl implements Initializable {
         this.names = new ArrayList<>();
     }
 
+    /**
+     * 
+     */
     public void back() {
         mainCtrl.showOverview();
     }
 
+    /**
+     * 
+     * @param name
+     */
     public void addName(String name) {
         names.add(name);
     }
 
+    /**
+     * 
+     */
     public void addExpense() {
         mainCtrl.showAddExpenses();
     }
 
+    /**
+     * 
+     */
     public void goToContact() {
         mainCtrl.goToContact();
     }
 
+    /**
+     * 
+     */
     public void sendInvites(){
         mainCtrl.sendInvites(eventName);
     }
@@ -65,6 +86,9 @@ public class OverviewCtrl implements Initializable {
         refresh();
     }
 
+    /**
+     * 
+     */
     public void refresh() {
         if (names != null && !names.isEmpty())
           myChoiceBox.getItems().add(names.get(names.size() - 1));

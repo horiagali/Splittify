@@ -46,46 +46,78 @@ public class QuoteOverviewCtrl implements Initializable {
     @FXML
     private TableColumn<Quote, String> colQuote;
 
+    /**
+     * 
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public QuoteOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * 
+     */
+    @SuppressWarnings("ParameterNumber")
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        colFirstName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().person.firstName));
-        colLastName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().person.lastName));
+        colFirstName.setCellValueFactory(q -> 
+        new SimpleStringProperty(q.getValue().person.firstName));
+        colLastName.setCellValueFactory(q -> 
+        new SimpleStringProperty(q.getValue().person.lastName));
         colQuote.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().quote));
     }
 
+    /**
+     * 
+     */
     public void addQuote() {
         mainCtrl.showAdd();
     }
 
+    /**
+     * 
+     */
     public void refresh() {
         var quotes = server.getQuotes();
         data = FXCollections.observableList(quotes);
         table.setItems(data);
     }
 
+    /**
+     * 
+     */
     public void page() {
         mainCtrl.showPage();
     }
 
+    /**
+     * 
+     */
     public void startPage() {
         mainCtrl.startPage();
     }
 
 
+    /**
+     * 
+     */
     public void showAddExpenses() {
         mainCtrl.showAddExpenses();
     }
 
+    /**
+     * 
+     */
     public void goToContact() {
         mainCtrl.goToContact();
     }
 
+    /**
+     * 
+     */
     public void goToOverview() {
         mainCtrl.goToOverview();
     }

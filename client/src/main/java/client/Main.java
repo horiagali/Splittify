@@ -64,6 +64,7 @@ public class Main extends Application {
         var invite = FXML.load(InviteCtrl.class, "client", "scenes", "Invite.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
-        mainCtrl.initialize(primaryStage, overview, add, page, startPage,addExpense, contactDetails, overviewApp, invite);
+        mainCtrl.initialize(primaryStage, overview, 
+        add, page, startPage,addExpense, contactDetails, overviewApp, invite);
     }
 }

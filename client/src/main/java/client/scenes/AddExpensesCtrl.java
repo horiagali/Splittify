@@ -8,6 +8,11 @@ public class AddExpensesCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    /**
+     * 
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public AddExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -15,6 +20,9 @@ public class AddExpensesCtrl {
 
     }
 
+    /**
+     * 
+     */
     public void back() {
         mainCtrl.goToOverview();
     }
