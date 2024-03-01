@@ -1,0 +1,18 @@
+### Create Event
+POST http://localhost:8080/api/events
+Accept: application/json
+Content-Type: application/json
+
+{
+  "title": "Stielt Party",
+  "date": null,
+  "description": "We have a DJ",
+  "location": "Stieltjesweg 12"
+}
+
+###
+GET http://localhost:8080/api/events
+Accept: application/json
+Content-Type: application/json
+
+

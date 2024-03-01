@@ -1,8 +1,7 @@
 package commons;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
 import java.awt.*;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -12,7 +11,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @Entity
 public class Tag {
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String name;
     private Color color;
 
