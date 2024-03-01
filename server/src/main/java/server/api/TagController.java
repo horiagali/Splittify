@@ -39,7 +39,7 @@ public class TagController {
      */
     @GetMapping("/{id}")
     @ResponseBody
-    public Tag getById(@PathVariable("id") Long id) {
+    public Tag getById(@PathVariable("id") Integer id) {
         return tagService.getTagById(id);
     }
 
@@ -62,7 +62,7 @@ public class TagController {
      */
     @DeleteMapping("/{id}")
     @ResponseBody
-    public Tag deleteTag(@PathVariable("id") Long id){
+    public Tag deleteTag(@PathVariable("id") Integer id){
         return tagService.deleteTag(id);
     }
 
@@ -74,7 +74,7 @@ public class TagController {
      */
     @PutMapping("/{id}")
     @ResponseBody
-    public Tag updateTag(@RequestBody Tag tag, @PathVariable("id") Long id){
+    public Tag updateTag(@RequestBody Tag tag, @PathVariable("id") Integer id){
         return tagService.updateTag(tag, id);
     }
 }

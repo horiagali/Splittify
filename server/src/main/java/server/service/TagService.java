@@ -42,7 +42,7 @@ public class TagService {
      * @param id The ID of the tag
      * @return The found Tag, or null if not found
      */
-    public Tag getTagById(Long id){
+    public Tag getTagById(Integer id){
         return tagRepository.findById(id).orElse(null);
     }
 
@@ -51,7 +51,7 @@ public class TagService {
      * @param id The ID of the tag to delete
      * @return The deleted tag, or null if not found
      */
-    public Tag deleteTag(Long id){
+    public Tag deleteTag(Integer id){
         Tag toDelete = getTagById(id);
         if (toDelete != null)
             tagRepository.delete(toDelete);
@@ -63,7 +63,7 @@ public class TagService {
      * @param tag The updated tag
      * @return The updated tag
      */
-    public Tag updateTag(Tag tag, Long id){
+    public Tag updateTag(Tag tag, Integer id){
         Tag existingTag = getTagById(id);
         if (existingTag == null)
             return null;

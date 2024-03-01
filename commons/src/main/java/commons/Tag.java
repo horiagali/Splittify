@@ -11,12 +11,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 @Entity
 public class Tag {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
     private Color color;
 
-    @ManyToOne private Event event;
+    @ManyToOne @JoinColumn(name = "event_id") private Event event;
 
     /**
      * constructor to create a Tag
