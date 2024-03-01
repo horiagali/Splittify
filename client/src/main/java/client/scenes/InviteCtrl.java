@@ -17,18 +17,31 @@ public class InviteCtrl implements Initializable {
     @FXML
     private Label code;
 
+    /**
+     * 
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public InviteCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
 
+    /**
+     *
+     * @param eventName
+     */
     public void setName(Label eventName){
         ///temporary, we should get it from the database
         name.setText(eventName.getText());
         //name.setText("New Year Party");
         name.setStyle("-fx-font-weight: bold");
     }
+
+    /**
+     * 
+     */
     public void setCode(){
         ///temporary, we should get it from the database
         code.setText("AC74ED");

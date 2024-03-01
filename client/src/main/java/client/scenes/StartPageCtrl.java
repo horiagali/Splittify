@@ -27,6 +27,11 @@ public class StartPageCtrl {
     private TableView<Event> table;
 
 
+    /**
+     * 
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public StartPageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -34,17 +39,25 @@ public class StartPageCtrl {
 
     }
 
+    /**
+     * 
+     */
     public void back() {
         mainCtrl.showOverview();
     }
 
+    /**
+     * 
+     */
     public void refresh() {
         var events = server.getEvents();
         data = FXCollections.observableList(events);
         table.setItems(data);
     }
 
-
+    /**
+     * 
+     */
     public void addEvent() {
         try {
             server.addEvent(getEvent());
@@ -61,8 +74,14 @@ public class StartPageCtrl {
         mainCtrl.showOverview();
     }
 
+    /**
+     * 
+     * @return return event
+     */
     private Quote getEvent() {   /// couldn t get the http request to work with event entity
-        return new Quote(new Person(eventName.getText(), "no location added"), "no date added");    /// temporary here should be all event attributes
+        return new Quote(new Person(eventName.getText(),
+         "no location added"), "no date added");   
+         /// temporary here should be all event attributes
 
     }
 
@@ -70,6 +89,10 @@ public class StartPageCtrl {
         eventName.clear();
     }
 
+    /**
+     * 
+     * @param e
+     */
     public void keyPressed(KeyEvent e) {
         switch (e.getCode()) {
             case ENTER:
@@ -83,6 +106,9 @@ public class StartPageCtrl {
         }
     }
 
+    /**
+     * 
+     */
     public void cancel() {
         clearFields();
         mainCtrl.showOverview();

@@ -48,10 +48,26 @@ public class MainCtrl {
     private Scene invite;
     private InviteCtrl inviteCtrl;
 
+    /**
+     * 
+     * @param primaryStage
+     * @param overview
+     * @param add
+     * @param page
+     * @param startPage
+     * @param addExpense
+     * @param contactDetails
+     * @param overviewApp
+     * @param invite
+     */
+
+    @SuppressWarnings({"ParameterNumber"})
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
-                           Pair<StartPageCtrl, Parent> startPage, Pair<AddExpensesCtrl, Parent> addExpense,
-                           Pair<ContactDetailsCtrl, Parent> contactDetails, Pair<OverviewCtrl, Parent> overviewApp,
+                           Pair<StartPageCtrl, Parent> startPage, 
+                           Pair<AddExpensesCtrl, Parent> addExpense,
+                           Pair<ContactDetailsCtrl, Parent> contactDetails, 
+                           Pair<OverviewCtrl, Parent> overviewApp,
                             Pair<InviteCtrl, Parent> invite) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -81,54 +97,88 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    /**
+     * 
+     */
     public void showOverview() {
         primaryStage.setTitle("Events: Overview");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
 //        startPageCtrl.refresh();  doesn't work (yet!)
     }
+
+    /**
+     * 
+     * @param name
+     */
     public void addToOverview(String name) {
         overviewAppCtrl.addName(name);
         overviewAppCtrl.refresh();
     }
+
+    /**
+     * 
+     */
     public void showAdd() {
         primaryStage.setTitle("Quotes: Adding Quote");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
+    /**
+     * 
+     */
     public void addEvent() {
         primaryStage.setTitle("Event: Adding Events");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
+    /**
+     * 
+     */
     public void showPage() {
         primaryStage.setTitle("Iulia's Page");
         primaryStage.setScene(page);
     }
 
+    /**
+     * 
+     */
     public void startPage() {
         primaryStage.setTitle("Start Screen");
         primaryStage.setScene(startPage);
     }
 
+    /**
+     * 
+     */
     public void showAddExpenses() {
         primaryStage.setTitle("Expenses: Add Expense");
         primaryStage.setScene(addExpenses);
         // Additional setup for the Add Expense page, if needed
     }
 
+    /**
+     * 
+     */
     public void goToContact() {
         primaryStage.setTitle("Contact Details");
         primaryStage.setScene(contactDetails);
     }
 
+    /**
+     * 
+     */
     public void goToOverview() {
         primaryStage.setTitle("Overview");
         primaryStage.setScene(overviewApp);
     }
 
+    /**
+     * 
+     * @param eventName
+     */
     public void sendInvites(Label eventName) {
         primaryStage.setTitle("Send Invites");
         inviteCtrl.setName(eventName);

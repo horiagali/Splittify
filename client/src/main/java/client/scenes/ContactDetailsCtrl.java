@@ -26,6 +26,11 @@ public class ContactDetailsCtrl {
     @FXML
     private TextField bicField;
 
+    /**
+     * 
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public ContactDetailsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -33,16 +38,27 @@ public class ContactDetailsCtrl {
 
     }
 
+    /**
+     * stop filling in fields
+     */
     public void abort() {
         clear();
         mainCtrl.showOverview();
     }
+
+    /**
+     * clear fields
+     */
     public void clear(){
         nameField.clear();
         emailField.clear();
         ibanField.clear();
         bicField.clear();
     }
+
+    /**
+     * 
+     */
     public void ok() {
 //        try {
 //            server.addQuote(getQuote());

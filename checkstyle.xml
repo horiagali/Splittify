@@ -11,12 +11,15 @@
       <!--Makes sure a line cannot be longer than 100 characters-->
       <property name="max" value="100" />
    </module>
-
+   <module name="SuppressWarningsFilter" />
    
 
    <module name="TreeWalker">
       <module name="UnusedImports" />
 
+      <module name="SuppressWarningsHolder" />
+      
+      <!--enables suppresswarnings for methods-->
       <module name="ParameterNumber">
          <!--Maximum amount of parameters in a method-->
          <property name="max" value="6" />
@@ -48,7 +51,7 @@
       <module name="AbbreviationAsWordInName">
          <!--Makes sure a name consists of no more than 2 consecutive capital letters-->
          <property name="allowedAbbreviations" value="XML,URL,O"/>
-         <property name="allowedAbbreviationLength" value="1"/>
+         <property name="allowedAbbreviationLength" value="3"/>
          <property name="ignoreStatic" value="false"/>
          <property name="ignoreOverriddenMethods" value="false" />
       </module>
