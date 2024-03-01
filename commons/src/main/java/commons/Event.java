@@ -236,22 +236,37 @@ public class Event {
         return true;
     }
 
-    // Methods to manage expenses
+    /**
+     * Method to add an expense to an event.
+     * @param expense that will be added
+     * @return boolean whether the adding was succesful.
+     */
     public boolean addExpense(Expense expense) {
         expense.settleBalance(); //make sure the balances of people involved are recalculated
         return expenses.add(expense);
     }
 
+    /**
+     * Method to remove an expense from an event.
+     * @param expense to remove
+     * @return boolean indicating whether removing was succesful
+     */
     public boolean removeExpense(Expense expense) {
         expense.reverseSettleBalance(); //recalculate balances to the state before this expense
         if (!expenses.contains(expense)) return true;
         return expenses.remove(expense);
     }
 
+    /**
+     * method to edit an expense 
+     * @param oldExpense expense which is edited
+     * @param newExpense the new values of the expense in question
+     * @return boolean indicating whether editing was succesful
+     */
     public boolean editExpense(Expense oldExpense, Expense newExpense) {
         if (!expenses.contains(oldExpense)) return false;
         oldExpense.reverseSettleBalance(); //recover old debts
-        newExpense.settleBalance(); //update debts of involved people
+        newExpense.settleBalance(); //update balances of involved people
         int indexOfExpense = expenses.indexOf(oldExpense);
         expenses.set(indexOfExpense, newExpense);
         return true;
@@ -273,7 +288,8 @@ public class Event {
      * @return the filtered list of expenses
      */
     public List<Expense> includingExpenses(Participant participant){
-        return expenses.stream().filter(x -> (x.getOwers().contains(participant) || x.getOwers().equals(participant))).toList();
+        return expenses.stream().filter(x -> (x.getOwers().contains(participant) || 
+        x.getOwers().equals(participant))).toList();
     }
 
     /**

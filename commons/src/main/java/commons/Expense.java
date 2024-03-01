@@ -55,7 +55,8 @@ public class Expense {
      * @throws IllegalArgumentException if the amount is negative.
      *
      */
-    public Expense(String title, double amount, Participant payer, ArrayList<Participant> owers, Tag tag) {
+    public Expense(String title, double amount, 
+    Participant payer, ArrayList<Participant> owers, Tag tag) {
         this.title = title;
         this.owers = owers;
         this.payer = payer;
@@ -127,10 +128,18 @@ public class Expense {
         this.amount = amount;
     }
 
+    /**
+     * retrieve tag of this expense.
+     * @return Tag tag
+     */
     public Tag getTag() {
         return tag;
     }
 
+    /**
+     * change the tag of this expense.
+     * @param tag
+     */
     public void setTag(Tag tag) {
         this.tag = tag;
     }

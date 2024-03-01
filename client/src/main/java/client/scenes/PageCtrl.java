@@ -7,6 +7,11 @@ public class PageCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    /**
+     * 
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public PageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -14,6 +19,9 @@ public class PageCtrl {
 
     }
 
+    /**
+     * 
+     */
     public void okay() {
         mainCtrl.showOverview();
     }

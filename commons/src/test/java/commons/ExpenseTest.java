@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.awt.Color;
 import java.util.ArrayList;
 
-@SuppressWarnings("checkstyle:*")
+
 public class ExpenseTest {
 
     @Test

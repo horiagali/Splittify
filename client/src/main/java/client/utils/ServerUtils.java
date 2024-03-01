@@ -36,6 +36,11 @@ public class ServerUtils {
 
 	private static final String SERVER = "http://localhost:8080/";
 
+	/**
+	 * 
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
 	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
 		var url = new URI("http://localhost:8080/api/quotes").toURL();
 		var is = url.openConnection().getInputStream();
@@ -46,6 +51,10 @@ public class ServerUtils {
 		}
 	}
 
+	/**
+	 * 
+	 * @return list of quotes
+	 */
 	public List<Quote> getQuotes() {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/quotes") //
@@ -54,6 +63,10 @@ public class ServerUtils {
                 .get(new GenericType<List<Quote>>() {});
 	}
 
+	/**
+	 * 
+	 * @return list of events
+	 */
 	public List<Event> getEvents() {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/events") //
@@ -62,6 +75,11 @@ public class ServerUtils {
 				.get(new GenericType<List<Event>>() {});
 	}
 
+	/**
+	 * 
+	 * @param quote
+	 * @return quote that is added
+	 */
 	public Quote addQuote(Quote quote) {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(SERVER).path("api/quotes") //
@@ -70,6 +88,11 @@ public class ServerUtils {
 				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
 	}
 
+	/**
+	 * 
+	 * @param event
+	 * @return event that is added (as quote for now)
+	 */
 	public Quote addEvent(Quote event) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER).path("api/quotes")
