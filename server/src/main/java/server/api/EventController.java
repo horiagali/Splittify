@@ -90,6 +90,13 @@ public class EventController {
     public Event deleteEvent(@PathVariable("id") Integer id){
         return eventService.deleteEvent(id);
     }
+
+    /**
+     * Update an existing event
+     * @param event the updated event
+     * @param id the id of the event to update
+     * @return the updated event
+     */
     @PutMapping("/{id}")
     @ResponseBody
     public Event updateEvent(Event event, @PathVariable("id") Integer id){

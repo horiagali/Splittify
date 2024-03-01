@@ -61,6 +61,7 @@ public class TagService {
     /**
      * Update an existing tag
      * @param tag The updated tag
+     * @param id the id
      * @return The updated tag
      */
     public Tag updateTag(Tag tag, Integer id){

@@ -24,7 +24,8 @@ public class EventService {
      * @return the new Event
      */
     public Event createEvent(Event event){
-        Event eventEntity = new Event(event.getTitle(), event.getDescription(), event.getLocation(), event.getDate());
+        Event eventEntity = new Event(event.getTitle(), event.getDescription(),
+                event.getLocation(), event.getDate());
         eventRepository.save(eventEntity);
         return eventEntity;
     }
