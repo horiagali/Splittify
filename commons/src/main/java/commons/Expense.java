@@ -16,6 +16,7 @@ import java.util.Objects;
         - Tag (tag)
 */
 @Entity
+@Table(name = "expenses")
 public class Expense {
 
     @Id
@@ -24,9 +25,13 @@ public class Expense {
 
     private String title;
     @ManyToOne
+    @JoinColumn(name = "participant_id")
     private Participant payer;
-    @OneToMany(targetEntity = Participant.class)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Participant> owers; //the people who owe money
+
+    @ManyToOne
+    private Event event;
 
     private double amount;
     @OneToOne

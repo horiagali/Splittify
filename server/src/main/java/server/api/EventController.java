@@ -16,44 +16,34 @@
 package server.api;
 
 import java.util.List;
-import java.util.Random;
 
 import commons.Event;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import commons.Event;
-import server.database.EventRepository;
+import server.service.EventService;
 
 @RestController
 @RequestMapping("/api/events")
 public class EventController {
 
-    private final Random random;
-    private final EventRepository repo;
+    private final EventService eventService;
 
     /**
-     * Constructs a new EventController.
-     * @param random Random object for generating random numbers.
-     * @param repo EventRepository for accessing event data.
+     * Constructor for the eventController
+     * @param eventService an EventService
      */
-    public EventController(Random random, EventRepository repo) {
-        this.random = random;
-        this.repo = repo;
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
     }
 
     /**
      * Retrieves all events.
      * @return List of all events.
      */
-    @GetMapping(path = {"", "/"})
-    public List<Event> getAll() {
-        return repo.findAll();
+    @GetMapping
+    @ResponseBody
+    public List<Event> getAllEvents() {
+        return eventService.getEvents();
     }
 
     /**
@@ -63,12 +53,10 @@ public class EventController {
      * or a bad request response if the ID is invalid.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getById(@PathVariable("id") long id) {
-        if (id < 0 || !repo.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(repo.findById(id).get());
-    }   //// this is a random change
+    @ResponseBody
+    public Event getById(@PathVariable("id") Integer id) {
+        return eventService.getEventById(id);
+    }
 
     /**
      * Adds a new event.
@@ -76,15 +64,11 @@ public class EventController {
      * @return ResponseEntity containing the added event,
      * or a bad request response if the event is invalid.
      */
-    @PostMapping(path = {"", "/"})
-    public ResponseEntity<Event> add(@RequestBody Event event) {
-
-        if (event.getTitle() == null || isNullOrEmpty(event.getTitle())) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        Event saved = repo.save(event);
-        return ResponseEntity.ok(saved);
+    @PostMapping
+    @ResponseBody
+    public Event createEvent(@RequestBody Event event) {
+        System.out.println(event);
+        return eventService.createEvent(event);
     }
 
     /**
@@ -97,13 +81,18 @@ public class EventController {
     }
 
     /**
-     * Retrieves a random event.
-     * @return ResponseEntity containing a random event.
+     * delete an event by id
+     * @param id the id of the deleted event
+     * @return an Event
      */
-    @GetMapping("rnd")
-    public ResponseEntity<Event> getRandom() {
-        var events = repo.findAll();
-        var idx = random.nextInt((int) repo.count());
-        return ResponseEntity.ok(events.get(idx));
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public Event deleteEvent(@PathVariable("id") Integer id){
+        return eventService.deleteEvent(id);
+    }
+    @PutMapping("/{id}")
+    @ResponseBody
+    public Event updateEvent(Event event, @PathVariable("id") Integer id){
+        return eventService.updateEvent(event, id);
     }
 }

@@ -11,35 +11,33 @@ import java.awt.*;
 import java.util.List;
 
 @Entity
-@Table(name = "event")
+@Table(name = "events")
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String title;
     private Date date;
     private String description;
     private String location;
 
-    @OneToMany  //(mappedBy = "event")
+    @OneToMany (mappedBy = "event", cascade = CascadeType.ALL)
     private List<Expense> expenses; // List of expenses associated with the event
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Participant> participants; // List of participants in the event'
 
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Tag> tags;
 
     /**
      * constructor for the event
-     * @param id the id
      * @param title the title as a String
      * @param description the description as a String
      * @param location the location as a String
      * @param date the date as a Date
      */
-    public Event(Integer id, String title, String description, String location, Date date) {
-        this.id = id;
+    public Event(String title, String description, String location, Date date) {
         this.title = title;
         this.description = description;
         this.location = location;
@@ -47,10 +45,26 @@ public class Event {
         this.expenses = new ArrayList<>();
         this.participants = new ArrayList<>();
         this.tags = new ArrayList<>();
-        tags.add(new Tag("food", Color.green)); // fills the list of tags with the standard 4
-        tags.add(new Tag("entrance fees", Color.blue));
-        tags.add(new Tag("travel", Color.red));
-        tags.add(new Tag("no tag", Color.gray));
+    }
+
+    /**
+     * complete constructor for the event
+     * @param title the title as a String
+     * @param date the date as a Date
+     * @param description the description as a String
+     * @param location the location as a String
+     * @param expenses the expenses as a List of Expense
+     * @param participants the participants as a List of Participant
+     * @param tags the participants as a List of Tag
+     */
+    public Event(String title, Date date, String description, String location, List<Expense> expenses, List<Participant> participants, List<Tag> tags) {
+        this.title = title;
+        this.date = date;
+        this.description = description;
+        this.location = location;
+        this.expenses = expenses;
+        this.participants = participants;
+        this.tags = tags;
     }
 
     /**
