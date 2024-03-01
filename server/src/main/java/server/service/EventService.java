@@ -4,7 +4,6 @@ import commons.Event;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
