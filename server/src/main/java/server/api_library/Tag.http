@@ -1,0 +1,18 @@
+### Create Tag
+POST http://localhost:8080/api/tags
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "travel",
+  "color": {
+    "red": 255,
+    "green": 0,
+    "blue": 0
+  }
+}
+
+### Get All Tags
+GET http://localhost:8080/api/tags
+Accept: application/json
+Content-Type: application/json
