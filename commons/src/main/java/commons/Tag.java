@@ -52,6 +52,14 @@ public class Tag {
     }
 
     /**
+     * Setter for the event of a tag.
+     * @param event the event of the tag.
+     */
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    /**
      * retrieve event this tag belongs to
      * @return event
      */
@@ -92,6 +100,10 @@ public class Tag {
         return color;
     }
 
+    /**
+     * toString method.
+     * @return the toString expression of the tag.
+     */
     @Override
     public String toString() {
         return "ID: " + id + " name: " + name + " color: " + color;
