@@ -21,20 +21,26 @@ import java.util.ResourceBundle;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
+import commons.Person;
 import commons.Quote;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 
 public class QuoteOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
+    @FXML
+    private TextField eventName;
     private ObservableList<Quote> data;
 
     @FXML
@@ -55,6 +61,41 @@ public class QuoteOverviewCtrl implements Initializable {
     public QuoteOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+    }
+    /**
+     *
+     * adds an event to the table
+
+     */
+    public void addEvent() {
+        try {
+            server.addEvent(getEvent());
+        } catch (WebApplicationException e) {
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
+        }
+
+        clearFields();
+        mainCtrl.showOverview();
+    }
+    private void clearFields() {
+        eventName.clear();
+    }
+
+
+    /**
+     *
+     * @return return event
+     */
+    private Quote getEvent() {   /// couldn t get the http request to work with event entity
+        return new Quote(new Person(eventName.getText(),
+                "no location added"), "no date added");
+        /// temporary here should be all event attributes
+
     }
 
     /**
@@ -86,6 +127,7 @@ public class QuoteOverviewCtrl implements Initializable {
         table.setItems(data);
     }
 
+
     /**
      * 
      */
@@ -96,9 +138,6 @@ public class QuoteOverviewCtrl implements Initializable {
     /**
      * 
      */
-    public void startPage() {
-        mainCtrl.startPage();
-    }
 
 
     /**
