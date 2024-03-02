@@ -53,7 +53,6 @@ public class MainCtrl {
      * @param overview
      * @param add
      * @param page
-     * @param startPage
      * @param addExpense
      * @param contactDetails
      * @param overviewApp

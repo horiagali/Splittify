@@ -62,6 +62,9 @@ public class QuoteOverviewCtrl implements Initializable {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
+    /*
+    adds an event to the table
+     */
     public void addEvent() {
         try {
             server.addEvent(getEvent());
