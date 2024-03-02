@@ -33,8 +33,7 @@ public class MainCtrl {
 
     private PageCtrl pageCtrl;
     private Scene page;
-    private StartPageCtrl startPageCtrl;
-    private Scene startPage;
+
 
     private AddExpensesCtrl addExpensesCtrl;
     private Scene addExpenses;
@@ -64,7 +63,6 @@ public class MainCtrl {
     @SuppressWarnings({"ParameterNumber"})
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
-                           Pair<StartPageCtrl, Parent> startPage, 
                            Pair<AddExpensesCtrl, Parent> addExpense,
                            Pair<ContactDetailsCtrl, Parent> contactDetails, 
                            Pair<OverviewCtrl, Parent> overviewApp,
@@ -79,8 +77,6 @@ public class MainCtrl {
         this.pageCtrl = page.getKey();
         this.page = new Scene(page.getValue());
 
-        this.startPageCtrl = startPage.getKey();
-        this.startPage = new Scene(startPage.getValue());
 
         this.addExpensesCtrl = addExpense.getKey();
         this.addExpenses = new Scene(addExpense.getValue());
@@ -145,10 +141,6 @@ public class MainCtrl {
     /**
      * 
      */
-    public void startPage() {
-        primaryStage.setTitle("Start Screen");
-        primaryStage.setScene(startPage);
-    }
 
     /**
      * 
