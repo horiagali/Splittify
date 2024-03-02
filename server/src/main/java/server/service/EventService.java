@@ -19,12 +19,13 @@ public class EventService {
     }
 
     /**
-     * create a event
+     * create an event
      * @param event the new Event
      * @return the new Event
      */
     public Event createEvent(Event event){
-        Event eventEntity = new Event(event.getTitle(), event.getDescription(), event.getLocation(), event.getDate());
+        Event eventEntity = new Event(event.getTitle(), event.getDescription(),
+                event.getLocation(), event.getDate());
         eventRepository.save(eventEntity);
         return eventEntity;
     }
@@ -60,7 +61,7 @@ public class EventService {
 
     /**
      * update an existing event
-     * @param event
+     * @param event the event to be updated
      * @param id an integer
      * @return the new event
      */

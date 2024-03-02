@@ -57,7 +57,8 @@ public class Event {
      * @param participants the participants as a List of Participant
      * @param tags the participants as a List of Tag
      */
-    public Event(String title, Date date, String description, String location, List<Expense> expenses, List<Participant> participants, List<Tag> tags) {
+    public Event(String title, Date date, String description, String location,
+                 List<Expense> expenses, List<Participant> participants, List<Tag> tags) {
         this.title = title;
         this.date = date;
         this.description = description;
