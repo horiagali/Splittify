@@ -18,6 +18,7 @@ package server.api;
 import java.util.List;
 
 import commons.Event;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import server.service.EventService;
@@ -54,7 +55,7 @@ public class EventController {
      */
     @GetMapping("/{id}")
     @ResponseBody
-    public Event getById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Event> getById(@PathVariable("id") Integer id) {
         return eventService.getEventById(id);
     }
 
@@ -66,7 +67,7 @@ public class EventController {
      */
     @PostMapping
     @ResponseBody
-    public Event createEvent(@RequestBody Event event) {
+    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         System.out.println(event);
         return eventService.createEvent(event);
     }
@@ -87,7 +88,7 @@ public class EventController {
      */
     @DeleteMapping("/{id}")
     @ResponseBody
-    public Event deleteEvent(@PathVariable("id") Integer id){
+    public ResponseEntity<Event> deleteEvent(@PathVariable("id") Integer id){
         return eventService.deleteEvent(id);
     }
 
@@ -99,7 +100,7 @@ public class EventController {
      */
     @PutMapping("/{id}")
     @ResponseBody
-    public Event updateEvent(Event event, @PathVariable("id") Integer id){
+    public ResponseEntity<Event> updateEvent(Event event, @PathVariable("id") Integer id){
         return eventService.updateEvent(event, id);
     }
 }
