@@ -16,13 +16,13 @@
 package client.scenes;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
-import commons.Person;
-import commons.Quote;
+import commons.Event;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -41,16 +41,16 @@ public class QuoteOverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     @FXML
     private TextField eventName;
-    private ObservableList<Quote> data;
+    private ObservableList<Event> data;
 
     @FXML
-    private TableView<Quote> table;
+    private TableView<Event> table;
     @FXML
-    private TableColumn<Quote, String> colFirstName;
+    private TableColumn<Event, String> colFirstName;
     @FXML
-    private TableColumn<Quote, String> colLastName;
+    private TableColumn<Event, String> colLastName;
     @FXML
-    private TableColumn<Quote, String> colQuote;
+    private TableColumn<Event, String> colQuote;
 
     /**
      * 
@@ -91,10 +91,8 @@ public class QuoteOverviewCtrl implements Initializable {
      *
      * @return return event
      */
-    private Quote getEvent() {   /// couldn t get the http request to work with event entity
-        return new Quote(new Person(eventName.getText(),
-                "no location added"), "no date added");
-        /// temporary here should be all event attributes
+    private Event getEvent() {
+        return new Event(eventName.getText(), "empty description", "empty location", new Date());
 
     }
 
@@ -105,10 +103,10 @@ public class QuoteOverviewCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         colFirstName.setCellValueFactory(q -> 
-        new SimpleStringProperty(q.getValue().person.firstName));
+        new SimpleStringProperty(q.getValue().getTitle()));
         colLastName.setCellValueFactory(q -> 
-        new SimpleStringProperty(q.getValue().person.lastName));
-        colQuote.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().quote));
+        new SimpleStringProperty(q.getValue().getLocation()));
+        colQuote.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
     }
 
     /**
@@ -122,8 +120,8 @@ public class QuoteOverviewCtrl implements Initializable {
      * 
      */
     public void refresh() {
-        var quotes = server.getQuotes();
-        data = FXCollections.observableList(quotes);
+        var events = server.getEvents();
+        data = FXCollections.observableList(events);
         table.setItems(data);
     }
 

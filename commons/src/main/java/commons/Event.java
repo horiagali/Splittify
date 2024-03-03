@@ -16,7 +16,7 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
     private String title;
     private Date date;
     private String description;
@@ -82,7 +82,7 @@ public class Event {
      * @return an Integer, the id
      */
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
     /**
@@ -145,7 +145,7 @@ public class Event {
      * a setter for the id
      * @param id an integer
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

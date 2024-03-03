@@ -93,12 +93,12 @@ public class ServerUtils {
 	 * @param event
 	 * @return event that is added (as quote for now)
 	 */
-	public Quote addEvent(Quote event) {
+	public Event addEvent(Event event) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/quotes")
+				.target(SERVER).path("api/events")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
-				.post(Entity.entity(event, APPLICATION_JSON), Quote.class);
+				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
 
 }

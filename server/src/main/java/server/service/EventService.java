@@ -47,7 +47,7 @@ public class EventService {
      * @param id an Integer
      * @return the found Event
      */
-    public ResponseEntity<Event> getEventById(Integer id) {
+    public ResponseEntity<Event> getEventById(Long id) {
         if (!eventRepository.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
@@ -60,7 +60,7 @@ public class EventService {
      * @param id the id
      * @return the deleted event
      */
-    public ResponseEntity<Event> deleteEvent(Integer id){
+    public ResponseEntity<Event> deleteEvent(Long id){
         if (!eventRepository.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
@@ -75,7 +75,7 @@ public class EventService {
      * @param id an integer
      * @return the new event
      */
-    public ResponseEntity<Event> updateEvent(Event event, Integer id){
+    public ResponseEntity<Event> updateEvent(Event event, Long id){
         if (!eventRepository.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
