@@ -67,7 +67,8 @@ public class ParticipantController {
      * @return 200 if successful, else 404 if not found
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Participant> update(@PathVariable Long id, @RequestBody Participant participant) {
+    public ResponseEntity<Participant> update(@PathVariable Long id,
+                                              @RequestBody Participant participant) {
         return participantService.updateParticipant(participant, id);
     }
 
