@@ -56,7 +56,7 @@ public class Expense {
      *
      */
     public Expense(String title, double amount, 
-    Participant payer, ArrayList<Participant> owers, Tag tag) {
+    Participant payer, List<Participant> owers, Tag tag) {
         this.title = title;
         this.owers = owers;
         this.payer = payer;
