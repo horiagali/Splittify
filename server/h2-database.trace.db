@@ -221,3 +221,9 @@ org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-22
 org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
 2024-03-01 22:40:36.934059+01:00 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLNonTransientException: The object is already closed [90007-224]
+2024-03-03 15:11:24.202454+01:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'' (PARTICIPANT: ""EVENT_ID"" INTEGER)"; SQL statement:
+INSERT INTO "PUBLIC"."PARTICIPANT"("ID","DEBT","EMAIL","NAME","EVENT_ID","PARTICIPANTID","BALANCE","BIC","IBAN","NICKNAME")VALUES(?,?,?,?,?,?,?,?,?,?) [22018-224]
+2024-03-03 15:11:24.207935+01:00 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLDataException: Data conversion error converting "'' (PARTICIPANT: ""EVENT_ID"" INTEGER)"; SQL statement:
+INSERT INTO "PUBLIC"."PARTICIPANT"("ID","DEBT","EMAIL","NAME","EVENT_ID","PARTICIPANTID","BALANCE","BIC","IBAN","NICKNAME")VALUES(?,?,?,?,?,?,?,?,?,?) [22018-224]
