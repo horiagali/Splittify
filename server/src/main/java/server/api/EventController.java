@@ -54,7 +54,7 @@ public class EventController {
      */
     @GetMapping("/{id}")
     @ResponseBody
-    public Event getById(@PathVariable("id") Integer id) {
+    public Event getById(@PathVariable("id") Long id) {
         return eventService.getEventById(id);
     }
 
@@ -87,7 +87,7 @@ public class EventController {
      */
     @DeleteMapping("/{id}")
     @ResponseBody
-    public Event deleteEvent(@PathVariable("id") Integer id){
+    public Event deleteEvent(@PathVariable("id") Long id){
         return eventService.deleteEvent(id);
     }
 
@@ -99,7 +99,7 @@ public class EventController {
      */
     @PutMapping("/{id}")
     @ResponseBody
-    public Event updateEvent(Event event, @PathVariable("id") Integer id){
+    public Event updateEvent(Event event, @PathVariable("id") Long id){
         return eventService.updateEvent(event, id);
     }
 }

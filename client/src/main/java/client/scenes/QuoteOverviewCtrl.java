@@ -16,11 +16,13 @@
 package client.scenes;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
+import commons.Event;
 import commons.Person;
 import commons.Quote;
 import jakarta.ws.rs.WebApplicationException;
@@ -91,10 +93,8 @@ public class QuoteOverviewCtrl implements Initializable {
      *
      * @return return event
      */
-    private Quote getEvent() {   /// couldn t get the http request to work with event entity
-        return new Quote(new Person(eventName.getText(),
-                "no location added"), "no date added");
-        /// temporary here should be all event attributes
+    private Event getEvent() {
+        return new Event(eventName.getText(), "empty description", "empty location", new Date());
 
     }
 

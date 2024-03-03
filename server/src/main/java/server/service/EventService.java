@@ -43,7 +43,7 @@ public class EventService {
      * @param id an Integer
      * @return the found Event
      */
-    public Event getEventById(Integer id){
+    public Event getEventById(Long id){
         return eventRepository.findById(id).orElse(null);
     }
 
@@ -52,7 +52,7 @@ public class EventService {
      * @param id the id
      * @return the deleted event
      */
-    public Event deleteEvent(Integer id){
+    public Event deleteEvent(Long id){
         Event toDelete = getEventById(id);
         if (getEventById(id) != null)
             eventRepository.delete(toDelete);
@@ -65,7 +65,7 @@ public class EventService {
      * @param id an integer
      * @return the new event
      */
-    public Event updateEvent(Event event, Integer id){
+    public Event updateEvent(Event event, Long id){
         if (getEventById(id) == null)
             return null;
         Event myEvent = new Event(event.getTitle(), event.getDate(), event.getDescription(),
