@@ -11,10 +11,19 @@ import java.util.List;
 public class ParticipantService {
     private final ParticipantRepository participantRepository;
 
+    /**
+     * Constructor for this service
+     * @param participantRepository repo for the participants
+     */
     public ParticipantService(ParticipantRepository participantRepository) {
         this.participantRepository = participantRepository;
     }
 
+    /**
+     * Create a new participant
+     * @param participant participant to be added to the database
+     * @return 200 if successful
+     */
     public ResponseEntity<Participant> createParticipant(Participant participant) {
         Participant participantEntity = new Participant(
                 participant.getNickname(),
@@ -26,10 +35,19 @@ public class ParticipantService {
         return ResponseEntity.ok(saved);
     }
 
+    /**
+     * Find all participants in the repository
+     * @return List of participants
+     */
     public List<Participant> getParticipants() {
         return participantRepository.findAll();
     }
 
+    /**
+     * Find participant by id
+     * @param id id of the participant to be found
+     * @return 200 if successful, 404 if not found
+     */
     public ResponseEntity<Participant> getParticipantById(Long id) {
         if (!participantRepository.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
@@ -37,6 +55,11 @@ public class ParticipantService {
         return ResponseEntity.ok(participantRepository.findById(id).get());
     }
 
+    /**
+     * Remove participant by id
+     * @param id id of participant to be removed
+     * @return 200 if successful, 404 if not found
+     */
     public ResponseEntity<Participant> removeParticipant(Long id) {
         if (!participantRepository.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
@@ -46,6 +69,12 @@ public class ParticipantService {
         return ResponseEntity.ok(toBeRemoved);
     }
 
+    /**
+     * Update participant
+     * @param participant new participant data
+     * @param id id of the participant to be updated
+     * @return 200 if successful, else 404 if not found
+     */
     public ResponseEntity<Participant> updateParticipant(Participant participant, Long id) {
         if (!participantRepository.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
