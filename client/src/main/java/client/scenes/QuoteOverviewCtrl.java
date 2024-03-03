@@ -23,7 +23,6 @@ import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Event;
-import commons.Person;
 import commons.Quote;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.beans.property.SimpleStringProperty;
