@@ -1,6 +1,7 @@
 package server.service;
 
 import commons.Event;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 
@@ -23,11 +24,14 @@ public class EventService {
      * @param event the new Event
      * @return the new Event
      */
-    public Event createEvent(Event event){
-        Event eventEntity = new Event(event.getTitle(), event.getDescription(),
-                event.getLocation(), event.getDate());
-        eventRepository.save(eventEntity);
-        return eventEntity;
+    public ResponseEntity<Event> createEvent(Event event){
+        Event eventEntity = new Event(
+                event.getTitle(),
+                event.getDescription(),
+                event.getLocation(),
+                event.getDate());
+        Event saved = eventRepository.save(eventEntity);
+        return ResponseEntity.ok(saved);
     }
 
     /**
@@ -43,8 +47,12 @@ public class EventService {
      * @param id an Integer
      * @return the found Event
      */
-    public Event getEventById(Integer id){
-        return eventRepository.findById(id).orElse(null);
+    public ResponseEntity<Event> getEventById(Integer id) {
+        if (!eventRepository.findById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        Event found = eventRepository.findById(id).get();
+        return ResponseEntity.ok(found);
     }
 
     /**
@@ -52,11 +60,13 @@ public class EventService {
      * @param id the id
      * @return the deleted event
      */
-    public Event deleteEvent(Integer id){
-        Event toDelete = getEventById(id);
-        if (getEventById(id) != null)
-            eventRepository.delete(toDelete);
-        return toDelete;
+    public ResponseEntity<Event> deleteEvent(Integer id){
+        if (!eventRepository.findById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        Event toBeRemoved = eventRepository.findById(id).get();
+        eventRepository.deleteById(id);
+        return ResponseEntity.ok(toBeRemoved);
     }
 
     /**
@@ -65,13 +75,18 @@ public class EventService {
      * @param id an integer
      * @return the new event
      */
-    public Event updateEvent(Event event, Integer id){
-        if (getEventById(id) == null)
-            return null;
-        Event myEvent = new Event(event.getTitle(), event.getDate(), event.getDescription(),
-                event.getLocation(), event.getExpenses(), event.getParticipants(), event.getTags());
-        eventRepository.save(myEvent);
-        return myEvent;
+    public ResponseEntity<Event> updateEvent(Event event, Integer id){
+        if (!eventRepository.findById(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        Event toBeUpdated = eventRepository.findById(id).get();
+
+        toBeUpdated.setTitle(event.getTitle());
+        toBeUpdated.setDescription(event.getDescription());
+        toBeUpdated.setLocation(event.getLocation());
+        toBeUpdated.setDate(event.getDate());
+
+        return ResponseEntity.ok(toBeUpdated);
     }
 
 }
