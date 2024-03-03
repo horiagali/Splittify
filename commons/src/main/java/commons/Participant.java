@@ -39,7 +39,6 @@ public class Participant {
     public Participant(String nickname, String email, String bic, String iban, double balance) {
         this.nickname = nickname;
         this.email = email;
-        this.balance = 0;
         this.bic = bic;
         this.iban = iban;
         this.balance = balance;
