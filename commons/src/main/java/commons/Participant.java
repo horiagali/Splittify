@@ -42,7 +42,18 @@ public class Participant {
         this.balance = balance;
     }
 
-    public Participant(Long participantID, String nickname, String email, double balance, Event event, String bic, String iban) {
+    /**
+     *
+     * @param participantID
+     * @param nickname
+     * @param email
+     * @param balance
+     * @param event
+     * @param bic
+     * @param iban
+     */
+    public Participant(Long participantID, String nickname, String email,
+                       double balance, Event event, String bic, String iban) {
         this.participantID = participantID;
         this.nickname = nickname;
         this.email = email;
@@ -158,10 +169,18 @@ public class Participant {
         this.iban = iban;
     }
 
+    /**
+     *
+     * @return event
+     */
     public Event getEvent() {
         return event;
     }
 
+    /**
+     *
+     * @param event
+     */
     public void setEvent(Event event) {
         this.event = event;
     }

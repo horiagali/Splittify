@@ -19,15 +19,18 @@ public class ParticipantService {
 
     /**
      * Constructor for this service
+     * @param eventRepository
      * @param participantRepository repo for the participants
      */
-    public ParticipantService(ParticipantRepository participantRepository, EventRepository eventRepository) {
+    public ParticipantService(ParticipantRepository participantRepository,
+                              EventRepository eventRepository) {
         this.participantRepository = participantRepository;
         this.eventRepository = eventRepository;
     }
 
     /**
      * Create a new participant
+     * @param eventId
      * @param participant participant to be added to the database
      * @return 200 if successful
      */
@@ -50,17 +53,25 @@ public class ParticipantService {
 
     /**
      * Find all participants in the repository
+     * @param eventId
      * @return List of participants
      */
     public List<Participant> getParticipants(Long eventId) {
         return participantRepository.findParticipantsByEventId(eventId);
     }
 
+    /**
+     *
+     * @param eventId
+     * @param participantId
+     * @return participant
+     */
     public ResponseEntity<Participant> getParticipantById(Long eventId, Long participantId) {
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
         Optional<Participant> participant = participantRepository.findById(participantId);
-        if(participant.isEmpty()) throw new IllegalArgumentException("Participant with given ID not found");
+        if(participant.isEmpty())
+            throw new IllegalArgumentException("Participant with given ID not found");
         if(participant.get().getEvent() != event.get()) {
             throw new IllegalArgumentException("Participant doesn't belong to event");
         }
@@ -81,11 +92,21 @@ public class ParticipantService {
         return ResponseEntity.ok(toBeRemoved);
     }
 
-    public ResponseEntity<Participant> updateParticipant(Long eventId, Long participantId, Participant changeParticipant) {
+    /**
+     *
+     * @param eventId
+     * @param participantId
+     * @param changeParticipant
+     * @return participant
+     */
+    public ResponseEntity<Participant> updateParticipant(Long eventId,
+                                                         Long participantId,
+                                                         Participant changeParticipant) {
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
         Optional<Participant> participant = participantRepository.findById(participantId);
-        if(participant.isEmpty()) throw new IllegalArgumentException("Participant with given ID not found");
+        if(participant.isEmpty())
+            throw new IllegalArgumentException("Participant with given ID not found");
         if(participant.get().getEvent() != event.get()) {
             throw new IllegalArgumentException("Participant doesn't belong to event");
         }
@@ -98,11 +119,18 @@ public class ParticipantService {
         return ResponseEntity.ok(saved);
     }
 
+    /**
+     *
+     * @param eventId
+     * @param participantId
+     * @return participant
+     */
     public ResponseEntity<Participant> deleteParticipant(Long eventId, Long participantId) {
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
         Optional<Participant> participant = participantRepository.findById(participantId);
-        if(participant.isEmpty()) throw new IllegalArgumentException("Participant with given ID not found");
+        if(participant.isEmpty())
+            throw new IllegalArgumentException("Participant with given ID not found");
         if(participant.get().getEvent() != event.get()) {
             throw new IllegalArgumentException("Participant doesn't belong to event");
         }
