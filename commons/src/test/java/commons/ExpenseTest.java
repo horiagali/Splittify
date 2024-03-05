@@ -127,7 +127,7 @@ public class ExpenseTest {
         assertEquals(0, expense.getId());
 
         // Test setId() method
-        expense.setId(123);
+        expense.setId(123L);
         assertEquals(123, expense.getId());
     }
 

@@ -21,7 +21,7 @@ public class Expense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String title;
     @ManyToOne
@@ -80,7 +80,7 @@ public class Expense {
      * Returns the ID of the expense.
      * @return The ID of the expense.
      */
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -88,7 +88,7 @@ public class Expense {
      * Sets the ID of the expense.
      * @param id The ID to set.
      */
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

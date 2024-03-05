@@ -12,7 +12,7 @@ public class TagTest {
     public void testGettersAndSetters() {
         Tag tag = new Tag("John", Color.black);
 
-        tag.setId(123);
+        tag.setId(123L);
         tag.setEvent(new Event());
 
         assertNotNull(tag.getName());
@@ -38,7 +38,7 @@ public class TagTest {
     @Test
     public void testToString() {
         Tag tag = new Tag("tag", Color.black);
-        tag.setId(123);
+        tag.setId(123L);
         tag.setEvent(new Event());
 
         String string = "ID: 123 name: tag color: java.awt.Color[r=0,g=0,b=0]";
