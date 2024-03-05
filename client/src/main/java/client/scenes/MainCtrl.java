@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -174,5 +175,17 @@ public class MainCtrl {
         primaryStage.setTitle("Send Invites");
         inviteCtrl.setName(eventName);
         primaryStage.setScene(invite);
+    }
+    /**
+     *
+     * @param selectedEvent
+     * goes to event overview, showing the event passed as a parameter
+     */
+    public void showEventOverview(Event selectedEvent) {
+        primaryStage.setTitle(selectedEvent.getTitle());
+        primaryStage.setScene(overviewApp);
+        overviewAppCtrl.displayEvent(selectedEvent);
+        overviewCtrl.refresh();
+
     }
 }

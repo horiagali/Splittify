@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import java.awt.*;
+
 import java.util.List;
 
 @Entity
@@ -111,6 +111,7 @@ public class Event {
 
     /**
      * a getter for the date
+     *
      * @return a Date, the date
      */
     public Date getDate() {
