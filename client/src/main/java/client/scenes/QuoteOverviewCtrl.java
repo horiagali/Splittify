@@ -98,7 +98,8 @@ public class QuoteOverviewCtrl implements Initializable {
     }
 
     /**
-     * Event handler for clicking on a table item.
+     * @param event
+     * event handler for mouse double click
      */
     private void handleTableItemClick(MouseEvent event) {
         if (event.getClickCount() == 2) { // Double-click
