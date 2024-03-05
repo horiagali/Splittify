@@ -1,18 +1,3 @@
-/*
- * Copyright 2021 Delft University of Technology
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package client.scenes;
 
 import java.net.URL;
@@ -33,6 +18,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 
 public class QuoteOverviewCtrl implements Initializable {
@@ -46,11 +32,11 @@ public class QuoteOverviewCtrl implements Initializable {
     @FXML
     private TableView<Event> table;
     @FXML
-    private TableColumn<Event, String> colFirstName;
+    private TableColumn<Event, String> colName;
     @FXML
-    private TableColumn<Event, String> colLastName;
+    private TableColumn<Event, String> colLocation;
     @FXML
-    private TableColumn<Event, String> colQuote;
+    private TableColumn<Event, String> colDate;
 
     /**
      * 
@@ -102,15 +88,29 @@ public class QuoteOverviewCtrl implements Initializable {
     @SuppressWarnings("ParameterNumber")
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        colFirstName.setCellValueFactory(q -> 
+        colName.setCellValueFactory(q ->
         new SimpleStringProperty(q.getValue().getTitle()));
-        colLastName.setCellValueFactory(q -> 
+        colLocation.setCellValueFactory(q ->
         new SimpleStringProperty(q.getValue().getLocation()));
-        colQuote.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
+        colDate.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
+        table.setOnMouseClicked(this::handleTableItemClick);
+
     }
 
     /**
-     * 
+     * Event handler for clicking on a table item.
+     */
+    private void handleTableItemClick(MouseEvent event) {
+        if (event.getClickCount() == 2) { // Double-click
+            Event selectedEvent = table.getSelectionModel().getSelectedItem();
+            if (selectedEvent != null) {
+                mainCtrl.showEventOverview(selectedEvent);
+            }
+        }
+    }
+
+    /**
+     *
      */
     public void addQuote() {
         mainCtrl.showAdd();
