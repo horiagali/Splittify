@@ -77,11 +77,16 @@ public class ExpenseService {
      * @return the new expense
      */
     public Expense updateExpense(Expense expense, Integer id){
-        if (getExpenseById(id) == null)
+        Expense existingExpense = getExpenseById(id);
+        if (existingExpense == null)
             return null;
-        deleteExpense(id);
-        createExpense(expense);
-        return expense;
+        existingExpense.setTitle(expense.getTitle());
+        existingExpense.setAmount(expense.getAmount());
+        existingExpense.setPayer(expense.getPayer());
+        existingExpense.setOwers(expense.getOwers());
+        existingExpense.setTag(expense.getTag());
+        expenseRepository.save(existingExpense);
+        return existingExpense;
     }
 
 }
