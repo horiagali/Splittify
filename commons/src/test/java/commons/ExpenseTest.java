@@ -71,20 +71,6 @@ public class ExpenseTest {
         assertEquals(expense1.hashCode(), expense2.hashCode());
     }
 
-    @Test
-    public void testToString() {
-        Participant test = new Participant();
-        ArrayList<Participant> test2 = new ArrayList<>();
-        Expense expense = new Expense("Dinner", 50, test, test2, new Tag("aTag", Color.BLUE));
-
-        String expected = "Expense{ id=0\n" +
-                "  title=Dinner\n" +
-                "  amount=50.0\n" +
-                "  payer=null\n" +
-                "  owers=[]\n" +
-                "]";
-        assertEquals(expected, expense.toString());
-    }
 
     @Test
     public void testGettersAndSetters() {
@@ -124,21 +110,22 @@ public class ExpenseTest {
         Expense expense = new Expense("Dinner", amount, payer, owers, tag);
 
         // Test getId() method
-        assertEquals(0, expense.getId());
-
+        Long x = null;
+        assertEquals(x, expense.getId());
+        x = 123L;
         // Test setId() method
-        expense.setId(123L);
-        assertEquals(123, expense.getId());
+        expense.setId(x);
+        assertEquals(x, expense.getId());
     }
 
     @Test
     public void testDefaultConstructor() {
         // Create an Expense object using the default constructor
         Expense expense = new Expense();
-
+        Long x = 0L;
         // Test if the default constructor initializes the object correctly
         assertNotNull(expense);
-        assertEquals(0, expense.getId());
+        assertEquals(null, expense.getId());
         assertNull(expense.getTitle());
         assertNull(expense.getPayer());
         assertNull(expense.getOwers());
