@@ -73,11 +73,8 @@
                 </columns>
             </TableView>
             <HBox layoutX="2.0" layoutY="359.0" spacing="10">
-                <Button mnemonicParsing="false" onAction="#showAddExpenses" text="Add Expenses Page"/>
-                <Button mnemonicParsing="false" onAction="#goToOverview" text="Overview"/>
                 <Button layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh"/>
-                <Button layoutX="383.0" layoutY="359.0" mnemonicParsing="false" onAction="#page" prefHeight="26.0"
-                        prefWidth="60.0" text="Page"/>
+
             </HBox>
         </children>
     </AnchorPane>

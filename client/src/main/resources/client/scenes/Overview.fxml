@@ -15,6 +15,25 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: pink;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
    <children>
+      <!-- Event Name -->
+      <Label fx:id="eventName" layoutX="14.0" layoutY="23.0" prefHeight="28.0" prefWidth="194.0" textFill="WHITE">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <!-- Event Location -->
+      <Label fx:id="eventLocation" layoutX="220.0" layoutY="40.0" prefHeight="17.0" prefWidth="150.0" textFill="WHITE">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Label>
+      <!-- Event Date -->
+      <Label fx:id="eventDate" layoutX="350.0" layoutY="40.0" prefHeight="17.0" prefWidth="150.0" textFill="WHITE">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Label>
+
       <Button layoutX="495.0" layoutY="13.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites">
          <font>
             <Font size="14.0" />

@@ -184,6 +184,7 @@ public class MainCtrl {
     public void showEventOverview(Event selectedEvent) {
         primaryStage.setTitle(selectedEvent.getTitle());
         primaryStage.setScene(overviewApp);
+        overviewAppCtrl.displayEvent(selectedEvent);
         overviewCtrl.refresh();
 
     }

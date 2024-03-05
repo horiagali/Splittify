@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
@@ -18,6 +19,10 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private Label myLabel2;
     @FXML
+    private Label eventLocation;
+    @FXML
+    private Label eventDate;
+    @FXML
     private ChoiceBox<String> myChoiceBox;
     @FXML
     private HBox hbox;
@@ -30,6 +35,8 @@ public class OverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private Event selectedEvent;
+
     /**
      * 
      * @param server
@@ -40,6 +47,19 @@ public class OverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.names = new ArrayList<>();
+    }
+
+    /**
+     *
+     * @param selectedEvent
+     * displays the info from the event selected from the table
+     */
+    public void displayEvent(Event selectedEvent) {
+        eventName .setText(selectedEvent.getTitle());
+        eventLocation .setText(selectedEvent.getLocation());
+        eventDate.setText(String.valueOf(selectedEvent.getDate()));
+        this.selectedEvent = selectedEvent;
+
     }
 
     /**
@@ -87,24 +107,25 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     * 
+     *  refreshing!
      */
     public void refresh() {
-        if (names != null && !names.isEmpty())
-          myChoiceBox.getItems().add(names.get(names.size() - 1));
+        if (selectedEvent != null) {
+            eventName.setText(selectedEvent.getTitle());
+            eventLocation.setText(selectedEvent.getLocation());
+            eventDate.setText(String.valueOf(selectedEvent.getDate()));
+        }
+        if (names != null && !names.isEmpty()) {
+            myChoiceBox.getItems().add(names.get(names.size() - 1));
+        }
         myChoiceBox.setOnAction(this::getName);
         hbox.setSpacing(5);
         labels = new ArrayList<>();
-       /* for (String s: names){
-            Label label = new Label(s);
-            label.setText(s);
-            label.setTextFill(Color.web("#000000"));
-            labels.add(label);
-        }*/
-        if (names != null && !names.isEmpty())
+        if (names != null && !names.isEmpty()) {
             hbox.getChildren().addAll(new Label(names.get(names.size() - 1)));
-        eventName.setText("New Year Party");
+        }
     }
+
 
     private void getName(javafx.event.ActionEvent actionEvent) {
         String name = myChoiceBox.getValue();

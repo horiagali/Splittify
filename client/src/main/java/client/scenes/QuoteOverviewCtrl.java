@@ -158,4 +158,6 @@ public class QuoteOverviewCtrl implements Initializable {
     public void goToOverview() {
         mainCtrl.goToOverview();
     }
+
+
 }
