@@ -2,16 +2,23 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import jakarta.inject.Inject;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddExpensesCtrl {
 
     private ServerUtils server;
     private MainCtrl mainCtrl;
+    private List<CheckBox> participantCheckboxes;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -31,27 +38,50 @@ public class AddExpensesCtrl {
     @FXML
     private TextField amountTextField;
 
+    @FXML
+    private ComboBox<String> currencyComboBox;
+
+    @FXML
+    private CheckBox equallyCheckbox;
+
+    @FXML
+    private Label selectedCurrencyLabel;
+
     /**
      * Initializes the controller.
      */
     public void initialize() {
         String[] participantNames = {"Martijn", "Horia", "Iulia", "Amanda", "Mihnea", "Fayaz"};
 
-        // Add text fields dynamically for each participant
-        for (int i = 0; i < participantNames.length; i++) {
-            Label participantLabel = new Label(participantNames[i]);
-            participantLabel.setPrefWidth(80);
-            TextField amountTextField = new TextField();
-            amountTextField.setPromptText("Amount");
-            amountTextField.setPrefWidth(70); // Set a fixed width for all text fields
+        participantCheckboxes = new ArrayList<>();
 
-            HBox hbox = new HBox(participantLabel, amountTextField);
-            hbox.setSpacing(10.0); // Adjust spacing between label and text field
-            hbox.setLayoutY(30 + i * 40); // Set a fixed Y position for each participant
+        for (String name : participantNames) {
+            CheckBox participantCheckbox = new CheckBox(name);
+            participantCheckboxes.add(participantCheckbox);
 
-            participantsVBox.getChildren().add(hbox);
+            // Set preferred width and style for the checkbox
+            participantCheckbox.setPrefWidth(80);
+            participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
+
+            // Add the checkbox to the VBox
+            participantsVBox.getChildren().add(participantCheckbox);
+        }
+
+        // Initialize currency options and set default selection
+        ObservableList<String> currencyList = FXCollections.observableArrayList(
+                "USD", "EUR", "GBP", "JPY");
+        currencyComboBox.setItems(currencyList);
+        currencyComboBox.getSelectionModel().select("EUR");
+    }
+
+    @FXML
+    private void handleEquallyCheckbox() {
+        boolean selected = equallyCheckbox.isSelected();
+        for (CheckBox checkbox : participantCheckboxes) {
+            checkbox.setSelected(selected);
         }
     }
+
 
     /**
      * Handles the action when the user adds an expense.
