@@ -204,11 +204,9 @@ public class MainCtrl {
 
     }
 
-    public void goToAdmin() {
-        primaryStage.setTitle("Admin page");
-        primaryStage.setScene(adminPage);
-    }
-
+    /**
+     *  goes to admin password page
+     */
     public void goToAdminPass() {
         primaryStage.setTitle("Admin password");
         primaryStage.setScene(adminPass);
@@ -217,6 +215,9 @@ public class MainCtrl {
         AdminPassCtrl.setPass(pass);
     }
 
+    /**
+     *   goes to admin page
+     */
     public void goToAdminPage(){
         primaryStage.setTitle("Admin page");
         primaryStage.setScene(adminPage);

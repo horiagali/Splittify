@@ -35,6 +35,7 @@ public class AdminPassCtrl implements Initializable {
     }
     /**
      *  sets the password of the instance
+     * @param pass the password generated when the page was opened
      */
     public static void setPass(String pass) {
         password = pass;
@@ -68,7 +69,10 @@ public class AdminPassCtrl implements Initializable {
         if (enteredPassword.equals(password)) {
             mainCtrl.goToAdminPage();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Incorrect password! >:(", ButtonType.OK);
+            Alert alert = new Alert(
+                    Alert.AlertType.ERROR, "Incorrect password! >:(",
+                    ButtonType.OK
+            );
             alert.showAndWait();
         }
     }

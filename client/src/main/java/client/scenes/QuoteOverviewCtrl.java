@@ -162,8 +162,12 @@ public class QuoteOverviewCtrl implements Initializable {
         mainCtrl.goToOverview();
     }
 
-
-    public void goToAdminPass(ActionEvent actionEvent) {
+    /**
+     *
+     *  goes to the admin pass page
+     *
+     */
+    public void goToAdminPass() {
         mainCtrl.goToAdminPass();
     }
 }
