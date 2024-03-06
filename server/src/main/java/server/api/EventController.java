@@ -16,14 +16,11 @@
 package server.api;
 
 import commons.Event;
-import commons.Participant;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.service.EventService;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/events")

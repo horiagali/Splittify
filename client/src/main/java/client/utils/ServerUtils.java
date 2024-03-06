@@ -109,7 +109,7 @@ public class ServerUtils {
 	public List<String> getParticipantNicknamesByEventId(long eventId) {
 		return ClientBuilder.newClient(new ClientConfig())
 				.target(SERVER)
-				.path("api/events/" + eventId + "/participants/nicknames") // Assuming this endpoint exists
+				.path("api/events/" + eventId + "/participants/nicknames")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<String>>() {});
