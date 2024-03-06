@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -25,7 +24,6 @@ public class AdminPassCtrl implements Initializable {
 
 
     /**
-     *
      * @param server
      * @param mainCtrl
      */
@@ -35,19 +33,24 @@ public class AdminPassCtrl implements Initializable {
         this.server = server;
 
     }
-
+    /**
+     *  sets the password of the instance
+     */
     public static void setPass(String pass) {
         password = pass;
     }
 
     /**
-     *
+     *  goes back to main page
      */
     public void goBack() {
         mainCtrl.showOverview();
     }
 
-
+    /**
+     *
+     * @return   returns a random 8 character password
+     */
     public static String generatePassword() {
         SecureRandom secureRandom = new SecureRandom();
         byte[] randomBytes = new byte[8];
@@ -55,6 +58,10 @@ public class AdminPassCtrl implements Initializable {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
 
+    /**
+     * checks the inputted password against the instance password, throws error if not equal
+     * if equal go to admin page
+     */
     @FXML
     private void tryPassword() {
         String enteredPassword = passwordField.getText();

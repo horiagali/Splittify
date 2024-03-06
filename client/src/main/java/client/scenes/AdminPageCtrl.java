@@ -43,7 +43,7 @@ public class AdminPageCtrl implements Initializable {
     }
 
     /**
-     *
+     * goes back to main page
      */
     public void goBack() {
         mainCtrl.showOverview();
@@ -99,7 +99,7 @@ public class AdminPageCtrl implements Initializable {
     }
 
     /**
-     *
+     *  refreshes
      */
     public void refresh() {
         var events = server.getEvents();

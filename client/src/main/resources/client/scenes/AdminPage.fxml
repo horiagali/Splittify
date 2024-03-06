@@ -1,74 +1,77 @@
-        <?import javafx.scene.Cursor?>
-        <?import javafx.scene.SubScene?>
-        <?import javafx.scene.control.CheckMenuItem?>
-        <?import javafx.scene.control.Menu?>
-        <?import javafx.scene.control.MenuBar?>
-        <?import javafx.scene.control.Tooltip?>
-        <?import javafx.scene.effect.Blend?>
-        <?import javafx.scene.layout.AnchorPane?>
-        <?import javafx.scene.layout.Region?>
-        <?import javafx.scene.layout.VBox?>
-        <?import javafx.scene.text.Font?>
-        <?import javafx.scene.text.Text?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.SubScene?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-        <?import javafx.scene.control.TableView?>
-        <?import javafx.scene.control.TableColumn?>
-        <?import javafx.scene.layout.HBox?>
-        <?import javafx.scene.control.Button?>
-        <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-              fx:controller="client.scenes.AdminPageCtrl">
-<children>
-    <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
-        <menus>
-            <Menu mnemonicParsing="false" text="Language">
-                <items>
-                    <CheckMenuItem mnemonicParsing="false" selected="true" text="English" />
-                    <CheckMenuItem mnemonicParsing="false" text="Romanian" />
-                    <CheckMenuItem mnemonicParsing="false" text="Dutch" />
-                </items>
-            </Menu>
-        </menus>
-        <tooltip>
-            <Tooltip text="Empty Tooltip" />
-        </tooltip>
-    </MenuBar>
-    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
-        <children>
-            <SubScene height="346.0" layoutX="176.0" layoutY="5.0" width="289.0">
-                <root>
-                    <Region />
-                </root>
-                <cursor>
-                    <Cursor fx:constant="DEFAULT" />
-                </cursor>
-                <effect>
-                    <Blend />
-                </effect>
-            </SubScene>
-            <Text layoutX="204.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Overview" wrappingWidth="214.66665649414062">
-                <font>
-                    <Font name="Comic Sans MS" size="24.0" />
-                </font>
-            </Text>
-            <Text layoutX="204.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="very secret page" wrappingWidth="214.66665649414062">
-                <font>
-                    <Font name="Mongolian Baiti" size="24.0" />
-                </font>
-            </Text>
-        </children>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="client.scenes.AdminPageCtrl">
+    <children>
+        <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="Language">
+                    <items>
+                        <CheckMenuItem mnemonicParsing="false" selected="true" text="English"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Romanian"/>
+                        <CheckMenuItem mnemonicParsing="false" text="Dutch"/>
+                    </items>
+                </Menu>
+            </menus>
+            <tooltip>
+                <Tooltip text="Empty Tooltip"/>
+            </tooltip>
+        </MenuBar>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+            <children>
+                <SubScene height="346.0" layoutX="176.0" layoutY="5.0" width="289.0">
+                    <root>
+                        <Region/>
+                    </root>
+                    <cursor>
+                        <Cursor fx:constant="DEFAULT"/>
+                    </cursor>
+                    <effect>
+                        <Blend/>
+                    </effect>
+                </SubScene>
+                <Text layoutX="204.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Overview"
+                      wrappingWidth="214.66665649414062">
+                    <font>
+                        <Font name="Comic Sans MS" size="24.0"/>
+                    </font>
+                </Text>
+                <Text layoutX="204.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="very secret page"
+                      wrappingWidth="214.66665649414062">
+                    <font>
+                        <Font name="Mongolian Baiti" size="24.0"/>
+                    </font>
+                </Text>
+            </children>
 
-        <children>
-            <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="337.0" prefWidth="572.0">
-                <columns>
-                    <TableColumn fx:id="colName" prefWidth="113.0" text="Event name"/>
-                    <TableColumn fx:id="colLocation" prefWidth="114.0" text="Event location"/>
-                    <TableColumn fx:id="colDate" prefWidth="344.0" text="Event date"/>
-                </columns>
-            </TableView>
-        </children>
-        <Button fx:id="backButton" layoutX="346.0" layoutY="350.0" onAction="#goBack" mnemonicParsing="false" text="Back" />
+            <children>
+                <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="337.0" prefWidth="572.0">
+                    <columns>
+                        <TableColumn fx:id="colName" prefWidth="113.0" text="Event name"/>
+                        <TableColumn fx:id="colLocation" prefWidth="114.0" text="Event location"/>
+                        <TableColumn fx:id="colDate" prefWidth="344.0" text="Event date"/>
+                    </columns>
+                </TableView>
+            </children>
+            <Button fx:id="backButton" layoutX="346.0" layoutY="350.0" onAction="#goBack" mnemonicParsing="false"
+                    text="Back"/>
 
-    </AnchorPane>
-    <AnchorPane prefHeight="200.0" prefWidth="200.0" />
-</children>
+        </AnchorPane>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0"/>
+    </children>
 </VBox>
