@@ -72,9 +72,9 @@
                     <TableColumn fx:id="colDate" prefWidth="344.0" text="Event date"/>
                 </columns>
             </TableView>
-            <HBox layoutX="2.0" layoutY="359.0" spacing="10">
+            <HBox layoutX="2.0" layoutY="359.0" spacing="10" alignment="CENTER_RIGHT">
                 <Button layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh"/>
-
+                <Button layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#goToAdminPass" text="Admin"/>
             </HBox>
         </children>
     </AnchorPane>
