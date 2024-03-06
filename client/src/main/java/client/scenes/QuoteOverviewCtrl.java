@@ -88,6 +88,7 @@ public class QuoteOverviewCtrl implements Initializable {
      */
     @SuppressWarnings("ParameterNumber")
     @Override
+
     public void initialize(URL location, ResourceBundle resources) {
         colName.setCellValueFactory(q ->
         new SimpleStringProperty(q.getValue().getTitle()));

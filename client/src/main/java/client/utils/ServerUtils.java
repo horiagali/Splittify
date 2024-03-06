@@ -115,4 +115,12 @@ public class ServerUtils {
 				.get(new GenericType<List<String>>() {});
 	}
 
+	public void deleteEvent(Event selectedEvent) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.path("api/events/" + selectedEvent.getId())
+				.request()
+				.delete();
+	}
+
 }

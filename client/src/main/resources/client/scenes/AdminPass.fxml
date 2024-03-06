@@ -45,7 +45,7 @@
                     <Blend />
                 </effect>
             </SubScene>
-            <Text layoutX="204.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Overview" wrappingWidth="214.66665649414062">
+            <Text layoutX="204.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Admin Password Page" wrappingWidth="244.66665649414062">
                 <font>
                     <Font name="Comic Sans MS" size="24.0" />
                 </font>
