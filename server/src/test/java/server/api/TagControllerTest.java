@@ -38,7 +38,7 @@ public class TagControllerTest {
 
     @Test
     public void testGetTagById() {
-        Integer id = 1;
+        Long id = 1L;
         Tag tag = new Tag("Tag1", Color.RED);
         when(tagService.getTagById(id)).thenReturn(tag);
         Tag result = tagController.getById(id);
@@ -55,7 +55,7 @@ public class TagControllerTest {
 
     @Test
     public void testDeleteTag() {
-        Integer id = 1;
+        Long id = 1L;
         Tag tag = new Tag("Tag1", Color.RED);
         when(tagService.deleteTag(id)).thenReturn(tag);
         Tag result = tagController.deleteTag(id);
@@ -64,7 +64,7 @@ public class TagControllerTest {
 
     @Test
     public void testUpdateTag() {
-        Integer id = 1;
+        Long id = 1L;
         Tag tag = new Tag("UpdatedTag", Color.BLUE);
         when(tagService.updateTag(any(Tag.class), eq(id))).thenReturn(tag);
         Tag result = tagController.updateTag(tag, id);
