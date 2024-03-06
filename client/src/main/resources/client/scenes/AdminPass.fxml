@@ -51,7 +51,7 @@
                 </font>
             </Text>
             <PasswordField fx:id="passwordField" layoutX="204.0" layoutY="99.0" />
-            <Button layoutX="346.0" layoutY="99.0" mnemonicParsing="false" text="Enter Password" />
+            <Button layoutX="346.0" layoutY="99.0" mnemonicParsing="false" onAction="#tryPassword" text="Enter Password" />
             <Button fx:id="backButton" layoutX="346.0" layoutY="150.0" onAction="#goBack" mnemonicParsing="false" text="Back" />
 
         </children>

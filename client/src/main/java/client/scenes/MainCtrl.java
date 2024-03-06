@@ -212,5 +212,13 @@ public class MainCtrl {
     public void goToAdminPass() {
         primaryStage.setTitle("Admin password");
         primaryStage.setScene(adminPass);
+        String pass = AdminPassCtrl.generatePassword();
+        System.out.println("The password is " + pass);
+        AdminPassCtrl.setPass(pass);
+    }
+
+    public void goToAdminPage(){
+        primaryStage.setTitle("Admin page");
+        primaryStage.setScene(adminPage);
     }
 }
