@@ -59,15 +59,13 @@ public class AddExpensesCtrl {
             CheckBox participantCheckbox = new CheckBox(name);
             participantCheckboxes.add(participantCheckbox);
 
-            // Set preferred width and style for the checkbox
+
             participantCheckbox.setPrefWidth(80);
             participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
 
-            // Add the checkbox to the VBox
             participantsVBox.getChildren().add(participantCheckbox);
         }
 
-        // Initialize currency options and set default selection
         ObservableList<String> currencyList = FXCollections.observableArrayList(
                 "USD", "EUR", "GBP", "JPY");
         currencyComboBox.setItems(currencyList);
