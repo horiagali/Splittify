@@ -64,6 +64,8 @@ public class MainCtrl {
      * @param contactDetails
      * @param overviewApp
      * @param invite
+     * @param adminPage
+     * @param adminPass
      */
 
     @SuppressWarnings({"ParameterNumber"})
