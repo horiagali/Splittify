@@ -2,7 +2,6 @@ package commons;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -172,7 +171,7 @@ public class Expense {
      * Sets the list of participants who owe money for the expense.
      * @param owers The list of participants to set.
      */
-    public void setOwers(ArrayList<Participant> owers) {
+    public void setOwers(List<Participant> owers) {
         this.owers = owers;
     }
 

@@ -15,13 +15,12 @@
  */
 package server.api;
 
-import java.util.List;
-
 import commons.Event;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import server.service.EventService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/events")
@@ -31,6 +30,7 @@ public class EventController {
 
     /**
      * Constructor for the eventController
+     *
      * @param eventService an EventService
      */
     public EventController(EventService eventService) {
@@ -39,6 +39,7 @@ public class EventController {
 
     /**
      * Retrieves all events.
+     *
      * @return List of all events.
      */
     @GetMapping
@@ -49,6 +50,7 @@ public class EventController {
 
     /**
      * Retrieves an event by its ID.
+     *
      * @param id The ID of the event to retrieve.
      * @return ResponseEntity containing the retrieved event,
      * or a bad request response if the ID is invalid.
@@ -61,6 +63,7 @@ public class EventController {
 
     /**
      * Adds a new event.
+     *
      * @param event The event to add.
      * @return ResponseEntity containing the added event,
      * or a bad request response if the event is invalid.
@@ -74,6 +77,7 @@ public class EventController {
 
     /**
      * Checks if a string is null or empty.
+     *
      * @param s The string to check.
      * @return True if the string is null or empty, false otherwise.
      */
@@ -83,24 +87,26 @@ public class EventController {
 
     /**
      * delete an event by id
+     *
      * @param id the id of the deleted event
      * @return an Event
      */
     @DeleteMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Event> deleteEvent(@PathVariable("id") Long id){
+    public ResponseEntity<Event> deleteEvent(@PathVariable("id") Long id) {
         return eventService.deleteEvent(id);
     }
 
     /**
      * Update an existing event
+     *
      * @param event the updated event
-     * @param id the id of the event to update
+     * @param id    the id of the event to update
      * @return the updated event
      */
     @PutMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<Event> updateEvent(Event event, @PathVariable("id") Long id){
+    public ResponseEntity<Event> updateEvent(Event event, @PathVariable("id") Long id) {
         return eventService.updateEvent(event, id);
     }
 }
