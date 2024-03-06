@@ -1,0 +1,42 @@
+### Create Participant
+POST http://localhost:8080/api/events/602/participants
+Accept: application/json
+Content-Type: application/json
+
+{
+  "nickname": "Iulia",
+  "email": "iuliasl05@gmail.com",
+  "bic": "434324",
+  "iban": "438784",
+  "balance": null
+}
+
+###
+GET http://localhost:8080/api/events/602/participants
+Accept: application/json
+Content-Type: application/json
+
+###
+GET http://localhost:8080/api/events/602/participants/2
+Accept: application/json
+Content-Type: application/json
+
+###
+PUT http://localhost:8080/api/events/602/participants/2
+Accept: application/json
+Content-Type: application/json
+
+{
+  "nickname": "samira simona",
+  "email": "iuliasl05@gmail.com",
+  "bic": "434324",
+  "iban": "438784",
+  "balance": null
+}
+
+###
+DELETE http://localhost:8080/api/events/602/participants/54
+Accept: application/json
+Content-Type: application/json
+
+

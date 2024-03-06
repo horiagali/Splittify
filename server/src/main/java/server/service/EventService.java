@@ -52,6 +52,7 @@ public class EventService {
             return ResponseEntity.notFound().build();
         }
         Event found = eventRepository.findById(id).get();
+//        found.getParticipants();
         return ResponseEntity.ok(found);
     }
 

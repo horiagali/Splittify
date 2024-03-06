@@ -8,8 +8,7 @@ import server.service.ParticipantService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/participants")
-
+@RequestMapping("/api/events/{event_id}/participants")
 public class ParticipantController {
     private final ParticipantService participantService;
 
@@ -22,57 +21,69 @@ public class ParticipantController {
     }
 
     /**
-     * Returns all participants in the database
-     * @return List of participants
+     *
+     * @param eventId
+     * @return participants
      */
     @GetMapping
-    public List<Participant> getAll() {
-        return participantService.getParticipants();
+    public List<Participant> getAll(@PathVariable(name = "event_id") Long eventId) {
+        return participantService.getParticipants(eventId);
     }
 
     /**
-     * Find a participant by their id
-     * @param id id of the participant
-     * @return 200 status of successful, else 404 if not found
+     *
+     * @param eventId
+     * @param participantId
+     * @return participant
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<Participant> getById(@PathVariable Long id) {
-        return participantService.getParticipantById(id);
+    @GetMapping("/{participant_id}")
+    public ResponseEntity<Participant> getById(@PathVariable(name = "event_id") Long eventId,
+                                               @PathVariable(name = "participant_id")
+                                               Long participantId) {
+        return participantService.getParticipantById(eventId, participantId);
     }
 
     /**
      * Add a participant to the database
+     * @param eventId
      * @param participant Participant to be added
      * @return 200 code if successful
      */
     @PostMapping
-    public ResponseEntity<Participant> add(@RequestBody Participant participant) {
-        return participantService.createParticipant(participant);
+    @ResponseBody
+    public ResponseEntity<Participant> createParticipant(@PathVariable(name = "event_id")
+                                                             Long eventId,
+                                                         @RequestBody Participant participant) {
+        return participantService.createParticipant(eventId, participant);
     }
 
     /**
-     * Delete a participant by their id
-     * @param id id of the participant
-     * @return status code 200 if successful, else 404 if not found
+     *
+     * @param eventId
+     * @param participantId
+     * @param participant
+     * @return participant
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Participant> removeById(@PathVariable Long id) {
-        return participantService.removeParticipant(id);
-    }
-
-    /**
-     * Endpoint for updating participants
-     * @param id id of the participant to be updated
-     * @param participant new participant data
-     * @return 200 if successful, else 404 if not found
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<Participant> update(@PathVariable Long id,
+    @PutMapping("/{participant_id}")
+    public ResponseEntity<Participant> update(@PathVariable(name = "event_id") Long eventId,
+                                              @PathVariable(name = "participant_id")
+                                              Long participantId,
                                               @RequestBody Participant participant) {
-        return participantService.updateParticipant(participant, id);
+        return participantService.updateParticipant(eventId, participantId, participant);
     }
 
-
+    /**
+     *
+     * @param eventId
+     * @param participantId
+     * @return participant
+     */
+    @DeleteMapping("/{participant_id}")
+    public ResponseEntity<Participant> delete(@PathVariable(name = "event_id") Long eventId,
+                                              @PathVariable(name = "participant_id")
+                                              Long participantId) {
+        return participantService.deleteParticipant(eventId, participantId);
+    }
 
 
 }

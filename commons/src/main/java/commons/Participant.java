@@ -1,6 +1,6 @@
 package commons;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -8,24 +8,22 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.Objects;
 
 @Entity
-@Table(indexes = {
-        @Index(columnList = "Nickname"),
-        @Index(columnList = "email")
-})
+@Table(name = "participants")
 public class Participant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long participantID;
-
     private String nickname; // Changed name to nickname
     private String email;
     private double balance;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Event event;
     private String bic;
     private String iban;
+
 
     /**
      * Creates a participant
@@ -42,6 +40,27 @@ public class Participant {
         this.bic = bic;
         this.iban = iban;
         this.balance = balance;
+    }
+
+    /**
+     *
+     * @param participantID
+     * @param nickname
+     * @param email
+     * @param balance
+     * @param event
+     * @param bic
+     * @param iban
+     */
+    public Participant(Long participantID, String nickname, String email,
+                       double balance, Event event, String bic, String iban) {
+        this.participantID = participantID;
+        this.nickname = nickname;
+        this.email = email;
+        this.balance = balance;
+        this.event = event;
+        this.bic = bic;
+        this.iban = iban;
     }
 
     /**
@@ -150,6 +169,21 @@ public class Participant {
         this.iban = iban;
     }
 
+    /**
+     *
+     * @return event
+     */
+    public Event getEvent() {
+        return event;
+    }
+
+    /**
+     *
+     * @param event
+     */
+    public void setEvent(Event event) {
+        this.event = event;
+    }
 
     /**
      * toString method
@@ -194,9 +228,4 @@ public class Participant {
     public int hashCode() {
         return Objects.hash(participantID, nickname, email, bic, iban, balance);
     }
-
-
-
-
-    
 }
