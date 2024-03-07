@@ -84,6 +84,23 @@ public class Expense {
     }
 
     /**
+     * returns event of expense
+     * @return event
+     */
+    public Event getEvent() {
+        return event;
+    }
+
+    /**
+     * sets the event of expense
+     * @param event to set expense to
+     */
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+
+    /**
      * Sets the ID of the expense.
      * @param id The ID to set.
      */

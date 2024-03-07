@@ -1,92 +1,136 @@
 package server.service;
 
+import commons.Event;
 import commons.Expense;
+import jakarta.transaction.Transactional;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import server.database.EventRepository;
 import server.database.ExpenseRepository;
+import server.database.ParticipantRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class ExpenseService {
     private ExpenseRepository expenseRepository;
+    private EventRepository eventRepository;
+    private ParticipantRepository participantRepository;
 
     /**
-     * Constructor for expenseService
-     * @param expenseRepository the repository for this service
+     * Constructor for service
+     * @param expenseRepository repo for expenses
+     * @param eventRepository repo for events
+     * @param participantRepository repo for participants
      */
-    protected ExpenseService(ExpenseRepository expenseRepository){
+    public ExpenseService(ExpenseRepository expenseRepository, 
+    EventRepository eventRepository, ParticipantRepository participantRepository){
         this.expenseRepository = expenseRepository;
+        this.eventRepository = eventRepository;
+        this.participantRepository = participantRepository;
     }
 
     /**
-     * create an expense
-     * @param expense the new Expense
-     * @return the new Expense
+     * creates an expense
+     * @param eventId id of event where the expense is created
+     * @param expense created expense
+     * @return expense
      */
-    public Expense createExpense(Expense expense){
-        Expense expenseEntity = new Expense(expense.getTitle(), expense.getAmount(), 
-        expense.getPayer(), expense.getOwers(), expense.getTag());
-        return expenseEntity;
+    @Transactional
+    public ResponseEntity<Expense> createExpense(Long eventId, Expense expense) {
+        Optional<Event> event = eventRepository.findById(eventId);
+        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
+        else {
+            Expense newExpese = new Expense();
+            newExpese.setAmount(expense.getAmount());
+            newExpese.setOwers(expense.getOwers());
+            newExpese.setPayer(expense.getPayer());
+            newExpese.setTag(expense.getTag());
+            newExpese.setTitle(expense.getTitle());
+            newExpese.setEvent(event.get());
+            Expense saved = expenseRepository.save(newExpese);
+            return ResponseEntity.ok(saved);
+        }
     }
 
     /**
-     * getter for all the expenses 
-     * @return all the expenses in the repository
+     * Find all expenses in the repository belonging to 1 event
+     * @param eventId
+     * @return List of expenses
      */
-    public List<Expense> getExpenses(){
-        return expenseRepository.findAll();
+    public List<Expense> getExpenses(Long eventId) {
+        return expenseRepository.findExpensesByEventId(eventId);
     }
 
     /**
-     * getter for all the expenses related to an Event
-     * @param id EventID all expenses should be related to
-     * @return all the expenses in the repository related to this event
+     * get expense by its id.
+     * @param eventId id of event of this expense
+     * @param expenseId id of this expense
+     * @return expense belonging to this id
      */
-    public List<Expense> getExpensesFromEvent(Integer id){
-    // @Query("SELECT EXPENSE_ID FROM EVENT_EXPENSES WHERE EVENT_ID = " + id)
-        return expenseRepository.findAll();
+    public ResponseEntity<Expense> getExpenseById(Long eventId, Long expenseId) {
+        Optional<Event> event = eventRepository.findById(eventId);
+        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
+        Optional<Expense> expense = expenseRepository.findById(expenseId);
+        if(expense.isEmpty())
+            throw new IllegalArgumentException("Expense with given ID not found");
+        if(expense.get().getEvent() != event.get()) {
+            throw new IllegalArgumentException("Expense doesn't belong to event");
+        }
+        return ResponseEntity.ok(expense.get());
+    }
+
+    /**
+     * updates the expense
+     * @param eventId id of event of expense to update
+     * @param expenseId id of expense to update
+     * @param changedExpense changed form of expense
+     * @return expense
+     */
+    public ResponseEntity<Expense> updateExpense(Long eventId, 
+    Long expenseId, Expense changedExpense) {
+        Optional<Event> event = eventRepository.findById(eventId);
+        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
+        Optional<Expense> expense = expenseRepository.findById(expenseId);
+        if(expense.isEmpty())
+            throw new IllegalArgumentException("Expense with given ID not found");
+        if(expense.get().getEvent() != event.get()) {
+            throw new IllegalArgumentException("Expense doesn't belong to event");
+        }
+        
+        expense.get().setAmount(changedExpense.getAmount());
+        expense.get().setOwers(changedExpense.getOwers());
+        expense.get().setPayer(changedExpense.getPayer());
+        expense.get().setTag(changedExpense.getTag());
+        expense.get().setTitle(changedExpense.getTitle());
+        expense.get().setEvent(event.get());
+        Expense saved = expenseRepository.save(expense.get());
+        return ResponseEntity.ok(saved);
     }
 
 
     /**
-     * a getter by id for an expense
-     * @param id Integer ID of an expense
-     * @return the found Expense
+     * deletes an expense
+     * @param eventId
+     * @param expenseId
+     * @return expense
      */
-    public Expense getExpenseById(Integer id){
-        return expenseRepository.findById(id).orElse(null);
+    public ResponseEntity<Expense> deleteExpense(Long eventId, Long expenseId) {
+        Optional<Event> event = eventRepository.findById(eventId);
+        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
+        Optional<Expense> expense = expenseRepository.findById(expenseId);
+        if(expense.isEmpty())
+            throw new IllegalArgumentException("Expense with given ID not found");
+        if(expense.get().getEvent() != event.get()) {
+            throw new IllegalArgumentException("Expense doesn't belong to event");
+        }
+        expenseRepository.delete(expense.get());
+        return ResponseEntity.ok(expense.get());
     }
 
-    /**
-     * delete a expense by id
-     * @param id the id from the to-be-deleted expense
-     * @return the deleted expense
-     */
-    public Expense deleteExpense(Integer id){
-        Expense toDelete = getExpenseById(id);
-        if (getExpenseById(id) != null)
-            expenseRepository.delete(toDelete);
-        return toDelete;
-    }
-
-    /**
-     * update an existing expense
-     * @param expense the updated version of the expense
-     * @param id ID of the old expense
-     * @return the new expense
-     */
-    public Expense updateExpense(Expense expense, Integer id){
-        Expense existingExpense = getExpenseById(id);
-        if (existingExpense == null)
-            return null;
-        existingExpense.setTitle(expense.getTitle());
-        existingExpense.setAmount(expense.getAmount());
-        existingExpense.setPayer(expense.getPayer());
-        existingExpense.setOwers(expense.getOwers());
-        existingExpense.setTag(expense.getTag());
-        expenseRepository.save(existingExpense);
-        return existingExpense;
-    }
-
+    
 }
