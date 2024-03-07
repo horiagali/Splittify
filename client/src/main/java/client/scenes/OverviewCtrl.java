@@ -38,7 +38,6 @@ public class OverviewCtrl implements Initializable {
     private Event selectedEvent;
 
     /**
-     * 
      * @param server
      * @param mainCtrl
      */
@@ -50,27 +49,24 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     *
-     * @param selectedEvent
-     * displays the info from the event selected from the table
+     * @param selectedEvent displays the info from the event selected from the table
      */
     public void displayEvent(Event selectedEvent) {
-        eventName .setText(selectedEvent.getTitle());
-        eventLocation .setText(selectedEvent.getLocation());
+        eventName.setText(selectedEvent.getTitle());
+        eventLocation.setText(selectedEvent.getLocation());
         eventDate.setText(String.valueOf(selectedEvent.getDate()));
         this.selectedEvent = selectedEvent;
 
     }
 
     /**
-     * 
+     *
      */
     public void back() {
         mainCtrl.showOverview();
     }
 
     /**
-     * 
      * @param name
      */
     public void addName(String name) {
@@ -78,28 +74,29 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     * 
+     *
      */
     public void addExpense() {
         mainCtrl.showAddExpenses();
     }
 
     /**
-     * 
+     *
      */
     public void goToContact() {
         mainCtrl.goToContact();
     }
 
     /**
-     * 
+     *
      */
-    public void sendInvites(){
+    public void sendInvites() {
         mainCtrl.sendInvites(eventName);
     }
-   /* public HBox getHbox() {
-        return hbox;
-    }*/
+
+    /* public HBox getHbox() {
+         return hbox;
+     }*/
     ///tried to create an hbox but it is not done
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -107,7 +104,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     *  refreshing!
+     * refreshing!
      */
     public void refresh() {
         if (selectedEvent != null) {
