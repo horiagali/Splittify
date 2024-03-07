@@ -11,8 +11,8 @@
       <Text layoutX="256.0" layoutY="111.0" text="Invite People" />
 
       <Label layoutX="200.0" layoutY="132.0" text="Event Code:" />
-      <TextField fx:id="inviteCodeTextField" editable="false" layoutX="200.0" layoutY="157.0" prefHeight="25.0" prefWidth="91.0" promptText="Invite Code" />
-      <Button layoutX="300.0" layoutY="157.0" onAction="#copyInviteCode" prefHeight="25.0" prefWidth="50.0" text="Copy" />
+      <TextField fx:id="inviteCodeTextField" editable="false" layoutX="200.0" layoutY="157.0" prefHeight="25.0" prefWidth="132.0" promptText="Invitation Code" />
+      <Button layoutX="338.0" layoutY="157.0" onAction="#copyInviteCode" prefHeight="25.0" prefWidth="50.0" text="Copy" />
 
       <Label layoutX="200.0" layoutY="192.0" text="Invite people by mail:" />
 
