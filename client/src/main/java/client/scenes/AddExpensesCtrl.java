@@ -52,6 +52,7 @@ public class AddExpensesCtrl implements Initializable {
 
     /**
      * Initializes the controller.
+     * From Initializable
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
