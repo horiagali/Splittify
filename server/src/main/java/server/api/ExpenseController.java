@@ -46,6 +46,31 @@ public class ExpenseController {
     }
 
     /**
+     * returns all expenses where 1 participant is payer
+     * @param eventId
+     * @param participantId
+     * @return list of expenses
+     */
+    @GetMapping("/payer={participant_id}")
+    public List<Expense> getExpensesOfPayer(@PathVariable(name = "event_id") Long eventId, 
+    @PathVariable(name = "participant_id") Long participantId) {
+        return expenseService.getExpensesOfPayer(eventId, participantId);
+    }
+
+    /**
+     * returns all expenses where 1 participant is ower
+     * @param eventId
+     * @param participantId
+     * @return list of expenses
+     */
+    @GetMapping("/ower={participant_id}")
+    public List<Expense> getExpensesOfOwer(@PathVariable(name = "event_id") Long eventId, 
+    @PathVariable(name = "participant_id") Long participantId) {
+        return expenseService.getExpensesOfOwer(eventId, participantId);
+    }
+
+
+    /**
      * Creates an expense
      * @param eventId event where the expense is supposed to be created in
      * @param expense the expense that needs to be created
