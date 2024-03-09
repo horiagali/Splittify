@@ -115,4 +115,17 @@ public class ServerUtils {
 				.get(new GenericType<List<String>>() {});
 	}
 
+	/**
+	 *
+	 * @param selectedEvent
+	 *   deletes an event from the database
+	 */
+	public void deleteEvent(Event selectedEvent) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(SERVER)
+				.path("api/events/" + selectedEvent.getId())
+				.request()
+				.delete();
+	}
+
 }

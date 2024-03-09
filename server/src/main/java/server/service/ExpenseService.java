@@ -2,6 +2,7 @@ package server.service;
 
 import commons.Event;
 import commons.Expense;
+import commons.Participant;
 import jakarta.transaction.Transactional;
 
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ public class ExpenseService {
     private EventRepository eventRepository;
     private ParticipantRepository participantRepository;
 
+    private EventService eventService;
+    private ParticipantService participantService;
+
     /**
      * Constructor for service
      * @param expenseRepository repo for expenses
@@ -32,6 +36,9 @@ public class ExpenseService {
         this.expenseRepository = expenseRepository;
         this.eventRepository = eventRepository;
         this.participantRepository = participantRepository;
+        eventService = new EventService(eventRepository);
+        participantService = new ParticipantService(participantRepository, eventRepository);
+
     }
 
     /**
@@ -64,6 +71,41 @@ public class ExpenseService {
      */
     public List<Expense> getExpenses(Long eventId) {
         return expenseRepository.findExpensesByEventId(eventId);
+    }
+
+
+    /**
+     * finds all expenses where 1 specific participant is the payer.
+     * @param eventId event which contains expenses
+     * @param participantId participantId of the payer
+     * @return list of expenses where the participant is the payer
+     */
+    public List<Expense> getExpensesOfPayer(Long eventId, Long participantId) {
+        Event event = eventService.getEventById(eventId).getBody();
+        Participant payer = participantService.getParticipantById(eventId, participantId).getBody();
+        List<Expense> expenses = event.getExpenses();
+        for(Expense expense : expenses) {
+            if(!expense.getPayer().equals(payer))
+            expenses.remove(expense);
+        }
+        return expenses;
+    }
+
+    /**
+     * finds all expenses where 1 specific participant is an ower
+     * @param eventId event which contains expenses
+     * @param participantId id of the ower
+     * @return list of expenses where the participant is an ower
+     */
+    public List<Expense> getExpensesOfOwer(Long eventId, Long participantId) {
+        Event event = eventService.getEventById(eventId).getBody();
+        Participant ower = participantService.getParticipantById(eventId, participantId).getBody();
+        List<Expense> expenses = event.getExpenses();
+        for(Expense expense : expenses) {
+            if(!expense.getOwers().contains(ower))
+            expenses.remove(expense);
+        }
+        return expenses;
     }
 
     /**

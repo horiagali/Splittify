@@ -34,7 +34,13 @@ public class MainCtrl {
 
     private PageCtrl pageCtrl;
     private Scene page;
+    private Scene adminPage;
 
+
+    private AdminPageCtrl adminPageCtrl;
+
+    private Scene adminPass;
+    private AdminPassCtrl adminPassCtrl;
 
     private AddExpensesCtrl addExpensesCtrl;
     private Scene addExpenses;
@@ -58,15 +64,19 @@ public class MainCtrl {
      * @param contactDetails
      * @param overviewApp
      * @param invite
+     * @param adminPage
+     * @param adminPass
      */
 
     @SuppressWarnings({"ParameterNumber"})
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
                            Pair<AddExpensesCtrl, Parent> addExpense,
-                           Pair<ContactDetailsCtrl, Parent> contactDetails, 
+                           Pair<ContactDetailsCtrl, Parent> contactDetails,
                            Pair<OverviewCtrl, Parent> overviewApp,
-                            Pair<InviteCtrl, Parent> invite) {
+                           Pair<InviteCtrl, Parent> invite,
+                           Pair<AdminPageCtrl, Parent> adminPage,
+                           Pair<AdminPassCtrl, Parent> adminPass) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -89,6 +99,13 @@ public class MainCtrl {
 
         this.inviteCtrl = invite.getKey();
         this.invite = new Scene(invite.getValue());
+
+        this.adminPageCtrl = adminPage.getKey();
+        this.adminPage = new Scene(adminPage.getValue());
+
+        this.adminPassCtrl = adminPass.getKey();
+        this.adminPass = new Scene(adminPass.getValue());
+
         showOverview();
         primaryStage.show();
     }
@@ -187,5 +204,24 @@ public class MainCtrl {
         overviewAppCtrl.displayEvent(selectedEvent);
         overviewCtrl.refresh();
 
+    }
+
+    /**
+     *  goes to admin password page
+     */
+    public void goToAdminPass() {
+        primaryStage.setTitle("Admin password");
+        primaryStage.setScene(adminPass);
+        String pass = AdminPassCtrl.generatePassword();
+        System.out.println("The password is " + pass);
+        AdminPassCtrl.setPass(pass);
+    }
+
+    /**
+     *   goes to admin page
+     */
+    public void goToAdminPage(){
+        primaryStage.setTitle("Admin page");
+        primaryStage.setScene(adminPage);
     }
 }
