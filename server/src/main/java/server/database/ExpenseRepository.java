@@ -20,7 +20,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
      * @param participantId id of the participant which is the payer
      * @return list of expenses related to that participant
      */
-    List<Expense> findExpensesParticipantPayer(Long eventId, Long participantId);
+    // List<Expense> findExpensesParticipantPayer(Long eventId, Long participantId);
 
     /**
      * Finds all expenses where a participant is being paid for
@@ -28,5 +28,5 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
      * @param participantId id of the participant which is the ower
      * @return list of expenses related to that participant
      */
-    List<Expense> findExpensesParticipantOwer(Long eventId, Long participantId);
+    // List<Expense> findExpensesParticipantOwer(Long eventId, Long participantId);
 }
