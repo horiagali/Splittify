@@ -148,6 +148,7 @@ public class InviteCtrl implements Initializable {
      *  @param  email address to be removed
      */
     private void removeEmail(String email) {
+        uniqueEmails.remove(email);
         emailList.remove(email);
         uniqueEmails.remove(email);
         updateEmailListUI();
