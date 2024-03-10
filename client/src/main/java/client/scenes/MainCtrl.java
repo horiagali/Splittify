@@ -190,7 +190,7 @@ public class MainCtrl {
      */
     public void sendInvites(Label eventName) {
         primaryStage.setTitle("Send Invites");
-        inviteCtrl.setName(eventName);
+        //inviteCtrl.setName(eventName);
         primaryStage.setScene(invite);
     }
     /**
