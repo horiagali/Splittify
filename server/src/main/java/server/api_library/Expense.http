@@ -1,5 +1,5 @@
 ### Create expense
-POST http://localhost:8080/api/events/52/expenses
+POST http://localhost:8080/api/events/1/expenses
 Accept: application/json
 Content-Type: application/json
 
@@ -7,32 +7,39 @@ Content-Type: application/json
   "title": "ExpenseTest",
   "amount": 50,
   "payer": {
-    "participantID": 152
+    "participantID": 2
   },
   "owers": [{
-    "participantID": 153
+    "participantID": 3
+  },{
+    "participantID": 1
   }]
 }
 
 ### Update expense
-PUT http://localhost:8080/api/events/2/expenses/653
+PUT http://localhost:8080/api/events/1/expenses/1
 Accept: application/json
 Content-Type: application/json
 
 {
-  "id": 653,
+  "id": 1,
   "payer": {
-    "participantID": 103
-  }
+    "participantID": 3
+  },
+  "owers": [{
+    "participantID": 2
+  },{
+    "participantID": 1
+  }]
 }
 
 ### Get expenses
-GET http://localhost:8080/api/events/2/expenses
+GET http://localhost:8080/api/events/1/expenses
 Accept: application/json
 Content-Type: application/json
 
 ### Get specific expense
-GET http://localhost:8080/api/events/1/expenses/2
+GET http://localhost:8080/api/events/1/expenses/1
 Accept: application/json
 Content-Type: application/json
 

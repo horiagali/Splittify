@@ -12,6 +12,7 @@ import server.database.EventRepository;
 import server.database.ExpenseRepository;
 import server.database.ParticipantRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,20 +54,41 @@ public class ExpenseService {
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
         else {
             Expense newExpese = new Expense();
+            expense.toString();
             newExpese.setAmount(expense.getAmount());
             newExpese.setOwers(expense.getOwers());
             newExpese.setPayer(expense.getPayer());
             newExpese.setTag(expense.getTag());
             newExpese.setTitle(expense.getTitle());
             newExpese.setEvent(event.get());
+            newExpese.toString();
             double amount = expense.getAmount();
-            Participant payer = expense.getPayer();
-            payer.setBalance(payer.getBalance() + amount);
+            Participant payer = participantRepository
+                    .findById(expense.getPayer().getParticipantID()).orElse(null);
+            newExpese.setPayer(payer);
+            List<Participant> participants = new ArrayList<>();
+            eventRepository.save(event.get());
+            participants.addAll(event.get().getParticipants());
+            participants.remove(payer);
+            payer.setBalance(payer.getBalance() + (amount * newExpese.getOwers().size()) /
+                    (newExpese.getOwers().size() + 1));
             participantRepository.save(payer);
-            for (Participant p : newExpese.getOwers()){
-                p.setBalance(p.getBalance() - amount / newExpese.getOwers().size());
+            participants.add(payer);
+            List<Participant> newOwers = new ArrayList<>();
+            for (Participant pp : newExpese.getOwers()){
+                Participant p = participantRepository.findById(pp.getParticipantID()).orElse(null);
+                newOwers.add(p);
+                participants.remove(p);
+                p.setBalance(p.getBalance() - amount / (newExpese.getOwers().size() + 1));
                 participantRepository.save(p);
+                participants.add(p);
             }
+            newExpese.setOwers(newOwers);
+            Event newEvent = event.get();
+            newEvent.toString();
+            newEvent.setParticipants(participants);
+            //eventService.updateEvent(newEvent, eventId);
+            eventRepository.save(newEvent);
             Expense saved = expenseRepository.save(newExpese);
             return ResponseEntity.ok(saved);
         }
@@ -138,27 +160,58 @@ public class ExpenseService {
      * updates the expense
      * @param eventId id of event of expense to update
      * @param expenseId id of expense to update
-     * @param changedExpense changed form of expense
+     * @param expense changed form of expense
      * @return expense
      */
     public ResponseEntity<Expense> updateExpense(Long eventId, 
-    Long expenseId, Expense changedExpense) {
+    Long expenseId, Expense expense) {
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
-        Optional<Expense> expense = expenseRepository.findById(expenseId);
-        if(expense.isEmpty())
+        Optional<Expense> newExpesee = expenseRepository.findById(expenseId);
+        if(newExpesee.isEmpty())
             throw new IllegalArgumentException("Expense with given ID not found");
-        if(expense.get().getEvent() != event.get()) {
+        if(newExpesee.get().getEvent() != event.get()) {
             throw new IllegalArgumentException("Expense doesn't belong to event");
         }
-        
-        expense.get().setAmount(changedExpense.getAmount());
-        expense.get().setOwers(changedExpense.getOwers());
-        expense.get().setPayer(changedExpense.getPayer());
-        expense.get().setTag(changedExpense.getTag());
-        expense.get().setTitle(changedExpense.getTitle());
-        expense.get().setEvent(event.get());
-        Expense saved = expenseRepository.save(expense.get());
+        Expense newExpese = newExpesee.get();
+        expense.toString();
+        newExpese.setId(expense.getId());
+        newExpese.setAmount(expense.getAmount());
+        newExpese.setOwers(expense.getOwers());
+        newExpese.setPayer(expense.getPayer());
+        newExpese.setTag(expense.getTag());
+        newExpese.setTitle(expense.getTitle());
+        newExpese.setEvent(event.get());
+        newExpese.toString();
+        double amount = newExpese.getAmount();
+        ///NEED TO REVERT BALANCES
+
+        Participant payer = participantRepository
+                .findById(expense.getPayer().getParticipantID()).orElse(null);
+        newExpese.setPayer(payer);
+        List<Participant> participants = new ArrayList<>();
+        eventRepository.save(event.get());
+        participants.addAll(event.get().getParticipants());
+        participants.remove(payer);
+        payer.setBalance(payer.getBalance() + (amount * newExpese.getOwers().size()) /
+                (newExpese.getOwers().size() + 1));
+        participantRepository.save(payer);
+        participants.add(payer);
+        List<Participant> newOwers = new ArrayList<>();
+        for (Participant pp : newExpese.getOwers()){
+            Participant p = participantRepository.findById(pp.getParticipantID()).orElse(null);
+            newOwers.add(p);
+            participants.remove(p);
+            p.setBalance(p.getBalance() - amount / (newExpese.getOwers().size() + 1));
+            participantRepository.save(p);
+            participants.add(p);
+        }
+        newExpese.setOwers(newOwers);
+        Event newEvent = event.get();
+        newEvent.toString();
+        newEvent.setParticipants(participants);
+        eventRepository.save(newEvent);
+        Expense saved = expenseRepository.save(newExpese);
         return ResponseEntity.ok(saved);
     }
 
@@ -170,6 +223,7 @@ public class ExpenseService {
      * @return expense
      */
     public ResponseEntity<Expense> deleteExpense(Long eventId, Long expenseId) {
+        ///NEED TO REVERT BALANCES
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
         Optional<Expense> oExpense = expenseRepository.findById(expenseId);

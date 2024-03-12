@@ -86,6 +86,7 @@ public class EventService {
         toBeUpdated.setDescription(event.getDescription());
         toBeUpdated.setLocation(event.getLocation());
         toBeUpdated.setDate(event.getDate());
+        toBeUpdated.setParticipants(event.getParticipants());
 
         return ResponseEntity.ok(toBeUpdated);
     }

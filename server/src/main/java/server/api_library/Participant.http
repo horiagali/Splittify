@@ -1,5 +1,5 @@
 ### Create Participant
-POST http://localhost:8080/api/events/52/participants
+POST http://localhost:8080/api/events/1/participants
 Accept: application/json
 Content-Type: application/json
 
@@ -12,7 +12,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/api/events/2/participants
+GET http://localhost:8080/api/events/1/participants
 Accept: application/json
 Content-Type: application/json
 

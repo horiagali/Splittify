@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/api/events/2
+GET http://localhost:8080/api/events/1
 Accept: application/json
 Content-Type: application/json
 
