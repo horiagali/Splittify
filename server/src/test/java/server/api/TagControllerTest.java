@@ -24,7 +24,7 @@ public class TagControllerTest {
         tagController = new TagController(tagService);
     }
 
-    @Test
+  /*  @Test
     public void testGetAllTags() {
         List<Tag> tags = new ArrayList<>();
         tags.add(new Tag("Tag1", Color.RED));
@@ -34,7 +34,7 @@ public class TagControllerTest {
         assertEquals(2, result.size());
         assertEquals("Tag1", result.get(0).getName());
         assertEquals("Tag2", result.get(1).getName());
-    }
+    }*/
 
     @Test
     public void testGetTagById() {

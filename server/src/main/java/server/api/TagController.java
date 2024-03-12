@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import server.service.TagService;
 
 @RestController
-@RequestMapping("/api/tags")
+@RequestMapping("/api/events/{event_id}/tags")
 public class TagController {
 
     private final TagService tagService;
@@ -22,12 +22,13 @@ public class TagController {
     }
 
     /**
-     * Retrieves all tags.
-     * @return List of all tags.
+     * retrieves all tags
+     * @param eventId an eventId
+     * @return the tags
      */
-    @GetMapping
+    @GetMapping("", "/")
     @ResponseBody
-    public List<Tag> getAllTags() {
+    public List<Tag> getAllTags(@PathVariable(name = "event_id") Long eventId) {
         return tagService.getTags();
     }
 
