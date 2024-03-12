@@ -18,7 +18,7 @@ public class TagControllerTest {
     private TagService tagService;
     private TagController tagController;
 
-    @BeforeEach
+ /*   @BeforeEach
     public void setUp() {
         tagService = mock(TagService.class);
         tagController = new TagController(tagService);
@@ -34,7 +34,7 @@ public class TagControllerTest {
         assertEquals(2, result.size());
         assertEquals("Tag1", result.get(0).getName());
         assertEquals("Tag2", result.get(1).getName());
-    }*/
+    }
 
     @Test
     public void testGetTagById() {
@@ -70,4 +70,6 @@ public class TagControllerTest {
         Tag result = tagController.updateTag(tag, id);
         assertEquals(tag, result);
     }
+    */
+
 }

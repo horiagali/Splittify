@@ -22,12 +22,12 @@ public class Event {
     private String description;
     private String location;
 
-    @OneToMany (mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany (mappedBy = "event", cascade = CascadeType.REMOVE)
     private List<Expense> expenses; // List of expenses associated with the event
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     private List<Participant> participants; // List of participants in the event'
 
-    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     private List<Tag> tags;
 
     /**

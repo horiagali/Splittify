@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.awt.*;
@@ -16,7 +17,9 @@ public class Tag {
     private String name;
     private Color color;
 
-    @ManyToOne @JoinColumn(name = "event_id") private Event event;
+    @ManyToOne @JoinColumn(name = "event_id")
+    @JsonIgnore
+    private Event event;
 
     /**
      * constructor to create a Tag

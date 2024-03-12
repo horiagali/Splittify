@@ -1,5 +1,5 @@
 ### Create Tag
-POST http://localhost:8080/api/tags
+POST http://localhost:8080/api/events/2/tags
 Accept: application/json
 Content-Type: application/json
 
