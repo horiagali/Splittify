@@ -131,10 +131,13 @@ public class ParticipantService {
         Optional<Participant> participant = participantRepository.findById(participantId);
         if(participant.isEmpty())
             throw new IllegalArgumentException("Participant with given ID not found");
-        if(participant.get().getEvent() != event.get()) {
+        Participant p = participant.get();
+        if(p.getEvent() != event.get()) {
             throw new IllegalArgumentException("Participant doesn't belong to event");
         }
-        participantRepository.delete(participant.get());
-        return ResponseEntity.ok(participant.get());
+        p.toString();
+        participantRepository.deleteById(participantId);
+        p.toString();
+        return ResponseEntity.ok(p);
     }
 }

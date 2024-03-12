@@ -76,13 +76,16 @@ public class TagService {
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
         Optional<Tag> tag = tagRepository.findById(id);
+        Tag t = tag.get();
         if(tag.isEmpty())
             throw new IllegalArgumentException("Expense with given ID not found");
         if(tag.get().getEvent() != event.get()) {
             throw new IllegalArgumentException("Expense doesn't belong to event");
         }
-        tagRepository.delete(tag.get());
-        return tag.get();
+        t.toString();
+        tagRepository.deleteById(id);
+        t.toString();
+        return t;
     }
 
     /**

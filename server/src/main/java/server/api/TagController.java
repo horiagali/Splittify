@@ -65,19 +65,22 @@ public class TagController {
      */
     @DeleteMapping("/{id}")
     @ResponseBody
-    public Tag deleteTag(@PathVariable(name = "event_id") Long eventId, @PathVariable(name = "id") Long tagId){
+    public Tag deleteTag(@PathVariable(name = "event_id") Long eventId,
+                         @PathVariable(name = "id") Long tagId){
         return tagService.deleteTag(eventId, tagId);
     }
 
     /**
      * Update an existing tag.
+     * @param eventId eventId
      * @param tag The updated tag.
      * @param id The ID of the tag to update.
      * @return The updated tag.
      */
     @PutMapping("/{id}")
     @ResponseBody
-    public Tag updateTag(@PathVariable(name = "event_id") Long eventId, @RequestBody Tag tag, @PathVariable(name = "id") Long id){
+    public Tag updateTag(@PathVariable(name = "event_id") Long eventId, @RequestBody Tag tag,
+                         @PathVariable(name = "id") Long id){
         return tagService.updateTag(eventId, tag, id);
     }
 

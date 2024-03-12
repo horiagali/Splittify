@@ -35,7 +35,7 @@ public class Expense {
     private Event event;
 
     private double amount;
-    @OneToOne
+    @ManyToOne
     private Tag tag;
 
     /**

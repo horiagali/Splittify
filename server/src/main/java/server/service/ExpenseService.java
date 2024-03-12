@@ -59,6 +59,14 @@ public class ExpenseService {
             newExpese.setTag(expense.getTag());
             newExpese.setTitle(expense.getTitle());
             newExpese.setEvent(event.get());
+            double amount = expense.getAmount();
+            Participant payer = expense.getPayer();
+            payer.setBalance(payer.getBalance() + amount);
+            participantRepository.save(payer);
+            for (Participant p : newExpese.getOwers()){
+                p.setBalance(p.getBalance() - amount / newExpese.getOwers().size());
+                participantRepository.save(p);
+            }
             Expense saved = expenseRepository.save(newExpese);
             return ResponseEntity.ok(saved);
         }
@@ -164,14 +172,17 @@ public class ExpenseService {
     public ResponseEntity<Expense> deleteExpense(Long eventId, Long expenseId) {
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
-        Optional<Expense> expense = expenseRepository.findById(expenseId);
-        if(expense.isEmpty())
+        Optional<Expense> oExpense = expenseRepository.findById(expenseId);
+        if(oExpense.isEmpty())
             throw new IllegalArgumentException("Expense with given ID not found");
-        if(expense.get().getEvent() != event.get()) {
+        Expense expense = oExpense.get();
+        if(expense.getEvent() != event.get()) {
             throw new IllegalArgumentException("Expense doesn't belong to event");
         }
-        expenseRepository.delete(expense.get());
-        return ResponseEntity.ok(expense.get());
+        expense.toString();
+        expenseRepository.deleteById(expenseId);
+        expense.toString();
+        return ResponseEntity.ok(expense);
     }
 
     
