@@ -3,6 +3,8 @@ package server.api;
 import java.util.List;
 
 import commons.Tag;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import server.service.TagService;
@@ -28,7 +30,7 @@ public class TagController {
      */
     @GetMapping
     @ResponseBody
-    public List<Tag> getAllTags(@PathVariable(name = "event_id") Long eventId) {
+    public ResponseEntity<List<Tag>> getAllTags(@PathVariable(name = "event_id") Long eventId) {
         return tagService.getTags(eventId);
     }
 
@@ -41,7 +43,8 @@ public class TagController {
      */
     @GetMapping("/{id}")
     @ResponseBody
-    public Tag getById(@PathVariable("id") Long id, @PathVariable(name = "event_id") Long eventId) {
+    public ResponseEntity<Tag> getById(@PathVariable("id") Long id,
+    @PathVariable(name = "event_id") Long eventId) {
         return tagService.getTagById(id, eventId);
     }
 
@@ -53,7 +56,8 @@ public class TagController {
      */
     @PostMapping
     @ResponseBody
-    public Tag createTag(@RequestBody Tag tag, @PathVariable(name = "event_id") Long eventId) {
+    public ResponseEntity<Tag> createTag(@RequestBody Tag tag, 
+    @PathVariable(name = "event_id") Long eventId) {
         return tagService.createTag(tag, eventId);
     }
 

@@ -2,6 +2,8 @@ package server.service;
 
 import commons.Event;
 import commons.Tag;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 import server.database.TagRepository;
@@ -30,13 +32,13 @@ public class TagService {
      * @param eventId the eventId
      * @return The new Tag
      */
-    public Tag createTag(Tag tag, Long eventId){
+    public ResponseEntity<Tag> createTag(Tag tag, Long eventId){
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
         Tag tagEntity = new Tag(tag.getName(), tag.getColor());
         tagEntity.setEvent(event.get());
         tagRepository.save(tagEntity);
-        return tagEntity;
+        return ResponseEntity.ok(tagEntity);
     }
 
     /**
@@ -44,8 +46,8 @@ public class TagService {
      * @param eventId an eventId
      * @return All tags in the repository
      */
-    public List<Tag> getTags(Long eventId){
-        return tagRepository.findTagsByEvent_Id(eventId);
+    public ResponseEntity<List<Tag>> getTags(Long eventId){
+        return ResponseEntity.ok(tagRepository.findTagsByEvent_Id(eventId));
     }
 
     /**
@@ -54,7 +56,7 @@ public class TagService {
      * @param eventId the eventId
      * @return The found Tag, or null if not found
      */
-    public Tag getTagById(Long id, Long eventId){
+    public ResponseEntity<Tag> getTagById(Long id, Long eventId){
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
         Optional<Tag> tag = tagRepository.findById(id);
@@ -63,7 +65,7 @@ public class TagService {
         if(tag.get().getEvent() != event.get()) {
             throw new IllegalArgumentException("Expense doesn't belong to event");
         }
-        return tag.get();
+        return ResponseEntity.ok(tag.get());
     }
 
     /**

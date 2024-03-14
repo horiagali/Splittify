@@ -26,7 +26,7 @@ public class ParticipantController {
      * @return participants
      */
     @GetMapping
-    public List<Participant> getAll(@PathVariable(name = "event_id") Long eventId) {
+    public ResponseEntity<List<Participant>> getAll(@PathVariable(name = "event_id") Long eventId) {
         return participantService.getParticipants(eventId);
     }
 

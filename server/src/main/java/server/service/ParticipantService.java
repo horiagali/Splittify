@@ -56,8 +56,8 @@ public class ParticipantService {
      * @param eventId
      * @return List of participants
      */
-    public List<Participant> getParticipants(Long eventId) {
-        return participantRepository.findParticipantsByEventId(eventId);
+    public ResponseEntity<List<Participant>> getParticipants(Long eventId) {
+        return ResponseEntity.ok(participantRepository.findParticipantsByEventId(eventId));
     }
 
     /**
