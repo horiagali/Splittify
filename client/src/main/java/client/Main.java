@@ -60,8 +60,9 @@ public class Main extends Application {
                 (ContactDetailsCtrl.class, "client", "scenes", "ContactDetails.fxml");
         var overviewApp = FXML.load
                 (OverviewCtrl.class, "client", "scenes", "Overview.fxml");
-        var invite = FXML.load(InviteCtrl.class, "client", "scenes", "Invite.fxml");
 
+        var invite = FXML.load(InviteCtrl.class, "client", "scenes", "Invite.fxml");
+        int money = 69;
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         var adminPage = FXML.load(AdminPageCtrl.class, "client", "scenes", "AdminPage.fxml");
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
@@ -70,3 +71,4 @@ public class Main extends Application {
                 add, page, addExpense, contactDetails, overviewApp, invite, adminPage, adminPass);
     }
 }
+/// ignore this dude
