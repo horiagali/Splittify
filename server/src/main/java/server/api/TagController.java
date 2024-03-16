@@ -69,7 +69,7 @@ public class TagController {
      */
     @DeleteMapping("/{id}")
     @ResponseBody
-    public Tag deleteTag(@PathVariable(name = "event_id") Long eventId,
+    public ResponseEntity<Tag> deleteTag(@PathVariable(name = "event_id") Long eventId,
                          @PathVariable(name = "id") Long tagId){
         return tagService.deleteTag(eventId, tagId);
     }
@@ -83,7 +83,8 @@ public class TagController {
      */
     @PutMapping("/{id}")
     @ResponseBody
-    public Tag updateTag(@PathVariable(name = "event_id") Long eventId, @RequestBody Tag tag,
+    public ResponseEntity<Tag> updateTag
+    (@PathVariable(name = "event_id") Long eventId, @RequestBody Tag tag,
                          @PathVariable(name = "id") Long id){
         return tagService.updateTag(eventId, tag, id);
     }

@@ -38,8 +38,8 @@ public class EventService {
      * getter for the events
      * @return all the events in the repository
      */
-    public List<Event> getEvents(){
-        return eventRepository.findAll();
+    public ResponseEntity<List<Event>> getEvents(){
+        return ResponseEntity.ok(eventRepository.findAll());
     }
 
     /**

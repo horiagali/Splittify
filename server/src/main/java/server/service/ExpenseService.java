@@ -104,8 +104,8 @@ public class ExpenseService {
      * @param eventId
      * @return List of expenses
      */
-    public List<Expense> getExpenses(Long eventId) {
-        return expenseRepository.findExpensesByEventId(eventId);
+    public ResponseEntity<List<Expense>> getExpenses(Long eventId) {
+        return ResponseEntity.ok(expenseRepository.findExpensesByEventId(eventId));
     }
 
     /**
@@ -115,7 +115,7 @@ public class ExpenseService {
      * @param participantId participantId of the payer
      * @return list of expenses where the participant is the payer
      */
-    public List<Expense> getExpensesOfPayer(Long eventId, Long participantId) {
+    public ResponseEntity<List<Expense>> getExpensesOfPayer(Long eventId, Long participantId) {
         Event event = eventService.getEventById(eventId).getBody();
         Participant payer = participantService.getParticipantById(eventId, participantId).getBody();
         List<Expense> expenses = event.getExpenses();
@@ -123,7 +123,7 @@ public class ExpenseService {
             if (!expense.getPayer().equals(payer))
                 expenses.remove(expense);
         }
-        return expenses;
+        return ResponseEntity.ok(expenses);
     }
 
     /**
@@ -133,7 +133,7 @@ public class ExpenseService {
      * @param participantId id of the ower
      * @return list of expenses where the participant is an ower
      */
-    public List<Expense> getExpensesOfOwer(Long eventId, Long participantId) {
+    public ResponseEntity<List<Expense>> getExpensesOfOwer(Long eventId, Long participantId) {
         Event event = eventService.getEventById(eventId).getBody();
         Participant ower = participantService.getParticipantById(eventId, participantId).getBody();
         List<Expense> expenses = event.getExpenses();
@@ -141,7 +141,7 @@ public class ExpenseService {
             if (!expense.getOwers().contains(ower))
                 expenses.remove(expense);
         }
-        return expenses;
+        return ResponseEntity.ok(expenses);
     }
 
     /**

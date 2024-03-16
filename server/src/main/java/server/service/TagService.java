@@ -74,7 +74,7 @@ public class TagService {
      * @param eventId the eventId
      * @return The deleted tag, or null if not found
      */
-    public Tag deleteTag(Long eventId, Long id){
+    public ResponseEntity<Tag> deleteTag(Long eventId, Long id){
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
         Optional<Tag> tag = tagRepository.findById(id);
@@ -87,7 +87,7 @@ public class TagService {
         t.toString();
         tagRepository.deleteById(id);
         t.toString();
-        return t;
+        return ResponseEntity.ok(t);
     }
 
     /**
@@ -97,7 +97,7 @@ public class TagService {
      * @param id the id
      * @return The updated tag
      */
-    public Tag updateTag(Long eventId, Tag newTag, Long id){
+    public ResponseEntity<Tag> updateTag(Long eventId, Tag newTag, Long id){
         Optional<Event> event = eventRepository.findById(eventId);
         if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
         Optional<Tag> tag = tagRepository.findById(id);
@@ -111,6 +111,6 @@ public class TagService {
         tag.get().setColor(newTag.getColor());
         tag.get().setEvent(newTag.getEvent());
         Tag saved = tagRepository.save(tag.get());
-        return saved;
+        return ResponseEntity.ok(saved);
     }
 }
