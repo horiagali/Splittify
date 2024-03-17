@@ -15,18 +15,25 @@
  */
 package client.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
+import commons.Expense;
+import commons.Participant;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -34,6 +41,18 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
 	private static final String SERVER = "http://localhost:8080/";
+	private final ObjectMapper objectMapper;
+	private final RestTemplate restTemplate;
+
+	/**
+	 * Constructor
+	 * @throws IOException IOException
+	 * @throws InterruptedException InterruptedException
+	 */
+	public ServerUtils() throws IOException, InterruptedException {
+		this.objectMapper = new ObjectMapper();
+		this.restTemplate = new RestTemplate();
+	}
 
 	/**
 	 * 
@@ -76,7 +95,7 @@ public class ServerUtils {
 
 	/**
 	 * 
-	 * @param quote
+	 * @param quote quote
 	 * @return quote that is added
 	 */
 	public Quote addQuote(Quote quote) {
@@ -128,4 +147,69 @@ public class ServerUtils {
 				.delete();
 	}
 
+	/**
+	 * Add an expense to an event
+	 * @param eventId id of the event to add the expense to
+	 * @param expense expense to be added
+	 */
+	public void addExpenseToEvent(long eventId, Expense expense) {
+		// Construct the URL for the specific event's expenses endpoint
+		String url = String.format("%s/events/%d/expenses", SERVER, eventId);
+
+		// Serialize the expense object to JSON string
+		String expenseJson = serializeExpenseToJson(expense);
+
+		// Create HttpClient
+		HttpClient client = HttpClient.newHttpClient();
+
+		// Create HttpRequest with POST method and JSON body
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(url))
+				.header("Content-Type", "application/json")
+				.POST(HttpRequest.BodyPublishers.ofString(expenseJson))
+				.build();
+
+		try {
+			// Send the request and receive the response
+			HttpResponse<String> response = client.send(request,
+					HttpResponse.BodyHandlers.ofString());
+
+			// Check the response status code
+			if (response.statusCode() == 200) {
+				System.out.println("Expense added successfully!");
+			} else {
+				System.out.println("Failed to add expense. " +
+						"Status code: " + response.statusCode());
+				// Print error response if needed: response.body()
+			}
+		} catch (Exception e) {
+			System.err.println("An error occurred: " + e.getMessage());
+		}
+	}
+
+
+	private String serializeExpenseToJson(Expense expense) {
+		try {
+			// Use Jackson ObjectMapper to serialize Expense object to JSON string
+			return objectMapper.writeValueAsString(expense);
+		} catch (Exception e) {
+			System.err.println("Error serializing " +
+					"Expense object to JSON: " + e.getMessage());
+			return null;
+		}
+	}
+
+	/**
+	 * Get participant by nickname
+	 * @param nickname nickname
+	 * @return participant
+	 */
+	public Participant getParticipantByNickname(Long eventID, String nickname) {
+		String url = SERVER + "api/events/" + eventID + "/participants/" + nickname;
+
+		// Make the HTTP GET request and directly retrieve the participant
+		Participant participant = restTemplate.getForObject(url, Participant.class);
+
+		return participant;
+	}
 }

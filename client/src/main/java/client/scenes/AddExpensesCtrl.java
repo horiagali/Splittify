@@ -1,6 +1,9 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import commons.Event;
+import commons.Expense;
+import commons.Participant;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +26,8 @@ public class AddExpensesCtrl implements Initializable {
     private ServerUtils server;
     private MainCtrl mainCtrl;
     private List<CheckBox> participantCheckboxes;
+    @FXML
+    private TextField nameTextField;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -90,11 +96,42 @@ public class AddExpensesCtrl implements Initializable {
      * Handles the action when the user adds an expense.
      */
     @FXML
-    private void addExpense() {
-        // Handle adding expense here
-        // To be implemented
-        String amount = amountTextField.getText();
-        System.out.println("Amount: " + amount);
+    private void addExpense() throws IOException {
+        Event selectedEvent = new Event();
+        String payerName = nameTextField.getText();
+        Participant payer = server.getParticipantByNickname(selectedEvent.getId(), payerName);
+
+        // Step 2: Retrieve the amount and currency from the UI components
+        String amountText = amountTextField.getText();
+        double amount = Double.parseDouble(amountText);
+
+        // Step 3: Create an expense object
+        Expense expense = new Expense();
+        expense.setAmount(amount);
+        // Set other properties of the Expense object as needed
+
+        // Step 4: Set the payer of the expense
+        expense.setPayer(payer);
+
+        List<Participant> owners = new ArrayList<>();
+        // Step 5: Add the expense to the selected event for each selected participant
+        for (CheckBox checkbox : participantCheckboxes) {
+            if (checkbox.isSelected()) {
+                String participantName = checkbox.getText();
+                Participant participant = server.getParticipantByNickname(selectedEvent.getId(), participantName);
+                // Add the participant as an owner of the expense
+                owners.add(participant);
+            }
+        }
+        expense.setOwers(owners);
+
+        // Step 6: Add the expense to the event
+        // Assuming you have a method to get the selected event
+        selectedEvent.addExpense(expense);
+
+        // Step 7: Save the expense to the server
+        // Assuming you have a method to save the expense to the server
+        server.addExpenseToEvent(selectedEvent.getId(), expense);
     }
 
     /**
