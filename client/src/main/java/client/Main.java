@@ -75,14 +75,17 @@ public class Main extends Application {
         Config config = new Config();
         var mapper = new ObjectMapper();
         FileInputStream stream;
-        String location = "C:\\Users\\marti\\OneDrive\\Documents" +
-        "\\Q3\\OOPP\\oopp-team-56\\client\\src\\main\\java\\client\\config.json";
+        
+
 
         try {
+            String location = Main.class.getProtectionDomain().getCodeSource()
+            .getLocation().toURI().getPath() + "/client/config.json";
             stream = new FileInputStream(new File(location));
             config = mapper.readValue(stream, Config.class);
             System.out.println(config.getLanguage());
             System.out.println(config.getServerUrl());
+            
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
