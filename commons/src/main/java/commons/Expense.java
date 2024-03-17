@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -26,14 +27,15 @@ public class Expense {
     @ManyToOne
     @JoinColumn(name = "participant_id")
     private Participant payer;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Participant> owers; //the people who owe money
 
     @ManyToOne
+    @JsonIgnore
     private Event event;
 
     private double amount;
-    @OneToOne
+    @ManyToOne
     private Tag tag;
 
     /**

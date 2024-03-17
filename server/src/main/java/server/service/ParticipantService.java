@@ -9,7 +9,7 @@ import server.database.EventRepository;
 import server.database.ParticipantRepository;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class ParticipantService {
@@ -36,19 +36,23 @@ public class ParticipantService {
      */
     @Transactional
     public ResponseEntity<Participant> createParticipant(Long eventId, Participant participant) {
-        Optional<Event> event = eventRepository.findById(eventId);
-        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
-        else {
-            Participant newParticipant = new Participant();
-            newParticipant.setBalance(participant.getBalance());
-            newParticipant.setBic(participant.getBic());
-            newParticipant.setNickname(participant.getNickname());
-            newParticipant.setEmail(participant.getEmail());
-            newParticipant.setIban(participant.getIban());
-            newParticipant.setEvent(event.get());
-            Participant saved = participantRepository.save(newParticipant);
-            return ResponseEntity.ok(saved);
+        if (!eventRepository.findById(eventId).isPresent()) {
+            System.out.println("Event with given ID not found");
+            return ResponseEntity.notFound().build();
         }
+
+        Event event = eventRepository.findById(eventId).get();
+
+        Participant newParticipant = new Participant();
+        newParticipant.setBalance(participant.getBalance());
+        newParticipant.setBic(participant.getBic());
+        newParticipant.setNickname(participant.getNickname());
+        newParticipant.setEmail(participant.getEmail());
+        newParticipant.setIban(participant.getIban());
+        newParticipant.setEvent(event);
+        Participant saved = participantRepository.save(newParticipant);
+        return ResponseEntity.ok(saved);
+
     }
 
     /**
@@ -56,8 +60,8 @@ public class ParticipantService {
      * @param eventId
      * @return List of participants
      */
-    public List<Participant> getParticipants(Long eventId) {
-        return participantRepository.findParticipantsByEventId(eventId);
+    public ResponseEntity<List<Participant>> getParticipants(Long eventId) {
+        return ResponseEntity.ok(participantRepository.findParticipantsByEventId(eventId));
     }
 
     /**
@@ -67,15 +71,23 @@ public class ParticipantService {
      * @return participant
      */
     public ResponseEntity<Participant> getParticipantById(Long eventId, Long participantId) {
-        Optional<Event> event = eventRepository.findById(eventId);
-        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
-        Optional<Participant> participant = participantRepository.findById(participantId);
-        if(participant.isEmpty())
-            throw new IllegalArgumentException("Participant with given ID not found");
-        if(participant.get().getEvent() != event.get()) {
-            throw new IllegalArgumentException("Participant doesn't belong to event");
+        if (!eventRepository.findById(eventId).isPresent()) {
+            System.out.println("Event with given ID not found");
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(participant.get());
+
+        if (!participantRepository.findById(participantId).isPresent()) {
+            System.out.println("Participant with given ID not found");
+            return ResponseEntity.notFound().build();
+        }
+        Event event = eventRepository.findById(eventId).get();
+        Participant participant = participantRepository.findById(participantId).get();
+
+        if(participant.getEvent() != event) {
+            System.out.println("Participant does not belong to event");
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(participant);
     }
 
     /**
@@ -102,20 +114,29 @@ public class ParticipantService {
     public ResponseEntity<Participant> updateParticipant(Long eventId,
                                                          Long participantId,
                                                          Participant changeParticipant) {
-        Optional<Event> event = eventRepository.findById(eventId);
-        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
-        Optional<Participant> participant = participantRepository.findById(participantId);
-        if(participant.isEmpty())
-            throw new IllegalArgumentException("Participant with given ID not found");
-        if(participant.get().getEvent() != event.get()) {
-            throw new IllegalArgumentException("Participant doesn't belong to event");
+
+        if (!eventRepository.findById(eventId).isPresent()) {
+            System.out.println("Event with given ID not found");
+            return ResponseEntity.notFound().build();
         }
-        participant.get().setBalance(changeParticipant.getBalance());
-        participant.get().setBic(changeParticipant.getBic());
-        participant.get().setNickname(changeParticipant.getNickname());
-        participant.get().setEmail(changeParticipant.getEmail());
-        participant.get().setIban(changeParticipant.getIban());
-        Participant saved = participantRepository.save(participant.get());
+
+        if (!participantRepository.findById(participantId).isPresent()) {
+            System.out.println("Participant with given ID not found");
+            return ResponseEntity.notFound().build();
+        }
+        Event event = eventRepository.findById(eventId).get();
+        Participant participant = participantRepository.findById(participantId).get();
+
+        if(participant.getEvent() != event) {
+            System.out.println("Participant does not belong to event");
+            return ResponseEntity.notFound().build();
+        }
+        participant.setBalance(changeParticipant.getBalance());
+        participant.setBic(changeParticipant.getBic());
+        participant.setNickname(changeParticipant.getNickname());
+        participant.setEmail(changeParticipant.getEmail());
+        participant.setIban(changeParticipant.getIban());
+        Participant saved = participantRepository.save(participant);
         return ResponseEntity.ok(saved);
     }
 
@@ -126,15 +147,23 @@ public class ParticipantService {
      * @return participant
      */
     public ResponseEntity<Participant> deleteParticipant(Long eventId, Long participantId) {
-        Optional<Event> event = eventRepository.findById(eventId);
-        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
-        Optional<Participant> participant = participantRepository.findById(participantId);
-        if(participant.isEmpty())
-            throw new IllegalArgumentException("Participant with given ID not found");
-        if(participant.get().getEvent() != event.get()) {
-            throw new IllegalArgumentException("Participant doesn't belong to event");
+        if (!eventRepository.findById(eventId).isPresent()) {
+            System.out.println("Event with given ID not found");
+            return ResponseEntity.notFound().build();
         }
-        participantRepository.delete(participant.get());
-        return ResponseEntity.ok(participant.get());
+
+        if (!participantRepository.findById(participantId).isPresent()) {
+            System.out.println("Participant with given ID not found");
+            return ResponseEntity.notFound().build();
+        }
+        Event event = eventRepository.findById(eventId).get();
+        Participant participant = participantRepository.findById(participantId).get();
+
+        if(participant.getEvent() != event) {
+            System.out.println("Participant does not belong to event");
+            return ResponseEntity.notFound().build();
+        }
+        participantRepository.deleteById(participantId);
+        return ResponseEntity.ok(participant);
     }
 }

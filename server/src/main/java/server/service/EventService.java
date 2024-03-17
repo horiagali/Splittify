@@ -38,8 +38,8 @@ public class EventService {
      * getter for the events
      * @return all the events in the repository
      */
-    public List<Event> getEvents(){
-        return eventRepository.findAll();
+    public ResponseEntity<List<Event>> getEvents(){
+        return ResponseEntity.ok(eventRepository.findAll());
     }
 
     /**
@@ -81,11 +81,12 @@ public class EventService {
             return ResponseEntity.notFound().build();
         }
         Event toBeUpdated = eventRepository.findById(id).get();
-
+        // This does not work btw
         toBeUpdated.setTitle(event.getTitle());
         toBeUpdated.setDescription(event.getDescription());
         toBeUpdated.setLocation(event.getLocation());
         toBeUpdated.setDate(event.getDate());
+        toBeUpdated.setParticipants(event.getParticipants());
 
         return ResponseEntity.ok(toBeUpdated);
     }

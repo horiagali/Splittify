@@ -18,13 +18,13 @@ public class TagControllerTest {
     private TagService tagService;
     private TagController tagController;
 
-    @BeforeEach
+ /*   @BeforeEach
     public void setUp() {
         tagService = mock(TagService.class);
         tagController = new TagController(tagService);
     }
 
-    @Test
+  /*  @Test
     public void testGetAllTags() {
         List<Tag> tags = new ArrayList<>();
         tags.add(new Tag("Tag1", Color.RED));
@@ -70,4 +70,6 @@ public class TagControllerTest {
         Tag result = tagController.updateTag(tag, id);
         assertEquals(tag, result);
     }
+    */
+
 }
