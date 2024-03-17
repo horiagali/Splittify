@@ -54,19 +54,7 @@ public class QuoteOverviewCtrl implements Initializable {
 
      */
     public void addEvent() {
-        try {
-            server.addEvent(getEvent());
-        } catch (WebApplicationException e) {
-
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
-        }
-
-        clearFields();
-        mainCtrl.showOverview();
+        mainCtrl.showAddEvent();
     }
     private void clearFields() {
         eventName.clear();
