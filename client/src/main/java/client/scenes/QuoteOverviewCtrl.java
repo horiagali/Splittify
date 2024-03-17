@@ -2,6 +2,7 @@ package client.scenes;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
@@ -14,10 +15,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 
@@ -37,9 +35,28 @@ public class QuoteOverviewCtrl implements Initializable {
     private TableColumn<Event, String> colLocation;
     @FXML
     private TableColumn<Event, String> colDate;
+    @FXML
+    private ToggleGroup languageGroup;
+    @FXML
+    private Button createEventButton;
+
+    @FXML
+    private Button joinEventButton;
+    @FXML
+    private Button refreshButton;
+
+    @FXML
+    private Button adminButton;
+
+    @FXML
+    private javafx.scene.text.Text yourEventsText;
+    @FXML
+    private Menu languageMenu;
+
+
+    private ResourceBundle resourceBundle;
 
     /**
-     * 
      * @param server
      * @param mainCtrl
      */
@@ -48,10 +65,40 @@ public class QuoteOverviewCtrl implements Initializable {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
-    /**
-     *
-     * adds an event to the table
 
+    /**
+     * Changes the language of the site
+     * @param event
+     */
+    @FXML
+    public void changeLanguage(javafx.event.ActionEvent event) {
+        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
+        String language = selectedLanguageItem.getText().toLowerCase();
+
+        // Load the appropriate resource bundle based on the selected language
+        resourceBundle = ResourceBundle.getBundle("messages_" + language, new Locale(language));
+        // Update UI elements with the new resource bundle
+        updateUIWithNewLanguage();
+    }
+
+
+    // Method to update UI elements with the new language from the resource bundle
+    private void updateUIWithNewLanguage() {
+
+        createEventButton.setText(resourceBundle.getString("button.createEvent"));
+        joinEventButton.setText(resourceBundle.getString("button.joinEvent"));
+        refreshButton.setText(resourceBundle.getString("button.refresh"));
+        adminButton.setText(resourceBundle.getString("button.admin"));
+        yourEventsText.setText(resourceBundle.getString("Text.yourEvents"));
+        colDate.setText(resourceBundle.getString("TableColumn.colDate"));
+        colName.setText(resourceBundle.getString("TableColumn.colName"));
+        colLocation.setText(resourceBundle.getString("TableColumn.colLocation"));
+        languageMenu.setText(resourceBundle.getString("menu.languageMenu"));
+    }
+
+
+    /**
+     * adds an event to the table
      */
     public void addEvent() {
         try {
@@ -68,13 +115,13 @@ public class QuoteOverviewCtrl implements Initializable {
         clearFields();
         mainCtrl.showOverview();
     }
+
     private void clearFields() {
         eventName.clear();
     }
 
 
     /**
-     *
      * @return return event
      */
     private Event getEvent() {
@@ -83,24 +130,23 @@ public class QuoteOverviewCtrl implements Initializable {
     }
 
     /**
-     * 
+     *
      */
     @SuppressWarnings("ParameterNumber")
     @Override
 
     public void initialize(URL location, ResourceBundle resources) {
         colName.setCellValueFactory(q ->
-        new SimpleStringProperty(q.getValue().getTitle()));
+                new SimpleStringProperty(q.getValue().getTitle()));
         colLocation.setCellValueFactory(q ->
-        new SimpleStringProperty(q.getValue().getLocation()));
+                new SimpleStringProperty(q.getValue().getLocation()));
         colDate.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
         table.setOnMouseClicked(this::handleTableItemClick);
 
     }
 
     /**
-     * @param event
-     * event handler for mouse double click
+     * @param event event handler for mouse double click
      */
     private void handleTableItemClick(MouseEvent event) {
         if (event.getClickCount() == 2) { // Double-click
@@ -119,7 +165,7 @@ public class QuoteOverviewCtrl implements Initializable {
     }
 
     /**
-     * 
+     *
      */
     public void refresh() {
         var events = server.getEvents();
@@ -129,44 +175,44 @@ public class QuoteOverviewCtrl implements Initializable {
 
 
     /**
-     * 
+     *
      */
     public void page() {
         mainCtrl.showPage();
     }
 
     /**
-     * 
+     *
      */
 
 
     /**
-     * 
+     *
      */
     public void showAddExpenses() {
         mainCtrl.showAddExpenses();
     }
 
     /**
-     * 
+     *
      */
     public void goToContact() {
         mainCtrl.goToContact();
     }
 
     /**
-     * 
+     *
      */
     public void goToOverview() {
         mainCtrl.goToOverview();
     }
 
     /**
-     *
-     *  goes to the admin pass page
-     *
+     * goes to the admin pass page
      */
     public void goToAdminPass() {
         mainCtrl.goToAdminPass();
     }
+
+
 }
