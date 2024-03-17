@@ -53,6 +53,8 @@ public class MainCtrl {
 
     private Scene invite;
     private InviteCtrl inviteCtrl;
+    private AddEventCtrl addEventCtrl;
+    private Scene addEvent;
 
     /**
      * 
@@ -66,6 +68,7 @@ public class MainCtrl {
      * @param invite
      * @param adminPage
      * @param adminPass
+     * @param addEvent
      */
 
     @SuppressWarnings({"ParameterNumber"})
@@ -76,7 +79,8 @@ public class MainCtrl {
                            Pair<OverviewCtrl, Parent> overviewApp,
                            Pair<InviteCtrl, Parent> invite,
                            Pair<AdminPageCtrl, Parent> adminPage,
-                           Pair<AdminPassCtrl, Parent> adminPass) {
+                           Pair<AdminPassCtrl, Parent> adminPass,
+                           Pair<AddEventCtrl, Parent> addEvent) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -87,6 +91,8 @@ public class MainCtrl {
         this.pageCtrl = page.getKey();
         this.page = new Scene(page.getValue());
 
+        this.addEventCtrl = addEvent.getKey();
+        this.addEvent = new Scene(addEvent.getValue());
 
         this.addExpensesCtrl = addExpense.getKey();
         this.addExpenses = new Scene(addExpense.getValue());
@@ -145,6 +151,14 @@ public class MainCtrl {
         primaryStage.setTitle("Event: Adding Events");
         primaryStage.setScene(add);
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+    }
+
+    /**
+     * Show add event page
+     */
+    public void showAddEvent() {
+        primaryStage.setTitle("Create an event");
+        primaryStage.setScene(addEvent);
     }
 
     /**
