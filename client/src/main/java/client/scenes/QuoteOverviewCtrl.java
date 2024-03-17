@@ -1,7 +1,9 @@
 package client.scenes;
 
+import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.Date;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
@@ -14,10 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 
@@ -37,6 +36,12 @@ public class QuoteOverviewCtrl implements Initializable {
     private TableColumn<Event, String> colLocation;
     @FXML
     private TableColumn<Event, String> colDate;
+    @FXML
+    private ToggleGroup languageGroup;
+    @FXML
+    private Button createEventButton;
+
+    private ResourceBundle resourceBundle;
 
     /**
      * 
@@ -48,6 +53,33 @@ public class QuoteOverviewCtrl implements Initializable {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
+
+    // Method to handle language change
+    @FXML
+    public void changeLanguage(javafx.event.ActionEvent event) {
+        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
+        String language = selectedLanguageItem.getText().toLowerCase();
+
+        // Load the appropriate resource bundle based on the selected language
+        resourceBundle = ResourceBundle.getBundle("messages_" + language, new Locale(language));
+        // Update UI elements with the new resource bundle
+        updateUIWithNewLanguage();
+    }
+
+
+    // Method to update UI elements with the new language from the resource bundle
+    private void updateUIWithNewLanguage() {
+        // Assuming you have a key for the "Create Event" button text in your resource bundle
+        String createEventButtonText = resourceBundle.getString("button.createEvent");
+
+        // Update the text of the "Create Event" button
+        createEventButton.setText(createEventButtonText);
+        System.out.println(createEventButtonText);
+        System.out.println("mama ta");
+    }
+
+
+
     /**
      *
      * adds an event to the table
@@ -169,4 +201,6 @@ public class QuoteOverviewCtrl implements Initializable {
     public void goToAdminPass() {
         mainCtrl.goToAdminPass();
     }
+
+
 }
