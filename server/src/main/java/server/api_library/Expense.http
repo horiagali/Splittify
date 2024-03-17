@@ -1,0 +1,50 @@
+### Create expense
+POST http://localhost:8080/api/events/1/expenses
+Accept: application/json
+Content-Type: application/json
+
+{
+  "title": "ExpenseTest",
+  "amount": 50,
+  "payer": {
+    "participantID": 2
+  },
+  "owers": [{
+    "participantID": 3
+  },{
+    "participantID": 1
+  }]
+}
+
+### Update expense
+PUT http://localhost:8080/api/events/1/expenses/1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 1,
+  "payer": {
+    "participantID": 3
+  },
+  "owers": [{
+    "participantID": 2
+  },{
+    "participantID": 1
+  }]
+}
+
+### Get expenses
+GET http://localhost:8080/api/events/1/expenses
+Accept: application/json
+Content-Type: application/json
+
+### Get specific expense
+GET http://localhost:8080/api/events/1/expenses/1
+Accept: application/json
+Content-Type: application/json
+
+### Delete expense
+DELETE http://localhost:8080/api/events/2/expenses/702
+Accept: application/json
+Content-Type: application/json
+

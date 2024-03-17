@@ -29,7 +29,7 @@ public class ExpenseController {
      * @return list of expenses
      */
     @GetMapping
-    public List<Expense> getAll(@PathVariable(name = "event_id") Long eventId) {
+    public ResponseEntity<List<Expense>> getAll(@PathVariable(name = "event_id") Long eventId) {
         return expenseService.getExpenses(eventId);
     }
 
@@ -52,7 +52,8 @@ public class ExpenseController {
      * @return list of expenses
      */
     @GetMapping("/payer={participant_id}")
-    public List<Expense> getExpensesOfPayer(@PathVariable(name = "event_id") Long eventId, 
+    public ResponseEntity<List<Expense>> getExpensesOfPayer
+    (@PathVariable(name = "event_id") Long eventId, 
     @PathVariable(name = "participant_id") Long participantId) {
         return expenseService.getExpensesOfPayer(eventId, participantId);
     }
@@ -64,7 +65,8 @@ public class ExpenseController {
      * @return list of expenses
      */
     @GetMapping("/ower={participant_id}")
-    public List<Expense> getExpensesOfOwer(@PathVariable(name = "event_id") Long eventId, 
+    public ResponseEntity<List<Expense>> getExpensesOfOwer
+    (@PathVariable(name = "event_id") Long eventId, 
     @PathVariable(name = "participant_id") Long participantId) {
         return expenseService.getExpensesOfOwer(eventId, participantId);
     }
@@ -76,7 +78,7 @@ public class ExpenseController {
      * @param expense the expense that needs to be created
      * @return expense
      */
-    @ResponseBody
+    @PostMapping
     public ResponseEntity<Expense> createExpense(@PathVariable(name = "event_id")Long eventId, 
     @RequestBody Expense expense) {
         return expenseService.createExpense(eventId, expense);

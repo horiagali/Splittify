@@ -18,4 +18,13 @@ package server.database;
 import commons.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TagRepository extends JpaRepository<Tag, Long> {}
+import java.util.List;
+
+public interface TagRepository extends JpaRepository<Tag, Long> {
+    /**
+     * find all tags
+     * @param eventId an eventId
+     * @return a list of tags
+     */
+    List<Tag> findTagsByEvent_Id(Long eventId);
+}

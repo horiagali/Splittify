@@ -44,7 +44,7 @@ public class EventController {
      */
     @GetMapping
     @ResponseBody
-    public List<Event> getAllEvents() {
+    public ResponseEntity<List<Event>> getAllEvents() {
         return eventService.getEvents();
     }
 

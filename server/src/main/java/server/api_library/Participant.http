@@ -1,5 +1,5 @@
 ### Create Participant
-POST http://localhost:8080/api/events/602/participants
+POST http://localhost:8080/api/events/1/participants
 Accept: application/json
 Content-Type: application/json
 
@@ -12,17 +12,17 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/api/events/602/participants
+GET http://localhost:8080/api/events/1/participants
 Accept: application/json
 Content-Type: application/json
 
 ###
-GET http://localhost:8080/api/events/602/participants/2
+GET http://localhost:8080/api/events/2/participants/102
 Accept: application/json
 Content-Type: application/json
 
 ###
-PUT http://localhost:8080/api/events/602/participants/2
+PUT http://localhost:8080/api/events/2/participants/102
 Accept: application/json
 Content-Type: application/json
 
@@ -35,7 +35,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/api/events/602/participants/54
+DELETE http://localhost:8080/api/events/4/participants/52
 Accept: application/json
 Content-Type: application/json
 
