@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
+import org.w3c.dom.Text;
 
 public class QuoteOverviewCtrl implements Initializable {
 
@@ -41,10 +42,23 @@ public class QuoteOverviewCtrl implements Initializable {
     @FXML
     private Button createEventButton;
 
+    @FXML
+    private Button joinEventButton;
+    @FXML
+    private Button refreshButton;
+
+    @FXML
+    private Button adminButton;
+
+    @FXML
+    private javafx.scene.text.Text yourEventsText;
+    @FXML
+    private Menu languageMenu;
+
+
     private ResourceBundle resourceBundle;
 
     /**
-     * 
      * @param server
      * @param mainCtrl
      */
@@ -69,21 +83,21 @@ public class QuoteOverviewCtrl implements Initializable {
 
     // Method to update UI elements with the new language from the resource bundle
     private void updateUIWithNewLanguage() {
-        // Assuming you have a key for the "Create Event" button text in your resource bundle
-        String createEventButtonText = resourceBundle.getString("button.createEvent");
 
-        // Update the text of the "Create Event" button
-        createEventButton.setText(createEventButtonText);
-        System.out.println(createEventButtonText);
-        System.out.println("mama ta");
+        createEventButton.setText(resourceBundle.getString("button.createEvent"));
+        joinEventButton.setText(resourceBundle.getString("button.joinEvent"));
+        refreshButton.setText(resourceBundle.getString("button.refresh"));
+        adminButton.setText(resourceBundle.getString("button.admin"));
+        yourEventsText.setText(resourceBundle.getString("Text.yourEvents"));
+        colDate.setText(resourceBundle.getString("TableColumn.colDate"));
+        colName.setText(resourceBundle.getString("TableColumn.colName"));
+        colLocation.setText(resourceBundle.getString("TableColumn.colLocation"));
+        languageMenu.setText(resourceBundle.getString("menu.languageMenu"));
     }
 
 
-
     /**
-     *
      * adds an event to the table
-
      */
     public void addEvent() {
         try {
@@ -100,13 +114,13 @@ public class QuoteOverviewCtrl implements Initializable {
         clearFields();
         mainCtrl.showOverview();
     }
+
     private void clearFields() {
         eventName.clear();
     }
 
 
     /**
-     *
      * @return return event
      */
     private Event getEvent() {
@@ -115,24 +129,23 @@ public class QuoteOverviewCtrl implements Initializable {
     }
 
     /**
-     * 
+     *
      */
     @SuppressWarnings("ParameterNumber")
     @Override
 
     public void initialize(URL location, ResourceBundle resources) {
         colName.setCellValueFactory(q ->
-        new SimpleStringProperty(q.getValue().getTitle()));
+                new SimpleStringProperty(q.getValue().getTitle()));
         colLocation.setCellValueFactory(q ->
-        new SimpleStringProperty(q.getValue().getLocation()));
+                new SimpleStringProperty(q.getValue().getLocation()));
         colDate.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
         table.setOnMouseClicked(this::handleTableItemClick);
 
     }
 
     /**
-     * @param event
-     * event handler for mouse double click
+     * @param event event handler for mouse double click
      */
     private void handleTableItemClick(MouseEvent event) {
         if (event.getClickCount() == 2) { // Double-click
@@ -151,7 +164,7 @@ public class QuoteOverviewCtrl implements Initializable {
     }
 
     /**
-     * 
+     *
      */
     public void refresh() {
         var events = server.getEvents();
@@ -161,42 +174,40 @@ public class QuoteOverviewCtrl implements Initializable {
 
 
     /**
-     * 
+     *
      */
     public void page() {
         mainCtrl.showPage();
     }
 
     /**
-     * 
+     *
      */
 
 
     /**
-     * 
+     *
      */
     public void showAddExpenses() {
         mainCtrl.showAddExpenses();
     }
 
     /**
-     * 
+     *
      */
     public void goToContact() {
         mainCtrl.goToContact();
     }
 
     /**
-     * 
+     *
      */
     public void goToOverview() {
         mainCtrl.goToOverview();
     }
 
     /**
-     *
-     *  goes to the admin pass page
-     *
+     * goes to the admin pass page
      */
     public void goToAdminPass() {
         mainCtrl.goToAdminPass();

@@ -17,11 +17,11 @@
     <!-- MenuBar -->
     <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
         <menus>
-            <Menu mnemonicParsing="false" text="Language">
+            <Menu fx:id = "languageMenu" mnemonicParsing="false" text="Language">
                 <items>
                     <RadioMenuItem mnemonicParsing="false" text="English" toggleGroup="$languageGroup" onAction="#changeLanguage" />
-                    <RadioMenuItem mnemonicParsing="false" text="Romanian" toggleGroup="$languageGroup" onAction="#changeLanguage" />
-                    <RadioMenuItem mnemonicParsing="false" text="Dutch" toggleGroup="$languageGroup" onAction="#changeLanguage" />
+                    <RadioMenuItem mnemonicParsing="false" text="Romana" toggleGroup="$languageGroup" onAction="#changeLanguage" />
+                    <RadioMenuItem mnemonicParsing="false" text="Nederlands" toggleGroup="$languageGroup" onAction="#changeLanguage" />
 
                 </items>
             </Menu>
@@ -51,8 +51,8 @@
             <TextField layoutX="204.0" layoutY="99.0"  fx:id="eventName"/>
             <TextField layoutX="204.0" layoutY="180.0" />
             <Button fx:id="createEventButton" layoutX="346.0" layoutY="99.0" mnemonicParsing="false" onAction="#addEvent" text="Create Event" />
-            <Button layoutX="346.0" layoutY="180.0" mnemonicParsing="false" text="Join Event" />
-            <Text layoutX="283.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your events:" />
+            <Button fx:id="joinEventButton" layoutX="346.0" layoutY="180.0" mnemonicParsing="false" text="Join Event" />
+            <Text fx:id="yourEventsText" layoutX="283.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your events:" />
         </children>
     </AnchorPane>
 
@@ -68,8 +68,8 @@
                 </columns>
             </TableView>
             <HBox layoutX="2.0" layoutY="359.0" spacing="10" alignment="CENTER_RIGHT">
-                <Button layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh"/>
-                <Button layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#goToAdminPass" text="Admin"/>
+                <Button fx:id="refreshButton" layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh"/>
+                <Button fx:id="adminButton" layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#goToAdminPass" text="Admin"/>
             </HBox>
         </children>
     </AnchorPane>
