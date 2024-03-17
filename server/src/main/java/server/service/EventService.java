@@ -81,7 +81,7 @@ public class EventService {
             return ResponseEntity.notFound().build();
         }
         Event toBeUpdated = eventRepository.findById(id).get();
-
+        // This does not work btw
         toBeUpdated.setTitle(event.getTitle());
         toBeUpdated.setDescription(event.getDescription());
         toBeUpdated.setLocation(event.getLocation());
