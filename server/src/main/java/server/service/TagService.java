@@ -9,7 +9,6 @@ import server.database.EventRepository;
 import server.database.TagRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TagService {
@@ -33,10 +32,13 @@ public class TagService {
      * @return The new Tag
      */
     public ResponseEntity<Tag> createTag(Tag tag, Long eventId){
-        Optional<Event> event = eventRepository.findById(eventId);
-        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
+        if (!eventRepository.findById(eventId).isPresent()) {
+            System.out.println("Event with given ID not found");
+            return ResponseEntity.notFound().build();
+        }
+        Event event = eventRepository.findById(eventId).get();
         Tag tagEntity = new Tag(tag.getName(), tag.getColor());
-        tagEntity.setEvent(event.get());
+        tagEntity.setEvent(event);
         tagRepository.save(tagEntity);
         return ResponseEntity.ok(tagEntity);
     }
@@ -57,15 +59,24 @@ public class TagService {
      * @return The found Tag, or null if not found
      */
     public ResponseEntity<Tag> getTagById(Long id, Long eventId){
-        Optional<Event> event = eventRepository.findById(eventId);
-        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
-        Optional<Tag> tag = tagRepository.findById(id);
-        if(tag.isEmpty())
-            throw new IllegalArgumentException("Expense with given ID not found");
-        if(tag.get().getEvent() != event.get()) {
-            throw new IllegalArgumentException("Expense doesn't belong to event");
+        if (!eventRepository.findById(eventId).isPresent()) {
+            System.out.println("Event with given ID not found");
+            return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(tag.get());
+
+        if (!tagRepository.findById(id).isPresent()) {
+            System.out.println("Tag with given ID not found");
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventRepository.findById(eventId).get();
+        Tag tag = tagRepository.findById(id).get();
+
+        if(tag.getEvent() != event) {
+            System.out.println("Tag does not belong to event");
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(tag);
     }
 
     /**
@@ -75,19 +86,26 @@ public class TagService {
      * @return The deleted tag, or null if not found
      */
     public ResponseEntity<Tag> deleteTag(Long eventId, Long id){
-        Optional<Event> event = eventRepository.findById(eventId);
-        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
-        Optional<Tag> tag = tagRepository.findById(id);
-        Tag t = tag.get();
-        if(tag.isEmpty())
-            throw new IllegalArgumentException("Expense with given ID not found");
-        if(tag.get().getEvent() != event.get()) {
-            throw new IllegalArgumentException("Expense doesn't belong to event");
+        if (!eventRepository.findById(eventId).isPresent()) {
+            System.out.println("Event with given ID not found");
+            return ResponseEntity.notFound().build();
         }
-        t.toString();
+
+        if (!tagRepository.findById(id).isPresent()) {
+            System.out.println("Tag with given ID not found");
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventRepository.findById(eventId).get();
+        Tag tag = tagRepository.findById(id).get();
+
+        if(tag.getEvent() != event) {
+            System.out.println("Tag does not belong to event");
+            return ResponseEntity.notFound().build();
+        }
+
         tagRepository.deleteById(id);
-        t.toString();
-        return ResponseEntity.ok(t);
+        return ResponseEntity.ok(tag);
     }
 
     /**
@@ -98,19 +116,28 @@ public class TagService {
      * @return The updated tag
      */
     public ResponseEntity<Tag> updateTag(Long eventId, Tag newTag, Long id){
-        Optional<Event> event = eventRepository.findById(eventId);
-        if(event.isEmpty()) throw new IllegalArgumentException("Event with given ID not found");
-        Optional<Tag> tag = tagRepository.findById(id);
-        if(tag.isEmpty())
-            throw new IllegalArgumentException("Expense with given ID not found");
-        if(tag.get().getEvent() != event.get()) {
-            throw new IllegalArgumentException("Expense doesn't belong to event");
+        if (!eventRepository.findById(eventId).isPresent()) {
+            System.out.println("Event with given ID not found");
+            return ResponseEntity.notFound().build();
         }
 
-        tag.get().setName(newTag.getName());
-        tag.get().setColor(newTag.getColor());
-        tag.get().setEvent(newTag.getEvent());
-        Tag saved = tagRepository.save(tag.get());
+        if (!tagRepository.findById(id).isPresent()) {
+            System.out.println("Tag with given ID not found");
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventRepository.findById(eventId).get();
+        Tag tag = tagRepository.findById(id).get();
+
+        if(tag.getEvent() != event) {
+            System.out.println("Tag does not belong to event");
+            return ResponseEntity.notFound().build();
+        }
+
+        tag.setName(newTag.getName());
+        tag.setColor(newTag.getColor());
+        tag.setEvent(newTag.getEvent());
+        Tag saved = tagRepository.save(tag);
         return ResponseEntity.ok(saved);
     }
 }
