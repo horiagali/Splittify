@@ -77,7 +77,7 @@ public class ExpenseService {
      * @param event
      * @param newExpense
      * @param amount
-     * @return
+     * @return returns new expense i guess
      */
     private Expense balancing(Expense expense,
                               Event event,
