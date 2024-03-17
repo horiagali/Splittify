@@ -1,6 +1,5 @@
 package client.scenes;
 
-import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
@@ -19,7 +18,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
-import org.w3c.dom.Text;
 
 public class QuoteOverviewCtrl implements Initializable {
 
@@ -68,7 +66,10 @@ public class QuoteOverviewCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
-    // Method to handle language change
+    /**
+     * Changes the language of the site
+     * @param event
+     */
     @FXML
     public void changeLanguage(javafx.event.ActionEvent event) {
         RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
