@@ -15,6 +15,9 @@
  */
 package client.scenes;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -54,6 +57,8 @@ public class MainCtrl {
     private Scene invite;
     private InviteCtrl inviteCtrl;
 
+    public static ResourceBundle resourceBundle;
+
     /**
      * 
      * @param primaryStage
@@ -66,6 +71,7 @@ public class MainCtrl {
      * @param invite
      * @param adminPage
      * @param adminPass
+     * @param language
      */
 
     @SuppressWarnings({"ParameterNumber"})
@@ -76,8 +82,15 @@ public class MainCtrl {
                            Pair<OverviewCtrl, Parent> overviewApp,
                            Pair<InviteCtrl, Parent> invite,
                            Pair<AdminPageCtrl, Parent> adminPage,
-                           Pair<AdminPassCtrl, Parent> adminPass) {
+                           Pair<AdminPassCtrl, Parent> adminPass,
+                           String language) {
         this.primaryStage = primaryStage;
+
+        resourceBundle = ResourceBundle.getBundle("messages_" + 
+        language, new Locale(language));
+
+        System.out.println("resourceBundle set to language " + language);
+        overview.getKey().updateUIWithNewLanguage();
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
@@ -105,6 +118,8 @@ public class MainCtrl {
 
         this.adminPassCtrl = adminPass.getKey();
         this.adminPass = new Scene(adminPass.getValue());
+
+        
 
         showOverview();
         primaryStage.show();
@@ -175,6 +190,7 @@ public class MainCtrl {
         primaryStage.setTitle("Contact Details");
         primaryStage.setScene(contactDetails);
     }
+
 
     /**
      * 

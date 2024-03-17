@@ -17,10 +17,15 @@ package client;
 
 import static com.google.inject.Guice.createInjector;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 import client.scenes.*;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -67,8 +72,26 @@ public class Main extends Application {
         var adminPage = FXML.load(AdminPageCtrl.class, "client", "scenes", "AdminPage.fxml");
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
 
-        mainCtrl.initialize(primaryStage, overview,
-                add, page, addExpense, contactDetails, overviewApp, invite, adminPage, adminPass);
+        Config config = new Config();
+        var mapper = new ObjectMapper();
+        FileInputStream stream;
+        String location = "C:\\Users\\marti\\OneDrive\\Documents" +
+        "\\Q3\\OOPP\\oopp-team-56\\client\\src\\main\\java\\client\\config.json";
+
+        try {
+            stream = new FileInputStream(new File(location));
+            config = mapper.readValue(stream, Config.class);
+            System.out.println(config.getLanguage());
+            System.out.println(config.getServerUrl());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String language = config.getLanguage();
+
+        mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
+        contactDetails, overviewApp, invite, adminPage, adminPass, language);
     }
 }
 /// ignore this dude

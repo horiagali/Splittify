@@ -53,9 +53,6 @@ public class QuoteOverviewCtrl implements Initializable {
     @FXML
     private Menu languageMenu;
 
-
-    private ResourceBundle resourceBundle;
-
     /**
      * @param server
      * @param mainCtrl
@@ -76,24 +73,27 @@ public class QuoteOverviewCtrl implements Initializable {
         String language = selectedLanguageItem.getText().toLowerCase();
 
         // Load the appropriate resource bundle based on the selected language
-        resourceBundle = ResourceBundle.getBundle("messages_" + language, new Locale(language));
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
+        + language, new Locale(language));
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
     }
 
 
-    // Method to update UI elements with the new language from the resource bundle
-    private void updateUIWithNewLanguage() {
+    /**
+     * Method to update UI elements with the new language from the resource bundle
+     */
+    public void updateUIWithNewLanguage() {
 
-        createEventButton.setText(resourceBundle.getString("button.createEvent"));
-        joinEventButton.setText(resourceBundle.getString("button.joinEvent"));
-        refreshButton.setText(resourceBundle.getString("button.refresh"));
-        adminButton.setText(resourceBundle.getString("button.admin"));
-        yourEventsText.setText(resourceBundle.getString("Text.yourEvents"));
-        colDate.setText(resourceBundle.getString("TableColumn.colDate"));
-        colName.setText(resourceBundle.getString("TableColumn.colName"));
-        colLocation.setText(resourceBundle.getString("TableColumn.colLocation"));
-        languageMenu.setText(resourceBundle.getString("menu.languageMenu"));
+        createEventButton.setText(MainCtrl.resourceBundle.getString("button.createEvent"));
+        joinEventButton.setText(MainCtrl.resourceBundle.getString("button.joinEvent"));
+        refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
+        adminButton.setText(MainCtrl.resourceBundle.getString("button.admin"));
+        yourEventsText.setText(MainCtrl.resourceBundle.getString("Text.yourEvents"));
+        colDate.setText(MainCtrl.resourceBundle.getString("TableColumn.colDate"));
+        colName.setText(MainCtrl.resourceBundle.getString("TableColumn.colName"));
+        colLocation.setText(MainCtrl.resourceBundle.getString("TableColumn.colLocation"));
+        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
     }
 
 
