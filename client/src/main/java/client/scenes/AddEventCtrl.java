@@ -24,12 +24,22 @@ public class AddEventCtrl {
     private TextField locationField;
     @FXML
     private Button addEventButton;
+
+    /**
+     * Constructor for the controller
+     * @param server server
+     * @param mainCtrl mainCtrl
+     */
     @Inject
     public AddEventCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Adds an event directly into the database. No checking of values
+     * @param ae action event
+     */
     public void addEvent(ActionEvent ae) {
         Event newEvent = new Event(
                 nameField.getText(),
@@ -49,6 +59,10 @@ public class AddEventCtrl {
         clearFields();
         mainCtrl.showOverview();
     }
+
+    /**
+     * Clears all text fields
+     */
     public void clearFields() {
         nameField.clear();
         descriptionField.clear();

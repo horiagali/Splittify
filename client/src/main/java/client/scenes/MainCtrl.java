@@ -68,6 +68,7 @@ public class MainCtrl {
      * @param invite
      * @param adminPage
      * @param adminPass
+     * @param addEvent
      */
 
     @SuppressWarnings({"ParameterNumber"})
@@ -152,6 +153,9 @@ public class MainCtrl {
         add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
     }
 
+    /**
+     * Show add event page
+     */
     public void showAddEvent() {
         primaryStage.setTitle("Create an event");
         primaryStage.setScene(addEvent);

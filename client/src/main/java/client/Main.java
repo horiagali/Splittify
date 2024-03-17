@@ -69,8 +69,13 @@ public class Main extends Application {
 
         var addEvent = FXML.load(AddEventCtrl.class, "client", "scenes", "AddEventPage.fxml");
 
-        mainCtrl.initialize(primaryStage, overview,
-                add, page, addExpense, contactDetails, overviewApp, invite, adminPage, adminPass, addEvent);
+        mainCtrl.initialize(
+                primaryStage,
+                overview,
+                add,
+                page,
+                addExpense,
+                contactDetails, overviewApp, invite, adminPage, adminPass, addEvent);
 
 
     }
