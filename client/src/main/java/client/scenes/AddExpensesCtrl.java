@@ -15,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,14 +61,18 @@ public class AddExpensesCtrl implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String[] participantNames = {"Martijn", "Horia", "Iulia", "Amanda", "Mihnea", "Fayaz"};
+        Long eventId = mainCtrl.getSelectedEvent().getId();
 
-        participantCheckboxes = new ArrayList<>();
+        // Fetch participants by event ID from the server
+        List<String> participants = server.getParticipantNicknamesByEventId(eventId);
 
-        for (String name : participantNames) {
-            CheckBox participantCheckbox = new CheckBox(name);
+        // Clear existing checkboxes
+        participantsVBox.getChildren().clear();
+
+        // Populate checkboxes with participant names
+        for (String participant : participants) {
+            CheckBox participantCheckbox = new CheckBox(participant);
             participantCheckboxes.add(participantCheckbox);
-
 
             participantCheckbox.setPrefWidth(80);
             participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
@@ -96,7 +99,7 @@ public class AddExpensesCtrl implements Initializable {
      * Handles the action when the user adds an expense.
      */
     @FXML
-    private void addExpense() throws IOException {
+    private void addExpense() {
         Event selectedEvent = new Event();
         String payerName = nameTextField.getText();
         Participant payer = server.getParticipantByNickname(selectedEvent.getId(), payerName);
@@ -118,7 +121,8 @@ public class AddExpensesCtrl implements Initializable {
         for (CheckBox checkbox : participantCheckboxes) {
             if (checkbox.isSelected()) {
                 String participantName = checkbox.getText();
-                Participant participant = server.getParticipantByNickname(selectedEvent.getId(), participantName);
+                Participant participant = server.getParticipantByNickname(
+                        selectedEvent.getId(), participantName);
                 // Add the participant as an owner of the expense
                 owners.add(participant);
             }

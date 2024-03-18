@@ -201,6 +201,7 @@ public class ServerUtils {
 
 	/**
 	 * Get participant by nickname
+	 * @param eventID id of the event the participant is a part of
 	 * @param nickname nickname
 	 * @return participant
 	 */

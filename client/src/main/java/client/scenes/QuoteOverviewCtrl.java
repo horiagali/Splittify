@@ -139,6 +139,7 @@ public class QuoteOverviewCtrl implements Initializable {
             Event selectedEvent = table.getSelectionModel().getSelectedItem();
             if (selectedEvent != null) {
                 mainCtrl.showEventOverview(selectedEvent);
+                mainCtrl.setSelectedEvent(selectedEvent);
             }
         }
     }

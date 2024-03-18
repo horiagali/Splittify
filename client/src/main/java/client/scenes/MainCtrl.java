@@ -55,6 +55,7 @@ public class MainCtrl {
     private InviteCtrl inviteCtrl;
     private AddEventCtrl addEventCtrl;
     private Scene addEvent;
+    private Event selectedEvent;
 
     /**
      * 
@@ -237,5 +238,13 @@ public class MainCtrl {
     public void goToAdminPage(){
         primaryStage.setTitle("Admin page");
         primaryStage.setScene(adminPage);
+    }
+
+    public void setSelectedEvent(Event selectedEvent){
+        this.selectedEvent = selectedEvent;
+    }
+
+    public Event getSelectedEvent(){
+        return this.selectedEvent;
     }
 }
