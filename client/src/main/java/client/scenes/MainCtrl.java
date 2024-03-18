@@ -240,10 +240,18 @@ public class MainCtrl {
         primaryStage.setScene(adminPage);
     }
 
+    /**
+     * Sets the selected event
+     * @param selectedEvent
+     */
     public void setSelectedEvent(Event selectedEvent){
         this.selectedEvent = selectedEvent;
     }
 
+    /**
+     * Get the selected event
+     * @return selected event
+     */
     public Event getSelectedEvent(){
         return this.selectedEvent;
     }

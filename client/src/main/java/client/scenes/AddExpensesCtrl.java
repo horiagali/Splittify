@@ -14,6 +14,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -61,23 +63,26 @@ public class AddExpensesCtrl implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Long eventId = mainCtrl.getSelectedEvent().getId();
+        if (mainCtrl.getSelectedEvent() != null) {
+            Long eventId = mainCtrl.getSelectedEvent().getId();
+            List<String> participants = server.getParticipantNicknamesByEventId(eventId);
 
-        // Fetch participants by event ID from the server
-        List<String> participants = server.getParticipantNicknamesByEventId(eventId);
 
-        // Clear existing checkboxes
-        participantsVBox.getChildren().clear();
+            // Clear existing checkboxes
+            participantsVBox.getChildren().clear();
 
-        // Populate checkboxes with participant names
-        for (String participant : participants) {
-            CheckBox participantCheckbox = new CheckBox(participant);
-            participantCheckboxes.add(participantCheckbox);
+            // Populate checkboxes with participant names
+            for (String participant : participants) {
+                CheckBox participantCheckbox = new CheckBox(participant);
+                participantCheckboxes.add(participantCheckbox);
 
-            participantCheckbox.setPrefWidth(80);
-            participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
+                participantCheckbox.setPrefWidth(80);
+                participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
 
-            participantsVBox.getChildren().add(participantCheckbox);
+                participantsVBox.getChildren().add(participantCheckbox);
+            }
+        } else {
+            showErrorDialog("No event found");
         }
 
         ObservableList<String> currencyList = FXCollections.observableArrayList(
@@ -143,5 +148,17 @@ public class AddExpensesCtrl implements Initializable {
      */
     public void back() {
         mainCtrl.goToOverview();
+    }
+
+    /**
+     * Shows error message
+     * @param errorMessage message to be shown
+     */
+    private void showErrorDialog(String errorMessage) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(errorMessage);
+        alert.showAndWait();
     }
 }
