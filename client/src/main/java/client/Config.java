@@ -1,7 +1,11 @@
 package client;
 
 
+import java.io.File;
+import java.io.IOException;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, 
@@ -9,8 +13,8 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
                 isGetterVisibility = JsonAutoDetect.Visibility.NONE, 
                 setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class Config {
-    private String serverUrl;
-    private String language;
+    private String serverUrl = "http://localhost:8080/";
+    private String language = "romana";
 
     /**
      * getter for language
@@ -34,6 +38,7 @@ public class Config {
      */
     public void setLanguage(String language) {
         this.language = language;
+        saveConfig(this);
     }
 
     /**
@@ -42,5 +47,22 @@ public class Config {
      */
     public void setServerUrl(String serverUrl) {
         this.serverUrl = serverUrl;
+        saveConfig(this);
+    }
+
+    private static void saveConfig(Config config) {
+        var mapper = new ObjectMapper();
+        var file = new File(Main.configLocation + "/config.json");
+        // If file is not present, construct from default values
+        if(!file.exists()) {
+            throw new IllegalStateException("Config file should exist at [" 
+                + file.getAbsolutePath() + "]");
+        }
+
+        try {
+            mapper.writeValue(file, config);
+        } catch (IOException e) {
+            System.err.println("Failed save config file");
+        }
     }
 }
