@@ -10,7 +10,6 @@ import com.google.inject.Inject;
 import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +24,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Modality;
 
 public class QuoteOverviewCtrl implements Initializable {
 
@@ -112,19 +110,7 @@ public class QuoteOverviewCtrl implements Initializable {
      * adds an event to the table
      */
     public void addEvent() {
-        try {
-            server.addEvent(getEvent());
-        } catch (WebApplicationException e) {
-
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
-        }
-
-        clearFields();
-        mainCtrl.showOverview();
+        mainCtrl.showAddEvent();
     }
 
     private void clearFields() {
