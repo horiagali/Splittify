@@ -33,7 +33,15 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
-	private static final String SERVER = "http://localhost:8080/";
+	static String server;
+
+	/**
+	 * 
+	 * @param server
+	 */
+	public static void setServer(String server) {
+		ServerUtils.server = server;
+	}
 
 	/**
 	 * 
@@ -56,7 +64,7 @@ public class ServerUtils {
 	 */
 	public List<Quote> getQuotes() {
 		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/quotes") //
+				.target(server).path("api/quotes") //
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Quote>>() {});
@@ -68,7 +76,7 @@ public class ServerUtils {
 	 */
 	public List<Event> getEvents() {
 		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/events") //
+				.target(server).path("api/events") //
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.get(new GenericType<List<Event>>() {});
@@ -81,7 +89,7 @@ public class ServerUtils {
 	 */
 	public Quote addQuote(Quote quote) {
 		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(SERVER).path("api/quotes") //
+				.target(server).path("api/quotes") //
 				.request(APPLICATION_JSON) //
 				.accept(APPLICATION_JSON) //
 				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
@@ -94,7 +102,7 @@ public class ServerUtils {
 	 */
 	public Event addEvent(Event event) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER).path("api/events")
+				.target(server).path("api/events")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
@@ -108,7 +116,7 @@ public class ServerUtils {
 	 */
 	public List<String> getParticipantNicknamesByEventId(long eventId) {
 		return ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER)
+				.target(server)
 				.path("api/events/" + eventId + "/participants/nicknames")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
@@ -122,7 +130,7 @@ public class ServerUtils {
 	 */
 	public void deleteEvent(Event selectedEvent) {
 		ClientBuilder.newClient(new ClientConfig())
-				.target(SERVER)
+				.target(server)
 				.path("api/events/" + selectedEvent.getId())
 				.request()
 				.delete();
