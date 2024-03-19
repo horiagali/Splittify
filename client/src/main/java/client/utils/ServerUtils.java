@@ -165,14 +165,7 @@ public class ServerUtils {
 
 		// Create HttpEntity with expense object and headers
 		HttpEntity<Expense> requestEntity = new HttpEntity<>(expense, headers);
-
-		try {
-			// Send POST request using RestTemplate
-			restTemplate.postForObject(url, requestEntity, String.class);
-			System.out.println("Expense added successfully!");
-		} catch (Exception e) {
-			System.err.println("Failed to add expense. Error: " + e.getMessage());
-		}
+		restTemplate.postForObject(url, requestEntity, Void.class);
 	}
 
 	/**
