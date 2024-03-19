@@ -17,10 +17,16 @@ package client;
 
 import static com.google.inject.Guice.createInjector;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
 import client.scenes.*;
+import client.utils.ServerUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Injector;
 
 import javafx.application.Application;
@@ -30,6 +36,9 @@ public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
+
+    public static Config config = new Config();
+    public static String configLocation; 
 
     /**
      * The entry point of the application.
@@ -50,7 +59,32 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-
+        var mapper = new ObjectMapper();
+        FileInputStream stream;
+        
+        try {
+            configLocation = Main.class.getProtectionDomain().getCodeSource()
+            .getLocation().toURI().getPath() + "data/client";
+            var file = new File(configLocation + "/config.json");
+            // If file is not present, construct from default values
+            if(!file.exists()) {
+                var dir = new File(configLocation);
+                dir.mkdirs();
+                file.createNewFile();
+                mapper.writeValue(file, new Config());
+            }
+            stream = new FileInputStream(file);
+            config = mapper.readValue(stream, Config.class);
+            System.out.println(config.getLanguage());
+            System.out.println(config.getServerUrl());
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ServerUtils.setServer(config.getServerUrl());
+        String language = config.getLanguage();
 
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
@@ -66,17 +100,10 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         var adminPage = FXML.load(AdminPageCtrl.class, "client", "scenes", "AdminPage.fxml");
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
-
         var addEvent = FXML.load(AddEventCtrl.class, "client", "scenes", "AddEventPage.fxml");
 
-        mainCtrl.initialize(
-                primaryStage,
-                overview,
-                add,
-                page,
-                addExpense,
-                contactDetails, overviewApp, invite, adminPage, adminPass, addEvent);
-
+        mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
+        contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, language);
 
     }
 }
