@@ -24,6 +24,9 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
@@ -156,46 +159,19 @@ public class ServerUtils {
 		// Construct the URL for the specific event's expenses endpoint
 		String url = String.format("%s/events/%d/expenses", SERVER, eventId);
 
-		// Serialize the expense object to JSON string
-		String expenseJson = serializeExpenseToJson(expense);
+		// Create HttpHeaders with JSON content type
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		// Create HttpClient
-		HttpClient client = HttpClient.newHttpClient();
-
-		// Create HttpRequest with POST method and JSON body
-		HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(url))
-				.header("Content-Type", "application/json")
-				.POST(HttpRequest.BodyPublishers.ofString(expenseJson))
-				.build();
+		// Create HttpEntity with expense object and headers
+		HttpEntity<Expense> requestEntity = new HttpEntity<>(expense, headers);
 
 		try {
-			// Send the request and receive the response
-			HttpResponse<String> response = client.send(request,
-					HttpResponse.BodyHandlers.ofString());
-
-			// Check the response status code
-			if (response.statusCode() == 200) {
-				System.out.println("Expense added successfully!");
-			} else {
-				System.out.println("Failed to add expense. " +
-						"Status code: " + response.statusCode());
-				// Print error response if needed: response.body()
-			}
+			// Send POST request using RestTemplate
+			restTemplate.postForObject(url, requestEntity, String.class);
+			System.out.println("Expense added successfully!");
 		} catch (Exception e) {
-			System.err.println("An error occurred: " + e.getMessage());
-		}
-	}
-
-
-	private String serializeExpenseToJson(Expense expense) {
-		try {
-			// Use Jackson ObjectMapper to serialize Expense object to JSON string
-			return objectMapper.writeValueAsString(expense);
-		} catch (Exception e) {
-			System.err.println("Error serializing " +
-					"Expense object to JSON: " + e.getMessage());
-			return null;
+			System.err.println("Failed to add expense. Error: " + e.getMessage());
 		}
 	}
 
