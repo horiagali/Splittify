@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import client.scenes.*;
+import client.utils.ServerUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Injector;
@@ -35,6 +36,9 @@ public class Main extends Application {
 
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
+
+    public static Config config = new Config();
+    public static String configLocation; 
 
     /**
      * The entry point of the application.
@@ -55,6 +59,32 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
+        var mapper = new ObjectMapper();
+        FileInputStream stream;
+        
+        try {
+            configLocation = Main.class.getProtectionDomain().getCodeSource()
+            .getLocation().toURI().getPath() + "data/client";
+            var file = new File(configLocation + "/config.json");
+            // If file is not present, construct from default values
+            if(!file.exists()) {
+                var dir = new File(configLocation);
+                dir.mkdirs();
+                file.createNewFile();
+                mapper.writeValue(file, new Config());
+            }
+            stream = new FileInputStream(file);
+            config = mapper.readValue(stream, Config.class);
+            System.out.println(config.getLanguage());
+            System.out.println(config.getServerUrl());
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ServerUtils.setServer(config.getServerUrl());
+        String language = config.getLanguage();
 
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
@@ -71,27 +101,6 @@ public class Main extends Application {
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         var adminPage = FXML.load(AdminPageCtrl.class, "client", "scenes", "AdminPage.fxml");
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
-
-        Config config = new Config();
-        var mapper = new ObjectMapper();
-        FileInputStream stream;
-        
-
-
-        try {
-            String location = Main.class.getProtectionDomain().getCodeSource()
-            .getLocation().toURI().getPath() + "/client/config.json";
-            stream = new FileInputStream(new File(location));
-            config = mapper.readValue(stream, Config.class);
-            System.out.println(config.getLanguage());
-            System.out.println(config.getServerUrl());
-            
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String language = config.getLanguage();
 
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
         contactDetails, overviewApp, invite, adminPage, adminPass, language);
