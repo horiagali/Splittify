@@ -29,6 +29,8 @@ public class AddExpensesCtrl implements Initializable {
     private List<CheckBox> participantCheckboxes;
     @FXML
     private TextField nameTextField;
+    @FXML
+    private TextField purposeTextField;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -81,8 +83,6 @@ public class AddExpensesCtrl implements Initializable {
 
                 participantsVBox.getChildren().add(participantCheckbox);
             }
-        } else {
-            showErrorDialog("No event found");
         }
 
         ObservableList<String> currencyList = FXCollections.observableArrayList(
@@ -93,9 +93,14 @@ public class AddExpensesCtrl implements Initializable {
 
     @FXML
     private void handleEquallyCheckbox() {
-        boolean selected = equallyCheckbox.isSelected();
-        for (CheckBox checkbox : participantCheckboxes) {
-            checkbox.setSelected(selected);
+        if(participantCheckboxes != null) {
+            boolean selected = equallyCheckbox.isSelected();
+            for (CheckBox checkbox : participantCheckboxes) {
+                checkbox.setSelected(selected);
+            }
+        }
+        else{
+            showErrorDialog("There are no participants to split the cost between");
         }
     }
 
@@ -105,42 +110,42 @@ public class AddExpensesCtrl implements Initializable {
      */
     @FXML
     private void addExpense() {
-        Event selectedEvent = new Event();
-        String payerName = nameTextField.getText();
-        Participant payer = server.getParticipantByNickname(selectedEvent.getId(), payerName);
+        Event selectedEvent = mainCtrl.getSelectedEvent();
 
-        // Step 2: Retrieve the amount and currency from the UI components
-        String amountText = amountTextField.getText();
-        double amount = Double.parseDouble(amountText);
+        if(selectedEvent != null && participantCheckboxes != null) {
+            String title = purposeTextField.getText();
+            String payerName = nameTextField.getText();
+            Participant payer = server.getParticipantByNickname(selectedEvent.getId(), payerName);
 
-        // Step 3: Create an expense object
-        Expense expense = new Expense();
-        expense.setAmount(amount);
-        // Set other properties of the Expense object as needed
+            // Step 2: Retrieve the amount and currency from the UI components
+            String amountText = amountTextField.getText();
+            double amount = Double.parseDouble(amountText);
 
-        // Step 4: Set the payer of the expense
-        expense.setPayer(payer);
+            // Step 3: Create an expense object
+            Expense expense = new Expense();
+            expense.setAmount(amount);
+            expense.setTitle(title);
 
-        List<Participant> owners = new ArrayList<>();
-        // Step 5: Add the expense to the selected event for each selected participant
-        for (CheckBox checkbox : participantCheckboxes) {
-            if (checkbox.isSelected()) {
-                String participantName = checkbox.getText();
-                Participant participant = server.getParticipantByNickname(
-                        selectedEvent.getId(), participantName);
-                // Add the participant as an owner of the expense
-                owners.add(participant);
+            // Step 4: Set the payer of the expense
+            expense.setPayer(payer);
+            List<Participant> owners = new ArrayList<>();
+
+            // Step 5: Add the expense to the selected event for each selected participant
+            for (CheckBox checkbox : participantCheckboxes) {
+                if (checkbox.isSelected()) {
+                    String participantName = checkbox.getText();
+                    Participant participant = server.getParticipantByNickname(
+                            selectedEvent.getId(), participantName);
+                    owners.add(participant);
+                }
             }
+            expense.setOwers(owners);
+            selectedEvent.addExpense(expense);
+            server.addExpenseToEvent(selectedEvent.getId(), expense);
         }
-        expense.setOwers(owners);
-
-        // Step 6: Add the expense to the event
-        // Assuming you have a method to get the selected event
-        selectedEvent.addExpense(expense);
-
-        // Step 7: Save the expense to the server
-        // Assuming you have a method to save the expense to the server
-        server.addExpenseToEvent(selectedEvent.getId(), expense);
+        else{
+            showErrorDialog("Can't add an expense, because some values may be null");
+        }
     }
 
     /**
