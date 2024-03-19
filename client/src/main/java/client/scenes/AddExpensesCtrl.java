@@ -65,8 +65,8 @@ public class AddExpensesCtrl implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        if (mainCtrl.getSelectedEvent() != null) {
-            Long eventId = mainCtrl.getSelectedEvent().getId();
+        if (OverviewCtrl.getSelectedEvent() != null) {
+            Long eventId = OverviewCtrl.getSelectedEvent().getId();
             List<String> participants = server.getParticipantNicknamesByEventId(eventId);
 
 
@@ -110,7 +110,7 @@ public class AddExpensesCtrl implements Initializable {
      */
     @FXML
     private void addExpense() {
-        Event selectedEvent = mainCtrl.getSelectedEvent();
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
 
         if(selectedEvent != null && participantCheckboxes != null) {
             String title = purposeTextField.getText();

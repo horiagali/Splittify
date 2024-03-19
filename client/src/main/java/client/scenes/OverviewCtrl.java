@@ -34,8 +34,7 @@ public class OverviewCtrl implements Initializable {
     private Label eventName;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
-    private Event selectedEvent;
+    private static Event selectedEvent;
 
     /**
      * @param server
@@ -128,6 +127,22 @@ public class OverviewCtrl implements Initializable {
         String name = myChoiceBox.getValue();
         myLabel.setText("From " + name);
         myLabel2.setText("Including " + name);
+    }
+
+    /**
+     * Sets the selected event
+     * @param selectedEvent
+     */
+    public static void setSelectedEvent(Event selectedEvent){
+        OverviewCtrl.selectedEvent = selectedEvent;
+    }
+
+    /**
+     * Get the selected event
+     * @return selected event
+     */
+    public static Event getSelectedEvent(){
+        return OverviewCtrl.selectedEvent;
     }
 
 
