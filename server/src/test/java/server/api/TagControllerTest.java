@@ -1,75 +1,87 @@
 package server.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import commons.Tag;
 import server.service.TagService;
+import commons.Tag;
 
-public class TagControllerTest {
+class TagControllerTest {
 
     private TagService tagService;
     private TagController tagController;
 
- /*   @BeforeEach
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
+        // Create a mock TagService
         tagService = mock(TagService.class);
         tagController = new TagController(tagService);
     }
 
-  /*  @Test
-    public void testGetAllTags() {
-        List<Tag> tags = new ArrayList<>();
-        tags.add(new Tag("Tag1", Color.RED));
-        tags.add(new Tag("Tag2", Color.BLUE));
-        when(tagService.getTags()).thenReturn(tags);
-        List<Tag> result = tagController.getAllTags();
-        assertEquals(2, result.size());
-        assertEquals("Tag1", result.get(0).getName());
-        assertEquals("Tag2", result.get(1).getName());
+    @Test
+    void testGetAllTags() {
+        List<Tag> mockTags = new ArrayList<>();
+        mockTags.add(new Tag("Food", new Color(255, 0, 0)));
+        mockTags.add(new Tag("Travel", new Color(0,255,0)));
+        when(tagService.getTags(anyLong())).thenReturn(new ResponseEntity<>(mockTags, HttpStatus.OK));
+
+        ResponseEntity<List<Tag>> responseEntity = tagController.getAllTags(1L);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(mockTags, responseEntity.getBody());
     }
 
     @Test
-    public void testGetTagById() {
-        Long id = 1L;
-        Tag tag = new Tag("Tag1", Color.RED);
-        when(tagService.getTagById(id)).thenReturn(tag);
-        Tag result = tagController.getById(id);
-        assertEquals(tag, result);
+    void testGetTagById() {
+        Tag mockTag = new Tag("Food", new Color(255, 0, 0));
+        when(tagService.getTagById(anyLong(), anyLong())).thenReturn(new ResponseEntity<>(mockTag, HttpStatus.OK));
+
+        ResponseEntity<Tag> responseEntity = tagController.getById(1L, 1L);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(mockTag, responseEntity.getBody());
     }
 
     @Test
-    public void testCreateTag() {
-        Tag tag = new Tag("NewTag", Color.GREEN);
-        when(tagService.createTag(tag)).thenReturn(tag);
-        Tag result = tagController.createTag(tag);
-        assertEquals(tag, result);
+    void testCreateTag() {
+        Tag tagToCreate = new Tag("Food", new Color(255, 0, 0));
+        Tag createdTag = new Tag("Travel", new Color(0, 255, 0));
+        when(tagService.createTag(any(Tag.class), anyLong())).thenReturn(new ResponseEntity<>(createdTag, HttpStatus.CREATED));
+
+        ResponseEntity<Tag> responseEntity = tagController.createTag(tagToCreate, 1L);
+
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(createdTag, responseEntity.getBody());
     }
 
     @Test
-    public void testDeleteTag() {
-        Long id = 1L;
-        Tag tag = new Tag("Tag1", Color.RED);
-        when(tagService.deleteTag(id)).thenReturn(tag);
-        Tag result = tagController.deleteTag(id);
-        assertEquals(tag, result);
+    void testDeleteTag() {
+        Tag deletedTag = new Tag("Food", new Color(255, 0, 0));
+        when(tagService.deleteTag(anyLong(), anyLong())).thenReturn(new ResponseEntity<>(deletedTag, HttpStatus.OK));
+
+        ResponseEntity<Tag> responseEntity = tagController.deleteTag(1L, 1L);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(deletedTag, responseEntity.getBody());
     }
 
     @Test
-    public void testUpdateTag() {
-        Long id = 1L;
-        Tag tag = new Tag("UpdatedTag", Color.BLUE);
-        when(tagService.updateTag(any(Tag.class), eq(id))).thenReturn(tag);
-        Tag result = tagController.updateTag(tag, id);
-        assertEquals(tag, result);
-    }
-    */
+    void testUpdateTag() {
+        Tag updatedTag = new Tag("Food", new Color(255, 0, 0));
+        when(tagService.updateTag(anyLong(), any(Tag.class), anyLong())).thenReturn(new ResponseEntity<>(updatedTag, HttpStatus.OK));
 
+        ResponseEntity<Tag> responseEntity = tagController.updateTag(1L, new Tag("Travel", new Color(255, 0, 0)), 1L);
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(updatedTag, responseEntity.getBody());
+    }
 }
