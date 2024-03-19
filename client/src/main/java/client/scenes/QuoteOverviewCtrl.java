@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
 
+import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
 import jakarta.ws.rs.WebApplicationException;
@@ -15,7 +16,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 
@@ -75,6 +83,9 @@ public class QuoteOverviewCtrl implements Initializable {
         // Load the appropriate resource bundle based on the selected language
         MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
         + language, new Locale(language));
+        
+        Main.config.setLanguage(language);
+
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
     }
