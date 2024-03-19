@@ -1,0 +1,10 @@
+### Send Mail
+POST http://localhost:8080/api/mail
+Accept: application/json
+Content-Type: application/json
+
+{
+  "toEmail": "slava.guzun@gmail.com",
+  "subject": "iulia",
+  "text": "iulia"
+}
