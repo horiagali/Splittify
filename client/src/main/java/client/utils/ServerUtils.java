@@ -136,4 +136,18 @@ public class ServerUtils {
 				.delete();
 	}
 
+	/**
+	 * Update the event in the DB.
+	 *
+	 * @param updatedEvent   the event
+	 */
+	public void updateEvent(Event updatedEvent) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + updatedEvent.getId())
+				.request()
+				.put(Entity.entity(updatedEvent, APPLICATION_JSON));
+	}
+
+
 }

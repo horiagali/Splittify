@@ -6,13 +6,15 @@ import commons.Event;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
@@ -27,12 +29,11 @@ public class OverviewCtrl implements Initializable {
     private HBox hbox;
 
     private ArrayList<String> names;
-    @FXML
     private ArrayList<Label> labels;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    @FXML
     private Event selectedEvent;
+
     @FXML
     private Label eventName;
     @FXML
@@ -43,13 +44,12 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private TextField eventNameTextField;
     @FXML
-    private TextField eventDateTextField;
+    private DatePicker eventDatePicker;
+
     @FXML
     private TextField eventLocationTextField;
-    /**
-     * @param server
-     * @param mainCtrl
-     */
+
+
     @Inject
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -58,148 +58,181 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     * @param selectedEvent displays the info from the event selected from the table
+     *
+     * @param selectedEvent
+     * displays an event
      */
     public void displayEvent(Event selectedEvent) {
         eventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
-        eventDate.setText(String.valueOf(selectedEvent.getDate()));
+        eventDate.setText(selectedEvent.getDate().toString());
         this.selectedEvent = selectedEvent;
-
     }
 
-    /**
-     *
-     */
     public void back() {
         mainCtrl.showOverview();
     }
 
-    /**
-     * @param name
-     */
     public void addName(String name) {
         names.add(name);
     }
 
-    /**
-     *
-     */
     public void addExpense() {
         mainCtrl.showAddExpenses();
     }
 
-    /**
-     *
-     */
     public void goToContact() {
         mainCtrl.goToContact();
     }
 
-    /**
-     *
-     */
     public void sendInvites() {
         mainCtrl.sendInvites(eventName);
     }
 
-    /* public HBox getHbox() {
-         return hbox;
-     }*/
-    ///tried to create an hbox but it is not done
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         refresh();
     }
 
     /**
-     * refreshing!
+     * refreshed the page, with the event data
      */
+
     public void refresh() {
         if (selectedEvent != null) {
             eventName.setText(selectedEvent.getTitle());
             eventLocation.setText(selectedEvent.getLocation());
-            eventDate.setText(String.valueOf(selectedEvent.getDate()));
+            eventDate.setText(selectedEvent.getDate().toString());
         }
-        if (names != null && !names.isEmpty()) {
-            myChoiceBox.getItems().add(names.get(names.size() - 1));
-        }
+        myChoiceBox.getItems().addAll(names);
         myChoiceBox.setOnAction(this::getName);
         hbox.setSpacing(5);
         labels = new ArrayList<>();
-        if (names != null && !names.isEmpty()) {
-            hbox.getChildren().addAll(new Label(names.get(names.size() - 1)));
-        }
+        labels.addAll(names.stream().map(Label::new).toList());
+        hbox.getChildren().addAll(labels);
     }
 
-
-    private void getName(javafx.event.ActionEvent actionEvent) {
+    private void getName(ActionEvent actionEvent) {
         String name = myChoiceBox.getValue();
         myLabel.setText("From " + name);
         myLabel2.setText("Including " + name);
     }
 
 
-    public void deleteEvent(ActionEvent actionEvent) {
-    }
-
+    /**
+     * asks if you really want to delete
+     * @param actionEvent
+     */
     public void goToAreYouSure(ActionEvent actionEvent) {
-    }
+        Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationDialog.setTitle("Confirmation");
+        confirmationDialog.setHeaderText("Are you sure you want to delete the event?");
+        confirmationDialog.setContentText("This action cannot be undone.");
 
+        confirmationDialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                server.deleteEvent(selectedEvent);
+                back();
+            } else {
+                System.out.println("Event deletion canceled.");
+            }
+        });    }
 
-
-
-
-
+    /**
+     * switches to text field for name
+     */
     public void switchToNameTextField() {
         eventNameTextField.setVisible(true);
-        eventNameTextField.requestFocus(); // Set focus to the text field
+        eventNameTextField.requestFocus();
         eventName.setVisible(false);
     }
 
+    /**
+     * swithces back to label
+     */
+
     public void switchToNameLabel() {
         eventNameTextField.setVisible(false);
-        eventName.setText(eventNameTextField.getText());
         eventName.setVisible(true);
     }
 
-
+    /**
+     * updated the name in the db
+     * @param event
+     */
     public void updateEventName(ActionEvent event) {
+        String name = eventNameTextField.getText();
+        selectedEvent.setTitle(name);
+        server.updateEvent(selectedEvent);
+
         switchToNameLabel();
+        refresh();
+
     }
 
+    /**
+     * switches to text field for the date
+     */
+
     public void switchToDateTextField() {
-        eventDateTextField.setVisible(true);
-        eventDateTextField.requestFocus(); // Set focus to the text field
+        eventDatePicker.setVisible(true);
+        eventDatePicker.requestFocus();
         eventDate.setVisible(false);
     }
 
+    /**
+     * switches to text field for the location
+     */
     public void switchToLocTextField() {
         eventLocationTextField.setVisible(true);
-        eventLocationTextField.requestFocus(); // Set focus to the text field
+        eventLocationTextField.requestFocus();
         eventLocation.setVisible(false);
     }
+    /**
+     * switches to label field for the date
+     */
 
     public void switchToDateLabel() {
-        eventDateTextField.setVisible(false);
-
-        eventDate.setText(eventDateTextField.getText());
-
+        eventDatePicker.setVisible(false);
+        eventDate.setText(String.valueOf(eventDatePicker.getValue()));
         eventDate.setVisible(true);
     }
-
+    /**
+     * updates the event s date in the db
+     */
     public void updateEventDate(ActionEvent event) {
-        switchToDateLabel();
+
+        try {
+            LocalDate newDate = eventDatePicker.getValue();
+            Date date = Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+            selectedEvent.setDate(date);
+            server.updateEvent(selectedEvent);
+            eventDate.setText(String.valueOf(newDate));
+            switchToDateLabel();
+        } catch (DateTimeParseException e) {
+            System.err.println("Error parsing date: " + e.getMessage());
+        }
     }
+
+    /**
+     * switches to the location label
+     */
     public void switchToLocationLabel() {
         eventLocationTextField.setVisible(false);
-
         eventLocation.setText(eventLocationTextField.getText());
-
         eventLocation.setVisible(true);
     }
-    public void updateEventLocation(ActionEvent event) {
-        switchToLocationLabel();
-    }
 
+    /**
+     * updates the event s location in the db
+     * @param event
+     */
+    public void updateEventLocation(ActionEvent event) {
+        String location = eventLocation.getText();
+        selectedEvent.setLocation(location);
+        switchToLocationLabel();
+        server.updateEvent(selectedEvent);
+
+    }
 }

@@ -163,11 +163,13 @@ public class QuoteOverviewCtrl implements Initializable {
     /**
      *
      */
+
     public void refresh() {
         var events = server.getEvents();
         data = FXCollections.observableList(events);
         table.setItems(data);
     }
+
 
 
     /**
