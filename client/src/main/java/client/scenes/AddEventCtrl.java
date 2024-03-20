@@ -62,6 +62,10 @@ public class AddEventCtrl {
         mainCtrl.showOverview();
     }
 
+    /**
+     * Return user to QuoteOveview
+     * @param e actionEvent
+     */
     public void cancel(ActionEvent e) {
         clearFields();
         mainCtrl.showOverview();

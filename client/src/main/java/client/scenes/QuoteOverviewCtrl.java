@@ -1,9 +1,7 @@
 package client.scenes;
 
 import java.net.URL;
-import java.util.Date;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
@@ -110,6 +108,10 @@ public class QuoteOverviewCtrl implements Initializable {
         mainCtrl.showAddEvent();
     }
 
+    /**
+     * Lets user view the event correspondign to the event id
+     * @param ae actionEvent
+     */
     public void joinEvent(ActionEvent ae) {
 
         try {

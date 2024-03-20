@@ -83,6 +83,11 @@ public class ServerUtils {
 				.get(new GenericType<List<Event>>() {});
 	}
 
+	/**
+	 * Get event by event ID
+	 * @param id id of the event
+	 * @return event
+	 */
 	public Event getEvent(Long id) {
 		return ClientBuilder.newClient(new ClientConfig()) //
 				.target(server).path("api/events/"+id) //
