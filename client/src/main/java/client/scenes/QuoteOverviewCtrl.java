@@ -28,8 +28,6 @@ public class QuoteOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    @FXML
-    private TextField eventName;
     private ObservableList<Event> data;
 
     @FXML
@@ -110,19 +108,6 @@ public class QuoteOverviewCtrl implements Initializable {
      */
     public void addEvent() {
         mainCtrl.showAddEvent();
-    }
-
-    private void clearFields() {
-        eventName.clear();
-    }
-
-
-    /**
-     * @return return event
-     */
-    private Event getEvent() {
-        return new Event(eventName.getText(), "empty description", "empty location", new Date());
-
     }
 
     /**
