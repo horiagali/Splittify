@@ -68,19 +68,18 @@
     </AnchorPane>
 
     <!-- AnchorPane 2 -->
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="311.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
         <children>
-            <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="337.0" prefWidth="572.0">
+            <HBox alignment="CENTER_RIGHT" layoutX="2.0" layoutY="359.0" spacing="10" />
+            <TableView fx:id="table" layoutX="14.0" layoutY="-122.0" prefHeight="337.0" prefWidth="572.0">
                 <columns>
                     <TableColumn fx:id="colName" prefWidth="113.0" text="Event name" />
                     <TableColumn fx:id="colLocation" prefWidth="114.0" text="Event location" />
                     <TableColumn fx:id="colDate" prefWidth="344.0" text="Event date" />
                 </columns>
             </TableView>
-            <HBox alignment="CENTER_RIGHT" layoutX="2.0" layoutY="359.0" spacing="10">
-                <Button fx:id="refreshButton" layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-                <Button fx:id="adminButton" layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#goToAdminPass" text="Admin" />
-            </HBox>
+             <Button fx:id="refreshButton" layoutX="14.0" layoutY="242.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+             <Button fx:id="adminButton" layoutX="103.0" layoutY="240.0" mnemonicParsing="false" onAction="#goToAdminPass" text="Admin" />
         </children>
     </AnchorPane>
 
