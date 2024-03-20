@@ -60,9 +60,9 @@
                     <Font name="Comic Sans MS" size="24.0" />
                 </font>
             </Text>
-            <TextField layoutX="204.0" layoutY="180.0" />
+            <TextField fx:id="joinEventCode" layoutX="204.0" layoutY="180.0" />
             <Button fx:id="createEventButton" layoutX="273.0" layoutY="99.0" mnemonicParsing="false" onAction="#addEvent" text="Create Event" />
-            <Button fx:id="joinEventButton" layoutX="346.0" layoutY="180.0" mnemonicParsing="false" text="Join Event" />
+            <Button fx:id="joinEventButton" layoutX="346.0" layoutY="180.0" mnemonicParsing="false" onAction="#joinEvent" text="Join Event" />
             <Text fx:id="yourEventsText" layoutX="283.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your events:" />
         </children>
     </AnchorPane>

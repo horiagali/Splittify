@@ -3,6 +3,7 @@ package client.scenes;
 import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
@@ -10,19 +11,16 @@ import com.google.inject.Inject;
 import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 
 public class QuoteOverviewCtrl implements Initializable {
 
@@ -45,6 +43,8 @@ public class QuoteOverviewCtrl implements Initializable {
 
     @FXML
     private Button joinEventButton;
+    @FXML
+    private TextField joinEventCode;
     @FXML
     private Button refreshButton;
 
@@ -110,6 +110,26 @@ public class QuoteOverviewCtrl implements Initializable {
         mainCtrl.showAddEvent();
     }
 
+    public void joinEvent(ActionEvent ae) {
+
+        try {
+            Long eventCode = Long.parseLong(joinEventCode.getText());
+            try {
+                mainCtrl.showEventOverview(server.getEvent(eventCode));
+            } catch (WebApplicationException e) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+        } catch (NumberFormatException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Please only enter numbers");
+            alert.showAndWait();
+        }
+    }
+
     /**
      *
      */
@@ -161,11 +181,6 @@ public class QuoteOverviewCtrl implements Initializable {
     public void page() {
         mainCtrl.showPage();
     }
-
-    /**
-     *
-     */
-
 
     /**
      *

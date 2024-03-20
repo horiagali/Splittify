@@ -83,6 +83,14 @@ public class ServerUtils {
 				.get(new GenericType<List<Event>>() {});
 	}
 
+	public Event getEvent(Long id) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(server).path("api/events/"+id) //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<Event>() {});
+	}
+
 	/**
 	 * 
 	 * @param quote
