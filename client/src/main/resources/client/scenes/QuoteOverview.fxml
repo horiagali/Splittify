@@ -1,27 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.effect.Blend?>
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.SubScene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="client.scenes.QuoteOverviewCtrl" alignment="CENTER">
+
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.QuoteOverviewCtrl">
 
     <fx:define>
-        <ToggleGroup fx:id="languageGroup"/>
+        <ToggleGroup fx:id="languageGroup" />
     </fx:define>
 
     <!-- MenuBar -->
     <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
         <menus>
-            <Menu fx:id = "languageMenu" mnemonicParsing="false" text="Language">
+            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
                 <items>
-                    <RadioMenuItem mnemonicParsing="false" text="English" toggleGroup="$languageGroup" onAction="#changeLanguage" />
-                    <RadioMenuItem mnemonicParsing="false" text="Romana" toggleGroup="$languageGroup" onAction="#changeLanguage" />
-                    <RadioMenuItem mnemonicParsing="false" text="Nederlands" toggleGroup="$languageGroup" onAction="#changeLanguage" />
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="languageGroup" />
+                  </toggleGroup></RadioMenuItem>
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
 
                 </items>
             </Menu>
@@ -29,10 +42,9 @@
     </MenuBar>
 
     <!-- AnchorPane 1 -->
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
         <children>
-            <SubScene height="346.0" layoutX="176.0" layoutY="5.0" width="289.0" >
+            <SubScene height="346.0" layoutX="176.0" layoutY="5.0" width="289.0">
                 <root>
                     <Region />
                 </root>
@@ -48,29 +60,26 @@
                     <Font name="Comic Sans MS" size="24.0" />
                 </font>
             </Text>
-            <TextField layoutX="204.0" layoutY="99.0"  fx:id="eventName"/>
-            <TextField layoutX="204.0" layoutY="180.0" />
-            <Button fx:id="createEventButton" layoutX="346.0" layoutY="99.0" mnemonicParsing="false" onAction="#addEvent" text="Create Event" />
-            <Button fx:id="joinEventButton" layoutX="346.0" layoutY="180.0" mnemonicParsing="false" text="Join Event" />
+            <TextField fx:id="joinEventCode" layoutX="204.0" layoutY="180.0" />
+            <Button fx:id="createEventButton" layoutX="273.0" layoutY="99.0" mnemonicParsing="false" onAction="#addEvent" text="Create Event" />
+            <Button fx:id="joinEventButton" layoutX="346.0" layoutY="180.0" mnemonicParsing="false" onAction="#joinEvent" text="Join Event" />
             <Text fx:id="yourEventsText" layoutX="283.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your events:" />
         </children>
     </AnchorPane>
 
     <!-- AnchorPane 2 -->
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-                prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="311.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
         <children>
-            <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="337.0" prefWidth="572.0">
+            <HBox alignment="CENTER_RIGHT" layoutX="2.0" layoutY="359.0" spacing="10" />
+            <TableView fx:id="table" layoutX="14.0" layoutY="-122.0" prefHeight="337.0" prefWidth="572.0">
                 <columns>
-                    <TableColumn fx:id="colName" prefWidth="113.0" text="Event name"/>
-                    <TableColumn fx:id="colLocation" prefWidth="114.0" text="Event location"/>
-                    <TableColumn fx:id="colDate" prefWidth="344.0" text="Event date"/>
+                    <TableColumn fx:id="colName" prefWidth="113.0" text="Event name" />
+                    <TableColumn fx:id="colLocation" prefWidth="114.0" text="Event location" />
+                    <TableColumn fx:id="colDate" prefWidth="344.0" text="Event date" />
                 </columns>
             </TableView>
-            <HBox layoutX="2.0" layoutY="359.0" spacing="10" alignment="CENTER_RIGHT">
-                <Button fx:id="refreshButton" layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh"/>
-                <Button fx:id="adminButton" layoutX="443.0" layoutY="360.0" mnemonicParsing="false" onAction="#goToAdminPass" text="Admin"/>
-            </HBox>
+             <Button fx:id="refreshButton" layoutX="14.0" layoutY="242.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+             <Button fx:id="adminButton" layoutX="103.0" layoutY="240.0" mnemonicParsing="false" onAction="#goToAdminPass" text="Admin" />
         </children>
     </AnchorPane>
 
