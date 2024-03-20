@@ -166,4 +166,5 @@ public class ParticipantService {
         participantRepository.deleteById(participantId);
         return ResponseEntity.ok(participant);
     }
+
 }

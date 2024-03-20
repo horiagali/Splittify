@@ -15,13 +15,20 @@
  */
 package client.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
+import commons.Expense;
+import commons.Participant;
 import commons.Mail;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,8 +40,20 @@ import java.util.List;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
-
+	private static final String SERVER = "http://localhost:8080/";
+	private final ObjectMapper objectMapper;
+	private final RestTemplate restTemplate;
 	static String server;
+
+	/**
+	 * Constructor
+	 * @throws IOException IOException
+	 * @throws InterruptedException InterruptedException
+	 */
+	public ServerUtils() throws IOException, InterruptedException {
+		this.objectMapper = new ObjectMapper();
+		this.restTemplate = new RestTemplate();
+	}
 
 	/**
 	 * 
@@ -98,7 +117,7 @@ public class ServerUtils {
 
 	/**
 	 * 
-	 * @param quote
+	 * @param quote quote
 	 * @return quote that is added
 	 */
 	public Quote addQuote(Quote quote) {
@@ -151,18 +170,52 @@ public class ServerUtils {
 	}
 
 	/**
-	 * Update the event in the DB.
-	 *
-	 * @param updatedEvent   the event
+<<<<<<< HEAD
+<<<<<<< HEAD
+	 * Add an expense to an event
+	 * @param eventId id of the event to add the expense to
+	 * @param expense expense to be added
 	 */
-	public void updateEvent(Event updatedEvent) {
+	public void addExpenseToEvent(long eventId, Expense expense) {
+		// Construct the URL for the specific event's expenses endpoint
+		String url = String.format("%s/events/%d/expenses", SERVER, eventId);
+
+		// Create HttpHeaders with JSON content type
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		// Create HttpEntity with expense object and headers
+		HttpEntity<Expense> requestEntity = new HttpEntity<>(expense, headers);
+		restTemplate.postForObject(url, requestEntity, Void.class);
+	}
+
+	/**
+	 * Get participant by nickname
+	 * @param eventID id of the event the participant is a part of
+	 * @param nickname nickname
+	 * @return participant
+	 */
+	public Participant getParticipantByNickname(Long eventID, String nickname) {
+		String url = SERVER + "api/events/" + eventID + "/participants/" + nickname;
+
+		// Make the HTTP GET request and directly retrieve the participant
+		Participant participant = restTemplate.getForObject(url, Participant.class);
+
+		return participant;
+	}
+
+	 /**
+	  * Update the event in the DB.
+	  *
+	  * @param updatedEvent   the event
+	  */
+	 public void updateEvent(Event updatedEvent) {
 		ClientBuilder.newClient(new ClientConfig())
 				.target(server)
 				.path("api/events/" + updatedEvent.getId())
 				.request()
 				.put(Entity.entity(updatedEvent, APPLICATION_JSON));
 	}
-
 
 	/**
 	 * sends a mail
@@ -176,5 +229,4 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(mail, APPLICATION_JSON), Mail.class);
 	}
-
 }
