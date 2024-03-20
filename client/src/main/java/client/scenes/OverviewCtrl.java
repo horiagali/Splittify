@@ -49,7 +49,11 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private TextField eventLocationTextField;
 
-
+    /**
+     *
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public OverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
@@ -69,25 +73,54 @@ public class OverviewCtrl implements Initializable {
         this.selectedEvent = selectedEvent;
     }
 
+    /**
+     *
+     */
+
     public void back() {
         mainCtrl.showOverview();
     }
+
+    /**
+     *
+     * @param name
+     */
 
     public void addName(String name) {
         names.add(name);
     }
 
+    /**
+     *
+     */
     public void addExpense() {
         mainCtrl.showAddExpenses();
     }
 
+    /**
+     *
+     */
     public void goToContact() {
         mainCtrl.goToContact();
     }
 
+    /**
+     *
+     */
     public void sendInvites() {
         mainCtrl.sendInvites(eventName);
     }
+
+    /**
+     *
+     * @param url
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resourceBundle
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -112,6 +145,10 @@ public class OverviewCtrl implements Initializable {
         hbox.getChildren().addAll(labels);
     }
 
+    /**
+     *
+     * @param actionEvent
+     */
     private void getName(ActionEvent actionEvent) {
         String name = myChoiceBox.getValue();
         myLabel.setText("From " + name);
@@ -199,6 +236,7 @@ public class OverviewCtrl implements Initializable {
     }
     /**
      * updates the event s date in the db
+     * @param event
      */
     public void updateEventDate(ActionEvent event) {
 
