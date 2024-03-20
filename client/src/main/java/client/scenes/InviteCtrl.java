@@ -2,6 +2,8 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Event;
+import commons.Mail;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -36,6 +38,8 @@ public class InviteCtrl implements Initializable {
     private Button sendButton;
     @FXML
     private FlowPane emailFlowPane;
+    @FXML
+    private Event event;
     private ObservableList<String> emailList = FXCollections.observableArrayList();
     private Set<String> uniqueEmails = new HashSet<>();
     private boolean sendingInProgress = false;
@@ -163,8 +167,12 @@ public class InviteCtrl implements Initializable {
             sendingInProgress = true;
             // Disable the sendButton
             sendButton.setDisable(true);
+            for (String email : emailList){
+                Mail mail = new Mail(email,event.getTitle(), "The invite code is: " +
+                        event.getId().toString());
+                server.sendEmail(mail);
+            }
 
-            // Logic for actually sending the invites here, JavaMail API?
 
             sendingInProgress = false;
             sendButton.setDisable(false);
@@ -190,5 +198,13 @@ public class InviteCtrl implements Initializable {
     @FXML
     public void back() {
         mainCtrl.goToOverview();
+    }
+
+    /**
+     * setter for the event
+     * @param event an Event
+     */
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }

@@ -16,6 +16,7 @@
 package client.utils;
 
 import commons.Event;
+import commons.Mail;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -134,6 +135,19 @@ public class ServerUtils {
 				.path("api/events/" + selectedEvent.getId())
 				.request()
 				.delete();
+	}
+
+	/**
+	 * sends a mail
+	 * @param mail the mail
+	 * @return the sent mail
+	 */
+	public Mail sendEmail(Mail mail) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/mail")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(mail, APPLICATION_JSON), Mail.class);
 	}
 
 }

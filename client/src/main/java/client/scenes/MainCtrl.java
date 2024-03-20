@@ -215,11 +215,14 @@ public class MainCtrl {
     }
 
     /**
-     * 
-     * @param eventName
+     * send invites
+     * @param eventName eventname
+     * @param event event
      */
-    public void sendInvites(Label eventName) {
+    public void sendInvites(Label eventName, Event event) {
         primaryStage.setTitle("Send Invites");
+        inviteCtrl.setEvent(event);
+
         //inviteCtrl.setName(eventName);
         primaryStage.setScene(invite);
     }

@@ -91,7 +91,7 @@ public class OverviewCtrl implements Initializable {
      *
      */
     public void sendInvites() {
-        mainCtrl.sendInvites(eventName);
+        mainCtrl.sendInvites(eventName, selectedEvent);
     }
 
     /* public HBox getHbox() {
@@ -123,7 +123,10 @@ public class OverviewCtrl implements Initializable {
         }
     }
 
-
+    /**
+     * get name
+     * @param actionEvent the actionEvent
+     */
     private void getName(javafx.event.ActionEvent actionEvent) {
         String name = myChoiceBox.getValue();
         myLabel.setText("From " + name);
