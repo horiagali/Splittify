@@ -14,26 +14,45 @@
 <?import javafx.scene.text.Text?>
 
 <!--suppress ALL -->
+<?import javafx.scene.control.TextField?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: pink;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
    <children>
       <!-- Event Name -->
-      <Label fx:id="eventName" layoutX="14.0" layoutY="23.0" prefHeight="28.0" prefWidth="194.0" textFill="WHITE">
+      <Label fx:id="eventName" layoutX="14.0" layoutY="23.0" prefHeight="28.0" prefWidth="194.0" onMouseClicked="#switchToNameTextField" textFill="WHITE">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
+      <TextField fx:id="eventNameTextField" layoutX="14.0" layoutY="23.0" prefHeight="28.0" prefWidth="194.0" visible="false" onAction="#updateEventName">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </TextField>
+
       <!-- Event Location -->
-      <Label fx:id="eventLocation" layoutX="220.0" layoutY="40.0" prefHeight="17.0" prefWidth="150.0" textFill="WHITE">
+      <Label fx:id="eventLocation" layoutX="220.0" layoutY="40.0" prefHeight="17.0" prefWidth="150.0"  onMouseClicked="#switchToLocTextField" textFill="WHITE">
          <font>
             <Font size="12.0" />
          </font>
       </Label>
+      <TextField fx:id="eventLocationTextField" layoutX="220.0" layoutY="40.0" prefHeight="17.0" prefWidth="150.0" visible="false" onAction="#updateEventLocation">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </TextField>
+
+
       <!-- Event Date -->
-      <Label fx:id="eventDate" layoutX="350.0" layoutY="40.0" prefHeight="17.0" prefWidth="150.0" textFill="WHITE">
+      <Label fx:id="eventDate" layoutX="350.0" layoutY="40.0" prefHeight="17.0" prefWidth="150.0" onMouseClicked="#switchToDateTextField" textFill="WHITE">
          <font>
             <Font size="12.0" />
          </font>
       </Label>
+      <TextField fx:id="eventDateTextField" layoutX="350.0" layoutY="40.0" prefHeight="17.0" prefWidth="150.0" visible="false" onAction="#updateEventDate">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </TextField>
 
       <Button layoutX="495.0" layoutY="13.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites">
          <font>
@@ -45,7 +64,9 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <Button layoutX="521.0" layoutY="358.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="54.0" text="Back" />
+      <Button layoutX="400.0" layoutY="358.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="90.0" onAction="#goToAreYouSure" text="Delete Event"/>
+
+      <Button layoutX="501.0" layoutY="358.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="54.0" text="Back" />
       <Text fill="WHITE" layoutX="19.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" wrappingWidth="69.6728515625">
          <font>
             <Font size="16.0" />
@@ -75,10 +96,6 @@
             </ImageView>
          </graphic>
       </Button>
-      <Label fx:id="eventName" layoutX="14.0" layoutY="23.0" prefHeight="28.0" prefWidth="194.0" textFill="WHITE">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
+
    </children>
 </AnchorPane>

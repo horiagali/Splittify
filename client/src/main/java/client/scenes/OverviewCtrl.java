@@ -3,10 +3,12 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
@@ -18,10 +20,7 @@ public class OverviewCtrl implements Initializable {
     private Label myLabel;
     @FXML
     private Label myLabel2;
-    @FXML
-    private Label eventLocation;
-    @FXML
-    private Label eventDate;
+
     @FXML
     private ChoiceBox<String> myChoiceBox;
     @FXML
@@ -30,13 +29,23 @@ public class OverviewCtrl implements Initializable {
     private ArrayList<String> names;
     @FXML
     private ArrayList<Label> labels;
-    @FXML
-    private Label eventName;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
+    @FXML
     private Event selectedEvent;
+    @FXML
+    private Label eventName;
+    @FXML
+    private Label eventLocation;
+    @FXML
+    private Label eventDate;
 
+    @FXML
+    private TextField eventNameTextField;
+    @FXML
+    private TextField eventDateTextField;
+    @FXML
+    private TextField eventLocationTextField;
     /**
      * @param server
      * @param mainCtrl
@@ -130,5 +139,67 @@ public class OverviewCtrl implements Initializable {
         myLabel2.setText("Including " + name);
     }
 
+
+    public void deleteEvent(ActionEvent actionEvent) {
+    }
+
+    public void goToAreYouSure(ActionEvent actionEvent) {
+    }
+
+
+
+
+
+
+    public void switchToNameTextField() {
+        eventNameTextField.setVisible(true);
+        eventNameTextField.requestFocus(); // Set focus to the text field
+        eventName.setVisible(false);
+    }
+
+    public void switchToNameLabel() {
+        eventNameTextField.setVisible(false);
+        eventName.setText(eventNameTextField.getText());
+        eventName.setVisible(true);
+    }
+
+
+    public void updateEventName(ActionEvent event) {
+        switchToNameLabel();
+    }
+
+    public void switchToDateTextField() {
+        eventDateTextField.setVisible(true);
+        eventDateTextField.requestFocus(); // Set focus to the text field
+        eventDate.setVisible(false);
+    }
+
+    public void switchToLocTextField() {
+        eventLocationTextField.setVisible(true);
+        eventLocationTextField.requestFocus(); // Set focus to the text field
+        eventLocation.setVisible(false);
+    }
+
+    public void switchToDateLabel() {
+        eventDateTextField.setVisible(false);
+
+        eventDate.setText(eventDateTextField.getText());
+
+        eventDate.setVisible(true);
+    }
+
+    public void updateEventDate(ActionEvent event) {
+        switchToDateLabel();
+    }
+    public void switchToLocationLabel() {
+        eventLocationTextField.setVisible(false);
+
+        eventLocation.setText(eventLocationTextField.getText());
+
+        eventLocation.setVisible(true);
+    }
+    public void updateEventLocation(ActionEvent event) {
+        switchToLocationLabel();
+    }
 
 }
