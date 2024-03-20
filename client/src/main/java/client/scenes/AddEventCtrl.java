@@ -43,6 +43,14 @@ public class AddEventCtrl {
      * @param ae action event
      */
     public void addEvent(ActionEvent ae) {
+        if (nameField.getText().isEmpty() || nameField.getText().isBlank()) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Please enter a title");
+            alert.showAndWait();
+            return;
+        }
+
         Event newEvent = new Event(
                 nameField.getText(),
                 descriptionField.getText(),
