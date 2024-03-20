@@ -103,6 +103,19 @@ public class ServerUtils {
 	}
 
 	/**
+	 * Get event by event ID
+	 * @param id id of the event
+	 * @return event
+	 */
+	public Event getEvent(Long id) {
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(server).path("api/events/"+id) //
+				.request(APPLICATION_JSON) //
+				.accept(APPLICATION_JSON) //
+				.get(new GenericType<Event>() {});
+	}
+
+	/**
 	 * 
 	 * @param quote quote
 	 * @return quote that is added
@@ -158,6 +171,7 @@ public class ServerUtils {
 
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * Add an expense to an event
 	 * @param eventId id of the event to add the expense to
 	 * @param expense expense to be added
@@ -188,6 +202,19 @@ public class ServerUtils {
 		Participant participant = restTemplate.getForObject(url, Participant.class);
 
 		return participant;
+	}
+
+	 /**
+	  * Update the event in the DB.
+	  *
+	  * @param updatedEvent   the event
+	  */
+	 public void updateEvent(Event updatedEvent) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + updatedEvent.getId())
+				.request()
+				.put(Entity.entity(updatedEvent, APPLICATION_JSON));
 	}
 
 	/**

@@ -13,6 +13,7 @@
       <Label layoutX="114.0" layoutY="91.0" text="Event name" />
       <Label layoutX="100.0" layoutY="171.0" text="Event description" />
       <Label layoutX="108.0" layoutY="256.0" text="Event location" />
-      <Button fx:id="addEventButton" layoutX="261.0" layoutY="313.0" mnemonicParsing="false" onAction="#addEvent" text="Create event" />
+      <Button fx:id="addEventButton" layoutX="228.0" layoutY="307.0" mnemonicParsing="false" onAction="#addEvent" text="Create event" />
+      <Button fx:id="cancelButton" layoutX="352.0" layoutY="307.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
    </children>
 </AnchorPane>
