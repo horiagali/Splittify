@@ -24,6 +24,8 @@ public class AddEventCtrl {
     private TextField locationField;
     @FXML
     private Button addEventButton;
+    @FXML
+    private Button cancelButton;
 
     /**
      * Constructor for the controller
@@ -56,6 +58,11 @@ public class AddEventCtrl {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+        clearFields();
+        mainCtrl.showOverview();
+    }
+
+    public void cancel(ActionEvent e) {
         clearFields();
         mainCtrl.showOverview();
     }
