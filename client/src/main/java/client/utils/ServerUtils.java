@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Mail;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -156,6 +157,7 @@ public class ServerUtils {
 	}
 
 	/**
+<<<<<<< HEAD
 	 * Add an expense to an event
 	 * @param eventId id of the event to add the expense to
 	 * @param expense expense to be added
@@ -186,5 +188,18 @@ public class ServerUtils {
 		Participant participant = restTemplate.getForObject(url, Participant.class);
 
 		return participant;
+	}
+
+	/**
+	 * sends a mail
+	 * @param mail the mail
+	 * @return the sent mail
+	 */
+	public Mail sendEmail(Mail mail) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/mail")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(mail, APPLICATION_JSON), Mail.class);
 	}
 }
