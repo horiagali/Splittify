@@ -23,7 +23,7 @@ public class ExpenseTest {
         owers.add(new Participant("Alice", "alice@example.com", "bic", "iban", 12));
         owers.add(new Participant("Bob", "bob@example.com", "bic", "iban", 12));
         amount = 50;
-        tag = new Tag("testTag", Color.yellow);
+        tag = new Tag("testTag", javafx.scene.paint.Color.ALICEBLUE);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class ExpenseTest {
     @Test
     public void testSetTag() {
         Expense expense = new Expense("Dinner", amount, payer, owers, tag);
-        Tag newTag = new Tag("newTag", Color.RED);
+        Tag newTag = new Tag("newTag", javafx.scene.paint.Color.ALICEBLUE);
         expense.setTag(newTag);
         assertEquals(newTag, expense.getTag());
     }

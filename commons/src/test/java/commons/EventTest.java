@@ -76,14 +76,14 @@ public class EventTest {
 
     @Test
     public void testAddExpense() {
-        Expense expense = new Expense("Food", 100, participant, new ArrayList<>(), new Tag("Food", Color.GREEN));
+        Expense expense = new Expense("Food", 100, participant, new ArrayList<>(), new Tag("Food", javafx.scene.paint.Color.ALICEBLUE));
         assertTrue(event.addExpense(expense));
         assertTrue(event.getExpenses().contains(expense));
     }
 
     @Test
     public void testRemoveExpense() {
-        Expense expense = new Expense("Decorations", 50, participant, new ArrayList<>(), new Tag("Decorations", Color.BLUE));
+        Expense expense = new Expense("Decorations", 50, participant, new ArrayList<>(), new Tag("Decorations", javafx.scene.paint.Color.ALICEBLUE));
         event.addExpense(expense);
         assertTrue(event.removeExpense(expense));
         assertFalse(event.getExpenses().contains(expense));
@@ -91,9 +91,9 @@ public class EventTest {
 
     @Test
     public void testEditExpense() {
-        Expense oldExpense = new Expense("Music", 200, participant, new ArrayList<>(), new Tag("Music", Color.RED));
+        Expense oldExpense = new Expense("Music", 200, participant, new ArrayList<>(), new Tag("Music", javafx.scene.paint.Color.ALICEBLUE));
         event.addExpense(oldExpense);
-        Expense newExpense = new Expense("Lighting", 150, participant, new ArrayList<>(), new Tag("Lighting", Color.YELLOW));
+        Expense newExpense = new Expense("Lighting", 150, participant, new ArrayList<>(), new Tag("Lighting", javafx.scene.paint.Color.ALICEBLUE));
         assertTrue(event.editExpense(oldExpense, newExpense));
         assertFalse(event.getExpenses().contains(oldExpense));
         assertTrue(event.getExpenses().contains(newExpense));
