@@ -3,6 +3,7 @@ package server.service;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import jakarta.transaction.Transactional;
 
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
 import server.database.ParticipantRepository;
+import server.database.TagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.List;
 public class ExpenseService {
     private ExpenseRepository expenseRepository;
     private EventRepository eventRepository;
+    private TagRepository tagRepository;
     private ParticipantRepository participantRepository;
 
     private EventService eventService;
@@ -30,15 +33,17 @@ public class ExpenseService {
      * @param expenseRepository     repo for expenses
      * @param eventRepository       repo for events
      * @param participantRepository repo for participants
+     * @param tagRepository repo for tags
      */
     public ExpenseService(ExpenseRepository expenseRepository,
                           EventRepository eventRepository,
-                          ParticipantRepository participantRepository) {
+                          ParticipantRepository participantRepository,
+                          TagRepository tagRepository) {
 
         this.expenseRepository = expenseRepository;
         this.eventRepository = eventRepository;
         this.participantRepository = participantRepository;
-
+        this.tagRepository = tagRepository;
         eventService = new EventService(eventRepository);
         participantService = new ParticipantService(participantRepository, eventRepository);
 
@@ -62,7 +67,9 @@ public class ExpenseService {
         Expense newExpense = new Expense();
         newExpense.setAmount(expense.getAmount());
         newExpense.setOwers(expense.getOwers());
-        newExpense.setTag(expense.getTag());
+        Tag tag = tagRepository
+                .findById(expense.getTag().getId()).orElse(null);
+        newExpense.setTag(tag);
         newExpense.setTitle(expense.getTitle());
         newExpense.setEvent(event);
         newExpense.toString();
@@ -220,7 +227,9 @@ public class ExpenseService {
         newExpense.setId(expenseId);
         newExpense.setAmount(expense.getAmount());
         newExpense.setOwers(oldExpense.getOwers());
-        newExpense.setTag(expense.getTag());
+        Tag tag = tagRepository
+                .findById(expense.getTag().getId()).orElse(null);
+        newExpense.setTag(tag);
         newExpense.setTitle(expense.getTitle());
         newExpense.setEvent(event);
 

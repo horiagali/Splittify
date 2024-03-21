@@ -3,9 +3,8 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,9 +25,14 @@ public class BalancesCtrl implements Initializable {
     private TableColumn<Participant, String> colName;
     @FXML
     private TableColumn<Participant, String> colBalance;
-
+    @FXML
+    private TableView<Expense> settles;
+    @FXML
+    private TableColumn<Expense, String> colSettles;
     @FXML
     private ObservableList<Participant> data;
+    @FXML
+    private ObservableList<Expense> data2;
     private Event event;
 
 
@@ -45,10 +49,15 @@ public class BalancesCtrl implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //refresh();
         colName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getNickname()));
         colBalance.setCellValueFactory(q ->
                 new SimpleStringProperty(String.valueOf(q.getValue().getBalance())));
+        colSettles.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gave " +
+                        q.getValue().getAmount() + " to " +
+                        q.getValue().getOwers().get(0).getNickname()));
     }
 
     /**
@@ -58,6 +67,11 @@ public class BalancesCtrl implements Initializable {
         var participants = server.getParticipantsByEventId(event.getId());
         data = FXCollections.observableList(participants);
         table.setItems(data);
+        var expenses = server.getExpensesByEventId(event.getId());
+        var filteredExpenses = expenses.stream().filter(x -> x.getTag().getName().equals("Gifting Money"))
+                .toList();
+        data2 = FXCollections.observableList(filteredExpenses);
+        settles.setItems(data2);
     }
     /**
      * setter for the event
