@@ -4,7 +4,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "nickname": "Iulia",
+  "nickname": "slavk",
   "email": "iuliasl05@gmail.com",
   "bic": "434324",
   "iban": "438784",

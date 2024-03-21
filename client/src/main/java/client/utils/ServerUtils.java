@@ -157,6 +157,20 @@ public class ServerUtils {
 	}
 
 	/**
+	 * get participants by eventId
+	 * @param eventId the eventId
+	 * @return the participants
+	 */
+	public List<Participant> getParticipantsByEventId(long eventId) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId + "/participants")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<List<Participant>>() {});
+	}
+
+	/**
 	 *
 	 * @param selectedEvent
 	 *   deletes an event from the database
@@ -228,5 +242,19 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.post(Entity.entity(mail, APPLICATION_JSON), Mail.class);
+	}
+
+	/**
+	 * get expense by eventId
+	 * @param eventId the eventId
+	 * @return the expenses
+	 */
+	public List<Expense> getExpensesByEventId(Long eventId) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId + "/expenses")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<List<Expense>>() {});
 	}
 }
