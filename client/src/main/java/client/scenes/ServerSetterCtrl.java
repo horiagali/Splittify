@@ -9,6 +9,7 @@ import client.Main;
 import client.utils.ServerUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
@@ -32,6 +33,11 @@ public class ServerSetterCtrl {
 
     @FXML 
     public Stage primaryStage;
+
+    @FXML 
+    public Label invalidURL;
+
+
 
 
     /**
@@ -73,8 +79,10 @@ public class ServerSetterCtrl {
         System.out.println("server changed to " + Main.config.getServerUrl());
         if(!Main.checkConnection()) {
             System.out.println("Please input a valid server.");
+            invalidURL.setText("Please input a valid URL!");
         }
         else {
+            invalidURL.setText("");
             mainCtrl.getMain().loadScenes();
         }
     }
