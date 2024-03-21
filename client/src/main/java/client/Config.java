@@ -7,6 +7,8 @@ import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import client.utils.ServerUtils;
+
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, 
                 getterVisibility = JsonAutoDetect.Visibility.NONE, 
@@ -14,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
                 setterVisibility = JsonAutoDetect.Visibility.NONE)
 public class Config {
     private String serverUrl = "http://localhost:8080/";
-    private String language = "romana";
+    private String language = "english";
 
     /**
      * getter for language
@@ -38,7 +40,7 @@ public class Config {
      */
     public void setLanguage(String language) {
         this.language = language;
-        saveConfig(this);
+        saveConfig(this, getServerUrl());
     }
 
     /**
@@ -46,11 +48,12 @@ public class Config {
      * @param serverUrl
      */
     public void setServerUrl(String serverUrl) {
+        ServerUtils.setServer(serverUrl);
         this.serverUrl = serverUrl;
-        saveConfig(this);
+        saveConfig(this, serverUrl);
     }
 
-    private static void saveConfig(Config config) {
+    private static void saveConfig(Config config, String serverUrl) {
         var mapper = new ObjectMapper();
         var file = new File(Main.configLocation + "/config.json");
         // If file is not present, construct from default values
