@@ -217,8 +217,9 @@ public class QuoteOverviewCtrl implements Initializable {
 
     /**
      * goes to balances page
+     * @param event
      */
-    public void goToBalances(){
-        mainCtrl.goToBalances();
+    public void goToBalances(Event event){
+        mainCtrl.goToBalances(event);
     }
 }

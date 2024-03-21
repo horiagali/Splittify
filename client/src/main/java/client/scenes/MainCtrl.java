@@ -266,9 +266,11 @@ public class MainCtrl {
 
     /**
      * goes to balances page
+     * @param event event
      */
-    public void goToBalances() {
+    public void goToBalances(Event event) {
         primaryStage.setTitle("Balances page");
+        balancesCtrl.setEvent(event);
         primaryStage.setScene(balances);
     }
 }

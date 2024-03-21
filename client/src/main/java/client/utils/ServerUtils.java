@@ -157,6 +157,20 @@ public class ServerUtils {
 	}
 
 	/**
+	 * get participants by eventId
+	 * @param eventId the eventId
+	 * @return the participants
+	 */
+	public List<Participant> getParticipantsByEventId(long eventId) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId + "/participants")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<List<Participant>>() {});
+	}
+
+	/**
 	 *
 	 * @param selectedEvent
 	 *   deletes an event from the database
