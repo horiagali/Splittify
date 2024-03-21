@@ -144,6 +144,9 @@ public class MainCtrl {
      */
     public void initializeServerSetter(Stage primaryStage, 
     Pair<ServerSetterCtrl, Parent> serverSetter, Main main) {
+        resourceBundle = ResourceBundle.getBundle("messages_" + 
+        Main.config.getLanguage(), new Locale(Main.config.getLanguage()));
+        serverSetter.getKey().updateUIWithNewLanguage();
         this.primaryStage = primaryStage;
         this.serverSetterCtrl = serverSetter.getKey();
         serverSetter.getKey().serverURL.setText(Main.config.getServerUrl());

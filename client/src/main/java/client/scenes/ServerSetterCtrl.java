@@ -14,6 +14,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ServerSetterCtrl {
@@ -36,6 +37,9 @@ public class ServerSetterCtrl {
 
     @FXML 
     public Label invalidURL;
+
+    @FXML 
+    public Text enterUrl;
 
 
 
@@ -79,7 +83,7 @@ public class ServerSetterCtrl {
         System.out.println("server changed to " + Main.config.getServerUrl());
         if(!Main.checkConnection()) {
             System.out.println("Please input a valid server.");
-            invalidURL.setText("Please input a valid URL!");
+            invalidURL.setText(MainCtrl.resourceBundle.getString("Text.invalidUrl"));
         }
         else {
             invalidURL.setText("");
@@ -92,16 +96,10 @@ public class ServerSetterCtrl {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-
-        // createEventButton.setText(MainCtrl.resourceBundle.getString("button.createEvent"));
-        // joinEventButton.setText(MainCtrl.resourceBundle.getString("button.joinEvent"));
-        // refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
-        // adminButton.setText(MainCtrl.resourceBundle.getString("button.admin"));
-        // yourEventsText.setText(MainCtrl.resourceBundle.getString("Text.yourEvents"));
-        // colDate.setText(MainCtrl.resourceBundle.getString("TableColumn.colDate"));
-        // colName.setText(MainCtrl.resourceBundle.getString("TableColumn.colName"));
-        // colLocation.setText(MainCtrl.resourceBundle.getString("TableColumn.colLocation"));
-        // languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        connectToServerButton.setText(MainCtrl.resourceBundle.getString("button.connectToServer"));
+        invalidURL.setText("");
+        enterUrl.setText(MainCtrl.resourceBundle.getString("Text.enterUrl"));
+        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
     }
 
     /**
