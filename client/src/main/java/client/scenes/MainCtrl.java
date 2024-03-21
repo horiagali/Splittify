@@ -18,6 +18,7 @@ package client.scenes;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import client.Main;
 import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
+    Main main;
 
     private Stage primaryStage;
 
@@ -53,6 +55,9 @@ public class MainCtrl {
 
     private Scene overviewApp;
     private OverviewCtrl overviewAppCtrl;
+
+    private Scene serverSetter;
+    private ServerSetterCtrl serverSetterCtrl;
 
     private Scene invite;
     private InviteCtrl inviteCtrl;
@@ -130,6 +135,41 @@ public class MainCtrl {
         showOverview();
         primaryStage.show();
     }
+
+    /**
+     * initializes scene to set serverUrl of client
+     * @param primaryStage
+     * @param serverSetter
+     * @param main 
+     */
+    public void initializeServerSetter(Stage primaryStage, 
+    Pair<ServerSetterCtrl, Parent> serverSetter, Main main) {
+        this.primaryStage = primaryStage;
+        this.serverSetterCtrl = serverSetter.getKey();
+        serverSetter.getKey().serverURL.setText(Main.config.getServerUrl());
+        this.serverSetter = new Scene(serverSetter.getValue());
+        primaryStage.setTitle("Choose your server");
+        primaryStage.setScene(this.serverSetter);
+        primaryStage.show();
+        setMain(main);
+    }
+
+    /**
+     * 
+     * @return main
+     */
+    public Main getMain() {
+        return main;
+    }
+
+    /**
+     * 
+     * @param main
+     */
+    public void setMain(Main main) {
+        this.main = main;
+    }
+
 
     /**
      * 
@@ -257,4 +297,6 @@ public class MainCtrl {
         primaryStage.setTitle("Admin page");
         primaryStage.setScene(adminPage);
     }
+
+    
 }

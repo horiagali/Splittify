@@ -71,6 +71,12 @@ public class ServerSetterCtrl {
     public void connect() {
         Main.config.setServerUrl(serverURL.getText());
         System.out.println("server changed to " + Main.config.getServerUrl());
+        if(!Main.checkConnection()) {
+            System.out.println("Please input a valid server.");
+        }
+        else {
+            mainCtrl.getMain().loadScenes();
+        }
     }
 
 

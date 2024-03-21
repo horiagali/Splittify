@@ -16,6 +16,7 @@
 package client.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -40,10 +41,9 @@ import java.util.List;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
-	private static final String SERVER = "http://localhost:8080/";
 	private final ObjectMapper objectMapper;
 	private final RestTemplate restTemplate;
-	static String server;
+	public static String server = "http://localhost:8090/";
 
 	/**
 	 * Constructor
@@ -69,7 +69,8 @@ public class ServerUtils {
 	 * @throws URISyntaxException
 	 */
 	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-		var url = new URI("http://localhost:8080/api/quotes").toURL();
+		String uri = server + "/api/quotes";
+		var url = new URI(uri).toURL();
 		var is = url.openConnection().getInputStream();
 		var br = new BufferedReader(new InputStreamReader(is));
 		String line;
@@ -178,7 +179,7 @@ public class ServerUtils {
 	 */
 	public void addExpenseToEvent(long eventId, Expense expense) {
 		// Construct the URL for the specific event's expenses endpoint
-		String url = String.format("%s/events/%d/expenses", SERVER, eventId);
+		String url = String.format("%s/events/%d/expenses", server, eventId);
 
 		// Create HttpHeaders with JSON content type
 		HttpHeaders headers = new HttpHeaders();
@@ -196,7 +197,7 @@ public class ServerUtils {
 	 * @return participant
 	 */
 	public Participant getParticipantByNickname(Long eventID, String nickname) {
-		String url = SERVER + "api/events/" + eventID + "/participants/" + nickname;
+		String url = server + "api/events/" + eventID + "/participants/" + nickname;
 
 		// Make the HTTP GET request and directly retrieve the participant
 		Participant participant = restTemplate.getForObject(url, Participant.class);
