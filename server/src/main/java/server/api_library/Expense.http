@@ -5,14 +5,15 @@ Content-Type: application/json
 
 {
   "title": "ExpenseTest",
-  "amount": 50,
+  "amount": 20,
+  "tag": {
+    "id": 2
+  },
   "payer": {
-    "participantID": 2
+    "participantID": 1
   },
   "owers": [{
-    "participantID": 3
-  },{
-    "participantID": 1
+    "participantID": 2
   }]
 }
 

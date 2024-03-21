@@ -42,6 +42,7 @@ public class MainCtrl {
     private Scene adminPage;
 
 
+
     private AdminPageCtrl adminPageCtrl;
 
     private Scene adminPass;
@@ -65,6 +66,8 @@ public class MainCtrl {
     private Scene addEvent;
 
     public static ResourceBundle resourceBundle;
+    private Scene balances;
+    private BalancesCtrl balancesCtrl;
 
     /**
      * 
@@ -80,6 +83,7 @@ public class MainCtrl {
      * @param adminPass
      * @param language
      * @param addEvent
+     * @param balances
      */
 
     @SuppressWarnings({"ParameterNumber"})
@@ -92,6 +96,7 @@ public class MainCtrl {
                            Pair<AdminPageCtrl, Parent> adminPage,
                            Pair<AdminPassCtrl, Parent> adminPass,
                            Pair<AddEventCtrl, Parent> addEvent,
+                           Pair<BalancesCtrl, Parent> balances,
                            String language) {
         this.primaryStage = primaryStage;
 
@@ -130,7 +135,8 @@ public class MainCtrl {
         this.adminPassCtrl = adminPass.getKey();
         this.adminPass = new Scene(adminPass.getValue());
 
-        
+        this.balancesCtrl = balances.getKey();
+        this.balances = new Scene(balances.getValue());
 
         showOverview();
         primaryStage.show();
@@ -301,5 +307,13 @@ public class MainCtrl {
         primaryStage.setScene(adminPage);
     }
 
-    
+    /**
+     * goes to balances page
+     * @param event event
+     */
+    public void goToBalances(Event event) {
+        primaryStage.setTitle("Balances page");
+        balancesCtrl.setEvent(event);
+        primaryStage.setScene(balances);
+    }
 }
