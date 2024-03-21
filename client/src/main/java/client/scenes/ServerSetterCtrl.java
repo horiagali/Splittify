@@ -78,6 +78,22 @@ public class ServerSetterCtrl {
      * 
      */
     @FXML
+    public void changeColor() {
+        connectToServerButton.setStyle("-fx-background-color: green");;
+    }
+
+    /**
+     * 
+     */
+    @FXML
+    public void changeColorBack() {
+        connectToServerButton.setStyle("-fx-background-color: orange");;
+    }
+
+    /**
+     * 
+     */
+    @FXML
     public void connect() {
         Main.config.setServerUrl(serverURL.getText());
         System.out.println("server changed to " + Main.config.getServerUrl());

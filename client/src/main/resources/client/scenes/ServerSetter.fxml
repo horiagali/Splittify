@@ -59,7 +59,7 @@
                 </font>
             </Text>
             <TextField fx:id="serverURL" layoutX="191.0" layoutY="178.0" prefHeight="26.0" prefWidth="218.0" promptText="Server URL..." style="-fx-background-color: #eda77e;" text="Enter Server URL" />
-            <Button fx:id="connectToServerButton" layoutX="224.0" layoutY="211.0" mnemonicParsing="false" onAction="#connect" prefHeight="34.0" prefWidth="152.0" style="-fx-background-color: orange;" text="Connect!" textAlignment="CENTER">
+            <Button fx:id="connectToServerButton" layoutX="224.0" layoutY="211.0" mnemonicParsing="false" onAction="#connect" onMouseEntered="#changeColor" onMouseExited="#changeColorBack" prefHeight="34.0" prefWidth="152.0" style="-fx-background-color: orange;" text="Connect!" textAlignment="CENTER">
                 <font>
                     <Font name="System Bold" size="12.0" />
                 </font>
