@@ -172,6 +172,10 @@ public class OverviewCtrl implements Initializable {
     }
 
 
+    public void showStatistics() {
+        mainCtrl.goToStatistics(selectedEvent);
+    }
+    
     /**
      * asks if you really want to delete
      * @param actionEvent

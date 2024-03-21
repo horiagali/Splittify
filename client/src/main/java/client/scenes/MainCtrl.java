@@ -60,6 +60,9 @@ public class MainCtrl {
     private Scene serverSetter;
     private ServerSetterCtrl serverSetterCtrl;
 
+    private Scene statistics;
+    private StatisticsCtrl statisticsCtrl;
+
     private Scene invite;
     private InviteCtrl inviteCtrl;
     private AddEventCtrl addEventCtrl;
@@ -84,6 +87,7 @@ public class MainCtrl {
      * @param language
      * @param addEvent
      * @param balances
+     * @param statistics 
      */
 
     @SuppressWarnings({"ParameterNumber"})
@@ -97,7 +101,7 @@ public class MainCtrl {
                            Pair<AdminPassCtrl, Parent> adminPass,
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
-                           String language) {
+                           Pair<StatisticsCtrl, Parent> statistics, String language) {
         this.primaryStage = primaryStage;
 
         resourceBundle = ResourceBundle.getBundle("messages_" + 
@@ -137,6 +141,9 @@ public class MainCtrl {
 
         this.balancesCtrl = balances.getKey();
         this.balances = new Scene(balances.getValue());
+
+        this.statisticsCtrl = statistics.getKey();
+        this.statistics = new Scene(statistics.getValue());
 
         showOverview();
         primaryStage.show();
@@ -236,10 +243,6 @@ public class MainCtrl {
     /**
      * 
      */
-
-    /**
-     * 
-     */
     public void showAddExpenses() {
         primaryStage.setTitle("Expenses: Add Expense");
         primaryStage.setScene(addExpenses);
@@ -316,4 +319,15 @@ public class MainCtrl {
         balancesCtrl.setEvent(event);
         primaryStage.setScene(balances);
     }
+
+    /**
+     * goes to statistics page
+     * @param event event to see statistics from
+     */
+    public void goToStatistics(Event event) {
+        primaryStage.setTitle("Statistics of " + event.getTitle());
+        statisticsCtrl.setEvent(event);
+        primaryStage.setScene(statistics);
+
+    }    
 }
