@@ -289,4 +289,10 @@ public class OverviewCtrl implements Initializable {
         server.updateEvent(selectedEvent);
 
     }
+    /**
+     * goes to balances page
+     */
+    public void goToBalances(){
+        mainCtrl.goToBalances();
+    }
 }

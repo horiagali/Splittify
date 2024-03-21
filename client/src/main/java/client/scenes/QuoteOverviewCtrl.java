@@ -215,5 +215,10 @@ public class QuoteOverviewCtrl implements Initializable {
         mainCtrl.goToAdminPass();
     }
 
-
+    /**
+     * goes to balances page
+     */
+    public void goToBalances(){
+        mainCtrl.goToBalances();
+    }
 }
