@@ -1,12 +1,14 @@
 package commons;
-import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class EventTest {
 
@@ -22,7 +24,7 @@ public class EventTest {
         expenses = new ArrayList<>();
         participants = new ArrayList<>();
         tags = new ArrayList<>();
-        event = new Event("Birthday Party", new Date(), "Celebrating John's birthday", "Party Hall", expenses, participants, tags);
+        event = new Event("Birthday Party", LocalDate.of(2024, 12, 25), "Celebrating John's birthday", "Party Hall", expenses, participants, tags);
     }
 
     @Test
@@ -124,24 +126,24 @@ public class EventTest {
 
     @Test
     public void testEquals() {
-        Event event1 = new Event("Birthday Party", new Date(), "Celebrating John's birthday", "Party Hall", expenses, participants, tags);
-        Event event2 = new Event("Birthday Party", new Date(), "Celebrating John's birthday", "Party Hall", expenses, participants, tags);
-        Event event3 = new Event("Wedding", new Date(), "Celebrating Jane's wedding", "Banquet Hall", expenses, participants, tags);
+        Event event1 = new Event("Birthday Party", LocalDate.of(2024, 12, 25), "Celebrating John's birthday", "Party Hall", expenses, participants, tags);
+        Event event2 = new Event("Birthday Party", LocalDate.of(2024, 12, 25), "Celebrating John's birthday", "Party Hall", expenses, participants, tags);
+        Event event3 = new Event("Wedding", LocalDate.of(2024, 12, 25), "Celebrating Jane's wedding", "Banquet Hall", expenses, participants, tags);
         assertEquals(event1, event2);
         assertNotEquals(event1, event3);
     }
 
     @Test
     public void testHashCode() {
-        Event event1 = new Event("Birthday Party", new Date(), "Celebrating John's birthday", "Party Hall", expenses, participants, tags);
-        Event event2 = new Event("Birthday Party", new Date(), "Celebrating John's birthday", "Party Hall", expenses, participants, tags);
+        Event event1 = new Event("Birthday Party", LocalDate.of(2024, 12, 25), "Celebrating John's birthday", "Party Hall", expenses, participants, tags);
+        Event event2 = new Event("Birthday Party", LocalDate.of(2024, 12, 25), "Celebrating John's birthday", "Party Hall", expenses, participants, tags);
         assertEquals(event1.hashCode(), event2.hashCode());
     }
 
     @Test
     public void testGettersAndSetters() {
         // Test getters and setters
-        Date newDate = new Date();
+        LocalDate newDate = LocalDate.of(2024, 12, 25);
         event.setTitle("Wedding Reception");
         event.setDate(newDate);
         event.setDescription("Celebrating Jane's wedding");

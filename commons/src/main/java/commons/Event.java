@@ -1,5 +1,6 @@
 package commons;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import jakarta.persistence.*;
@@ -18,7 +19,7 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
-    private Date date;
+    private LocalDate date;
     private String description;
     private String location;
 
@@ -37,7 +38,7 @@ public class Event {
      * @param location the location as a String
      * @param date the date as a Date
      */
-    public Event(String title, String description, String location, Date date) {
+    public Event(String title, String description, String location, LocalDate date) {
         this.title = title;
         this.description = description;
         this.location = location;
@@ -57,7 +58,7 @@ public class Event {
      * @param participants the participants as a List of Participant
      * @param tags the participants as a List of Tag
      */
-    public Event(String title, Date date, String description, String location,
+    public Event(String title, LocalDate date, String description, String location,
                  List<Expense> expenses, List<Participant> participants, List<Tag> tags) {
         this.title = title;
         this.date = date;
@@ -114,7 +115,7 @@ public class Event {
      *
      * @return a Date, the date
      */
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -178,7 +179,7 @@ public class Event {
      * a setter for the Date
      * @param date a Date
      */
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

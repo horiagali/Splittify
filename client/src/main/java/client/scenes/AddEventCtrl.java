@@ -11,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class AddEventCtrl {
     private final ServerUtils server;
@@ -45,7 +45,7 @@ public class AddEventCtrl {
                 nameField.getText(),
                 descriptionField.getText(),
                 locationField.getText(),
-                new Date()
+                LocalDate.now()
         );
 
         try {

@@ -1,28 +1,21 @@
 package client.scenes;
 
-import java.net.URL;
-import java.util.Date;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import com.google.inject.Inject;
-
 import client.Main;
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Event;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class QuoteOverviewCtrl implements Initializable {
 
@@ -121,8 +114,8 @@ public class QuoteOverviewCtrl implements Initializable {
      * @return return event
      */
     private Event getEvent() {
-        return new Event(eventName.getText(), "empty description", "empty location", new Date());
-
+        return new Event(eventName.getText(), "empty description",
+                "empty location", LocalDate.now());
     }
 
     /**
