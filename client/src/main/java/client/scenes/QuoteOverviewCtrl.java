@@ -170,6 +170,13 @@ public class QuoteOverviewCtrl implements Initializable {
             if (event.isControlDown() && event.getCode() == KeyCode.R) {
                 refresh();
             }
+            if (event.getCode() == KeyCode.ENTER) {
+                Event selectedEvent = table.getSelectionModel().getSelectedItem();
+                if (selectedEvent != null) {
+                    OverviewCtrl.setSelectedEvent(selectedEvent);
+                    mainCtrl.showEventOverview(selectedEvent);
+                }
+            }
         });
     }
 
