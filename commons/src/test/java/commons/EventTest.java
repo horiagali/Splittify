@@ -161,34 +161,63 @@ public class EventTest {
 
     @Test
     void testSeparateParticipantsByBalance() {
-        // Create some participants with different balances
         Participant participant1 = new Participant("Alice", "alice@example.com", "BIC1", "IBAN1", 100.0);
         Participant participant2 = new Participant("Bob", "bob@example.com", "BIC2", "IBAN2", -50.0);
         Participant participant3 = new Participant("Charlie", "charlie@example.com", "BIC3", "IBAN3", 0.0);
 
-        // Create a list of participants and add them to the event
         List<Participant> participants = new ArrayList<>();
         participants.add(participant1);
         participants.add(participant2);
         participants.add(participant3);
 
-        // Create an event and set its participants
         Event event = new Event();
         event.setParticipants(participants);
 
-        // Create lists to store participants who owe and are owed money
         List<Participant> oweList = new ArrayList<>();
         List<Participant> isOwedList = new ArrayList<>();
-
-        // Call the method to separate participants by balance
         event.separateParticipantsByBalance(oweList, isOwedList);
 
-        // Assert that participants are correctly separated based on their balance
         assertTrue(oweList.contains(participant1)); // Participant 1 owes money
         assertTrue(isOwedList.contains(participant2)); // Participant 2 is owed money
         assertFalse(oweList.contains(participant2)); // Participant 2 does not owe money
         assertFalse(isOwedList.contains(participant1)); // Participant 1 is not owed money
         assertFalse(oweList.contains(participant3)); // Participant 3 does not owe money
         assertFalse(isOwedList.contains(participant3)); // Participant 3 is not owed money
+    }
+
+    @Test
+    void testSetTags() {
+        Tag tag1 = new Tag("tag1", new Color(255, 0, 0, 0));
+        Tag tag2 = new Tag("tag2", new Color(255, 0, 0, 255));
+        List<Tag> tags = new ArrayList<>();
+        tags.add(tag1);
+        tags.add(tag2);
+        Event event = new Event();
+        event.setTags(tags);
+        List<Tag> retrievedTags = event.getTags();
+        assertEquals(2, retrievedTags.size());
+        assertTrue(retrievedTags.contains(tag1));
+        assertTrue(retrievedTags.contains(tag2));
+    }
+
+    @Test
+    void testSetExpenses() {
+        Participant payer = new Participant("John", "john@example.com", "bic", "iban", 12);
+        ArrayList<Participant> owers = new ArrayList<>();
+        owers.add(new Participant("Alice", "alice@example.com", "bic", "iban", 12));
+        owers.add(new Participant("Bob", "bob@example.com", "bic", "iban", 12));
+        double amount = 50;
+        Tag tag = new Tag("testTag", new Color(255,0,0,255));
+        Expense expense1 = new Expense("Dinner", amount, payer, owers, tag);
+        Expense expense2 = new Expense("Dinner", amount, payer, owers, tag);
+        List<Expense> expenses = new ArrayList<>();
+        expenses.add(expense1);
+        expenses.add(expense2);
+        Event event = new Event();
+        event.setExpenses(expenses);
+        List<Expense> retrievedExpenses = event.getExpenses();
+        assertEquals(2, retrievedExpenses.size());
+        assertTrue(retrievedExpenses.contains(expense1));
+        assertTrue(retrievedExpenses.contains(expense2));
     }
 }
