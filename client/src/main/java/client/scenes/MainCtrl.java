@@ -218,6 +218,8 @@ public class MainCtrl {
     public void goToOverview() {
         primaryStage.setTitle("Overview");
         primaryStage.setScene(overviewApp);
+        overviewAppCtrl.refresh();
+
     }
 
     /**
@@ -241,7 +243,7 @@ public class MainCtrl {
         primaryStage.setTitle(selectedEvent.getTitle());
         primaryStage.setScene(overviewApp);
         overviewAppCtrl.displayEvent(selectedEvent);
-        overviewCtrl.refresh();
+        overviewAppCtrl.refresh();
 
     }
 
