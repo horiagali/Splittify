@@ -10,7 +10,7 @@ public class TagTest {
 
     @Test
     public void testGettersAndSetters() {
-        Tag tag = new Tag("John", javafx.scene.paint.Color.ALICEBLUE);
+        Tag tag = new Tag("John", new Color(255,0,0,255));
 
         tag.setId(123L);
         tag.setEvent(new Event());
@@ -24,9 +24,9 @@ public class TagTest {
     @Test
     public void testEqualsAndHash() {
 
-        Tag tag1 = new Tag("Tag", javafx.scene.paint.Color.ALICEBLUE);
-        Tag tag2 = new Tag("Tag", javafx.scene.paint.Color.ALICEBLUE);
-        Tag tag3 = new Tag("Tag", javafx.scene.paint.Color.ALICEBLUE);
+        Tag tag1 = new Tag("Tag", new Color(255,0,0,255));
+        Tag tag2 = new Tag("Tag", new Color(0,255,0,255));
+        Tag tag3 = new Tag("Tag", new Color(0,0,255,255));
 
         assertEquals(tag1, tag2);
         assertNotEquals(tag1, tag3);
@@ -37,7 +37,7 @@ public class TagTest {
 
     @Test
     public void testToString() {
-        Tag tag = new Tag("tag", javafx.scene.paint.Color.ALICEBLUE);
+        Tag tag = new Tag("tag", new Color(255,0,0,255));
         tag.setId(123L);
         tag.setEvent(new Event());
 
