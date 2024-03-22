@@ -8,10 +8,13 @@ import commons.Participant;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,6 +22,8 @@ import java.util.ResourceBundle;
 public class BalancesCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private TableView<Participant> table;
     @FXML
@@ -58,6 +63,7 @@ public class BalancesCtrl implements Initializable {
                 new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gave " +
                         q.getValue().getAmount() + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
+        addKeyboardNavigationHandlers();
     }
 
     /**
@@ -74,6 +80,21 @@ public class BalancesCtrl implements Initializable {
         data2 = FXCollections.observableList(filteredExpenses);
         settles.setItems(data2);
     }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        anchorPane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.R) {
+                refresh();
+            }
+        });
+    }
+
     /**
      * setter for the event
      * @param event an Event
