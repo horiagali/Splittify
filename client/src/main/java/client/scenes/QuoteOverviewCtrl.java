@@ -171,13 +171,21 @@ public class QuoteOverviewCtrl implements Initializable {
                 refresh();
             }
             if (event.getCode() == KeyCode.ENTER) {
-                Event selectedEvent = table.getSelectionModel().getSelectedItem();
-                if (selectedEvent != null) {
-                    OverviewCtrl.setSelectedEvent(selectedEvent);
-                    mainCtrl.showEventOverview(selectedEvent);
-                }
+                handleTableItemKeyPress();
             }
         });
+    }
+
+    /**
+     * event handler for keyboard press
+     */
+    private void handleTableItemKeyPress() {
+        Event selectedEvent = table.getSelectionModel().getSelectedItem();
+        if (selectedEvent != null) {
+            OverviewCtrl.setSelectedEvent(selectedEvent);
+            mainCtrl.showEventOverview(selectedEvent);
+        }
+
     }
 
     /**
