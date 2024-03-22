@@ -4,7 +4,6 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
-import jakarta.transaction.Transactional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
