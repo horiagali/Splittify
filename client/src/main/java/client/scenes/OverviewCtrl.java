@@ -125,7 +125,6 @@ public class OverviewCtrl implements Initializable {
      * The resources used to localize the root object, or {@code null} if
      * the root object was not localized.
      */
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         refresh();
