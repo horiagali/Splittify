@@ -2,12 +2,8 @@ package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-
-import javafx.scene.paint.Color;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.springframework.boot.logging.log4j2.ColorConverter;
 
 
 @Entity
@@ -16,8 +12,6 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-
-    @Convert(converter = ColorConverter.class)
     private Color color;
 
 
