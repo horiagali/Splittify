@@ -158,4 +158,37 @@ public class EventTest {
         // Test toString method
         assertNotNull(event.toString());
     }
+
+    @Test
+    void testSeparateParticipantsByBalance() {
+        // Create some participants with different balances
+        Participant participant1 = new Participant("Alice", "alice@example.com", "BIC1", "IBAN1", 100.0);
+        Participant participant2 = new Participant("Bob", "bob@example.com", "BIC2", "IBAN2", -50.0);
+        Participant participant3 = new Participant("Charlie", "charlie@example.com", "BIC3", "IBAN3", 0.0);
+
+        // Create a list of participants and add them to the event
+        List<Participant> participants = new ArrayList<>();
+        participants.add(participant1);
+        participants.add(participant2);
+        participants.add(participant3);
+
+        // Create an event and set its participants
+        Event event = new Event();
+        event.setParticipants(participants);
+
+        // Create lists to store participants who owe and are owed money
+        List<Participant> oweList = new ArrayList<>();
+        List<Participant> isOwedList = new ArrayList<>();
+
+        // Call the method to separate participants by balance
+        event.separateParticipantsByBalance(oweList, isOwedList);
+
+        // Assert that participants are correctly separated based on their balance
+        assertTrue(oweList.contains(participant1)); // Participant 1 owes money
+        assertTrue(isOwedList.contains(participant2)); // Participant 2 is owed money
+        assertFalse(oweList.contains(participant2)); // Participant 2 does not owe money
+        assertFalse(isOwedList.contains(participant1)); // Participant 1 is not owed money
+        assertFalse(oweList.contains(participant3)); // Participant 3 does not owe money
+        assertFalse(isOwedList.contains(participant3)); // Participant 3 is not owed money
+    }
 }

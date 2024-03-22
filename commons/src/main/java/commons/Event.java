@@ -328,7 +328,7 @@ public class Event {
      * @param owe    The list to store participants who owe money.
      * @param isOwed The list to store participants who are owed money.
      */
-    private void separateParticipantsByBalance(List<Participant> owe, List<Participant> isOwed) {
+    public void separateParticipantsByBalance(List<Participant> owe, List<Participant> isOwed) {
         for (Participant participant : participants) {
             if (participant.getBalance() > 0)
                 owe.add(participant);
