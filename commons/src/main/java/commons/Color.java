@@ -24,6 +24,9 @@ public class Color {
         this.alpha = alpha;
     }
 
+    /**
+     * Constructor for JPA
+     */
     public Color() {
 
     }

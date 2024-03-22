@@ -23,9 +23,10 @@ public class TagTest {
 
     @Test
     public void testEqualsAndHash() {
+        Color red = new Color(255,0,0,255);
 
-        Tag tag1 = new Tag("Tag", new Color(255,0,0,255));
-        Tag tag2 = new Tag("Tag", new Color(0,255,0,255));
+        Tag tag1 = new Tag("Tag", red);
+        Tag tag2 = new Tag("Tag", red);
         Tag tag3 = new Tag("Tag", new Color(0,0,255,255));
 
         assertEquals(tag1, tag2);
@@ -37,11 +38,12 @@ public class TagTest {
 
     @Test
     public void testToString() {
-        Tag tag = new Tag("tag", new Color(255,0,0,255));
+        Color red = new Color(255,0,0,255);
+        Tag tag = new Tag("tag", red);
         tag.setId(123L);
         tag.setEvent(new Event());
 
-        String string = "ID: 123 name: tag color: java.awt.Color[r=0,g=0,b=0]";
+        String string = "ID: 123 name: tag color: " + red.toString();
         assertEquals(tag.toString(), string);
     }
 
