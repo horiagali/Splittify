@@ -286,6 +286,7 @@ public class MainCtrl {
     /**
      * goes to open debts page
      * @param event event
+     * @param expenses
      */
     public void goToSettleDebts(Event event, List<Expense> expenses) {
         primaryStage.setTitle("Open Debts page");

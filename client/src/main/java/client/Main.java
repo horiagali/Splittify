@@ -103,7 +103,6 @@ public class Main extends Application {
         var addEvent = FXML.load(AddEventCtrl.class, "client", "scenes", "AddEventPage.fxml");
         var balances = FXML.load(BalancesCtrl.class, "client", "scenes", "Balances.fxml");
         var debts = FXML.load(SettleDebtsCtrl.class, "client", "scenes", "SettleDebts.fxml");
-
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
         contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, balances,debts,
                 language);
