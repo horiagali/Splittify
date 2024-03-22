@@ -17,7 +17,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 
 public class QuoteOverviewCtrl implements Initializable {
@@ -26,6 +28,8 @@ public class QuoteOverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private ObservableList<Event> data;
 
+    @FXML
+    private VBox vbox;
     @FXML
     private TableView<Event> table;
     @FXML
@@ -145,7 +149,28 @@ public class QuoteOverviewCtrl implements Initializable {
                 new SimpleStringProperty(q.getValue().getLocation()));
         colDate.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
         table.setOnMouseClicked(this::handleTableItemClick);
+        addKeyboardNavigationHandlers();
+    }
 
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        vbox.setOnKeyPressed(event -> {
+            if (event.isControlDown() && event.getCode() == KeyCode.N) {
+                addEvent();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.J){
+                ActionEvent dummyEvent = new ActionEvent();
+                joinEvent(dummyEvent);
+            }
+            if (event.isControlDown() && event.isAltDown() && event.getCode() == KeyCode.D) {
+                goToAdminPass();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.R) {
+                refresh();
+            }
+        });
     }
 
     /**
