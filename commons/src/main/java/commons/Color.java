@@ -1,6 +1,7 @@
 package commons;
 
 import jakarta.persistence.Embeddable;
+import static javafx.scene.paint.Color.*;
 
 @Embeddable
 public class Color {
@@ -22,6 +23,17 @@ public class Color {
         this.green = green;
         this.blue = blue;
         this.alpha = alpha;
+    }
+
+    /**
+     * Constructor that accepts a javafx.scene.paint.Color object and converts it into this Color object.
+     * @param fxColor The javafx.scene.paint.Color object to convert.
+     */
+    public Color(javafx.scene.paint.Color fxColor) {
+        this.red = (int) (fxColor.getRed() * 255);
+        this.green = (int) (fxColor.getGreen() * 255);
+        this.blue = (int) (fxColor.getBlue() * 255);
+        this.alpha = (int) (fxColor.getOpacity() * 255);
     }
 
     /**
@@ -118,6 +130,20 @@ public class Color {
     public String toRGBA() {
         return String.format("RGBA(%d, %d, %d, %.2f)", red, green, blue, alpha / 255.0);
     }
+
+    /**
+     * Getter that returns a javafx.scene.paint.Color object based on the data in this Color object.
+     * @return The corresponding javafx.scene.paint.Color object.
+     */
+    public FXColor toFXColor() {
+        double fxRed = (double) red / 255;
+        double fxGreen = (double) green / 255;
+        double fxBlue = (double) blue / 255;
+        double fxAlpha = (double) alpha / 255;
+
+        return FXColor.rgb(fxRed, fxGreen, fxBlue, fxAlpha);
+    }
+
 
     /**
      * Equals method
