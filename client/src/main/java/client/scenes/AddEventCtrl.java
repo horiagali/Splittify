@@ -69,7 +69,7 @@ public class AddEventCtrl implements Initializable {
                 ActionEvent dummyEvent = new ActionEvent();
                 cancel(dummyEvent);
             }
-            if (event.isControlDown() && event.getCode() == KeyCode.F) {
+            if (event.isControlDown() && event.getCode() == KeyCode.N) {
                 ActionEvent dummyEvent = new ActionEvent();
                 addEvent(dummyEvent);
             }
