@@ -4,25 +4,27 @@ import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+
 public class QuoteOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    @FXML
-    private TextField eventName;
     private ObservableList<Event> data;
 
     @FXML
@@ -37,9 +39,13 @@ public class QuoteOverviewCtrl implements Initializable {
     private ToggleGroup languageGroup;
     @FXML
     private Button createEventButton;
+    @FXML
+    private TextField eventName;
 
     @FXML
     private Button joinEventButton;
+    @FXML
+    private TextField joinEventCode;
     @FXML
     private Button refreshButton;
 
@@ -105,17 +111,33 @@ public class QuoteOverviewCtrl implements Initializable {
         mainCtrl.showAddEvent();
     }
 
-    private void clearFields() {
-        eventName.clear();
-    }
 
-
-    /**
-     * @return return event
-     */
     private Event getEvent() {
         return new Event(eventName.getText(), "empty description",
                 "empty location", LocalDate.now());
+    }
+
+    /**
+     * Lets user view the event correspondign to the event id
+     * @param ae actionEvent
+     */
+    public void joinEvent(ActionEvent ae) {
+        try {
+            Long eventCode = Long.parseLong(joinEventCode.getText());
+            try {
+                mainCtrl.showEventOverview(server.getEvent(eventCode));
+            } catch (WebApplicationException e) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            }
+        } catch (NumberFormatException e) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Please only enter numbers");
+            alert.showAndWait();
+        }
     }
 
     /**
@@ -141,6 +163,7 @@ public class QuoteOverviewCtrl implements Initializable {
         if (event.getClickCount() == 2) { // Double-click
             Event selectedEvent = table.getSelectionModel().getSelectedItem();
             if (selectedEvent != null) {
+                OverviewCtrl.setSelectedEvent(selectedEvent);
                 mainCtrl.showEventOverview(selectedEvent);
             }
         }
@@ -156,11 +179,13 @@ public class QuoteOverviewCtrl implements Initializable {
     /**
      *
      */
+
     public void refresh() {
         var events = server.getEvents();
         data = FXCollections.observableList(events);
         table.setItems(data);
     }
+
 
 
     /**
@@ -169,11 +194,6 @@ public class QuoteOverviewCtrl implements Initializable {
     public void page() {
         mainCtrl.showPage();
     }
-
-    /**
-     *
-     */
-
 
     /**
      *
@@ -203,5 +223,11 @@ public class QuoteOverviewCtrl implements Initializable {
         mainCtrl.goToAdminPass();
     }
 
-
+    /**
+     * goes to balances page
+     * @param event
+     */
+    public void goToBalances(Event event){
+        mainCtrl.goToBalances(event);
+    }
 }

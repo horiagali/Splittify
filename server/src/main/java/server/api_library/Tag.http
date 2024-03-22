@@ -4,15 +4,10 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "name": "travel",
-  "color": {
-    "red": 255,
-    "green": 0,
-    "blue": 0
-  }
+  "name": "Gifting Money"
 }
 
 ### Get All Tags
-GET http://localhost:8080/api/tags
+GET http://localhost:8080/api/events/1/tags
 Accept: application/json
 Content-Type: application/json

@@ -24,6 +24,8 @@ public class AddEventCtrl {
     private TextField locationField;
     @FXML
     private Button addEventButton;
+    @FXML
+    private Button cancelButton;
 
     /**
      * Constructor for the controller
@@ -41,6 +43,14 @@ public class AddEventCtrl {
      * @param ae action event
      */
     public void addEvent(ActionEvent ae) {
+        if (nameField.getText().isEmpty() || nameField.getText().isBlank()) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Please enter a title");
+            alert.showAndWait();
+            return;
+        }
+
         Event newEvent = new Event(
                 nameField.getText(),
                 descriptionField.getText(),
@@ -56,6 +66,15 @@ public class AddEventCtrl {
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+        clearFields();
+        mainCtrl.showOverview();
+    }
+
+    /**
+     * Return user to QuoteOveview
+     * @param e actionEvent
+     */
+    public void cancel(ActionEvent e) {
         clearFields();
         mainCtrl.showOverview();
     }
