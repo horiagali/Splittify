@@ -361,7 +361,7 @@ public class Event {
      * @param owe    The list of participants who owe money.
      * @param isOwed The list of participants who are owed money.
      */
-    private void settleDebtsBetweenParticipants(List<Participant> owe, List<Participant> isOwed) {
+    public void settleDebtsBetweenParticipants(List<Participant> owe, List<Participant> isOwed) {
         for (Participant p1 : owe) {
             for (Iterator<Participant> iterator = isOwed.iterator(); iterator.hasNext();) {
                 Participant p2 = iterator.next();

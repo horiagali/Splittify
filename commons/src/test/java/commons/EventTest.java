@@ -220,4 +220,73 @@ public class EventTest {
         assertTrue(retrievedExpenses.contains(expense1));
         assertTrue(retrievedExpenses.contains(expense2));
     }
+
+    @Test
+    void setIDTest(){
+        event.setId(1L);
+        assertEquals(1L, event.getId());
+    }
+
+    @Test
+    void testSettleDebtsBetweenParticipants() {
+        Participant participant1 = new Participant("Alice", "alice@example.com", "BIC1", "IBAN1", 100.0);
+        Participant participant2 = new Participant("Bob", "bob@example.com", "BIC2", "IBAN2", -50.0);
+        Participant participant3 = new Participant("Charlie", "charlie@example.com", "BIC3", "IBAN3", 30.0);
+
+        List<Participant> owe = new ArrayList<>();
+        owe.add(participant2);
+
+        List<Participant> isOwed = new ArrayList<>();
+        isOwed.add(participant1);
+        isOwed.add(participant3);
+
+        Event event = new Event();
+        event.settleDebtsBetweenParticipants(owe, isOwed);
+
+        assertEquals(0.0, participant1.getBalance());
+        assertEquals(80.0, participant2.getBalance());
+        assertEquals(0.0, participant3.getBalance());
+    }
+
+    @Test
+    void testSettleDebtsBetweenParticipants_WhenNotEnoughFunds() {
+        Participant participant1 = new Participant("Alice", "alice@example.com", "BIC1", "IBAN1", 50.0);
+        Participant participant2 = new Participant("Bob", "bob@example.com", "BIC2", "IBAN2", -100.0);
+        Participant participant3 = new Participant("Charlie", "charlie@example.com", "BIC3", "IBAN3", 30.0);
+        List<Participant> owe = new ArrayList<>();
+        owe.add(participant2);
+
+        List<Participant> isOwed = new ArrayList<>();
+        isOwed.add(participant1);
+        isOwed.add(participant3);
+
+        Event event = new Event();
+        event.settleDebtsBetweenParticipants(owe, isOwed);
+
+        assertEquals(-50.0, participant1.getBalance());
+        assertEquals(30.0, participant2.getBalance());
+        assertEquals(0.0, participant3.getBalance());
+    }
+
+    @Test
+    void testEventConstructor() {
+        String title = "Birthday Party";
+        String description = "Celebrating John's birthday";
+        String location = "123 Main St";
+        LocalDate date = LocalDate.of(2024, 4, 15);
+
+
+        Event event = new Event(title, description, location, date);
+
+        assertEquals(title, event.getTitle());
+        assertEquals(description, event.getDescription());
+        assertEquals(location, event.getLocation());
+        assertEquals(date, event.getDate());
+        assertNotNull(event.getExpenses());
+        assertNotNull(event.getParticipants());
+        assertNotNull(event.getTags());
+        assertEquals(0, event.getExpenses().size());
+        assertEquals(0, event.getParticipants().size());
+        assertEquals(0, event.getTags().size());
+    }
 }
