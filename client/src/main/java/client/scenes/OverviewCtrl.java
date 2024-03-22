@@ -7,6 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
@@ -18,6 +20,8 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private Label myLabel;
     @FXML
@@ -125,6 +129,7 @@ public class OverviewCtrl implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         refresh();
+        addKeyboardNavigationHandlers();
     }
 
     /**
@@ -143,6 +148,30 @@ public class OverviewCtrl implements Initializable {
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
         hbox.getChildren().addAll(labels);
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        anchorPane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.E) {
+                addExpense();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.S) {
+                sendInvites();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.B) {
+                goToBalance();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.D) {
+                ActionEvent dummyEvent = new ActionEvent();
+                goToAreYouSure(dummyEvent);
+            }
+        });
     }
 
     /**
@@ -295,6 +324,13 @@ public class OverviewCtrl implements Initializable {
      * @param actionEvent
      */
     public void goToBalances(ActionEvent actionEvent) {
+        mainCtrl.goToBalances(selectedEvent);
+    }
+
+    /**
+     * For keyboard press
+     */
+    public void goToBalance() {
         mainCtrl.goToBalances(selectedEvent);
     }
 }
