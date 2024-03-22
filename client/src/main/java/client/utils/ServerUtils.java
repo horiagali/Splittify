@@ -16,11 +16,7 @@
 package client.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
-import commons.Mail;
-import commons.Quote;
+import commons.*;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -35,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -257,4 +254,5 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Expense>>() {});
 	}
+
 }

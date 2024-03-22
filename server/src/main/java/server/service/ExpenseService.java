@@ -56,7 +56,6 @@ public class ExpenseService {
      * @param expense created expense
      * @return expense
      */
-    @Transactional
     public ResponseEntity<Expense> createExpense(Long eventId, Expense expense) {
         if (!eventRepository.findById(eventId).isPresent()) {
             System.out.println("Event with given ID not found");

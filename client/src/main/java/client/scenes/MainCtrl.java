@@ -15,10 +15,12 @@
  */
 package client.scenes;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import commons.Event;
+import commons.Expense;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -285,9 +287,10 @@ public class MainCtrl {
      * goes to open debts page
      * @param event event
      */
-    public void goToSettleDebts(Event event) {
+    public void goToSettleDebts(Event event, List<Expense> expenses) {
         primaryStage.setTitle("Open Debts page");
         debtsCtrl.setEvent(event);
+        debtsCtrl.setExpenses(expenses);
         primaryStage.setScene(debts);
     }
 }
