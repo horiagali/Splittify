@@ -179,6 +179,13 @@ public class QuoteOverviewCtrl implements Initializable {
         table.setItems(data);
     }
 
+    /**
+     * 
+     */
+    public void disconnect() {
+        mainCtrl.showServerSetter();
+    }
+
 
 
     /**

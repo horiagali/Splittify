@@ -64,6 +64,7 @@
             <Button fx:id="createEventButton" alignment="CENTER" layoutX="273.0" layoutY="99.0" mnemonicParsing="false" onAction="#addEvent" text="Create Event" />
             <Button fx:id="joinEventButton" layoutX="346.0" layoutY="180.0" mnemonicParsing="false" onAction="#joinEvent" text="Join Event" />
             <Text fx:id="yourEventsText" layoutX="283.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your events:" />
+         <Button fx:id="createEventButton1" alignment="CENTER" layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#disconnect" text="Disconnect" />
         </children>
     </AnchorPane>
 

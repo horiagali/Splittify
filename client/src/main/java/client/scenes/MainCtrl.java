@@ -59,6 +59,7 @@ public class MainCtrl {
 
     private Scene serverSetter;
     private ServerSetterCtrl serverSetterCtrl;
+    Pair<ServerSetterCtrl, Parent> serverPair;
 
     private Scene invite;
     private InviteCtrl inviteCtrl;
@@ -84,6 +85,8 @@ public class MainCtrl {
      * @param language
      * @param addEvent
      * @param balances
+     * @param serverSetter2 
+     * @param main 
      */
 
     @SuppressWarnings({"ParameterNumber"})
@@ -97,8 +100,10 @@ public class MainCtrl {
                            Pair<AdminPassCtrl, Parent> adminPass,
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
-                           String language) {
+                           Pair<ServerSetterCtrl, Parent> serverSetter2, String language, 
+                           Main main) {
         this.primaryStage = primaryStage;
+        this.main = main;
 
         resourceBundle = ResourceBundle.getBundle("messages_" + 
         language, new Locale(language));
@@ -138,6 +143,8 @@ public class MainCtrl {
         this.balancesCtrl = balances.getKey();
         this.balances = new Scene(balances.getValue());
 
+        this.serverPair = serverSetter2;
+
         showOverview();
         primaryStage.show();
     }
@@ -161,6 +168,13 @@ public class MainCtrl {
         primaryStage.setScene(this.serverSetter);
         primaryStage.show();
         setMain(main);
+    }
+
+    /**
+     * 
+     */
+    public void showServerSetter() {
+        initializeServerSetter(primaryStage, serverPair, main);
     }
 
     /**

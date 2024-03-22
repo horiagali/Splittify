@@ -30,6 +30,7 @@ import java.net.URL;
 
 import client.scenes.*;
 import client.utils.ServerUtils;
+import jakarta.ws.rs.BadRequestException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Injector;
@@ -120,10 +121,12 @@ public class Main extends Application {
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
         var addEvent = FXML.load(AddEventCtrl.class, "client", "scenes", "AddEventPage.fxml");
         var balances = FXML.load(BalancesCtrl.class, "client", "scenes", "Balances.fxml");
+        var serverSetter = FXML.load(ServerSetterCtrl.class, "client", 
+        "scenes", "ServerSetter.fxml");
 
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
         contactDetails, overviewApp, invite, adminPage, adminPass, 
-        addEvent, balances, config.getLanguage());
+        addEvent, balances, serverSetter, config.getLanguage(), this);
     }
 
     /**
@@ -142,10 +145,15 @@ public class Main extends Application {
 		    while ((line = br.readLine()) != null) {
 			    System.out.println(line);
 		    }
-        }  catch (ConnectException e) {
+        }  catch (BadRequestException e) {
+            return true;
+        }
+        catch (ConnectException e) {
+            //no connection
             return false;
         }
         catch (Exception e) {
+            //connection but file not found, does not matter
             return true;
         }
         return true;
