@@ -34,8 +34,8 @@
    <AnchorPane prefHeight="3.0" prefWidth="640.0">
       <children>
          <Button layoutX="548.0" layoutY="189.0" mnemonicParsing="false" onAction="#back" text="Back" />
-         <PieChart layoutY="3.0" legendSide="RIGHT" prefHeight="401.0" prefWidth="500.0" title="Statistics" />
          <Button layoutX="548.0" layoutY="225.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+         <PieChart fx:id="pieChart" layoutY="3.0" legendSide="RIGHT" prefHeight="401.0" prefWidth="500.0" title="Statistics" />
       </children>
    </AnchorPane>
 

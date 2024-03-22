@@ -32,7 +32,6 @@ public class StatisticsCtrl {
     public StatisticsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        pieChart = new PieChart();
 
     }
 
@@ -40,6 +39,8 @@ public class StatisticsCtrl {
      * refreshes the data
      */
     public void refresh() {
+        if(!(this.pieChartData == null))
+        pieChartData.clear();
         var expenses = server.getExpensesByEventId(event.getId());
         var tags = server.getTags(event.getId());
         List<String> names = tags.stream().map(x -> x.getName()).distinct().toList();
@@ -49,7 +50,6 @@ public class StatisticsCtrl {
             .mapToInt(x  -> (int) x.getAmount()).sum();
             pieChartData.add(new PieChart.Data(name, amount));
         }
-        pieChartData.add(new PieChart.Data("test", 100));
         pieChart.setData(pieChartData);
     }
 
