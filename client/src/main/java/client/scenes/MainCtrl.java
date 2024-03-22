@@ -63,6 +63,8 @@ public class MainCtrl {
     public static ResourceBundle resourceBundle;
     private Scene balances;
     private BalancesCtrl balancesCtrl;
+    private Scene debts;
+    private SettleDebtsCtrl debtsCtrl;
 
     /**
      * 
@@ -79,6 +81,7 @@ public class MainCtrl {
      * @param language
      * @param addEvent
      * @param balances
+     * @param debtsCtrlParentPair
      */
 
     @SuppressWarnings({"ParameterNumber"})
@@ -92,6 +95,7 @@ public class MainCtrl {
                            Pair<AdminPassCtrl, Parent> adminPass,
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
+                           Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair,
                            String language) {
         this.primaryStage = primaryStage;
 
@@ -132,6 +136,9 @@ public class MainCtrl {
 
         this.balancesCtrl = balances.getKey();
         this.balances = new Scene(balances.getValue());
+
+        this.debtsCtrl = debtsCtrlParentPair.getKey();
+        this.debts = new Scene(debtsCtrlParentPair.getValue());
 
         showOverview();
         primaryStage.show();
@@ -272,5 +279,15 @@ public class MainCtrl {
         primaryStage.setTitle("Balances page");
         balancesCtrl.setEvent(event);
         primaryStage.setScene(balances);
+    }
+
+    /**
+     * goes to open debts page
+     * @param event event
+     */
+    public void goToSettleDebts(Event event) {
+        primaryStage.setTitle("Open Debts page");
+        debtsCtrl.setEvent(event);
+        primaryStage.setScene(debts);
     }
 }
