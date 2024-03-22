@@ -24,8 +24,8 @@ import java.util.ResourceBundle;
 
 public class AddExpensesCtrl implements Initializable {
 
-    private ServerUtils server;
-    private MainCtrl mainCtrl;
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
     private List<CheckBox> participantCheckboxes;
     @FXML
     private TextField nameTextField;

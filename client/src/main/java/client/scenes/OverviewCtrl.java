@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -32,7 +33,7 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private HBox hbox;
 
-    private ArrayList<String> names;
+    private final ArrayList<String> names;
     private ArrayList<Label> labels;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -162,6 +163,11 @@ public class OverviewCtrl implements Initializable {
             for (Participant participant : participants) {
                 Label participantLabel = new Label(participant.getNickname());
                 participantLabel.setTextFill(Color.BLACK);
+                participantLabel.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                        mainCtrl.goToEditParticipant(participant,selectedEvent);
+                    }
+                });
                 participantsVBox.getChildren().add(participantLabel);
             }
 

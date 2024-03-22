@@ -22,10 +22,10 @@ import java.util.stream.Collectors;
 
 public class EditExpenseCtrl implements Initializable {
 
-    private Event event;
-    private Expense expense;
-    private ServerUtils server;
-    private MainCtrl mainCtrl;
+    private final Event event;
+    private final Expense expense;
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
     private List<CheckBox> checkBoxes;
     private boolean isSplitEqually;
 

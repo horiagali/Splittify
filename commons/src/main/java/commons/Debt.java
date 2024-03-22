@@ -3,10 +3,10 @@ package commons;
 import java.util.Objects;
 
 public class Debt {
-    private Integer id;
-    private User owed;
-    private User indebted;
-    private Double amount;
+    private final Integer id;
+    private final User owed;
+    private final User indebted;
+    private final Double amount;
 
 
     /**

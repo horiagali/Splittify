@@ -290,4 +290,33 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Expense>>() {});
 	}
+	/**
+	 * Update a participant in the database.
+	 *
+	 * @param eventId     The ID of the event to which the participant belongs.
+	 * @param participant The updated participant information.
+	 */
+	public void updateParticipant(long eventId, Participant participant) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId + "/participants/" + participant.getNickname())
+				.request()
+				.put(Entity.entity(participant, APPLICATION_JSON));
+	}
+
+	/**
+	 * Deletes a participant from an event.
+	 *
+	 * @param eventId     The ID of the event from which the participant will be deleted.
+	 * @param participant The participant to be deleted.
+	 */
+	public void deleteParticipant(long eventId, Participant participant) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId + "/participants/" + participant.getParticipantID())
+				.request()
+				.delete();
+	}
+
+
 }

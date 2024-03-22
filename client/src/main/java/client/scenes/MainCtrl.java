@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import commons.Event;
+import commons.Participant;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -55,6 +56,8 @@ public class MainCtrl {
     private Scene overviewApp;
     private OverviewCtrl overviewAppCtrl;
 
+    private Scene editParticipant;
+    private EditParticipantCtrl editParticipantCtrl;
     private Scene invite;
     private InviteCtrl inviteCtrl;
     private AddEventCtrl addEventCtrl;
@@ -63,6 +66,7 @@ public class MainCtrl {
     public static ResourceBundle resourceBundle;
     private Scene balances;
     private BalancesCtrl balancesCtrl;
+
 
     /**
      * 
@@ -79,6 +83,7 @@ public class MainCtrl {
      * @param language
      * @param addEvent
      * @param balances
+     * @param editParticipant
      */
 
     @SuppressWarnings({"ParameterNumber"})
@@ -92,6 +97,7 @@ public class MainCtrl {
                            Pair<AdminPassCtrl, Parent> adminPass,
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
+                           Pair<EditParticipantCtrl,Parent> editParticipant,
                            String language) {
         this.primaryStage = primaryStage;
 
@@ -130,8 +136,13 @@ public class MainCtrl {
         this.adminPassCtrl = adminPass.getKey();
         this.adminPass = new Scene(adminPass.getValue());
 
+        this.editParticipantCtrl = editParticipant.getKey();
+        this.editParticipant = new Scene(editParticipant.getValue());
+
         this.balancesCtrl = balances.getKey();
         this.balances = new Scene(balances.getValue());
+
+
 
         showOverview();
         primaryStage.show();
@@ -221,6 +232,24 @@ public class MainCtrl {
         overviewAppCtrl.refresh();
 
     }
+
+    /**
+     *
+     * @param participant
+     */
+    /**
+     * Navigates to the Edit Participant page.
+     * @param participant The participant to be edited.
+     */
+    public void goToEditParticipant(Participant participant, Event event) {
+        primaryStage.setTitle("Edit Participant");
+        primaryStage.setScene(editParticipant);
+        EditParticipantCtrl.setParticipant(participant);
+        EditParticipantCtrl.setEvent(event);
+        editParticipantCtrl.displayParticipantDetails();
+    }
+
+
 
     /**
      * send invites

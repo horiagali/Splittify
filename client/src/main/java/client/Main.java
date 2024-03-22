@@ -102,9 +102,10 @@ public class Main extends Application {
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
         var addEvent = FXML.load(AddEventCtrl.class, "client", "scenes", "AddEventPage.fxml");
         var balances = FXML.load(BalancesCtrl.class, "client", "scenes", "Balances.fxml");
+        var editParticipant = FXML.load(EditParticipantCtrl.class, "client", "scenes", "EditParticipant.fxml");
 
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
-        contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, balances, language);
+        contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, balances, editParticipant, language);
 
     }
 }

@@ -136,8 +136,8 @@ public class ParticipantService {
         participant.setNickname(changeParticipant.getNickname());
         participant.setEmail(changeParticipant.getEmail());
         participant.setIban(changeParticipant.getIban());
-        Participant saved = participantRepository.save(participant);
-        return ResponseEntity.ok(saved);
+        participant = participantRepository.save(participant);
+        return ResponseEntity.ok(participant);
     }
 
     /**

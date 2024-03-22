@@ -125,7 +125,7 @@ public class ExpenseTest {
         Long x = 0L;
         // Test if the default constructor initializes the object correctly
         assertNotNull(expense);
-        assertEquals(null, expense.getId());
+        assertNull(expense.getId());
         assertNull(expense.getTitle());
         assertNull(expense.getPayer());
         assertNull(expense.getOwers());
