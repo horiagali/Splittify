@@ -156,7 +156,8 @@ public class OverviewCtrl implements Initializable {
      */
     private void loadParticipants() {
         if (getSelectedEvent() != null) {
-            List<Participant> participants = server.getParticipants(OverviewCtrl.getSelectedEvent().getId());
+            List<Participant> participants =
+                    server.getParticipants(OverviewCtrl.getSelectedEvent().getId());
 
             participantsVBox.getChildren().clear();
 

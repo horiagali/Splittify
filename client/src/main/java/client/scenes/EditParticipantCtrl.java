@@ -49,24 +49,47 @@ public class EditParticipantCtrl implements Initializable {
 
     @FXML
     private Label errorMessageLabel;
+
+    /**
+     *
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public EditParticipantCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     *
+     * @return
+     * return the participant
+     */
     public static Participant getParticipant() {
         return participant;
     }
 
+    /**
+     *
+     * @param participant
+     */
     public static void setParticipant(Participant participant) {
         EditParticipantCtrl.participant = participant;
     }
 
+    /**
+     *
+     * @return  returns the event
+     */
     public static Event getEvent() {
         return event;
     }
 
+    /**
+     *
+     * @param event
+     */
     public static void setEvent(Event event) {
         EditParticipantCtrl.event = event;
     }
@@ -130,6 +153,9 @@ public class EditParticipantCtrl implements Initializable {
         });
     }
 
+    /**
+     *  swithces to name text field
+     */
 
     public void switchToNameTextField() {
         nicknameLabel.setVisible(false);
@@ -137,13 +163,18 @@ public class EditParticipantCtrl implements Initializable {
         nicknameTextField.requestFocus();
     }
 
+    /**
+     *   switches to email txt field
+     */
     public void switchToEmailTextField() {
         emailLabel.setVisible(false);
         emailTextField.setVisible(true);
         emailTextField.requestFocus();
     }
 
-
+    /**
+     *
+     */
 
     public void switchToBicTextField() {
         bicLabel.setVisible(false);
@@ -151,6 +182,9 @@ public class EditParticipantCtrl implements Initializable {
         bicTextField.requestFocus();
     }
 
+    /**
+     *
+     */
     public void switchToIbanTextField() {
         ibanLabel.setVisible(false);
         ibanTextField.setVisible(true);

@@ -7,10 +7,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 
-import java.util.Optional;
 
 public class ContactDetailsCtrl {
     private final ServerUtils server;
@@ -25,11 +23,20 @@ public class ContactDetailsCtrl {
     @FXML
     private TextField bicField;
 
+    /**
+     *
+     * @param server
+     * @param mainCtrl
+     */
     @Inject
     public ContactDetailsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
+
+    /**
+     *  ok button pressed
+     */
 
     public void ok() {
         String name = nameField.getText();
@@ -48,6 +55,11 @@ public class ContactDetailsCtrl {
             showAlert(AlertType.ERROR, "Error", "Name field is empty", "Please enter a name.");
         }
     }
+
+    /**
+     *
+     * @param actionEvent
+     */
 
     public void goToEventOverview(ActionEvent actionEvent) {
         mainCtrl.goToOverview();

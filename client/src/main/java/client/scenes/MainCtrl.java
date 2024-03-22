@@ -240,6 +240,7 @@ public class MainCtrl {
     /**
      * Navigates to the Edit Participant page.
      * @param participant The participant to be edited.
+     * @param event
      */
     public void goToEditParticipant(Participant participant, Event event) {
         primaryStage.setTitle("Edit Participant");
