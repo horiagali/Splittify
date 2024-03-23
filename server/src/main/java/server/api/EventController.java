@@ -66,7 +66,9 @@ public class EventController {
     @MessageMapping("/events") // /app/events
     @SendTo("/topic/events")
     public Event addEvent(Event e) {
+        System.out.println("Add event reached");
         createEvent(e);
+        System.out.println("Event created");
         return e;
     }
 
