@@ -22,6 +22,7 @@ import commons.Expense;
 import commons.Participant;
 import commons.Mail;
 import commons.Quote;
+import commons.Tag;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -90,6 +91,8 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON) //
                 .get(new GenericType<List<Quote>>() {});
 	}
+
+	
 
 	/**
 	 * 
@@ -169,6 +172,20 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Participant>>() {});
+	}
+
+	/**
+	 * return a list of all tags related to 1 event
+	 * @param eventId
+	 * @return list of tags
+	 */
+	public List<Tag> getTags(long eventId) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId + "/tags")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<List<Tag>>() {});
 	}
 
 	/**

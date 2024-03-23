@@ -71,6 +71,8 @@ public class OverviewCtrl implements Initializable {
     public void displayEvent(Event selectedEvent) {
         eventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
+        eventDate.setText("");
+        if(!(selectedEvent.getDate() == null))
         eventDate.setText(selectedEvent.getDate().toString());
         this.selectedEvent = selectedEvent;
     }
@@ -198,6 +200,13 @@ public class OverviewCtrl implements Initializable {
     }
 
 
+    /**
+     * 
+     */
+    public void showStatistics() {
+        mainCtrl.goToStatistics(selectedEvent);
+    }
+    
     /**
      * asks if you really want to delete
      * @param actionEvent

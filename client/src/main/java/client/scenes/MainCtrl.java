@@ -61,6 +61,9 @@ public class MainCtrl {
     private ServerSetterCtrl serverSetterCtrl;
     Pair<ServerSetterCtrl, Parent> serverPair;
 
+    private Scene statistics;
+    private StatisticsCtrl statisticsCtrl;
+
     private Scene invite;
     private InviteCtrl inviteCtrl;
     private AddEventCtrl addEventCtrl;
@@ -87,6 +90,7 @@ public class MainCtrl {
      * @param balances
      * @param serverSetter2 
      * @param main 
+     * @param statistics 
      */
 
     @SuppressWarnings({"ParameterNumber"})
@@ -101,10 +105,11 @@ public class MainCtrl {
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
                            Pair<ServerSetterCtrl, Parent> serverSetter2, String language, 
-                           Main main) {
+                           Main main,
+                           Pair<StatisticsCtrl, Parent> statistics){
+
         this.primaryStage = primaryStage;
         this.main = main;
-
         resourceBundle = ResourceBundle.getBundle("messages_" + 
         language, new Locale(language));
 
@@ -144,6 +149,9 @@ public class MainCtrl {
         this.balances = new Scene(balances.getValue());
 
         this.serverPair = serverSetter2;
+
+        this.statisticsCtrl = statistics.getKey();
+        this.statistics = new Scene(statistics.getValue());
 
         showOverview();
         primaryStage.show();
@@ -250,10 +258,6 @@ public class MainCtrl {
     /**
      * 
      */
-
-    /**
-     * 
-     */
     public void showAddExpenses() {
         primaryStage.setTitle("Expenses: Add Expense");
         primaryStage.setScene(addExpenses);
@@ -329,5 +333,25 @@ public class MainCtrl {
         primaryStage.setTitle("Balances page");
         balancesCtrl.setEvent(event);
         primaryStage.setScene(balances);
+    }
+
+    /**
+     * goes to statistics page
+     * @param event event to see statistics from
+     */
+    public void goToStatistics(Event event) {
+        primaryStage.setTitle("Statistics of " + event.getTitle());
+        statisticsCtrl.setEvent(event);
+        primaryStage.setScene(statistics);
+        statisticsCtrl.refresh();
+
+    }    
+
+    /**
+     * set the title of primary stage, needed for translations
+     * @param title
+     */
+    public void setStageTitle(String title) {
+        primaryStage.setTitle(title);
     }
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" prefHeight="743.0" prefWidth="881.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
+
+    <fx:define>
+        <ToggleGroup fx:id="languageGroup" />
+    </fx:define>
+
+    <!-- MenuBar -->
+    <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
+        <menus>
+            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
+                <items>
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="languageGroup" />
+                  </toggleGroup></RadioMenuItem>
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
+
+                </items>
+            </Menu>
+        </menus>
+    </MenuBar>
+   <AnchorPane prefHeight="705.0" prefWidth="882.0">
+      <children>
+         <PieChart fx:id="pieChart" layoutY="3.0" prefHeight="544.0" prefWidth="667.0" title="Statistics" />
+         <Button fx:id="refresh" layoutX="21.0" layoutY="14.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+         <Button fx:id="back" layoutX="768.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
+         <Text fx:id="eventTotalAmount" layoutX="224.0" layoutY="583.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total cost of event: " wrappingWidth="262.13671875" />
+      </children>
+   </AnchorPane>
+
+</VBox>

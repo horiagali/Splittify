@@ -128,7 +128,7 @@ public class ServerSetterCtrl {
     /**
      *
      */
-    public void goToOverview() {
+    public void backToEventOverview() {
         mainCtrl.goToOverview();
     }
 

@@ -97,6 +97,7 @@
          </graphic>
       </Button>
       <Button fx:id="goToBalances" layoutX="399.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToBalances" prefHeight="26.0" prefWidth="79.0" text="Balances" />
+      <Button layoutX="496.0" layoutY="196.0" mnemonicParsing="false" onAction="#showStatistics" text="See Statistics" />
 
    </children>
 </AnchorPane>
