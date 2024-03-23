@@ -72,6 +72,8 @@ public class MainCtrl {
     public static ResourceBundle resourceBundle;
     private Scene balances;
     private BalancesCtrl balancesCtrl;
+    private Scene debts;
+    private SettleDebtsCtrl debtsCtrl;
 
     /**
      * 
@@ -90,10 +92,11 @@ public class MainCtrl {
      * @param balances
      * @param serverSetter2 
      * @param main 
-     * @param statistics 
+     * @param statistics
+     * @param debtsCtrlParentPair
      */
 
-    @SuppressWarnings({"ParameterNumber"})
+    @SuppressWarnings({"ParameterNumber", "checkstyle:MethodLength"})
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
                            Pair<AddExpensesCtrl, Parent> addExpense,
@@ -106,7 +109,8 @@ public class MainCtrl {
                            Pair<BalancesCtrl, Parent> balances,
                            Pair<ServerSetterCtrl, Parent> serverSetter2, String language, 
                            Main main,
-                           Pair<StatisticsCtrl, Parent> statistics){
+                           Pair<StatisticsCtrl, Parent> statistics,
+                           Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair){
 
         this.primaryStage = primaryStage;
         this.main = main;
@@ -152,6 +156,8 @@ public class MainCtrl {
 
         this.statisticsCtrl = statistics.getKey();
         this.statistics = new Scene(statistics.getValue());
+        this.debtsCtrl = debtsCtrlParentPair.getKey();
+        this.debts = new Scene(debtsCtrlParentPair.getValue());
 
         showOverview();
         primaryStage.show();
@@ -336,6 +342,7 @@ public class MainCtrl {
     }
 
     /**
+<<<<<<< HEAD
      * goes to statistics page
      * @param event event to see statistics from
      */
@@ -353,5 +360,15 @@ public class MainCtrl {
      */
     public void setStageTitle(String title) {
         primaryStage.setTitle(title);
+    }
+
+    /**
+     * goes to settle debts
+     * @param event
+     */
+    public void goToSettleDebts(Event event) {
+        primaryStage.setTitle("Open Debts page");
+        debtsCtrl.setEvent(event);
+        primaryStage.setScene(debts);
     }
 }

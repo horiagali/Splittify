@@ -108,4 +108,12 @@ public class BalancesCtrl implements Initializable {
     public void back(){
         mainCtrl.goToOverview();
     }
+
+    /**
+     * go to the settle debts page
+     */
+    public void settleDebts(){
+        mainCtrl.goToSettleDebts(event);
+    }
+
 }
