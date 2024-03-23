@@ -1,13 +1,8 @@
 package client.scenes;
 
-import java.net.URL;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import com.google.inject.Inject;
-
 import client.Main;
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Event;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,6 +16,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+
+import java.net.URL;
+import java.time.LocalDate;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 
 public class QuoteOverviewCtrl implements Initializable {
 
@@ -42,6 +43,8 @@ public class QuoteOverviewCtrl implements Initializable {
     private ToggleGroup languageGroup;
     @FXML
     private Button createEventButton;
+    @FXML
+    private TextField eventName;
 
     @FXML
     private Button joinEventButton;
@@ -112,12 +115,17 @@ public class QuoteOverviewCtrl implements Initializable {
         mainCtrl.showAddEvent();
     }
 
+
+    private Event getEvent() {
+        return new Event(eventName.getText(), "empty description",
+                "empty location", LocalDate.now());
+    }
+
     /**
      * Lets user view the event correspondign to the event id
      * @param ae actionEvent
      */
     public void joinEvent(ActionEvent ae) {
-
         try {
             Long eventCode = Long.parseLong(joinEventCode.getText());
             try {

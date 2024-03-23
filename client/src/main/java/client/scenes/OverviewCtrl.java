@@ -13,10 +13,8 @@ import javafx.scene.layout.HBox;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
@@ -286,9 +284,7 @@ public class OverviewCtrl implements Initializable {
 
         try {
             LocalDate newDate = eventDatePicker.getValue();
-            Date date = Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-            selectedEvent.setDate(date);
+            selectedEvent.setDate(newDate);
             server.updateEvent(selectedEvent);
             eventDate.setText(String.valueOf(newDate));
             switchToDateLabel();
