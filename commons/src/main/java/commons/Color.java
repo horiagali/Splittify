@@ -2,6 +2,8 @@ package commons;
 
 import jakarta.persistence.Embeddable;
 
+import java.util.Locale;
+
 @Embeddable
 public class Color {
     private int red;
@@ -128,7 +130,7 @@ public class Color {
      * @return RGBA representation
      */
     public String toRGBA() {
-        return String.format("RGBA(%d, %d, %d, %.2f)", red, green, blue, alpha / 255.0);
+        return String.format(Locale.ROOT, "RGBA(%d, %d, %d, %.2f)", red, green, blue, alpha / 255.0);
     }
 
     /**
