@@ -345,6 +345,7 @@ public class MainCtrl {
 
     /**
 <<<<<<< HEAD
+<<<<<<< HEAD
      * goes to statistics page
      * @param event event to see statistics from
      */

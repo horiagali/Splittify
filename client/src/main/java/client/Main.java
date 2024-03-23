@@ -125,7 +125,6 @@ public class Main extends Application {
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
         var serverSetter = FXML.load(ServerSetterCtrl.class, "client", 
         "scenes", "ServerSetter.fxml");
-
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
         contactDetails, overviewApp, invite, adminPage, adminPass, 
         addEvent, balances, serverSetter, config.getLanguage(), this, statistics, debts);
