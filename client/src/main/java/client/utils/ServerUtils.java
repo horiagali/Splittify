@@ -147,6 +147,10 @@ public class ServerUtils {
 		});
 	}
 
+	public void sendEvent(String dest, Event e) {
+		session.send(server+dest, e);
+	}
+
 	public String getServer() {
 		return server;
 	}
