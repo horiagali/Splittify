@@ -327,8 +327,8 @@ public class MainCtrl {
     public void goToStatistics(Event event) {
         primaryStage.setTitle("Statistics of " + event.getTitle());
         statisticsCtrl.setEvent(event);
-        statisticsCtrl.refresh();
         primaryStage.setScene(statistics);
+        statisticsCtrl.refresh();
 
     }    
 }
