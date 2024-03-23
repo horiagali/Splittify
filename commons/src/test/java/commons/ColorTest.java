@@ -63,4 +63,14 @@ public class ColorTest {
         assertEquals(200, color.getBlue());
         assertEquals(255, color.getAlpha());
     }
+
+    @Test
+    public void testToFXColor() {
+        Color color = new Color(100, 150, 200, 255);
+        javafx.scene.paint.Color fxColor = color.toFXColor();
+        assertEquals(100.0 / 255, fxColor.getRed(), 0.001);
+        assertEquals(150.0 / 255, fxColor.getGreen(), 0.001);
+        assertEquals(200.0 / 255, fxColor.getBlue(), 0.001);
+        assertEquals(1.0, fxColor.getOpacity(), 0.001);
+    }
 }

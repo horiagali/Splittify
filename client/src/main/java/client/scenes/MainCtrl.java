@@ -18,6 +18,7 @@ package client.scenes;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import client.Main;
 import commons.Event;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,6 +27,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
+    Main main;
 
     private Stage primaryStage;
 
@@ -55,6 +57,10 @@ public class MainCtrl {
     private Scene overviewApp;
     private OverviewCtrl overviewAppCtrl;
 
+    private Scene serverSetter;
+    private ServerSetterCtrl serverSetterCtrl;
+    Pair<ServerSetterCtrl, Parent> serverPair;
+
     private Scene invite;
     private InviteCtrl inviteCtrl;
     private AddEventCtrl addEventCtrl;
@@ -79,6 +85,8 @@ public class MainCtrl {
      * @param language
      * @param addEvent
      * @param balances
+     * @param serverSetter2 
+     * @param main 
      */
 
     @SuppressWarnings({"ParameterNumber"})
@@ -92,8 +100,10 @@ public class MainCtrl {
                            Pair<AdminPassCtrl, Parent> adminPass,
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
-                           String language) {
+                           Pair<ServerSetterCtrl, Parent> serverSetter2, String language, 
+                           Main main) {
         this.primaryStage = primaryStage;
+        this.main = main;
 
         resourceBundle = ResourceBundle.getBundle("messages_" + 
         language, new Locale(language));
@@ -133,9 +143,56 @@ public class MainCtrl {
         this.balancesCtrl = balances.getKey();
         this.balances = new Scene(balances.getValue());
 
+        this.serverPair = serverSetter2;
+
         showOverview();
         primaryStage.show();
     }
+
+    /**
+     * initializes scene to set serverUrl of client
+     * @param primaryStage
+     * @param serverSetter
+     * @param main 
+     */
+    public void initializeServerSetter(Stage primaryStage, 
+    Pair<ServerSetterCtrl, Parent> serverSetter, Main main) {
+        resourceBundle = ResourceBundle.getBundle("messages_" + 
+        Main.config.getLanguage(), new Locale(Main.config.getLanguage()));
+        serverSetter.getKey().updateUIWithNewLanguage();
+        this.primaryStage = primaryStage;
+        this.serverSetterCtrl = serverSetter.getKey();
+        serverSetter.getKey().serverURL.setText(Main.config.getServerUrl());
+        this.serverSetter = new Scene(serverSetter.getValue());
+        primaryStage.setTitle("Choose your server");
+        primaryStage.setScene(this.serverSetter);
+        primaryStage.show();
+        setMain(main);
+    }
+
+    /**
+     * 
+     */
+    public void showServerSetter() {
+        initializeServerSetter(primaryStage, serverPair, main);
+    }
+
+    /**
+     * 
+     * @return main
+     */
+    public Main getMain() {
+        return main;
+    }
+
+    /**
+     * 
+     * @param main
+     */
+    public void setMain(Main main) {
+        this.main = main;
+    }
+
 
     /**
      * 

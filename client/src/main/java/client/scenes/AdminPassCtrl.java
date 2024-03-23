@@ -7,6 +7,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.security.SecureRandom;
@@ -21,6 +23,8 @@ public class AdminPassCtrl implements Initializable {
 
     @FXML
     private PasswordField passwordField;
+    @FXML
+    private VBox vbox;
 
 
     /**
@@ -79,6 +83,20 @@ public class AdminPassCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        addKeyboardNavigationHandlers();
+    }
 
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        vbox.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                goBack();
+            }
+            if (event.getCode() == KeyCode.ENTER) {
+                tryPassword();
+            }
+        });
     }
 }

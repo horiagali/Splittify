@@ -136,12 +136,13 @@ public class Color {
      * @return The corresponding javafx.scene.paint.Color object.
      */
     public javafx.scene.paint.Color toFXColor() {
-        int fxRed = red / 255;
-        int fxGreen = green / 255;
-        int fxBlue = blue / 255;
-        int fxAlpha = alpha / 255;
+        double fxRed = (double) red / 255.0;
+        double fxGreen = (double) green / 255.0;
+        double fxBlue = (double) blue / 255.0;
+        double fxAlpha = (double) alpha / 255.0;
 
-        return javafx.scene.paint.Color.rgb(fxRed, fxGreen, fxBlue, fxAlpha);
+        return javafx.scene.paint.Color.rgb((int) (fxRed * 255),
+                (int) (fxGreen * 255), (int) (fxBlue * 255), fxAlpha);
     }
 
 
