@@ -31,6 +31,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -93,11 +97,12 @@ public class ServerUtils {
 	 * @return list of events
 	 */
 	public List<Event> getEvents() {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(server).path("api/events") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
+		List<Event> events = ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/events")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Event>>() {});
+		return events;
 	}
 
 	/**
@@ -106,11 +111,12 @@ public class ServerUtils {
 	 * @return event
 	 */
 	public Event getEvent(Long id) {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(server).path("api/events/"+id) //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
+		Event event = ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/events/"+id)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>() {});
+		return event;
 	}
 
 	/**
