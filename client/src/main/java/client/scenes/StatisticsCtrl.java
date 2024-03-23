@@ -124,6 +124,8 @@ public class StatisticsCtrl {
         totalAmount);
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         refresh.setText(MainCtrl.resourceBundle.getString("button.refresh"));
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.statistics") 
+        + event.getTitle());
         
     }
 

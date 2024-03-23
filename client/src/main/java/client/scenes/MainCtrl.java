@@ -331,4 +331,12 @@ public class MainCtrl {
         statisticsCtrl.refresh();
 
     }    
+
+    /**
+     * set the title of primary stage, needed for translations
+     * @param title
+     */
+    public void setStageTitle(String title) {
+        primaryStage.setTitle(title);
+    }
 }
