@@ -63,6 +63,11 @@ public class EventController {
         return eventService.getEventById(id);
     }
 
+    /**
+     * Controller for websocket connection
+     * @param e event to be added
+     * @return event to be received
+     */
     @MessageMapping("/events") // /app/events
     @SendTo("/topic/events")
     public Event addEvent(Event e) {
