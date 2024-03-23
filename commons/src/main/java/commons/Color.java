@@ -1,7 +1,6 @@
 package commons;
 
 import jakarta.persistence.Embeddable;
-import static javafx.scene.paint.Color.*;
 
 @Embeddable
 public class Color {
@@ -26,7 +25,8 @@ public class Color {
     }
 
     /**
-     * Constructor that accepts a javafx.scene.paint.Color object and converts it into this Color object.
+     * Constructor that accepts a javafx.scene.paint.Color
+     * object and converts it into this Color object.
      * @param fxColor The javafx.scene.paint.Color object to convert.
      */
     public Color(javafx.scene.paint.Color fxColor) {
@@ -135,13 +135,13 @@ public class Color {
      * Getter that returns a javafx.scene.paint.Color object based on the data in this Color object.
      * @return The corresponding javafx.scene.paint.Color object.
      */
-    public FXColor toFXColor() {
-        double fxRed = (double) red / 255;
-        double fxGreen = (double) green / 255;
-        double fxBlue = (double) blue / 255;
-        double fxAlpha = (double) alpha / 255;
+    public javafx.scene.paint.Color toFXColor() {
+        int fxRed = red / 255;
+        int fxGreen = green / 255;
+        int fxBlue = blue / 255;
+        int fxAlpha = alpha / 255;
 
-        return FXColor.rgb(fxRed, fxGreen, fxBlue, fxAlpha);
+        return javafx.scene.paint.Color.rgb(fxRed, fxGreen, fxBlue, fxAlpha);
     }
 
 
