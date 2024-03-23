@@ -9,13 +9,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,6 +30,8 @@ public class AddExpensesCtrl implements Initializable {
     private TextField nameTextField;
     @FXML
     private TextField purposeTextField;
+    @FXML
+    private AnchorPane anchorPane;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -65,6 +66,8 @@ public class AddExpensesCtrl implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        addKeyboardNavigationHandlers();
+        currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
         if (OverviewCtrl.getSelectedEvent() != null) {
             Long eventId = OverviewCtrl.getSelectedEvent().getId();
             List<String> participants = server.getParticipantNicknamesByEventId(eventId);
@@ -101,6 +104,32 @@ public class AddExpensesCtrl implements Initializable {
         }
         else{
             showErrorDialog("There are no participants to split the cost between");
+        }
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        anchorPane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.E) {
+                addExpense();
+            }
+        });
+    }
+
+    /**
+     * Handles switching of currencies with just keyboard presses
+     * @param event keyboard press
+     */
+    private void handleCurrencySwitch(KeyEvent event) {
+        if (event.getCode() == KeyCode.DOWN) {
+            currencyComboBox.getSelectionModel().selectNext();
+        } else if (event.getCode() == KeyCode.UP) {
+            currencyComboBox.getSelectionModel().selectPrevious();
         }
     }
 
