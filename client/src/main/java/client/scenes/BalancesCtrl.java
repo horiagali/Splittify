@@ -8,8 +8,11 @@ import commons.Participant;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
@@ -112,13 +115,25 @@ public class BalancesCtrl implements Initializable {
         mainCtrl.goToOverview();
     }
 
+
     /**
      * go to the settle debts page
      */
     public void settleDebts(){
-        letsSettle();
-        //server.settleDebts(event);
-        mainCtrl.goToSettleDebts(event, expenses);
+        Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationDialog.setTitle("Confirmation");
+        confirmationDialog.setHeaderText("Are you sure you want to settle the debts of the event?");
+        confirmationDialog.setContentText("This action cannot be undone and will close the event");
+
+        confirmationDialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                back();
+                letsSettle();
+                mainCtrl.goToSettleDebts(event, expenses);
+            } else {
+                System.out.println("Settling of debts canceled.");
+            }
+        });
     }
 
     /**
