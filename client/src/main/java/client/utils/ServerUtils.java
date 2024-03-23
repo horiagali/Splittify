@@ -93,11 +93,12 @@ public class ServerUtils {
 	 * @return list of events
 	 */
 	public List<Event> getEvents() {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(server).path("api/events") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
+		List<Event> events = ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/events")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Event>>() {});
+		return events;
 	}
 
 	/**
@@ -106,11 +107,12 @@ public class ServerUtils {
 	 * @return event
 	 */
 	public Event getEvent(Long id) {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(server).path("api/events/"+id) //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
+		Event event = ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/events/"+id)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>() {});
+		return event;
 	}
 
 	/**
