@@ -130,7 +130,8 @@ public class Color {
      * @return RGBA representation
      */
     public String toRGBA() {
-        return String.format(Locale.ROOT, "RGBA(%d, %d, %d, %.2f)", red, green, blue, alpha / 255.0);
+        return String.format(Locale.ROOT, "RGBA(%d, %d, %d, %.2f)",
+                red, green, blue, alpha / 255.0);
     }
 
     /**
