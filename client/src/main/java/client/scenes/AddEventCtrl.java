@@ -93,7 +93,7 @@ public class AddEventCtrl implements Initializable {
                 nameField.getText(),
                 descriptionField.getText(),
                 locationField.getText(),
-                null
+                null // Some jackson error from local date
         );
 
         try {

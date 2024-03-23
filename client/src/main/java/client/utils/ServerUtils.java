@@ -127,14 +127,16 @@ public class ServerUtils {
 		try {
 			return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
 		} catch (InterruptedException e) {
+			e.printStackTrace();
 			Thread.currentThread().interrupt();
 		} catch (ExecutionException e) {
+			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		throw new IllegalStateException();
 	}
 	public void registerForEvents(String dest, Consumer<Event> consumer) {
-		session.subscribe(dest, new StompFrameHandler() {
+		session.subscribe(getServer()+dest, new StompFrameHandler() {
 			@Override
 			public Type getPayloadType(StompHeaders headers) {
 				return Event.class;
