@@ -123,6 +123,12 @@ public class ServerUtils {
 		return event;
 	}
 	private StompSession session = connect("ws://localhost:8080/websocket");
+
+	/**
+	 * Connect to a stomp session with url to websocket
+	 * @param url websocket url
+	 * @return stomp session
+	 */
 	private StompSession connect(String url) {
 		var client = new StandardWebSocketClient();
 		var stomp = new WebSocketStompClient(client);
@@ -138,6 +144,12 @@ public class ServerUtils {
 		}
 		throw new IllegalStateException();
 	}
+
+	/**
+	 * Subscribe to topic
+	 * @param dest url to topic endpoint
+	 * @param consumer consumer
+	 */
 	public void registerForEvents(String dest, Consumer<Event> consumer) {
 		session.subscribe(dest, new StompFrameHandler() {
 			@Override
@@ -152,13 +164,15 @@ public class ServerUtils {
 		});
 	}
 
+	/**
+	 * Use this to add an event to the database using websockets
+	 * @param dest destination of the app endpoint
+	 * @param e event to be added
+	 */
 	public void sendEvent(String dest, Event e) {
 		session.send(dest, e);
 	}
 
-	public String getServer() {
-		return server;
-	}
 
 	/**
 	 * 
