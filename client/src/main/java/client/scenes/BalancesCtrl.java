@@ -16,6 +16,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class BalancesCtrl implements Initializable {
@@ -37,6 +39,7 @@ public class BalancesCtrl implements Initializable {
     private ObservableList<Participant> data;
     @FXML
     private ObservableList<Expense> data2;
+    private List<Expense> expenses;
     private Event event;
 
 
@@ -113,7 +116,54 @@ public class BalancesCtrl implements Initializable {
      * go to the settle debts page
      */
     public void settleDebts(){
-        mainCtrl.goToSettleDebts(event);
+        letsSettle();
+        //server.settleDebts(event);
+        mainCtrl.goToSettleDebts(event, expenses);
+    }
+
+    /**
+     * lets settle
+     */
+    private void letsSettle() {
+        expenses = new ArrayList<>();
+        List<Participant> participants = server.getParticipantsByEventId(event.getId());
+        List<Participant> owe = participants.stream()
+                .filter(x -> x.getBalance() > 0)
+                .sorted((a, b) ->
+                        (int) (a.getBalance()
+                                - b.getBalance()))
+                .toList();
+        List<Participant> is_owed = participants.stream()
+                .filter(x -> x.getBalance() < 0)
+                .sorted((a, b) ->
+                        (int) (a.getBalance()
+                                - b.getBalance()))
+                .toList();int i = 0, j = 0;
+        while(i < owe.size() && j < is_owed.size()) {
+            Participant inDepted = owe.get(i);
+            Participant deptor = is_owed.get(j);
+            if (inDepted.getBalance() >= -deptor.getBalance()) {
+                inDepted.setBalance(inDepted.getBalance()
+                        + deptor.getBalance());
+                Expense expense = new Expense();
+                expense.setPayer(deptor);
+                List<Participant> owed = new ArrayList<>();
+                owed.add(inDepted);expense.setOwers(owed);
+                expense.setAmount(-deptor.getBalance());
+                expenses.add(expense);j++;
+                if (inDepted.getBalance() == 0)
+                    i++;
+            } else {
+                deptor.setBalance(deptor.getBalance()
+                        + inDepted.getBalance());
+                Expense expense = new Expense();expense
+                        .setPayer(deptor);
+                List<Participant> owed = new ArrayList<>();
+                owed.add(inDepted);expense.setOwers(owed);
+                expense.setAmount(inDepted.getBalance());
+                expenses.add(expense);i++;
+            }
+        }
     }
 
 }

@@ -79,6 +79,7 @@ public class ExpenseController {
      * @return expense
      */
     @PostMapping
+    @ResponseBody
     public ResponseEntity<Expense> createExpense(@PathVariable(name = "event_id")Long eventId, 
     @RequestBody Expense expense) {
         return expenseService.createExpense(eventId, expense);

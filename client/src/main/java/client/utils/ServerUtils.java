@@ -16,7 +16,6 @@
 package client.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -275,4 +274,5 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Expense>>() {});
 	}
+
 }
