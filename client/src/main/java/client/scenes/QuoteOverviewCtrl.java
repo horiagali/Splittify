@@ -43,8 +43,6 @@ public class QuoteOverviewCtrl implements Initializable {
     private ToggleGroup languageGroup;
     @FXML
     private Button createEventButton;
-    @FXML
-    private TextField eventName;
 
     @FXML
     private Button joinEventButton;
@@ -116,13 +114,8 @@ public class QuoteOverviewCtrl implements Initializable {
     }
 
 
-    private Event getEvent() {
-        return new Event(eventName.getText(), "empty description",
-                "empty location", LocalDate.now());
-    }
-
     /**
-     * Lets user view the event correspondign to the event id
+     * Lets user view the event corresponding to the event id
      * @param ae actionEvent
      */
     public void joinEvent(ActionEvent ae) {
@@ -159,7 +152,7 @@ public class QuoteOverviewCtrl implements Initializable {
         table.setOnMouseClicked(this::handleTableItemClick);
         addKeyboardNavigationHandlers();
 
-        server.registerForEvents(server+"topic/events", e -> {data.add(e);});
+        server.registerForEvents(server+"app/events", e -> {data.add(e);});
     }
 
     /**
