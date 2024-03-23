@@ -300,7 +300,7 @@ public class ServerUtils {
 		ClientBuilder.newClient(new ClientConfig())
 				.target(server)
 				.path("api/events/" + eventId +
-						"/participants/" + participant.getNickname())
+						"/participants/" + participant.getParticipantID())
 				.request()
 				.put(Entity.entity(participant, APPLICATION_JSON));
 	}

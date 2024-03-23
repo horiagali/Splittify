@@ -22,7 +22,7 @@ Accept: application/json
 Content-Type: application/json
 
 ###
-PUT http://localhost:8080/api/events/2/participants/102
+PUT http://localhost:8080/api/events/1/participants/1
 Accept: application/json
 Content-Type: application/json
 
