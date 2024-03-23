@@ -346,6 +346,7 @@ public class MainCtrl {
     /**
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
      * goes to statistics page
      * @param event event to see statistics from
      */
@@ -367,7 +368,7 @@ public class MainCtrl {
 
     /**
      * goes to settle debts
-     * @param event
+     * @param event event
      * @param expenses
      */
     public void goToSettleDebts(Event event, List<Expense> expenses) {
