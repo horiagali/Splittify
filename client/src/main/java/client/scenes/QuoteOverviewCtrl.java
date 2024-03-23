@@ -214,8 +214,16 @@ public class QuoteOverviewCtrl implements Initializable {
 
     public void refresh() {
         var events = server.getEvents();
+        System.out.println(ServerUtils.server);
         data = FXCollections.observableList(events);
         table.setItems(data);
+    }
+
+    /**
+     * 
+     */
+    public void disconnect() {
+        mainCtrl.showServerSetter();
     }
 
 
