@@ -158,6 +158,8 @@ public class QuoteOverviewCtrl implements Initializable {
         colDate.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
         table.setOnMouseClicked(this::handleTableItemClick);
         addKeyboardNavigationHandlers();
+
+        server.registerForEvents(server+"topic/events", e -> {data.add(e);});
     }
 
     /**
