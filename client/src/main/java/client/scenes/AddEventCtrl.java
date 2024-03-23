@@ -97,7 +97,7 @@ public class AddEventCtrl implements Initializable {
         );
 
         try {
-            server.sendEvent("app/events", newEvent);
+            server.sendEvent("/app/events", newEvent);
             //server.addEvent(newEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
