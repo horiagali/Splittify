@@ -105,11 +105,11 @@ public class MainCtrl {
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
                            Pair<ServerSetterCtrl, Parent> serverSetter2, String language, 
-                           Main main) {
-                           Pair<StatisticsCtrl, Parent> statistics, String language) {
+                           Main main,
+                           Pair<StatisticsCtrl, Parent> statistics){
+
         this.primaryStage = primaryStage;
         this.main = main;
-
         resourceBundle = ResourceBundle.getBundle("messages_" + 
         language, new Locale(language));
 

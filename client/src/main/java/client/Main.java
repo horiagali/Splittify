@@ -127,7 +127,7 @@ public class Main extends Application {
 
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
         contactDetails, overviewApp, invite, adminPage, adminPass, 
-        addEvent, balances, serverSetter, statistics, config.getLanguage());
+        addEvent, balances, serverSetter, config.getLanguage(), this, statistics);
     }
 
     /**
