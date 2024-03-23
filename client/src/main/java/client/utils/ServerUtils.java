@@ -139,7 +139,7 @@ public class ServerUtils {
 		throw new IllegalStateException();
 	}
 	public void registerForEvents(String dest, Consumer<Event> consumer) {
-		session.subscribe(getServer()+dest, new StompFrameHandler() {
+		session.subscribe(dest, new StompFrameHandler() {
 			@Override
 			public Type getPayloadType(StompHeaders headers) {
 				return Event.class;
@@ -153,7 +153,7 @@ public class ServerUtils {
 	}
 
 	public void sendEvent(String dest, Event e) {
-		session.send(server+dest, e);
+		session.send(dest, e);
 	}
 
 	public String getServer() {
