@@ -249,27 +249,10 @@ public class EditParticipantCtrl implements Initializable {
             participant.setIban(newIban);
         }
 
-        // Update the participant only if any value was modified
-        if (!newNickname.equals(participant.getNickname()) ||
-                !newEmail.equals(participant.getEmail()) ||
-                !newBic.equals(participant.getBic()) ||
-                !newIban.equals(participant.getIban())) {
 
             server.updateParticipant(event.getId(), participant);
             mainCtrl.goToOverview();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Update Participant");
-            alert.setHeaderText(null);
-            alert.setContentText("Participant details updated successfully!");
-            alert.showAndWait();
-        } else {
-            // If no value was modified, show a message indicating no changes were made
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("No Changes");
-            alert.setHeaderText(null);
-            alert.setContentText("No changes were made to participant details.");
-            alert.showAndWait();
-        }
+
     }
 
 }
