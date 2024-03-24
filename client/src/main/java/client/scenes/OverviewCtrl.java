@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,6 +62,14 @@ public class OverviewCtrl implements Initializable {
     private ScrollPane participantsScrollPane;
     @FXML
     private VBox participantsVBox;
+    @FXML
+    private VBox vboxCode;
+    @FXML
+    private ListView<Expense> listExpenses;
+    @FXML
+    private Button editExpenseButton;
+    @FXML
+    private Button removeExpenseButton;
 
 
     /**
@@ -82,14 +91,69 @@ public class OverviewCtrl implements Initializable {
         eventLocation.setText(selectedEvent.getLocation());
         eventDate.setText("");
         if(!(selectedEvent.getDate() == null))
-        eventDate.setText(selectedEvent.getDate().toString());
+            eventDate.setText(selectedEvent.getDate().toString());
         setSelectedEvent(selectedEvent);
+
+        displayExpenses(selectedEvent);
+    }
+
+    /**
+     * Displays the expenses of an event.
+     * @param event the event in question.
+     */
+    private void displayExpenses(Event event) {
+        listExpenses = new ListView<>();
+        listExpenses.getItems().addAll(server.getExpensesByEventId(event.getId()));
+        listExpenses.setCellFactory(param -> new ListCell<Expense>() {
+            @Override
+            protected void updateItem(Expense item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null)
+                    setText(null);
+                else
+                    //TODO: To change dollar sign to currency,
+                    // ony placeholder for now, also maybe tags.
+                        //Created custom cellView to view parts of expenses
+                    setText(item.getTitle() + " - " + item.getPayer() + " - $" + item.getAmount());
+
+            }
+        });
+    }
+
+    /**
+     *  Functionality of expense edit button.
+     */
+    @FXML
+    public void goToEditExpense() {
+        try {
+            mainCtrl.goToEditExpense(listExpenses.getSelectionModel().getSelectedItem());
+        }
+        catch (Exception e) {
+            //TODO: Actual error message..
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Functionality for remove expense button.
+     */
+    @FXML
+    public void removeExpense() {
+        try {
+            Expense expense = listExpenses.getSelectionModel().getSelectedItem();
+            selectedEvent.getExpenses().remove(expense);
+            server.deleteExpense(expense);
+            refresh();
+        }
+        catch (Exception e) {
+            //TODO: Actual error message..
+            e.printStackTrace();
+        }
     }
 
     /**
      *
      */
-
     public void back() {
         mainCtrl.showOverview();
     }
@@ -107,6 +171,13 @@ public class OverviewCtrl implements Initializable {
      */
     public void addExpense() {
         mainCtrl.showAddExpenses();
+    }
+
+    /**
+     *
+     */
+    public void editExpense() {
+        mainCtrl.goToEditExpense(listExpenses.getSelectionModel().getSelectedItem());
     }
 
     /**
@@ -144,8 +215,8 @@ public class OverviewCtrl implements Initializable {
             eventName.setText(selectedEvent.getTitle());
             eventLocation.setText(selectedEvent.getLocation());
             eventDate.setText(selectedEvent.getDate().toString());
+            displayExpenses(selectedEvent);
         }
-
 
         myChoiceBox.getItems().addAll(names);
         myChoiceBox.setOnAction(this::getName);

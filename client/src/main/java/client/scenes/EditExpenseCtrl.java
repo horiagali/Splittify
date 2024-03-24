@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 
 public class EditExpenseCtrl implements Initializable {
 
-    private final Event event;
-    private final Expense expense;
+    private Event event;
+    private Expense expense;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private List<CheckBox> checkBoxes;
@@ -101,6 +101,38 @@ public class EditExpenseCtrl implements Initializable {
 
             participantsVBox.getChildren().add(participantCheckbox);
         }
+    }
+
+    /**
+     * Getter for event.
+     * @return event.
+     */
+    public Event getEvent() {
+        return event;
+    }
+
+    /**
+     * Getter for expense.
+     * @return expense.
+     */
+    public Expense getExpense() {
+        return expense;
+    }
+
+    /**
+     * Setter for expense.
+     * @param expense the new expense.
+     */
+    public void setExpense(Expense expense) {
+        this.expense = expense;
+    }
+
+    /**
+     * Setter for event.
+     * @param event the new event.
+     */
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     /**

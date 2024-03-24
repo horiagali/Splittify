@@ -53,6 +53,8 @@ public class MainCtrl {
 
     private AddExpensesCtrl addExpensesCtrl;
     private Scene addExpenses;
+    private EditExpenseCtrl editExpenseCtrl;
+    private Scene editExpenseScene;
 
     private Scene contactDetails;
     private ContactDetailsCtrl contactDetailsCtrl;
@@ -88,6 +90,7 @@ public class MainCtrl {
      * @param add
      * @param page
      * @param addExpense
+     * @param editExpense
      * @param contactDetails
      * @param overviewApp
      * @param invite
@@ -106,6 +109,7 @@ public class MainCtrl {
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
                            Pair<AddExpensesCtrl, Parent> addExpense,
+                           Pair<EditExpenseCtrl, Parent> editExpense,
                            Pair<ContactDetailsCtrl, Parent> contactDetails,
                            Pair<OverviewCtrl, Parent> overviewApp,
                            Pair<InviteCtrl, Parent> invite,
@@ -139,6 +143,9 @@ public class MainCtrl {
 
         this.addExpensesCtrl = addExpense.getKey();
         this.addExpenses = new Scene(addExpense.getValue());
+
+        this.editExpenseCtrl = editExpense.getKey();
+        this.editExpenseScene = new Scene(editExpense.getValue());
 
         this.contactDetailsCtrl = contactDetails.getKey();
         this.contactDetails = new Scene(contactDetails.getValue());
@@ -406,5 +413,16 @@ public class MainCtrl {
         debtsCtrl.setEvent(event);
         debtsCtrl.setExpenses(expenses);
         primaryStage.setScene(debts);
+    }
+
+    /**
+     * Goes to edit expense.
+     * @param expense the expense to be edited.
+     */
+    public void goToEditExpense(Expense expense) {
+        primaryStage.setTitle("Edit Expense page");
+        editExpenseCtrl.setExpense(expense);
+        editExpenseCtrl.setEvent(expense.getEvent());
+        primaryStage.setScene(editExpenseScene);
     }
 }
