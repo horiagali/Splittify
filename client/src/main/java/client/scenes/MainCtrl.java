@@ -360,6 +360,7 @@ public class MainCtrl {
     public void goToAdminPage(){
         primaryStage.setTitle("Admin page");
         primaryStage.setScene(adminPage);
+        adminPageCtrl.refresh();
     }
 
     /**

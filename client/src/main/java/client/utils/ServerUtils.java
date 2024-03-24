@@ -46,6 +46,7 @@ public class ServerUtils {
 	private final ObjectMapper objectMapper;
 	private final RestTemplate restTemplate;
 	public static String server = "http://localhost:8080/";
+	public static String serverPort = server.replace("http://", "");
 
 	/**
 	 * Constructor
@@ -63,6 +64,7 @@ public class ServerUtils {
 	 */
 	public static void setServer(String server) {
 		ServerUtils.server = server;
+		serverPort = server.replace("http://", "");
 	}
 
 	/**
@@ -120,8 +122,9 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>() {});
 	}
-	private StompSession session = connect("ws://localhost:8080/websocket");
+	private StompSession session = connect("ws://"+ serverPort + "websocket");
 
+	
 	/**
 	 * Connect to a stomp session with url to websocket
 	 * @param url websocket url
