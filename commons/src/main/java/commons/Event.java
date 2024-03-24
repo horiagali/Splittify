@@ -1,7 +1,9 @@
 package commons;
 
+import java.time.LocalDate;
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -18,7 +20,9 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
-    private Date date;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    private LocalDate date;
+
     private String description;
     private String location;
 
@@ -37,7 +41,7 @@ public class Event {
      * @param location the location as a String
      * @param date the date as a Date
      */
-    public Event(String title, String description, String location, Date date) {
+    public Event(String title, String description, String location, LocalDate date) {
         this.title = title;
         this.description = description;
         this.location = location;
@@ -57,7 +61,7 @@ public class Event {
      * @param participants the participants as a List of Participant
      * @param tags the participants as a List of Tag
      */
-    public Event(String title, Date date, String description, String location,
+    public Event(String title, LocalDate date, String description, String location,
                  List<Expense> expenses, List<Participant> participants, List<Tag> tags) {
         this.title = title;
         this.date = date;
@@ -114,7 +118,7 @@ public class Event {
      *
      * @return a Date, the date
      */
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -178,7 +182,7 @@ public class Event {
      * a setter for the Date
      * @param date a Date
      */
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -327,7 +331,7 @@ public class Event {
      * @param owe    The list to store participants who owe money.
      * @param isOwed The list to store participants who are owed money.
      */
-    private void separateParticipantsByBalance(List<Participant> owe, List<Participant> isOwed) {
+    public void separateParticipantsByBalance(List<Participant> owe, List<Participant> isOwed) {
         for (Participant participant : participants) {
             if (participant.getBalance() > 0)
                 owe.add(participant);
@@ -360,7 +364,7 @@ public class Event {
      * @param owe    The list of participants who owe money.
      * @param isOwed The list of participants who are owed money.
      */
-    private void settleDebtsBetweenParticipants(List<Participant> owe, List<Participant> isOwed) {
+    public void settleDebtsBetweenParticipants(List<Participant> owe, List<Participant> isOwed) {
         for (Participant p1 : owe) {
             for (Iterator<Participant> iterator = isOwed.iterator(); iterator.hasNext();) {
                 Participant p2 = iterator.next();

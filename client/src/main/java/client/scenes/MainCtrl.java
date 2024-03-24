@@ -15,11 +15,14 @@
  */
 package client.scenes;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import client.Main;
 import commons.Event;
 import commons.Participant;
+import commons.Expense;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -27,6 +30,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
+    Main main;
 
     private Stage primaryStage;
 
@@ -58,6 +62,13 @@ public class MainCtrl {
 
     private Scene editParticipant;
     private EditParticipantCtrl editParticipantCtrl;
+    private Scene serverSetter;
+    private ServerSetterCtrl serverSetterCtrl;
+    Pair<ServerSetterCtrl, Parent> serverPair;
+
+    private Scene statistics;
+    private StatisticsCtrl statisticsCtrl;
+
     private Scene invite;
     private InviteCtrl inviteCtrl;
     private AddEventCtrl addEventCtrl;
@@ -66,6 +77,8 @@ public class MainCtrl {
     public static ResourceBundle resourceBundle;
     private Scene balances;
     private BalancesCtrl balancesCtrl;
+    private Scene debts;
+    private SettleDebtsCtrl debtsCtrl;
 
 
     /**
@@ -84,9 +97,13 @@ public class MainCtrl {
      * @param addEvent
      * @param balances
      * @param editParticipant
+     * @param serverSetter2 
+     * @param main 
+     * @param statistics
+     * @param debtsCtrlParentPair
      */
 
-    @SuppressWarnings({"ParameterNumber"})
+    @SuppressWarnings({"ParameterNumber", "checkstyle:MethodLength"})
     public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
                            Pair<AddExpensesCtrl, Parent> addExpense,
@@ -98,9 +115,14 @@ public class MainCtrl {
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
                            Pair<EditParticipantCtrl,Parent> editParticipant,
-                           String language) {
-        this.primaryStage = primaryStage;
+                           String language)
+                            Pair<ServerSetterCtrl, Parent> serverSetter2, String language, 
+                           Main main,
+                           Pair<StatisticsCtrl, Parent> statistics,
+                           Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair) {
 
+        this.primaryStage = primaryStage;
+        this.main = main;
         resourceBundle = ResourceBundle.getBundle("messages_" + 
         language, new Locale(language));
 
@@ -143,10 +165,61 @@ public class MainCtrl {
         this.balances = new Scene(balances.getValue());
 
 
+        this.serverPair = serverSetter2;
+
+        this.statisticsCtrl = statistics.getKey();
+        this.statistics = new Scene(statistics.getValue());
+        this.debtsCtrl = debtsCtrlParentPair.getKey();
+        this.debts = new Scene(debtsCtrlParentPair.getValue());
 
         showOverview();
         primaryStage.show();
     }
+
+    /**
+     * initializes scene to set serverUrl of client
+     * @param primaryStage
+     * @param serverSetter
+     * @param main 
+     */
+    public void initializeServerSetter(Stage primaryStage, 
+    Pair<ServerSetterCtrl, Parent> serverSetter, Main main) {
+        resourceBundle = ResourceBundle.getBundle("messages_" + 
+        Main.config.getLanguage(), new Locale(Main.config.getLanguage()));
+        serverSetter.getKey().updateUIWithNewLanguage();
+        this.primaryStage = primaryStage;
+        this.serverSetterCtrl = serverSetter.getKey();
+        serverSetter.getKey().serverURL.setText(Main.config.getServerUrl());
+        this.serverSetter = new Scene(serverSetter.getValue());
+        primaryStage.setTitle("Choose your server");
+        primaryStage.setScene(this.serverSetter);
+        primaryStage.show();
+        setMain(main);
+    }
+
+    /**
+     * 
+     */
+    public void showServerSetter() {
+        initializeServerSetter(primaryStage, serverPair, main);
+    }
+
+    /**
+     * 
+     * @return main
+     */
+    public Main getMain() {
+        return main;
+    }
+
+    /**
+     * 
+     * @param main
+     */
+    public void setMain(Main main) {
+        this.main = main;
+    }
+
 
     /**
      * 
@@ -200,10 +273,6 @@ public class MainCtrl {
         primaryStage.setTitle("Iulia's Page");
         primaryStage.setScene(page);
     }
-
-    /**
-     * 
-     */
 
     /**
      * 
@@ -304,5 +373,40 @@ public class MainCtrl {
         primaryStage.setTitle("Balances page");
         balancesCtrl.setEvent(event);
         primaryStage.setScene(balances);
+    }
+
+    /**
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+     * goes to statistics page
+     * @param event event to see statistics from
+     */
+    public void goToStatistics(Event event) {
+        primaryStage.setTitle("Statistics of " + event.getTitle());
+        statisticsCtrl.setEvent(event);
+        primaryStage.setScene(statistics);
+        statisticsCtrl.refresh();
+
+    }    
+
+    /**
+     * set the title of primary stage, needed for translations
+     * @param title
+     */
+    public void setStageTitle(String title) {
+        primaryStage.setTitle(title);
+    }
+
+    /**
+     * goes to settle debts
+     * @param event event
+     * @param expenses
+     */
+    public void goToSettleDebts(Event event, List<Expense> expenses) {
+        primaryStage.setTitle("Open Debts page");
+        debtsCtrl.setEvent(event);
+        debtsCtrl.setExpenses(expenses);
+        primaryStage.setScene(debts);
     }
 }

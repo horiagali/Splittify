@@ -2,9 +2,6 @@ package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.awt.*;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -16,6 +13,7 @@ public class Tag {
     private Long id;
     private String name;
     private Color color;
+
 
     @ManyToOne @JoinColumn(name = "event_id")
     @JsonIgnore
@@ -109,7 +107,7 @@ public class Tag {
      */
     @Override
     public String toString() {
-        return "ID: " + id + " name: " + name + " color: " + color;
+        return "ID: " + id + " name: " + name + " color: " + color.toString();
     }
 
     /**

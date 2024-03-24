@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BalancesCtrl">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BalancesCtrl">
    <children>
       <Text layoutX="225.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts" textAlignment="CENTER" wrappingWidth="149.21630859375">
          <font>
@@ -29,6 +29,6 @@
         </columns>
       </TableView>
       <Text layoutX="60.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Partial settles" textAlignment="CENTER" wrappingWidth="480.0" />
-      <Button layoutX="250.0" layoutY="360.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="100.0" text="Settle Debts" />
+      <Button layoutX="250.0" layoutY="360.0" mnemonicParsing="false" onAction="#settleDebts" prefHeight="26.0" prefWidth="100.0" text="Settle Debts" />
    </children>
 </AnchorPane>

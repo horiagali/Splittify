@@ -17,14 +17,20 @@ package client;
 
 import static com.google.inject.Guice.createInjector;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 
 import client.scenes.*;
 import client.utils.ServerUtils;
+import jakarta.ws.rs.BadRequestException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Injector;
@@ -39,6 +45,8 @@ public class Main extends Application {
 
     public static Config config = new Config();
     public static String configLocation; 
+    MainCtrl mainCtrl;
+    Stage primaryStage;
 
     /**
      * The entry point of the application.
@@ -59,9 +67,9 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
+        this.primaryStage = primaryStage;
         var mapper = new ObjectMapper();
         FileInputStream stream;
-        
         try {
             configLocation = Main.class.getProtectionDomain().getCodeSource()
             .getLocation().toURI().getPath() + "data/client";
@@ -73,18 +81,30 @@ public class Main extends Application {
                 file.createNewFile();
                 mapper.writeValue(file, new Config());
             }
+            mainCtrl = INJECTOR.getInstance(MainCtrl.class);
             stream = new FileInputStream(file);
             config = mapper.readValue(stream, Config.class);
+            ServerUtils.setServer(config.getServerUrl());
             System.out.println(config.getLanguage());
             System.out.println(config.getServerUrl());
-            
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();}
+        if(checkConnection()) {
+            loadScenes();
+        }else{
+            var serverSetter = FXML.load(ServerSetterCtrl.class, 
+            "client", "scenes", "ServerSetter.fxml");
+            mainCtrl.initializeServerSetter(primaryStage, serverSetter, this);
         }
-        ServerUtils.setServer(config.getServerUrl());
-        String language = config.getLanguage();
+
+    }
+
+    /**
+     * load all scenes
+     */
+    public void loadScenes() {
 
         var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
@@ -96,16 +116,50 @@ public class Main extends Application {
         var overviewApp = FXML.load
                 (OverviewCtrl.class, "client", "scenes", "Overview.fxml");
         var invite = FXML.load(InviteCtrl.class, "client", "scenes", "Invite.fxml");
-        var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         var adminPage = FXML.load(AdminPageCtrl.class, "client", "scenes", "AdminPage.fxml");
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
         var addEvent = FXML.load(AddEventCtrl.class, "client", "scenes", "AddEventPage.fxml");
         var balances = FXML.load(BalancesCtrl.class, "client", "scenes", "Balances.fxml");
         var editParticipant = FXML.load(EditParticipantCtrl.class,
                 "client", "scenes", "EditParticipant.fxml");
-        mainCtrl.initialize(primaryStage, overview, add, page, addExpense,
-        contactDetails, overviewApp, invite, adminPage, adminPass,
-                addEvent, balances, editParticipant, language);
 
+        var debts = FXML.load(SettleDebtsCtrl.class, "client", "scenes", "SettleDebts.fxml");
+        var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
+        var serverSetter = FXML.load(ServerSetterCtrl.class, "client", 
+        "scenes", "ServerSetter.fxml");
+        mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
+        contactDetails, overviewApp, invite, adminPage, adminPass, 
+        addEvent, balances, editParticipant,serverSetter, config.getLanguage(), this, statistics, debts);
+    }
+
+    /**
+     * Method to check whether the url the client wants to connect is an active server.
+     * If it is not, the ServerSetter scene has to be shown.
+     * @return boolean, false: invalid url/ true: valid url
+     */
+    public static boolean checkConnection() {
+        String uri = config.getServerUrl() + "/api/events";
+		URL url;
+        try {
+            url = new URI(uri).toURL();
+            var is = url.openConnection().getInputStream();
+		    var br = new BufferedReader(new InputStreamReader(is));
+		    String line;
+		    while ((line = br.readLine()) != null) {
+			    System.out.println(line);
+		    }
+        }  catch (BadRequestException e) {
+            return true;
+        }
+        catch (ConnectException e) {
+            //no connection
+            return false;
+        }
+        catch (Exception e) {
+            //connection but file not found, does not matter
+            return true;
+        }
+        return true;
+		
     }
 }

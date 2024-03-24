@@ -4,7 +4,6 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
-import jakarta.transaction.Transactional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -56,7 +55,6 @@ public class ExpenseService {
      * @param expense created expense
      * @return expense
      */
-    @Transactional
     public ResponseEntity<Expense> createExpense(Long eventId, Expense expense) {
         if (!eventRepository.findById(eventId).isPresent()) {
             System.out.println("Event with given ID not found");

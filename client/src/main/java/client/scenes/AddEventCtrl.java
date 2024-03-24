@@ -6,16 +6,23 @@ import commons.Event;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class AddEventCtrl {
+public class AddEventCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private TextField nameField;
     @FXML
@@ -39,6 +46,37 @@ public class AddEventCtrl {
     }
 
     /**
+     *
+     * @param url
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resourceBundle
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        addKeyboardNavigationHandlers();
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        anchorPane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                ActionEvent dummyEvent = new ActionEvent();
+                cancel(dummyEvent);
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.N) {
+                ActionEvent dummyEvent = new ActionEvent();
+                addEvent(dummyEvent);
+            }
+        });
+    }
+
+    /**
      * Adds an event directly into the database. No checking of values
      * @param ae action event
      */
@@ -55,7 +93,7 @@ public class AddEventCtrl {
                 nameField.getText(),
                 descriptionField.getText(),
                 locationField.getText(),
-                new Date()
+                LocalDate.now()
         );
 
         try {

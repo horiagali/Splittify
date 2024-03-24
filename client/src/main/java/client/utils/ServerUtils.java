@@ -16,11 +16,7 @@
 package client.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import commons.Event;
-import commons.Expense;
-import commons.Participant;
-import commons.Mail;
-import commons.Quote;
+import commons.*;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -40,10 +36,9 @@ import java.util.List;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
-	private static final String SERVER = "http://localhost:8080/";
 	private final ObjectMapper objectMapper;
 	private final RestTemplate restTemplate;
-	static String server;
+	public static String server = "http://localhost:8090/";
 
 	/**
 	 * Constructor
@@ -69,7 +64,8 @@ public class ServerUtils {
 	 * @throws URISyntaxException
 	 */
 	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-		var url = new URI("http://localhost:8080/api/quotes").toURL();
+		String uri = server + "/api/quotes";
+		var url = new URI(uri).toURL();
 		var is = url.openConnection().getInputStream();
 		var br = new BufferedReader(new InputStreamReader(is));
 		String line;
@@ -90,16 +86,19 @@ public class ServerUtils {
                 .get(new GenericType<List<Quote>>() {});
 	}
 
+	
+
 	/**
 	 * 
 	 * @return list of events
 	 */
 	public List<Event> getEvents() {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(server).path("api/events") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
+		List<Event> events = ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/events")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Event>>() {});
+		return events;
 	}
 
 	/**
@@ -108,11 +107,12 @@ public class ServerUtils {
 	 * @return event
 	 */
 	public Event getEvent(Long id) {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(server).path("api/events/"+id) //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
+		Event event = ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("api/events/"+id)
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>() {});
+		return event;
 	}
 
 	/**
@@ -171,6 +171,20 @@ public class ServerUtils {
 	}
 
 	/**
+	 * return a list of all tags related to 1 event
+	 * @param eventId
+	 * @return list of tags
+	 */
+	public List<Tag> getTags(long eventId) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId + "/tags")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<List<Tag>>() {});
+	}
+
+	/**
 	 *
 	 * @param selectedEvent
 	 *   deletes an event from the database
@@ -192,7 +206,7 @@ public class ServerUtils {
 	 */
 	public void addExpenseToEvent(long eventId, Expense expense) {
 		// Construct the URL for the specific event's expenses endpoint
-		String url = String.format("%s/events/%d/expenses", SERVER, eventId);
+		String url = String.format("%s/events/%d/expenses", server, eventId);
 
 		// Create HttpHeaders with JSON content type
 		HttpHeaders headers = new HttpHeaders();
@@ -210,7 +224,7 @@ public class ServerUtils {
 	 * @return participant
 	 */
 	public Participant getParticipantByNickname(Long eventID, String nickname) {
-		String url = SERVER + "api/events/" + eventID + "/participants/" + nickname;
+		String url = server + "api/events/" + eventID + "/participants/" + nickname;
 
 		// Make the HTTP GET request and directly retrieve the participant
 		Participant participant = restTemplate.getForObject(url, Participant.class);

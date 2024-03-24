@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -30,6 +31,8 @@ public class InviteCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private TextField inviteCodeTextField;
     @FXML
@@ -66,6 +69,27 @@ public class InviteCtrl implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         generateInviteCode();
+        addKeyboardNavigationHandlers();
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        anchorPane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.Q) {
+                copyInviteCode();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.W) {
+                addEmail();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.S) {
+                sendInvitationsByEmail();
+            }
+        });
     }
 
     /**

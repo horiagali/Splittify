@@ -8,11 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,6 +21,8 @@ public class AdminPageCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private ObservableList<Event> data;
 
+    @FXML
+    private VBox vbox;
     @FXML
     private TableView<Event> table;
     @FXML
@@ -62,6 +63,21 @@ public class AdminPageCtrl implements Initializable {
         addContextMenu();
 
         refresh();
+        addKeyboardNavigationHandlers();
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        vbox.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                goBack();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.D) {
+                deleteSelectedEvent();
+            }
+        });
     }
 
     /**
@@ -80,10 +96,20 @@ public class AdminPageCtrl implements Initializable {
      */
     private void deleteSelectedEvent() {
         Event selectedEvent = table.getSelectionModel().getSelectedItem();
-        if (selectedEvent != null) {
-            server.deleteEvent(selectedEvent);
-            refresh();
-        }
+        Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationDialog.setTitle("Confirmation");
+        confirmationDialog.setHeaderText("Are you sure you want to delete the event?");
+        confirmationDialog.setContentText("This action cannot be undone.");
+
+        confirmationDialog.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                server.deleteEvent(selectedEvent);
+                refresh();
+            }
+            else {
+            System.out.println("Event deletion canceled.");
+            }
+        });
     }
 
     /**

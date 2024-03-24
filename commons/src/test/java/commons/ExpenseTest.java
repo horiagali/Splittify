@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 
@@ -23,7 +22,7 @@ public class ExpenseTest {
         owers.add(new Participant("Alice", "alice@example.com", "bic", "iban", 12));
         owers.add(new Participant("Bob", "bob@example.com", "bic", "iban", 12));
         amount = 50;
-        tag = new Tag("testTag", Color.yellow);
+        tag = new Tag("testTag", new Color(255,0,0,255));
     }
 
     @Test
@@ -141,7 +140,7 @@ public class ExpenseTest {
     @Test
     public void testSetTag() {
         Expense expense = new Expense("Dinner", amount, payer, owers, tag);
-        Tag newTag = new Tag("newTag", Color.RED);
+        Tag newTag = new Tag("newTag", new Color(255,0,0,255));
         expense.setTag(newTag);
         assertEquals(newTag, expense.getTag());
     }
