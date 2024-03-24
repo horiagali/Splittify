@@ -98,7 +98,6 @@ public class MainCtrl {
      * @param balances
      * @param editParticipant
      * @param serverSetter2 
-     * @param main 
      * @param statistics
      * @param debtsCtrlParentPair
      */
@@ -115,9 +114,7 @@ public class MainCtrl {
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
                            Pair<EditParticipantCtrl,Parent> editParticipant,
-                           String language)
-                            Pair<ServerSetterCtrl, Parent> serverSetter2, String language, 
-                           Main main,
+                            Pair<ServerSetterCtrl, Parent> serverSetter2, String language,
                            Pair<StatisticsCtrl, Parent> statistics,
                            Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair) {
 

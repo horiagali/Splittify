@@ -34,6 +34,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static java.net.Authenticator.RequestorType.SERVER;
 
 public class ServerUtils {
 	private final ObjectMapper objectMapper;

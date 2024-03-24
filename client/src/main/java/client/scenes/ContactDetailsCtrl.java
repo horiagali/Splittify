@@ -64,7 +64,7 @@ public class ContactDetailsCtrl implements Initializable {
     private void addKeyboardNavigationHandlers() {
         anchorPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                abort();
+                goToEventOverview();
             }
             if (event.isControlDown() && event.getCode() == KeyCode.P) {
                 ok();
@@ -96,10 +96,9 @@ public class ContactDetailsCtrl implements Initializable {
 
     /**
      *
-     * @param actionEvent
      */
 
-    public void goToEventOverview(ActionEvent actionEvent) {
+    public void goToEventOverview() {
         mainCtrl.goToOverview();
     }
 

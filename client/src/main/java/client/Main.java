@@ -129,7 +129,7 @@ public class Main extends Application {
         "scenes", "ServerSetter.fxml");
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
         contactDetails, overviewApp, invite, adminPage, adminPass, 
-        addEvent, balances, editParticipant,serverSetter, config.getLanguage(), this, statistics, debts);
+        addEvent, balances, editParticipant,serverSetter, config.getLanguage(),  statistics, debts);
     }
 
     /**
