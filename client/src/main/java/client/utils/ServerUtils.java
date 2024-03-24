@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -64,16 +65,17 @@ public class ServerUtils {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 */
-	public void getQuotesTheHardWay() throws IOException, URISyntaxException {
-		String uri = server + "/api/quotes";
-		var url = new URI(uri).toURL();
-		var is = url.openConnection().getInputStream();
+	public void getQuotesTheHardWay() throws IOException {
+		String url = server + "/api/quotes";
+		var connection = new URL(url).openConnection();
+		var is = connection.getInputStream();
 		var br = new BufferedReader(new InputStreamReader(is));
 		String line;
 		while ((line = br.readLine()) != null) {
 			System.out.println(line);
 		}
 	}
+
 
 	/**
 	 * 
@@ -254,7 +256,7 @@ public class ServerUtils {
 	 * @return The added participant.
 	 */
 	public Participant addParticipant(long eventId, Participant participant) {
-		String url = SERVER + "api/events/" + eventId + "/participants";
+		String url = server + "api/events/" + eventId + "/participants";
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
