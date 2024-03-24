@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 
 import client.Main;
 import commons.Event;
+import commons.Participant;
 import commons.Expense;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -59,6 +60,8 @@ public class MainCtrl {
     private Scene overviewApp;
     private OverviewCtrl overviewAppCtrl;
 
+    private Scene editParticipant;
+    private EditParticipantCtrl editParticipantCtrl;
     private Scene serverSetter;
     private ServerSetterCtrl serverSetterCtrl;
     Pair<ServerSetterCtrl, Parent> serverPair;
@@ -77,6 +80,7 @@ public class MainCtrl {
     private Scene debts;
     private SettleDebtsCtrl debtsCtrl;
 
+
     /**
      * 
      * @param primaryStage
@@ -92,8 +96,8 @@ public class MainCtrl {
      * @param language
      * @param addEvent
      * @param balances
+     * @param editParticipant
      * @param serverSetter2 
-     * @param main 
      * @param statistics
      * @param debtsCtrlParentPair
      */
@@ -109,10 +113,10 @@ public class MainCtrl {
                            Pair<AdminPassCtrl, Parent> adminPass,
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
-                           Pair<ServerSetterCtrl, Parent> serverSetter2, String language, 
-                           Main main,
+                           Pair<EditParticipantCtrl,Parent> editParticipant,
+                            Pair<ServerSetterCtrl, Parent> serverSetter2, String language,
                            Pair<StatisticsCtrl, Parent> statistics,
-                           Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair){
+                           Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair) {
 
         this.primaryStage = primaryStage;
         this.main = main;
@@ -151,8 +155,12 @@ public class MainCtrl {
         this.adminPassCtrl = adminPass.getKey();
         this.adminPass = new Scene(adminPass.getValue());
 
+        this.editParticipantCtrl = editParticipant.getKey();
+        this.editParticipant = new Scene(editParticipant.getValue());
+
         this.balancesCtrl = balances.getKey();
         this.balances = new Scene(balances.getValue());
+
 
         this.serverPair = serverSetter2;
 
@@ -287,7 +295,28 @@ public class MainCtrl {
     public void goToOverview() {
         primaryStage.setTitle("Overview");
         primaryStage.setScene(overviewApp);
+        overviewAppCtrl.refresh();
+
     }
+
+    /**
+     *
+     * @param participant
+     */
+    /**
+     * Navigates to the Edit Participant page.
+     * @param participant The participant to be edited.
+     * @param event
+     */
+    public void goToEditParticipant(Participant participant, Event event) {
+        primaryStage.setTitle("Edit Participant");
+        primaryStage.setScene(editParticipant);
+        EditParticipantCtrl.setParticipant(participant);
+        EditParticipantCtrl.setEvent(event);
+        editParticipantCtrl.displayParticipantDetails();
+    }
+
+
 
     /**
      * send invites
@@ -310,7 +339,7 @@ public class MainCtrl {
         primaryStage.setTitle(selectedEvent.getTitle());
         primaryStage.setScene(overviewApp);
         overviewAppCtrl.displayEvent(selectedEvent);
-        overviewCtrl.refresh();
+        overviewAppCtrl.refresh();
 
     }
 

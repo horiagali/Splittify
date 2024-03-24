@@ -75,27 +75,16 @@
       <ChoiceBox fx:id="myChoiceBox" layoutX="14.0" layoutY="144.0" prefHeight="19.0" prefWidth="112.0" />
       <Button layoutX="496.0" layoutY="157.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
       <VBox layoutX="14.0" layoutY="209.0" prefHeight="177.0" prefWidth="322.0" style="-fx-background-color: white;" />
-      <ScrollPane layoutX="9.0" layoutY="82.0" prefHeight="41.0" prefWidth="582.0" style="-fx-background-color: pink;">
+      <ScrollPane fx:id="participantsScrollPane" layoutX="9.0" layoutY="82.0" prefHeight="41.0" prefWidth="582.0" style="-fx-background-color: pink;">
          <content>
-            <HBox fx:id="hbox" minWidth="580.0" style="-fx-background-color: white;">
-               <cursor>
-                  <Cursor fx:constant="DEFAULT" />
-               </cursor>
-            </HBox>
+            <VBox fx:id="participantsVBox" spacing="5" />
          </content>
       </ScrollPane>
       <Label fx:id="myLabel2" alignment="CENTER" layoutX="237.0" layoutY="192.0" prefHeight="17.0" prefWidth="99.0" style="-fx-background-color: grey;" textFill="WHITE" />
       <Label fx:id="myLabel" alignment="CENTER" layoutX="122.0" layoutY="192.0" prefHeight="17.0" prefWidth="99.0" style="-fx-background-color: grey;" textFill="WHITE" />
       <Label fx:id="myLabel1" alignment="CENTER" layoutX="14.0" layoutY="192.0" prefHeight="17.0" prefWidth="89.0" style="-fx-background-color: grey;" text="All" textFill="WHITE" />
-      <Button layoutX="103.0" layoutY="54.0" mnemonicParsing="false" onAction="#goToContact" prefHeight="17.0" prefWidth="13.0" style="-fx-background-color: pink;" textFill="TRANSPARENT">
-         <graphic>
-            <ImageView fitHeight="19.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/add-people-icon-11.jpg" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
+      <Button layoutX="103.0" layoutY="54.0" mnemonicParsing="false" onAction="#goToContact" prefHeight="17.0" prefWidth="60.0" text = "Add" />
+
       <Button fx:id="goToBalances" layoutX="399.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToBalances" prefHeight="26.0" prefWidth="79.0" text="Balances" />
       <Button layoutX="496.0" layoutY="196.0" mnemonicParsing="false" onAction="#showStatistics" text="See Statistics" />
 

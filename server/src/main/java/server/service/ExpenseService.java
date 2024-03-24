@@ -18,13 +18,13 @@ import java.util.List;
 
 @Service
 public class ExpenseService {
-    private ExpenseRepository expenseRepository;
-    private EventRepository eventRepository;
-    private TagRepository tagRepository;
-    private ParticipantRepository participantRepository;
+    private final ExpenseRepository expenseRepository;
+    private final EventRepository eventRepository;
+    private final TagRepository tagRepository;
+    private final ParticipantRepository participantRepository;
 
-    private EventService eventService;
-    private ParticipantService participantService;
+    private final EventService eventService;
+    private final ParticipantService participantService;
 
     /**
      * Constructor for service

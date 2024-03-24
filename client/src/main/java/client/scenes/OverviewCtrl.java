@@ -3,18 +3,23 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
@@ -50,9 +55,13 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     private TextField eventLocationTextField;
+    @FXML
+    private ScrollPane participantsScrollPane;
+    @FXML
+    private VBox participantsVBox;
+
 
     /**
-     *
      * @param server
      * @param mainCtrl
      */
@@ -64,9 +73,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     *
-     * @param selectedEvent
-     * displays an event
+     * @param selectedEvent displays an event
      */
     public void displayEvent(Event selectedEvent) {
         eventName.setText(selectedEvent.getTitle());
@@ -74,7 +81,7 @@ public class OverviewCtrl implements Initializable {
         eventDate.setText("");
         if(!(selectedEvent.getDate() == null))
         eventDate.setText(selectedEvent.getDate().toString());
-        this.selectedEvent = selectedEvent;
+        setSelectedEvent(selectedEvent);
     }
 
     /**
@@ -86,7 +93,6 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     *
      * @param name
      */
 
@@ -116,38 +122,63 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     *
-     * @param url
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resourceBundle
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param url            The location used to resolve relative paths for the root object, or
+     *                       {@code null} if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or {@code null} if
+     *                       the root object was not localized.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         refresh();
+        loadParticipants();
         addKeyboardNavigationHandlers();
     }
 
     /**
      * refreshed the page, with the event data
      */
-
     public void refresh() {
         if (selectedEvent != null) {
             eventName.setText(selectedEvent.getTitle());
             eventLocation.setText(selectedEvent.getLocation());
             eventDate.setText(selectedEvent.getDate().toString());
         }
+
+
         myChoiceBox.getItems().addAll(names);
         myChoiceBox.setOnAction(this::getName);
-        hbox.setSpacing(5);
+//        hbox.setSpacing(5);    doesn't work, has to be fixed
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
-        hbox.getChildren().addAll(labels);
+//        hbox.getChildren().addAll(labels);
+        loadParticipants();
     }
+
+    /**
+     * Loads participants into page from DB
+     */
+    private void loadParticipants() {
+        if (getSelectedEvent() != null) {
+            List<Participant> participants =
+                    server.getParticipants(OverviewCtrl.getSelectedEvent().getId());
+
+            participantsVBox.getChildren().clear();
+
+            for (Participant participant : participants) {
+                Label participantLabel = new Label(participant.getNickname());
+                participantLabel.setTextFill(Color.BLACK);
+                participantLabel.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                        mainCtrl.goToEditParticipant(participant,selectedEvent);
+                    }
+                });
+                participantsVBox.getChildren().add(participantLabel);
+            }
+
+            participantsScrollPane.setContent(participantsVBox);
+        }
+    }
+
 
     /**
      * Add keyboard navigation
@@ -175,6 +206,7 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * get name
+     *
      * @param actionEvent the actionEvent
      */
     private void getName(javafx.event.ActionEvent actionEvent) {
@@ -185,17 +217,19 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * Sets the selected event
+     *
      * @param selectedEvent
      */
-    public static void setSelectedEvent(Event selectedEvent){
+    public static void setSelectedEvent(Event selectedEvent) {
         OverviewCtrl.selectedEvent = selectedEvent;
     }
 
     /**
      * Get the selected event
+     *
      * @return selected event
      */
-    public static Event getSelectedEvent(){
+    public static Event getSelectedEvent() {
         return OverviewCtrl.selectedEvent;
     }
 
@@ -209,6 +243,7 @@ public class OverviewCtrl implements Initializable {
     
     /**
      * asks if you really want to delete
+     *
      * @param actionEvent
      */
     public void goToAreYouSure(ActionEvent actionEvent) {
@@ -224,7 +259,8 @@ public class OverviewCtrl implements Initializable {
             } else {
                 System.out.println("Event deletion canceled.");
             }
-        });    }
+        });
+    }
 
     /**
      * switches to text field for name
@@ -246,6 +282,7 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * updated the name in the db
+     *
      * @param event
      */
     public void updateEventName(ActionEvent event) {
@@ -276,6 +313,7 @@ public class OverviewCtrl implements Initializable {
         eventLocationTextField.requestFocus();
         eventLocation.setVisible(false);
     }
+
     /**
      * switches to label field for the date
      */
@@ -285,8 +323,10 @@ public class OverviewCtrl implements Initializable {
         eventDate.setText(String.valueOf(eventDatePicker.getValue()));
         eventDate.setVisible(true);
     }
+
     /**
      * updates the event s date in the db
+     *
      * @param event
      */
     public void updateEventDate(ActionEvent event) {
@@ -313,6 +353,7 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * updates the event s location in the db
+     *
      * @param event
      */
     public void updateEventLocation(ActionEvent event) {
@@ -325,6 +366,7 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * c
+     *
      * @param actionEvent
      */
     public void goToBalances(ActionEvent actionEvent) {

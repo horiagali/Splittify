@@ -1,0 +1,35 @@
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="client.scenes.EditParticipantCtrl"
+          prefHeight="400.0"
+          prefWidth="640.0">
+
+    <Label text="Nickname:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+    <Label fx:id="nicknameLabel" GridPane.columnIndex="1" GridPane.rowIndex="0" onMouseClicked="#switchToNameTextField"/>
+    <TextField fx:id="nicknameTextField" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="0"  onAction="#updateNickname"/>
+
+    <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+    <Label fx:id="emailLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" onMouseClicked="#switchToEmailTextField"/>
+    <TextField fx:id="emailTextField" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1"  onAction="#updateEmail"/>
+
+    <Label text="Balance:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+    <Label fx:id="balanceLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+    <Label text="BIC:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <Label fx:id="bicLabel" GridPane.columnIndex="1" GridPane.rowIndex="3" onMouseClicked="#switchToBicTextField"/>
+    <TextField fx:id="bicTextField" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="3"  onAction="#updateBic"/>
+
+    <Label text="IBAN:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+    <Label fx:id="ibanLabel" GridPane.columnIndex="1" GridPane.rowIndex="4" onMouseClicked="#switchToIbanTextField"/>
+    <TextField fx:id="ibanTextField" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="4" onAction="#updateIban"/>
+
+    <Label fx:id="errorMessageLabel" textFill="RED" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="5"/>
+
+    <Button text="Update Participant" onAction="#updateParticipant" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="6"/>
+    <Button text="Delete Participant" onAction="#deleteParticipant" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="7"/>
+
+</GridPane>

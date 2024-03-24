@@ -11,7 +11,7 @@ import server.service.MailService;
 @Controller
 @RequestMapping("/api/mail")
 public class MailController {
-    private MailService mailService;
+    private final MailService mailService;
 
     /**
      * constructor for the mail controller

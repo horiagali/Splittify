@@ -203,7 +203,7 @@ public class Expense {
         payer.setBalance(payer.getBalance() - amount);
         // payer is no longer owed the money
         for (Participant ower : owers) {
-            ower.setBalance((ower.getBalance()) + amount * 1.0 / owers.size());
+            ower.setBalance((ower.getBalance()) + amount / owers.size());
             // each ower no longers owes his part of the expense
         }
     }

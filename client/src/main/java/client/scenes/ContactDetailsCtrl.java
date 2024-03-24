@@ -2,9 +2,10 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.BankAccount;
 import commons.Participant;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -18,25 +19,20 @@ public class ContactDetailsCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    private Participant participant;
-    private BankAccount bankAccount;
     @FXML
     private AnchorPane anchorPane;
 
     @FXML
     private TextField nameField;
-
     @FXML
     private TextField emailField;
-
     @FXML
     private TextField ibanField;
-
     @FXML
     private TextField bicField;
 
     /**
-     * 
+     *
      * @param server
      * @param mainCtrl
      */
@@ -44,7 +40,6 @@ public class ContactDetailsCtrl implements Initializable {
     public ContactDetailsCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-
     }
 
     /**
@@ -68,7 +63,7 @@ public class ContactDetailsCtrl implements Initializable {
     private void addKeyboardNavigationHandlers() {
         anchorPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                abort();
+                goToEventOverview();
             }
             if (event.isControlDown() && event.getCode() == KeyCode.P) {
                 ok();
@@ -79,39 +74,47 @@ public class ContactDetailsCtrl implements Initializable {
     /**
      * stop filling in fields
      */
-    public void abort() {
-        clear();
-        mainCtrl.showOverview();
+
+    public void ok() {
+        String name = nameField.getText();
+        String email = emailField.getText();
+        String iban = ibanField.getText();
+        String bic = bicField.getText();
+
+        if (!name.isEmpty()) {
+            Participant participant = new Participant(name, email, bic, iban, 0.0);
+            server.addParticipant(OverviewCtrl.getSelectedEvent().getId(),participant);
+
+
+            clearFields();
+            mainCtrl.goToOverview();
+        } else {
+            showAlert(AlertType.ERROR, "Error", "Name field is empty", "Please enter a name.");
+        }
     }
 
     /**
-     * clear fields
+     *
      */
-    public void clear(){
+
+    public void goToEventOverview() {
+        mainCtrl.goToOverview();
+    }
+
+    private void clearFields() {
         nameField.clear();
         emailField.clear();
         ibanField.clear();
         bicField.clear();
     }
 
-    /**
-     * 
-     */
-    public void ok() {
-//        try {
-//            server.addQuote(getQuote());
-//        } catch (WebApplicationException e) {
-//
-//            var alert = new Alert(Alert.AlertType.ERROR);
-//            alert.initModality(Modality.APPLICATION_MODAL);
-//            alert.setContentText(e.getMessage());
-//            alert.showAndWait();
-//            return;
-//        }
-        mainCtrl.addToOverview(nameField.getText());
-        clear();
-        mainCtrl.goToOverview();
+
+
+    private void showAlert(AlertType alertType, String title, String header, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
-
-
 }

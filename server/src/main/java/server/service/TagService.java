@@ -12,8 +12,8 @@ import java.util.List;
 
 @Service
 public class TagService {
-    private TagRepository tagRepository;
-    private EventRepository eventRepository;
+    private final TagRepository tagRepository;
+    private final EventRepository eventRepository;
 
     /**
      * Constructor for TagService

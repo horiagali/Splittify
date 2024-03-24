@@ -65,6 +65,7 @@ public class ParticipantController {
      * @return participant
      */
     @PutMapping("/{participant_id}")
+    @ResponseBody
     public ResponseEntity<Participant> update(@PathVariable(name = "event_id") Long eventId,
                                               @PathVariable(name = "participant_id")
                                               Long participantId,

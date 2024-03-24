@@ -34,6 +34,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import static java.net.Authenticator.RequestorType.SERVER;
 
 public class ServerUtils {
 	private final ObjectMapper objectMapper;
@@ -246,6 +247,39 @@ public class ServerUtils {
 	}
 
 	/**
+	 * Adds a participant to an event.
+	 *
+	 * @param eventId     The ID of the event to which the participant will be added.
+	 * @param participant The participant to be added.
+	 * @return The added participant.
+	 */
+	public Participant addParticipant(long eventId, Participant participant) {
+		String url = SERVER + "api/events/" + eventId + "/participants";
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<Participant> requestEntity = new HttpEntity<>(participant, headers);
+
+		return restTemplate.postForObject(url, requestEntity, Participant.class);
+	}
+	/**
+	 * Retrieves all participants of an event by event ID.
+	 *
+	 * @param eventId ID of the event to retrieve participants for
+	 * @return list of participants belonging to the event
+	 */
+	public List<Participant> getParticipants(long eventId) {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId + "/participants")
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.get(new GenericType<List<Participant>>() {});
+	}
+
+
+	/**
 	 * sends a mail
 	 * @param mail the mail
 	 * @return the sent mail
@@ -271,5 +305,35 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Expense>>() {});
 	}
+	/**
+	 * Update a participant in the database.
+	 *
+	 * @param eventId     The ID of the event to which the participant belongs.
+	 * @param participant The updated participant information.
+	 */
+	public void updateParticipant(long eventId, Participant participant) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId +
+						"/participants/" + participant.getParticipantID())
+				.request()
+				.put(Entity.entity(participant, APPLICATION_JSON));
+	}
+
+	/**
+	 * Deletes a participant from an event.
+	 *
+	 * @param eventId     The ID of the event from which the participant will be deleted.
+	 * @param participant The participant to be deleted.
+	 */
+	public void deleteParticipant(long eventId, Participant participant) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId +
+						"/participants/" + participant.getParticipantID())
+				.request()
+				.delete();
+	}
+
 
 }

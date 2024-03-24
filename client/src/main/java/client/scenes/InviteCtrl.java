@@ -43,8 +43,8 @@ public class InviteCtrl implements Initializable {
     private FlowPane emailFlowPane;
     @FXML
     private Event event;
-    private ObservableList<String> emailList = FXCollections.observableArrayList();
-    private Set<String> uniqueEmails = new HashSet<>();
+    private final ObservableList<String> emailList = FXCollections.observableArrayList();
+    private final Set<String> uniqueEmails = new HashSet<>();
     private boolean sendingInProgress = false;
 
     /**
