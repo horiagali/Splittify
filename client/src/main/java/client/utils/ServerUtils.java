@@ -29,13 +29,11 @@ import org.springframework.web.client.RestTemplate;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-import static java.net.Authenticator.RequestorType.SERVER;
 
 public class ServerUtils {
 	private final ObjectMapper objectMapper;

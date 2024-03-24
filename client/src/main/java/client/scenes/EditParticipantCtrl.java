@@ -256,6 +256,12 @@ public class EditParticipantCtrl implements Initializable {
 
     }
 
+    /**
+     * goes to overview page
+     * @param actionEvent
+     */
+
+
     public void goToOverview(ActionEvent actionEvent) {
         mainCtrl.goToOverview();
     }
