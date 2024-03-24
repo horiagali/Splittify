@@ -15,7 +15,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -49,6 +52,8 @@ public class EditExpenseCtrl implements Initializable {
     private VBox participantsVBox;
     @FXML
     private TextField purposeTextField;
+    @FXML
+    private DatePicker datePicker;
 
     /**
      * Constructor for EditExpenseCtrl.
@@ -85,6 +90,8 @@ public class EditExpenseCtrl implements Initializable {
         currencyComboBox.setItems(currencyList);
         currencyComboBox.getSelectionModel().select("EUR");
 
+        datePicker.setValue(LocalDate.parse(expense.getDate().toString()));
+
         for (Participant participant : participantNames) {
             CheckBox participantCheckbox = new CheckBox(participant.getNickname());
             checkBoxes.add(participantCheckbox);
@@ -104,6 +111,7 @@ public class EditExpenseCtrl implements Initializable {
         expense.reverseSettleBalance();
         expense.setTitle(purposeTextField.getText());
         expense.setAmount(Double.parseDouble(amountTextField.getText()));
+        expense.setDate(Date.from(datePicker.getValue().atStartOfDay().toInstant(ZoneOffset.UTC)));
         expense.setPayer(this.event.getParticipants()
                 .stream()
                 .filter(x -> x.getNickname().equals(nameChoiceBox.getValue()))
@@ -125,7 +133,8 @@ public class EditExpenseCtrl implements Initializable {
     public void edit() {
         try {
             editButton.setOnAction(event -> editExpense());
-            //TODO: Edit in database backend.
+            server.editExpense(expense);
+            mainCtrl.showEventOverview(event);
         }
         catch (Exception e) {
             messageLabel.setText("Invalid input, try again!");
@@ -147,7 +156,7 @@ public class EditExpenseCtrl implements Initializable {
      */
     @FXML
     public void cancel() {
-        mainCtrl.goToOverview();
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -166,6 +175,7 @@ public class EditExpenseCtrl implements Initializable {
     @FXML
     public void deleteExpense(ActionEvent event) {
         this.event.getExpenses().remove(this.expense);
-        //TODO: Delete from database.
+        server.deleteExpense(expense);
+        mainCtrl.showEventOverview(this.event);
     }
 }

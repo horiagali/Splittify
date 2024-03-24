@@ -364,6 +364,7 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Expense>>() {});
 	}
+
 	/**
 	 * Update a participant in the database.
 	 *
@@ -392,6 +393,33 @@ public class ServerUtils {
 						"/participants/" + participant.getParticipantID())
 				.request()
 				.delete();
+	}
+
+	/**
+	 * Deletes an expense from an event.
+	 * @param expense the expense to be deleted.
+	 */
+	public void deleteExpense(Expense expense) {
+		//I am not sure about this, someone fix if wrong please
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + expense.getEvent()
+						.getId() + "/expenses/" + expense.getId())
+				.request()
+				.delete();
+	}
+
+	/**
+	 * Edits an expense from an event.
+	 * @param newExpense the expense to be edited.
+	 */
+	public void editExpense(Expense newExpense) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + newExpense.getEvent()
+						.getId() + "/expenses/" + newExpense.getId())
+				.request()
+				.put(Entity.entity(newExpense, APPLICATION_JSON));
 	}
 
 
