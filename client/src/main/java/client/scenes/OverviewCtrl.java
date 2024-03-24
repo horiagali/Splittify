@@ -33,7 +33,7 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private HBox hbox;
 
-    private final ArrayList<String> names;
+    private ArrayList<String> names;
     private ArrayList<Label> labels;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;

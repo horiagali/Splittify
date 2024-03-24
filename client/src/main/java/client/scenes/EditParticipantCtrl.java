@@ -100,32 +100,43 @@ public class EditParticipantCtrl implements Initializable {
 
     void displayParticipantDetails() {
         if (participant != null) {
-            nicknameLabel.setText(participant.getNickname());
-            emailLabel.setText(participant.getEmail());
+            if (participant.getNickname() != "") {
+                nicknameLabel.setText(participant.getNickname());
+                nicknameTextField.setText(participant.getNickname());
+            } else {
+                nicknameLabel.setText("No nickname added");
+            }
+
+            if (participant.getEmail() != "") {
+                emailTextField.setText(participant.getEmail());
+                emailLabel.setText(participant.getEmail());
+            } else {
+                emailLabel.setText("No email added");
+            }
+
             balanceLabel.setText(String.valueOf(participant.getBalance()));
-            bicLabel.setText(participant.getBic());
-            ibanLabel.setText(participant.getIban());
 
-            // Check for empty values
-            checkEmptyFields();
+
+            if (participant.getBic() != "") {
+                bicTextField.setText(participant.getBic());
+                bicLabel.setText(participant.getBic());
+            } else {
+                bicLabel.setText("No BIC added");
+            }
+
+            if (participant.getIban() != "") {
+                ibanTextField.setText(participant.getIban());
+                ibanLabel.setText(participant.getIban());
+            } else {
+                ibanLabel.setText("No IBAN added");
+            }
+
+
         }
     }
 
-    private void checkEmptyFields() {
-        if (participant.getNickname() == null) {
-            errorMessageLabel.setText("Nickname is empty");
-        }
-        if (participant.getEmail() == null) {
-            errorMessageLabel.setText("Email is empty");
-        }
 
-        if (participant.getBic() == null) {
-            errorMessageLabel.setText("BIC is empty");
-        }
-        if (participant.getIban() == null) {
-            errorMessageLabel.setText("IBAN is empty");
-        }
-    }
+
 
     @FXML
     private void deleteParticipant() {
@@ -220,18 +231,46 @@ public class EditParticipantCtrl implements Initializable {
     }
     @FXML
     private void updateParticipant() {
-        participant.setNickname(nicknameLabel.getText());
-        participant.setEmail(emailLabel.getText());
-        participant.setBic(bicLabel.getText());
-        participant.setIban(ibanLabel.getText());
+        String newNickname = nicknameTextField.getText();
+        String newEmail = emailTextField.getText();
+        String newBic = bicTextField.getText();
+        String newIban = ibanTextField.getText();
 
-        server.updateParticipant(event.getId(), participant);
-        mainCtrl.goToOverview();
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Update Participant");
-        alert.setHeaderText(null);
-        alert.setContentText("Participant details updated successfully!");
-        alert.showAndWait();
+        if (!newNickname.equals("No nickname added")) {
+            participant.setNickname(newNickname);
+        }
+        if (!newEmail.equals("No email added")) {
+            participant.setEmail(newEmail);
+        }
+        if (!newBic.equals("No BIC added")) {
+            participant.setBic(newBic);
+        }
+        if (!newIban.equals("No IBAN added")) {
+            participant.setIban(newIban);
+        }
+
+        // Update the participant only if any value was modified
+        if (!newNickname.equals(participant.getNickname()) ||
+                !newEmail.equals(participant.getEmail()) ||
+                !newBic.equals(participant.getBic()) ||
+                !newIban.equals(participant.getIban())) {
+
+            server.updateParticipant(event.getId(), participant);
+            mainCtrl.goToOverview();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Update Participant");
+            alert.setHeaderText(null);
+            alert.setContentText("Participant details updated successfully!");
+            alert.showAndWait();
+        } else {
+            // If no value was modified, show a message indicating no changes were made
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Changes");
+            alert.setHeaderText(null);
+            alert.setContentText("No changes were made to participant details.");
+            alert.showAndWait();
+        }
     }
+
 }
 
