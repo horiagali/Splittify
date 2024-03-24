@@ -101,12 +101,11 @@ public class ServerUtils {
 	 * @return list of events
 	 */
 	public List<Event> getEvents() {
-		List<Event> events = ClientBuilder.newClient(new ClientConfig())
+		return ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/events")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Event>>() {});
-		return events;
 	}
 
 	/**
@@ -115,12 +114,11 @@ public class ServerUtils {
 	 * @return event
 	 */
 	public Event getEvent(Long id) {
-		Event event = ClientBuilder.newClient(new ClientConfig())
+		return ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/events/"+id)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>() {});
-		return event;
 	}
 	private StompSession session = connect("ws://localhost:8080/websocket");
 

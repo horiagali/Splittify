@@ -17,8 +17,10 @@ import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -333,7 +335,8 @@ public class OverviewCtrl implements Initializable {
 
         try {
             LocalDate newDate = eventDatePicker.getValue();
-            selectedEvent.setDate(newDate);
+            Date date = Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            selectedEvent.setDate(date);
             server.updateEvent(selectedEvent);
             eventDate.setText(String.valueOf(newDate));
             switchToDateLabel();
