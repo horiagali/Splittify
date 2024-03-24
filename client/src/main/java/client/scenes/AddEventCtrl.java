@@ -14,8 +14,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
-import java.time.LocalDate;
+// import java.time.LocalDate;
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 public class AddEventCtrl implements Initializable {
@@ -93,11 +94,12 @@ public class AddEventCtrl implements Initializable {
                 nameField.getText(),
                 descriptionField.getText(),
                 locationField.getText(),
-                LocalDate.now()
+                new Date()
         );
 
         try {
-            server.addEvent(newEvent);
+            server.sendEvent("/app/events", newEvent);
+            //server.addEvent(newEvent);
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);

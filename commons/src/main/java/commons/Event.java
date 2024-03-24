@@ -1,9 +1,7 @@
 package commons;
 
-import java.time.LocalDate;
-import java.util.*;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.*;
 import jakarta.persistence.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -20,16 +18,14 @@ public class Event {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    private LocalDate date;
-
+    private Date date;
     private String description;
     private String location;
 
     @OneToMany (mappedBy = "event", cascade = CascadeType.REMOVE)
     private List<Expense> expenses; // List of expenses associated with the event
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
-    private List<Participant> participants; // List of participants in the event'
+    private List<Participant> participants; // List of participants in the event
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     private List<Tag> tags;
@@ -41,7 +37,7 @@ public class Event {
      * @param location the location as a String
      * @param date the date as a Date
      */
-    public Event(String title, String description, String location, LocalDate date) {
+    public Event(String title, String description, String location, Date date) {
         this.title = title;
         this.description = description;
         this.location = location;
@@ -61,7 +57,7 @@ public class Event {
      * @param participants the participants as a List of Participant
      * @param tags the participants as a List of Tag
      */
-    public Event(String title, LocalDate date, String description, String location,
+    public Event(String title, Date date, String description, String location,
                  List<Expense> expenses, List<Participant> participants, List<Tag> tags) {
         this.title = title;
         this.date = date;
@@ -118,7 +114,7 @@ public class Event {
      *
      * @return a Date, the date
      */
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -182,7 +178,7 @@ public class Event {
      * a setter for the Date
      * @param date a Date
      */
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

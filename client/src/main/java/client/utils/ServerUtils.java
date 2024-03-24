@@ -24,21 +24,29 @@ import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 	private final ObjectMapper objectMapper;
 	private final RestTemplate restTemplate;
-	public static String server = "http://localhost:8090/";
+	public static String server = "http://localhost:8080/";
+	public static String serverPort = server.replace("http://", "");
 
 	/**
 	 * Constructor
@@ -56,6 +64,7 @@ public class ServerUtils {
 	 */
 	public static void setServer(String server) {
 		ServerUtils.server = server;
+		serverPort = server.replace("http://", "");
 	}
 
 	/**
@@ -94,12 +103,11 @@ public class ServerUtils {
 	 * @return list of events
 	 */
 	public List<Event> getEvents() {
-		List<Event> events = ClientBuilder.newClient(new ClientConfig())
+		return ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/events")
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Event>>() {});
-		return events;
 	}
 
 	/**
@@ -108,13 +116,64 @@ public class ServerUtils {
 	 * @return event
 	 */
 	public Event getEvent(Long id) {
-		Event event = ClientBuilder.newClient(new ClientConfig())
+		return ClientBuilder.newClient(new ClientConfig())
 				.target(server).path("api/events/"+id)
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>() {});
-		return event;
 	}
+	private StompSession session = connect("ws://"+ serverPort + "websocket");
+
+	
+	/**
+	 * Connect to a stomp session with url to websocket
+	 * @param url websocket url
+	 * @return stomp session
+	 */
+	private StompSession connect(String url) {
+		var client = new StandardWebSocketClient();
+		var stomp = new WebSocketStompClient(client);
+		stomp.setMessageConverter(new MappingJackson2MessageConverter());
+		try {
+			return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			Thread.currentThread().interrupt();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		throw new IllegalStateException();
+	}
+
+	/**
+	 * Subscribe to topic
+	 * @param dest url to topic endpoint
+	 * @param consumer consumer
+	 */
+	public void registerForEvents(String dest, Consumer<Event> consumer) {
+		session.subscribe(dest, new StompFrameHandler() {
+			@Override
+			public Type getPayloadType(StompHeaders headers) {
+				return Event.class;
+			}
+
+			@Override
+			public void handleFrame(StompHeaders headers, Object payload) {
+				consumer.accept((Event) payload);
+			}
+		});
+	}
+
+	/**
+	 * Use this to add an event to the database using websockets
+	 * @param dest destination of the app endpoint
+	 * @param e event to be added
+	 */
+	public void sendEvent(String dest, Event e) {
+		session.send(dest, e);
+	}
+
 
 	/**
 	 * 

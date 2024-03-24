@@ -18,7 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -43,8 +42,6 @@ public class QuoteOverviewCtrl implements Initializable {
     private ToggleGroup languageGroup;
     @FXML
     private Button createEventButton;
-    @FXML
-    private TextField eventName;
 
     @FXML
     private Button joinEventButton;
@@ -116,13 +113,8 @@ public class QuoteOverviewCtrl implements Initializable {
     }
 
 
-    private Event getEvent() {
-        return new Event(eventName.getText(), "empty description",
-                "empty location", LocalDate.now());
-    }
-
     /**
-     * Lets user view the event correspondign to the event id
+     * Lets user view the event corresponding to the event id
      * @param ae actionEvent
      */
     public void joinEvent(ActionEvent ae) {
@@ -158,6 +150,8 @@ public class QuoteOverviewCtrl implements Initializable {
         colDate.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
         table.setOnMouseClicked(this::handleTableItemClick);
         addKeyboardNavigationHandlers();
+
+        server.registerForEvents("/topic/events", e -> {data.add(e);});
     }
 
     /**

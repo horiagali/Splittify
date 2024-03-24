@@ -17,6 +17,8 @@ package server.api;
 
 import commons.Event;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 import server.service.EventService;
 
@@ -60,6 +62,21 @@ public class EventController {
     public ResponseEntity<Event> getById(@PathVariable("id") Long id) {
         return eventService.getEventById(id);
     }
+
+    /**
+     * Controller for websocket connection
+     * @param e event to be added
+     * @return event to be received
+     */
+    @MessageMapping("/events") // /app/events
+    @SendTo("/topic/events")
+    public Event addEvent(Event e) {
+        System.out.println("Add event reached");
+        createEvent(e);
+        System.out.println("Event created");
+        return e;
+    }
+
 
     /**
      * Adds a new event.
