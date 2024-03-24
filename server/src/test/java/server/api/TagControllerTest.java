@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.Color;
 import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
