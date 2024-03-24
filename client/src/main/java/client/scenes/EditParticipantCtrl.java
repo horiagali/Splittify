@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Participant;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -255,5 +256,14 @@ public class EditParticipantCtrl implements Initializable {
 
     }
 
+    /**
+     * goes to overview page
+     * @param actionEvent
+     */
+
+
+    public void goToOverview(ActionEvent actionEvent) {
+        mainCtrl.goToOverview();
+    }
 }
 
