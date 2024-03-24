@@ -6,12 +6,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class ExpenseTest {
 
     private Participant payer;
     private ArrayList<Participant> owers;
+    private final Date date = new Date();
     private double amount;
     private Tag tag;
 
@@ -27,7 +29,7 @@ public class ExpenseTest {
 
     @Test
     public void testSettleBalance() {
-        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
+        Expense expense = new Expense("Dinner", amount, date, payer, owers, tag);
         assertEquals(62, payer.getBalance());
         for (Participant ower : owers) {
             assertEquals(-13, ower.getBalance());
@@ -42,7 +44,7 @@ public class ExpenseTest {
 
     @Test
     public void testReverseSettleBalances() {
-        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
+        Expense expense = new Expense("Dinner", amount, date, payer, owers, tag);
         expense.settleBalance();
         expense.reverseSettleBalance();
 
@@ -54,9 +56,9 @@ public class ExpenseTest {
 
     @Test
     public void testEquals() {
-        Expense expense1 = new Expense("Dinner", 50, payer, owers, tag);
-        Expense expense2 = new Expense("Dinner", 50, payer, owers, tag);
-        Expense expense3 = new Expense("Lunch", 30, payer, owers, tag);
+        Expense expense1 = new Expense("Dinner", 50, new Date(), payer, owers, tag);
+        Expense expense2 = new Expense("Dinner", 50, new Date(), payer, owers, tag);
+        Expense expense3 = new Expense("Lunch", 30, new Date(), payer, owers, tag);
 
         assertEquals(expense1, expense2);
         assertNotEquals(expense1, expense3);
@@ -64,8 +66,8 @@ public class ExpenseTest {
 
     @Test
     public void testHashCode() {
-        Expense expense1 = new Expense("Dinner", 50, payer, owers, tag);
-        Expense expense2 = new Expense("Dinner", 50, payer, owers, tag);
+        Expense expense1 = new Expense("Dinner", 50, new Date(), payer, owers, tag);
+        Expense expense2 = new Expense("Dinner", 50, new Date(), payer, owers, tag);
 
         assertEquals(expense1.hashCode(), expense2.hashCode());
     }
@@ -73,7 +75,7 @@ public class ExpenseTest {
 
     @Test
     public void testGettersAndSetters() {
-        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
+        Expense expense = new Expense("Dinner", amount, date, payer, owers, tag);
 
         // Test getters
         assertEquals("Dinner", expense.getTitle());
@@ -101,12 +103,12 @@ public class ExpenseTest {
     @Test
     public void testNegativeAmount() {
         // Test if creating an expense with negative amount throws IllegalArgumentException
-        assertThrows(IllegalArgumentException.class, () -> new Expense("Dinner", -50, payer, owers, tag));
+        assertThrows(IllegalArgumentException.class, () -> new Expense("Dinner", -50, date, payer, owers, tag));
     }
 
     @Test
     public void testGetIdAndSetId() {
-        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
+        Expense expense = new Expense("Dinner", amount, date, payer, owers, tag);
 
         // Test getId() method
         Long x = null;
@@ -133,13 +135,13 @@ public class ExpenseTest {
 
     @Test
     public void testGetTag() {
-        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
+        Expense expense = new Expense("Dinner", amount, date, payer, owers, tag);
         assertEquals(tag, expense.getTag());
     }
 
     @Test
     public void testSetTag() {
-        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
+        Expense expense = new Expense("Dinner", amount, date, payer, owers, tag);
         Tag newTag = new Tag("newTag", new Color(255,0,0,255));
         expense.setTag(newTag);
         assertEquals(newTag, expense.getTag());
