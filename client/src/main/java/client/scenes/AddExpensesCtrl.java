@@ -17,7 +17,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -59,6 +62,8 @@ public class AddExpensesCtrl implements Initializable {
 
     @FXML
     private Label selectedCurrencyLabel;
+    @FXML
+    private DatePicker datePicker;
 
     /**
      * Initializes the controller.
@@ -168,6 +173,12 @@ public class AddExpensesCtrl implements Initializable {
                     owners.add(participant);
                 }
             }
+
+            // Step 6: Add the date of the expense
+            LocalDate localDate = datePicker.getValue();
+            Date date = Date.from(localDate.atStartOfDay().toInstant(ZoneOffset.UTC));
+            expense.setDate(date);
+
             expense.setOwers(owners);
             selectedEvent.addExpense(expense);
             server.addExpenseToEvent(selectedEvent.getId(), expense);
