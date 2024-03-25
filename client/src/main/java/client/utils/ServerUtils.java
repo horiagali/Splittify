@@ -258,23 +258,29 @@ public class ServerUtils {
 	}
 
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
 	 * Add an expense to an event
 	 * @param eventId id of the event to add the expense to
 	 * @param expense expense to be added
+	 * @return Expense expense
 	 */
-	public void addExpenseToEvent(long eventId, Expense expense) {
-		// Construct the URL for the specific event's expenses endpoint
-		String url = String.format("%s/events/%d/expenses", server, eventId);
+	public Expense addExpenseToEvent(long eventId, Expense expense) {
+		String url = server + "api/events/" + eventId + "/expenses";
 
-		// Create HttpHeaders with JSON content type
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		// Create HttpEntity with expense object and headers
+		// Log the contents of the expense object
+		System.out.println("Expense object: " + expense);
+
+		// Log the HTTP headers
+		System.out.println("HTTP Headers: " + headers);
+
 		HttpEntity<Expense> requestEntity = new HttpEntity<>(expense, headers);
-		restTemplate.postForObject(url, requestEntity, Void.class);
+
+		// Log the contents of the request entity
+		System.out.println("Request Entity: " + requestEntity);
+
+		return restTemplate.postForObject(url, requestEntity, Expense.class);
 	}
 
 	/**

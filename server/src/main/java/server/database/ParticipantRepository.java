@@ -12,4 +12,5 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
      * @return participants
      */
     List<Participant> findParticipantsByEventId(Long eventId);
+
 }
