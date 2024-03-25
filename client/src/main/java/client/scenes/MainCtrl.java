@@ -417,12 +417,13 @@ public class MainCtrl {
 
     /**
      * Goes to edit expense.
+     * @param event the event of the expense.
      * @param expense the expense to be edited.
      */
-    public void goToEditExpense(Expense expense) {
+    public void goToEditExpense(Event event, Expense expense) {
         primaryStage.setTitle("Edit Expense page");
         editExpenseCtrl.setExpense(expense);
-        editExpenseCtrl.setEvent(expense.getEvent());
+        editExpenseCtrl.setEvent(event);
         primaryStage.setScene(editExpenseScene);
     }
 }

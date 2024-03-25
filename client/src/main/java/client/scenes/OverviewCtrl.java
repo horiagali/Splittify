@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -32,9 +33,6 @@ public class OverviewCtrl implements Initializable {
     private Label myLabel;
     @FXML
     private Label myLabel2;
-
-    @FXML
-    private ChoiceBox<String> myChoiceBox;
     @FXML
     private HBox hbox;
 
@@ -43,6 +41,7 @@ public class OverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private static Event selectedEvent;
+    private static Expense selectedExpense = null;
 
     @FXML
     private Label eventName;
@@ -63,9 +62,9 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private VBox participantsVBox;
     @FXML
-    private VBox vboxCode;
+    private VBox expensesVBox;
     @FXML
-    private ListView<Expense> listExpenses;
+    private ListView<Label> listExpenses;
     @FXML
     private Button editExpenseButton;
     @FXML
@@ -94,60 +93,28 @@ public class OverviewCtrl implements Initializable {
             eventDate.setText(selectedEvent.getDate().toString());
         setSelectedEvent(selectedEvent);
 
-        displayExpenses(selectedEvent);
+        displayExpenses();
     }
 
-    /**
-     * Displays the expenses of an event.
-     * @param event the event in question.
-     */
-    private void displayExpenses(Event event) {
-        listExpenses = new ListView<>();
-        listExpenses.getItems().addAll(server.getExpensesByEventId(event.getId()));
-        listExpenses.setCellFactory(param -> new ListCell<Expense>() {
-            @Override
-            protected void updateItem(Expense item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null)
-                    setText(null);
-                else
-                    //TODO: To change dollar sign to currency,
-                    // ony placeholder for now, also maybe tags.
-                        //Created custom cellView to view parts of expenses
-                    setText(item.getTitle() + " - " + item.getPayer() + " - $" + item.getAmount());
-
-            }
-        });
-    }
-
-    /**
-     *  Functionality of expense edit button.
-     */
-    @FXML
-    public void goToEditExpense() {
-        try {
-            mainCtrl.goToEditExpense(listExpenses.getSelectionModel().getSelectedItem());
-        }
-        catch (Exception e) {
-            //TODO: Actual error message..
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Functionality for remove expense button.
      */
     @FXML
     public void removeExpense() {
+
         try {
-            Expense expense = listExpenses.getSelectionModel().getSelectedItem();
+            Expense expense = selectedExpense;
             selectedEvent.getExpenses().remove(expense);
             server.deleteExpense(expense);
+            selectedExpense = null;
             refresh();
         }
         catch (Exception e) {
-            //TODO: Actual error message..
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Select an expense!");
+            alert.showAndWait();
         }
     }
 
@@ -174,10 +141,19 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     *
+     *  Goes to edit expense page upon press.
      */
+   @FXML
     public void editExpense() {
-        mainCtrl.goToEditExpense(listExpenses.getSelectionModel().getSelectedItem());
+
+        if (selectedExpense != null)
+            mainCtrl.goToEditExpense(selectedEvent, selectedExpense);
+        else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("Select an expense!");
+            alert.showAndWait();
+        }
     }
 
     /**
@@ -204,6 +180,7 @@ public class OverviewCtrl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         refresh();
         loadParticipants();
+        displayExpenses();
         addKeyboardNavigationHandlers();
     }
 
@@ -215,11 +192,9 @@ public class OverviewCtrl implements Initializable {
             eventName.setText(selectedEvent.getTitle());
             eventLocation.setText(selectedEvent.getLocation());
             eventDate.setText(selectedEvent.getDate().toString());
-            displayExpenses(selectedEvent);
+            displayExpenses();
         }
 
-        myChoiceBox.getItems().addAll(names);
-        myChoiceBox.setOnAction(this::getName);
 //        hbox.setSpacing(5);    doesn't work, has to be fixed
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
@@ -252,6 +227,46 @@ public class OverviewCtrl implements Initializable {
         }
     }
 
+    /**
+     * Displays the expenses on the Overview page.
+     */
+    private void displayExpenses() {
+        if (getSelectedEvent() != null) {
+            List<Expense> expenses = server.getExpensesByEventId(getSelectedEvent().getId());
+            
+            listExpenses.getItems().clear();
+
+            for (Expense expense : expenses) {
+
+                Label expenseLabel = getLabel(expense);
+                expenseLabel.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.PRIMARY)
+                        setSelectedExpense(selectedEvent.getExpenses().stream()
+                                .filter(x -> expenseLabel.getText().equals(x.getTitle()))
+                                .toList().getFirst());
+                });
+                    //TODO: Add currency to label
+                listExpenses.getItems().add(expenseLabel);
+            }
+        }
+    }
+
+    /**
+     * Label generator for an expense.
+     * @param expense the expense in question.
+     * @return the new Label.
+     */
+    private static Label getLabel(Expense expense) {
+        Label expenseLabel = new Label
+                (expense.getTitle() + " - " + expense.getPayer() + " - " + expense.getAmount());
+        expenseLabel.setTextFill(Color.BLACK);
+        return expenseLabel;
+    }
+
+    private static void setSelectedExpense(Expense expense) {
+        selectedExpense = expense;
+    }
+
 
     /**
      * Add keyboard navigation
@@ -282,11 +297,11 @@ public class OverviewCtrl implements Initializable {
      *
      * @param actionEvent the actionEvent
      */
-    private void getName(javafx.event.ActionEvent actionEvent) {
-        String name = myChoiceBox.getValue();
-        myLabel.setText("From " + name);
-        myLabel2.setText("Including " + name);
-    }
+//    private void getName(javafx.event.ActionEvent actionEvent) {
+//        String name = myChoiceBox.getValue();
+//        myLabel.setText("From " + name);
+//        myLabel2.setText("Including " + name);
+//    }
 
     /**
      * Sets the selected event

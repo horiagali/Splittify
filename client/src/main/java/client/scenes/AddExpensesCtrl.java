@@ -7,6 +7,7 @@ import commons.Participant;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -35,6 +36,8 @@ public class AddExpensesCtrl implements Initializable {
     private TextField purposeTextField;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private ListView<Participant> participantsListView;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -59,7 +62,6 @@ public class AddExpensesCtrl implements Initializable {
 
     @FXML
     private CheckBox equallyCheckbox;
-
     @FXML
     private Label selectedCurrencyLabel;
     @FXML
@@ -71,12 +73,14 @@ public class AddExpensesCtrl implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         addKeyboardNavigationHandlers();
+        participantCheckboxes = new ArrayList<>();
         currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
         if (OverviewCtrl.getSelectedEvent() != null) {
+
             Long eventId = OverviewCtrl.getSelectedEvent().getId();
             List<String> participants = server.getParticipantNicknamesByEventId(eventId);
-
 
             // Clear existing checkboxes
             participantsVBox.getChildren().clear();
@@ -205,5 +209,12 @@ public class AddExpensesCtrl implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(errorMessage);
         alert.showAndWait();
+    }
+
+    /**
+     *
+     * @param event
+     */
+    public void getDateFromPicker(ActionEvent event) {
     }
 }

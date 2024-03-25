@@ -156,7 +156,7 @@ public class InviteCtrl implements Initializable {
             Label emailLabel = new Label(email);
             emailLabel.setStyle("-fx-padding: 5px;");
 
-            Button removeButton = new Button("❌");
+            Button removeButton = new Button("");
             removeButton.setFont(Font.font("Arial", 5));
             removeButton.setOnAction(event -> removeEmail(email));
             removeButton.setPrefSize(15, 15);

@@ -239,9 +239,9 @@ public class QuoteOverviewCtrl implements Initializable {
     /**
      *
      */
-    public void showAddExpenses() {
-        mainCtrl.showAddExpenses();
-    }
+//    public void showAddExpenses() {
+//        mainCtrl.showAddExpenses();
+//    }
 
     /**
      *

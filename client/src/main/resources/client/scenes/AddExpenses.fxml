@@ -4,7 +4,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -34,14 +34,13 @@
         <ComboBox fx:id="currencyComboBox" layoutX="299.0" layoutY="199.0" prefHeight="25.0" prefWidth="68.0" VBox.vgrow="NEVER" />
 <!--        <Label fx:id="selectedCurrencyLabel" layoutX="370.0" layoutY="216.0" />-->
         <Text layoutX="246.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Expense" />
-
-        <!-- List of participants with their payment amounts -->
-        <ScrollPane layoutX="202.0" layoutY="282.0" prefHeight="54.0" prefWidth="176.0">
-        <VBox fx:id="participantsVBox" layoutX="200.0" layoutY="270.0">
-        </VBox>
-        </ScrollPane>
       <DatePicker fx:id="datePicker" layoutX="256.0" layoutY="232.0" onAction="#getDateFromPicker" prefHeight="25.0" prefWidth="122.0" promptText="Enter a date" />
       <Text layoutX="201.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="When?" wrappingWidth="45.818756103515625" />
+      <VBox layoutX="195.0" layoutY="282.0" prefHeight="59.0" prefWidth="191.0">
+         <children>
+            <ListView fx:id="participantsListView" editable="true" prefHeight="59.0" prefWidth="200.0" />
+         </children>
+      </VBox>
 
     </children>
 </AnchorPane>
