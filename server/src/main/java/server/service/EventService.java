@@ -67,6 +67,7 @@ public class EventService {
      */
     public ResponseEntity<Event> getEventById(Long id) {
         if (!eventRepository.findById(id).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.WARNING, "404: Event not found in getEventById");
             return ResponseEntity.notFound().build();
         }
         Event found = eventRepository.findById(id).get();
@@ -81,6 +82,7 @@ public class EventService {
      */
     public ResponseEntity<Event> deleteEvent(Long id){
         if (!eventRepository.findById(id).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.WARNING, "404: Event not found in deleteEvent");
             return ResponseEntity.notFound().build();
         }
         Event toBeRemoved = eventRepository.findById(id).get();
@@ -97,6 +99,7 @@ public class EventService {
      */
     public ResponseEntity<Event> updateEvent(Event event, Long id){
         if (!eventRepository.findById(id).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.WARNING, "404: Event not found in updateEvent");
             return ResponseEntity.notFound().build();
         }
         Event toBeUpdated = eventRepository.findById(id).get();
