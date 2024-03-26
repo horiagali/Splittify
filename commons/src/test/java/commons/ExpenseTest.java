@@ -24,7 +24,7 @@ public class ExpenseTest {
         owers.add(new Participant("Alice", "alice@example.com", "bic", "iban", 12));
         owers.add(new Participant("Bob", "bob@example.com", "bic", "iban", 12));
         amount = 50;
-        tag = new Tag("testTag", new Color(255,0,0,255));
+        tag = new Tag("testTag", "HEXcolor");
     }
 
     @Test
@@ -111,9 +111,8 @@ public class ExpenseTest {
         Expense expense = new Expense("Dinner", amount, date, payer, owers, tag);
 
         // Test getId() method
-        Long x = null;
-        assertEquals(x, expense.getId());
-        x = 123L;
+        assertNull(expense.getId());
+        Long x = 123L;
         // Test setId() method
         expense.setId(x);
         assertEquals(x, expense.getId());
@@ -123,7 +122,7 @@ public class ExpenseTest {
     public void testDefaultConstructor() {
         // Create an Expense object using the default constructor
         Expense expense = new Expense();
-        Long x = 0L;
+        //Long x = 0L;
         // Test if the default constructor initializes the object correctly
         assertNotNull(expense);
         assertNull(expense.getId());
@@ -141,8 +140,8 @@ public class ExpenseTest {
 
     @Test
     public void testSetTag() {
-        Expense expense = new Expense("Dinner", amount, date, payer, owers, tag);
-        Tag newTag = new Tag("newTag", new Color(255,0,0,255));
+        Expense expense = new Expense("Dinner", amount, new Date(), payer, owers, tag);
+        Tag newTag = new Tag("newTag", "HEXcolor");
         expense.setTag(newTag);
         assertEquals(newTag, expense.getTag());
     }

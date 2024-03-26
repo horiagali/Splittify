@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.Color;
 import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 class TagControllerTest {
@@ -29,8 +30,8 @@ class TagControllerTest {
     @Test
     void testGetAllTags() {
         List<Tag> mockTags = new ArrayList<>();
-        mockTags.add(new Tag("Food", new Color(0,255,0,255)));
-        mockTags.add(new Tag("Travel", new Color(255,0,0,255)));
+        mockTags.add(new Tag("Food", "HEXcolor"));
+        mockTags.add(new Tag("Travel", "HEXcolor"));
         when(tagService.getTags(anyLong())).thenReturn(new ResponseEntity<>(mockTags, HttpStatus.OK));
 
         ResponseEntity<List<Tag>> responseEntity = tagController.getAllTags(1L);
@@ -41,7 +42,7 @@ class TagControllerTest {
 
     @Test
     void testGetTagById() {
-        Tag mockTag = new Tag("Food", new Color(0,0,255,255));
+        Tag mockTag = new Tag("Food", "HEXcolor");
         when(tagService.getTagById(anyLong(), anyLong())).thenReturn(new ResponseEntity<>(mockTag, HttpStatus.OK));
 
         ResponseEntity<Tag> responseEntity = tagController.getById(1L, 1L);
@@ -52,8 +53,8 @@ class TagControllerTest {
 
     @Test
     void testCreateTag() {
-        Tag tagToCreate = new Tag("Food", new Color(255,0,0,255));
-        Tag createdTag = new Tag("Travel", new Color(0,255,0,255));
+        Tag tagToCreate = new Tag("Food", "HEXcolor");
+        Tag createdTag = new Tag("Travel", "HEXcolor");
         when(tagService.createTag(any(Tag.class), anyLong())).thenReturn(new ResponseEntity<>(createdTag, HttpStatus.CREATED));
 
         ResponseEntity<Tag> responseEntity = tagController.createTag(tagToCreate, 1L);
@@ -64,7 +65,7 @@ class TagControllerTest {
 
     @Test
     void testDeleteTag() {
-        Tag deletedTag = new Tag("Food", new Color(255,0,0,255));
+        Tag deletedTag = new Tag("Food", "HEXcolor");
         when(tagService.deleteTag(anyLong(), anyLong())).thenReturn(new ResponseEntity<>(deletedTag, HttpStatus.OK));
 
         ResponseEntity<Tag> responseEntity = tagController.deleteTag(1L, 1L);
@@ -75,10 +76,10 @@ class TagControllerTest {
 
     @Test
     void testUpdateTag() {
-        Tag updatedTag = new Tag("Food", new Color(255,0,0,255));
+        Tag updatedTag = new Tag("Food", "HEXcolor");
         when(tagService.updateTag(anyLong(), any(Tag.class), anyLong())).thenReturn(new ResponseEntity<>(updatedTag, HttpStatus.OK));
 
-        ResponseEntity<Tag> responseEntity = tagController.updateTag(1L, new Tag("Travel", new Color(255,0,0,255)), 1L);
+        ResponseEntity<Tag> responseEntity = tagController.updateTag(1L, new Tag("Travel", "HEXcolor"), 1L);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(updatedTag, responseEntity.getBody());

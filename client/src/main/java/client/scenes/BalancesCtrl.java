@@ -79,7 +79,7 @@ public class BalancesCtrl implements Initializable {
         table.setItems(data);
         var expenses = server.getExpensesByEventId(event.getId());
         var filteredExpenses = expenses.stream()
-                .filter(x -> x.getTag().getName().equals("Gifting Money"))
+                .filter(x -> x.getTag().getName().equals("gifting money"))
                 .toList();
         data2 = FXCollections.observableList(filteredExpenses);
         settles.setItems(data2);

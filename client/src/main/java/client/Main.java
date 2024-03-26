@@ -127,9 +127,12 @@ public class Main extends Application {
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
         var serverSetter = FXML.load(ServerSetterCtrl.class, "client", 
         "scenes", "ServerSetter.fxml");
+        var tagOverview = FXML.load(TagOverviewCtrl.class, "client", "scenes", "TagOverview.fxml");
+
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, editExpense,
-        contactDetails, overviewApp, invite, adminPage, adminPass, 
-        addEvent, balances, editParticipant,serverSetter, config.getLanguage(),  statistics, debts);
+                contactDetails, overviewApp, invite, adminPage, adminPass,
+                addEvent, balances, editParticipant,serverSetter,
+                config.getLanguage(), statistics, debts, tagOverview,this);
     }
 
     /**

@@ -70,12 +70,24 @@
             <VBox fx:id="participantsVBox" spacing="5" />
          </content>
       </ScrollPane>
+<!--<<<<<<< HEAD-->
+<!--      <Button layoutX="103.0" layoutY="54.0" mnemonicParsing="false" onAction="#goToContact" prefHeight="17.0" prefWidth="60.0" text="Add" />-->
+
+<!--      <Button fx:id="goToBalances" layoutX="399.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToBalances" prefHeight="26.0" prefWidth="79.0" text="Balances" />-->
+<!--      <Button layoutX="469.0" layoutY="247.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="25.0" prefWidth="108.0" text="See Statistics" />-->
+<!--     -->
+<!--=======-->
+<!--      <Label fx:id="myLabel2" alignment="CENTER" layoutX="237.0" layoutY="192.0" prefHeight="17.0" prefWidth="99.0" style="-fx-background-color: grey;" textFill="WHITE" />-->
+<!--      <Label fx:id="myLabel" alignment="CENTER" layoutX="122.0" layoutY="192.0" prefHeight="17.0" prefWidth="99.0" style="-fx-background-color: grey;" textFill="WHITE" />-->
+<!--      <Label fx:id="myLabel1" alignment="CENTER" layoutX="14.0" layoutY="192.0" prefHeight="17.0" prefWidth="89.0" style="-fx-background-color: grey;" text="All" textFill="WHITE" />-->
       <Button layoutX="103.0" layoutY="54.0" mnemonicParsing="false" onAction="#goToContact" prefHeight="17.0" prefWidth="60.0" text="Add" />
 
       <Button fx:id="goToBalances" layoutX="399.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToBalances" prefHeight="26.0" prefWidth="79.0" text="Balances" />
-      <Button layoutX="469.0" layoutY="247.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="25.0" prefWidth="108.0" text="See Statistics" />
+      <Button layoutX="469.0" layoutY="244.0" mnemonicParsing="false" onAction="#showStatistics" prefHeight="25.0" prefWidth="108.0" text="See Statistics" />
+      <Button fx:id="tagButton" layoutX="246.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToTagOverview" prefHeight="26.0" prefWidth="129.0" text="Manage tags" />
       <Button fx:id="editExpenseButton" layoutX="469.0" layoutY="175.0" mnemonicParsing="false" onAction="#editExpense" prefHeight="25.0" prefWidth="108.0" text="Edit Expense" />
       <Button fx:id="removeExpenseButton" layoutX="469.0" layoutY="209.0" mnemonicParsing="false" onAction="#removeExpense" prefHeight="25.0" prefWidth="108.0" text="Remove Expense" />
+
 
    </children>
 </AnchorPane>

@@ -12,7 +12,7 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private Color color;
+    private String color;
 
 
     @ManyToOne @JoinColumn(name = "event_id")
@@ -24,7 +24,7 @@ public class Tag {
      * @param name name of tag
      * @param color colour of tag
      */
-    public Tag(String name, Color color){
+    public Tag(String name, String color){
         this.name = name;
         this.color = color;
     }
@@ -89,7 +89,7 @@ public class Tag {
      * change the color of a tag
      * @param color colour of tag
      */
-    public void setColor(Color color) {
+    public void setColor(String color) {
         this.color = color;
     }
 
@@ -97,7 +97,7 @@ public class Tag {
      * get the color of a tag
      * @return colour of tag
      */
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
 
@@ -107,7 +107,7 @@ public class Tag {
      */
     @Override
     public String toString() {
-        return "ID: " + id + " name: " + name + " color: " + color.toString();
+        return "ID: " + id + " name: " + name + " color: " + color;
     }
 
     /**

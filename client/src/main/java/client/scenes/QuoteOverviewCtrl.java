@@ -151,7 +151,7 @@ public class QuoteOverviewCtrl implements Initializable {
         table.setOnMouseClicked(this::handleTableItemClick);
         addKeyboardNavigationHandlers();
 
-        server.registerForEvents("/topic/events", e -> {data.add(e);});
+        server.registerForEvents("/topic/events", e -> data.add(e));
     }
 
     /**
@@ -197,6 +197,13 @@ public class QuoteOverviewCtrl implements Initializable {
         if (event.getClickCount() == 2) { // Double-click
             Event selectedEvent = table.getSelectionModel().getSelectedItem();
             if (selectedEvent != null) {
+                try {
+                    selectedEvent.getId();
+                } catch (NullPointerException e) {
+                    System.out.println("Something went wrong. Please try again.");
+                    refresh();
+                    return;
+                }
                 OverviewCtrl.setSelectedEvent(selectedEvent);
                 mainCtrl.showEventOverview(selectedEvent);
             }

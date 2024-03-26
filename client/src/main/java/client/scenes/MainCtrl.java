@@ -62,6 +62,9 @@ public class MainCtrl {
     private Scene overviewApp;
     private OverviewCtrl overviewAppCtrl;
 
+    private Scene tagOverview;
+    private TagOverviewCtrl tagOverviewCtrl;
+
     private Scene editParticipant;
     private EditParticipantCtrl editParticipantCtrl;
     private Scene serverSetter;
@@ -85,24 +88,26 @@ public class MainCtrl {
 
     /**
      * 
-     * @param primaryStage
-     * @param overview
-     * @param add
-     * @param page
-     * @param addExpense
-     * @param editExpense
-     * @param contactDetails
-     * @param overviewApp
-     * @param invite
-     * @param adminPage
-     * @param adminPass
-     * @param language
-     * @param addEvent
-     * @param balances
-     * @param editParticipant
-     * @param serverSetter2 
-     * @param statistics
-     * @param debtsCtrlParentPair
+     * @param primaryStage stage.
+     * @param overview overview.
+     * @param add add.
+     * @param page page.
+     * @param addExpense addExpense.
+     * @param editExpense editExpense.
+     * @param contactDetails contactDetails.
+     * @param overviewApp overviewApp.
+     * @param invite invite.
+     * @param adminPage adminPage.
+     * @param adminPass adminPass.
+     * @param language language.
+     * @param addEvent addEvent.
+     * @param balances balances.
+     * @param editParticipant editParticipant.
+     * @param serverSetter2 serverSetter2.
+     * @param statistics statistics.
+     * @param debtsCtrlParentPair debtsCtrlParentPair.
+     * @param tagOverview tagOverview.
+     * @param main main.
      */
 
     @SuppressWarnings({"ParameterNumber", "checkstyle:MethodLength"})
@@ -120,7 +125,8 @@ public class MainCtrl {
                            Pair<EditParticipantCtrl,Parent> editParticipant,
                             Pair<ServerSetterCtrl, Parent> serverSetter2, String language,
                            Pair<StatisticsCtrl, Parent> statistics,
-                           Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair) {
+                           Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair,
+                           Pair<TagOverviewCtrl, Parent> tagOverview, Main main) {
 
         this.primaryStage = primaryStage;
         this.main = main;
@@ -134,6 +140,9 @@ public class MainCtrl {
 
         this.addCtrl = add.getKey();
         this.add = new Scene(add.getValue());
+
+        this.tagOverviewCtrl = tagOverview.getKey();
+        this.tagOverview = new Scene(tagOverview.getValue());
 
         this.pageCtrl = page.getKey();
         this.page = new Scene(page.getValue());
@@ -216,6 +225,8 @@ public class MainCtrl {
         return main;
     }
 
+    
+
     /**
      * 
      * @param main
@@ -232,7 +243,6 @@ public class MainCtrl {
         primaryStage.setTitle("Events: Overview");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
-//        startPageCtrl.refresh();  doesn't work (yet!)
     }
 
     /**
@@ -270,6 +280,16 @@ public class MainCtrl {
         primaryStage.setScene(addEvent);
     }
 
+    /**
+     * Show tag overview page
+     * @param event
+     */
+    public void goToTagOverview(Event event) {
+        primaryStage.setTitle("Tag Manager");
+        tagOverviewCtrl.setEvent(event);
+        primaryStage.setScene(tagOverview);
+        tagOverviewCtrl.refresh();
+    }
     /**
      * 
      */
@@ -381,9 +401,6 @@ public class MainCtrl {
     }
 
     /**
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
      * goes to statistics page
      * @param event event to see statistics from
      */
