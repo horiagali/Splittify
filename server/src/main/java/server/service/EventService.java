@@ -33,12 +33,11 @@ public class EventService {
      * @return the new Event
      */
     public ResponseEntity<Event> createEvent(Event event){
-        Event eventEntity = new Event(
+        Event saved = eventRepository.save(new Event(
                 event.getTitle(),
                 event.getDescription(),
                 event.getLocation(),
-                event.getDate());
-        Event saved = eventRepository.save(eventEntity);
+                event.getDate()));
         tagService.createTag(new Tag("food", "#42f572"), saved.getId());
         tagService.createTag(new Tag("travel", "#f54254"), saved.getId());
         tagService.createTag(new Tag("entrance fees", "#07dafa"), saved.getId());

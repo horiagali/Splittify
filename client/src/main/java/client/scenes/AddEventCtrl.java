@@ -1,7 +1,12 @@
 package client.scenes;
 
-import client.utils.ServerUtils;
+import java.net.URL;
+import java.util.Date;
+import java.util.ResourceBundle;
+
 import com.google.inject.Inject;
+
+import client.utils.ServerUtils;
 import commons.Event;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.event.ActionEvent;
@@ -13,11 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
-
-
-import java.net.URL;
-import java.util.Date;
-import java.util.ResourceBundle;
 
 public class AddEventCtrl implements Initializable {
     private final ServerUtils server;
@@ -108,7 +108,6 @@ public class AddEventCtrl implements Initializable {
         }
         clearFields();
         mainCtrl.showOverview();
-        
     }
 
     /**
