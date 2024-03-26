@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import server.database.EventRepository;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class EventService {
@@ -31,6 +33,7 @@ public class EventService {
                 event.getLocation(),
                 event.getDate());
         Event saved = eventRepository.save(eventEntity);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Event created: "+saved);
         return ResponseEntity.ok(saved);
     }
 
@@ -39,6 +42,7 @@ public class EventService {
      * @return all the events in the repository
      */
     public ResponseEntity<List<Event>> getEvents(){
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Events requested");
         return ResponseEntity.ok(eventRepository.findAll());
     }
 
@@ -52,7 +56,7 @@ public class EventService {
             return ResponseEntity.notFound().build();
         }
         Event found = eventRepository.findById(id).get();
-//        found.getParticipants();
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Event requested by ID: "+found);
         return ResponseEntity.ok(found);
     }
 
@@ -67,6 +71,7 @@ public class EventService {
         }
         Event toBeRemoved = eventRepository.findById(id).get();
         eventRepository.deleteById(id);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Event removed: "+toBeRemoved);
         return ResponseEntity.ok(toBeRemoved);
     }
 
@@ -89,6 +94,7 @@ public class EventService {
         toBeUpdated.setTags(event.getTags());
         toBeUpdated.setExpenses(event.getExpenses());
         eventRepository.save(toBeUpdated);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Event updated: "+toBeUpdated);
         return ResponseEntity.ok(toBeUpdated);
     }
 
