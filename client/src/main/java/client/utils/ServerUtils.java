@@ -269,16 +269,7 @@ public class ServerUtils {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		// Log the contents of the expense object
-		System.out.println("Expense object: " + expense);
-
-		// Log the HTTP headers
-		System.out.println("HTTP Headers: " + headers);
-
 		HttpEntity<Expense> requestEntity = new HttpEntity<>(expense, headers);
-
-		// Log the contents of the request entity
-		System.out.println("Request Entity: " + requestEntity);
 
 		return restTemplate.postForObject(url, requestEntity, Expense.class);
 	}

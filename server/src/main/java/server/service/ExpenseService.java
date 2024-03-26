@@ -4,10 +4,8 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
 import server.database.ParticipantRepository;
@@ -56,24 +54,41 @@ public class ExpenseService {
      * @return expense
      */
     public ResponseEntity<Expense> createExpense(Long eventId, Expense expense) {
+//        if (!eventRepository.findById(eventId).isPresent()) {
+//            System.out.println("Event with given ID not found");
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        Event event = eventRepository.findById(eventId).get();
+//        Expense newExpense = new Expense();
+//        newExpense.setAmount(expense.getAmount());
+//        newExpense.setOwers(expense.getOwers());
+//        Tag tag = tagRepository
+//                .findById(expense.getTag().getId()).orElse(null);
+//        newExpense.setTag(tag);
+//        newExpense.setTitle(expense.getTitle());
+//        newExpense.setEvent(event);
+//        newExpense.toString();
+//        Expense saved = balancing(expense, event, newExpense, expense.getAmount());
+//        return ResponseEntity.ok(saved);
         if (!eventRepository.findById(eventId).isPresent()) {
             System.out.println("Event with given ID not found");
             return ResponseEntity.notFound().build();
         }
 
         Event event = eventRepository.findById(eventId).get();
+        Tag tag = expense.getTag() != null ? tagRepository.findById(expense.getTag().getId()).orElse(null) : null;
+
         Expense newExpense = new Expense();
         newExpense.setAmount(expense.getAmount());
         newExpense.setOwers(expense.getOwers());
-        Tag tag = tagRepository
-                .findById(expense.getTag().getId()).orElse(null);
         newExpense.setTag(tag);
         newExpense.setTitle(expense.getTitle());
         newExpense.setEvent(event);
-        newExpense.toString();
-        Expense saved = balancing(expense, event, newExpense, expense.getAmount());
-        return ResponseEntity.ok(saved);
 
+        Expense saved = balancing(expense, event, newExpense, expense.getAmount());
+
+        return ResponseEntity.ok(saved);
     }
 
     /**
