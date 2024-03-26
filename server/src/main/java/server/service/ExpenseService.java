@@ -158,7 +158,8 @@ public class ExpenseService {
 
         if(payer.getEvent() != event) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                    .log(Level.WARNING, "404: Participant does not belong to event via 'getExpensesOfPayer'");
+                    .log(Level.WARNING,
+                            "404: Participant does not belong to event via 'getExpensesOfPayer'");
             return ResponseEntity.notFound().build();
         }
 
@@ -197,7 +198,8 @@ public class ExpenseService {
 
         if(ower.getEvent() != event) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                    .log(Level.WARNING, "404: Participant does not belong to event via 'getExpensesOfOwer'");
+                    .log(Level.WARNING,
+                            "404: Participant does not belong to event via 'getExpensesOfOwer'");
             return ResponseEntity.notFound().build();
         }
 
@@ -237,7 +239,8 @@ public class ExpenseService {
 
         if (expense.getEvent() != event) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                    .log(Level.WARNING, "404: Expense does not belong to event via 'getExpensesById'");
+                    .log(Level.WARNING,
+                            "404: Expense does not belong to event via 'getExpensesById'");
             return ResponseEntity.notFound().build();
         }
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
@@ -273,7 +276,8 @@ public class ExpenseService {
 
         if (expense.getEvent() != event) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                    .log(Level.WARNING, "404: Expense does not belong to event via 'updateExpense'");
+                    .log(Level.WARNING,
+                            "404: Expense does not belong to event via 'updateExpense'");
             return ResponseEntity.notFound().build();
         }
 
@@ -327,7 +331,8 @@ public class ExpenseService {
 
         if (expense.getEvent() != event) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                    .log(Level.WARNING, "404: Expense does not belong to event via 'updateExpense'");
+                    .log(Level.WARNING,
+                            "404: Expense does not belong to event via 'updateExpense'");
             return ResponseEntity.notFound().build();
         }
 
