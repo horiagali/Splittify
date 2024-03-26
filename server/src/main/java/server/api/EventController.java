@@ -72,9 +72,8 @@ public class EventController {
     @SendTo("/topic/events")
     public Event addEvent(Event e) {
         System.out.println("Add event reached");
-        createEvent(e);
         System.out.println("Event created");
-        return e;
+        return createEvent(e).getBody();
     }
 
 

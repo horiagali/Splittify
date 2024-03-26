@@ -1,22 +1,30 @@
 package server.service;
 
 import commons.Event;
+import commons.Tag;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import server.database.EventRepository;
+import server.database.TagRepository;
 
 import java.util.List;
 
 @Service
 public class EventService {
     private final EventRepository eventRepository;
+    private final TagRepository tagRepository;
+    private final TagService tagService;
 
     /**
      * Constructor for eventService
      * @param eventRepository an eventRepository
+     * @param tagRepository
      */
-    protected EventService(EventRepository eventRepository){
+    protected EventService(EventRepository eventRepository, TagRepository tagRepository){
         this.eventRepository = eventRepository;
+        this.tagRepository = tagRepository;
+        tagService = new TagService(tagRepository, eventRepository);
     }
 
     /**
@@ -25,12 +33,16 @@ public class EventService {
      * @return the new Event
      */
     public ResponseEntity<Event> createEvent(Event event){
-        Event eventEntity = new Event(
+        Event saved = eventRepository.save(new Event(
                 event.getTitle(),
                 event.getDescription(),
                 event.getLocation(),
-                event.getDate());
-        Event saved = eventRepository.save(eventEntity);
+                event.getDate()));
+        tagService.createTag(new Tag("food", "#42f572"), saved.getId());
+        tagService.createTag(new Tag("travel", "#f54254"), saved.getId());
+        tagService.createTag(new Tag("entrance fees", "#07dafa"), saved.getId());
+        tagService.createTag(new Tag("no tag", "#9fa9ab"), saved.getId());
+        tagService.createTag(new Tag("gifting money","#e5ff00"), saved.getId());
         return ResponseEntity.ok(saved);
     }
 

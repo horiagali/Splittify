@@ -41,7 +41,7 @@ public class ExpenseService {
         this.eventRepository = eventRepository;
         this.participantRepository = participantRepository;
         this.tagRepository = tagRepository;
-        eventService = new EventService(eventRepository);
+        eventService = new EventService(eventRepository, tagRepository);
         participantService = new ParticipantService(participantRepository, eventRepository);
 
     }

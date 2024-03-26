@@ -103,6 +103,7 @@ public class ServerSetterCtrl {
         }
         else {
             invalidURL.setText("");
+            server.checkConnectionForWebsockets();
             mainCtrl.getMain().loadScenes();
         }
     }

@@ -10,7 +10,7 @@ public class TagTest {
 
     @Test
     public void testGettersAndSetters() {
-        Tag tag = new Tag("John", new Color(255,0,0,255));
+        Tag tag = new Tag("John", "HEXcolor");
 
         tag.setId(123L);
         tag.setEvent(new Event());
@@ -23,11 +23,11 @@ public class TagTest {
 
     @Test
     public void testEqualsAndHash() {
-        Color red = new Color(255,0,0,255);
+        String red = "HEXcolor1";
 
         Tag tag1 = new Tag("Tag", red);
         Tag tag2 = new Tag("Tag", red);
-        Tag tag3 = new Tag("Tag", new Color(0,0,255,255));
+        Tag tag3 = new Tag("Tag", "HEXcolor");
 
         assertEquals(tag1, tag2);
         assertNotEquals(tag1, tag3);
@@ -38,7 +38,7 @@ public class TagTest {
 
     @Test
     public void testToString() {
-        Color red = new Color(255,0,0,255);
+        String red = "HEXcolor";
         Tag tag = new Tag("tag", red);
         tag.setId(123L);
         tag.setEvent(new Event());
