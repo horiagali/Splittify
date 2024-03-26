@@ -43,11 +43,6 @@ public class Event {
         this.expenses = new ArrayList<>();
         this.participants = new ArrayList<>();
         this.tags = new ArrayList<>();
-        tags.add((new Tag("food", "#42f572")));
-        tags.add((new Tag("travel", "#f54254")));
-        tags.add((new Tag("entrance fees", "#07dafa")));
-        tags.add((new Tag("no tag", "#9fa9ab")));
-        tags.add((new Tag("gifting money", "#e5ff00")));
     }
 
     /**

@@ -65,7 +65,7 @@ public class StatisticsCtrl {
         List<String> names = tags.stream().map(x -> x.getName()).distinct().toList();
         pieChartData = FXCollections.observableArrayList();
         for(String name : names) {
-            if(name.equals("Gifting Money"))
+            if(name.equals("gifting money"))
             continue;
             double amount = expenses.stream().filter(x -> x.getTag().getName().equals(name))
             .mapToDouble(x  -> (int) x.getAmount()).sum(); 

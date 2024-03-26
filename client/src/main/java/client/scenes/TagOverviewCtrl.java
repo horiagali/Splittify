@@ -114,7 +114,7 @@ public class TagOverviewCtrl {
         Button button = new Button(tag.getName());
         button.setTextFill(Color.BLACK);
         // if(tag.getColor() != null)
-        button.setStyle("-fx-background-color: " + "#FFFF00");
+        button.setStyle("-fx-background-color: " + tag.getColor());
         button.setOnMouseClicked(event -> {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
             System.out.println(button.getText());
