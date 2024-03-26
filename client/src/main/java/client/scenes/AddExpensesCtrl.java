@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -209,7 +210,9 @@ public class AddExpensesCtrl implements Initializable {
             if (payer != null) {
                 String amountText = amountTextField.getText();
                 double amount = Double.parseDouble(amountText);
-                Expense expense = new Expense(title, amount, payer, selectedParticipants, null);
+                Expense expense = new Expense(title, amount, payer, 
+                selectedParticipants, new Tag("testing", "#42f572"));
+                expense.getTag().setId(1l);
                 System.out.println(expense.toString());
                 server.addExpenseToEvent(selectedEvent.getId(), expense);
                 selectedParticipants.clear();
