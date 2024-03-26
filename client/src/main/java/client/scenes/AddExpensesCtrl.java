@@ -147,14 +147,14 @@ public class AddExpensesCtrl implements Initializable {
         if (!participantCheckboxes.isEmpty()) {
             boolean selected = equallyCheckbox.isSelected();
             if (selected) {
-                selectedParticipants.clear(); // Clear the selected participants list
+                selectedParticipants.clear();
                 Event selectedEvent = OverviewCtrl.getSelectedEvent();
                 if (selectedEvent != null) {
                     List<Participant> participants = server.getParticipants(selectedEvent.getId());
-                    selectedParticipants.addAll(participants); // Add all participants to the selected list
+                    selectedParticipants.addAll(participants);
                 }
             } else {
-                selectedParticipants.clear(); // Clear the selected participants list if equally checkbox is deselected
+                selectedParticipants.clear();
             }
             for (CheckBox checkbox : participantCheckboxes) {
                 checkbox.setSelected(selected);
