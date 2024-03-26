@@ -126,7 +126,6 @@ public class MainCtrl {
 
         this.primaryStage = primaryStage;
         this.main = main;
-        System.out.println("main is set to " + main);
         resourceBundle = ResourceBundle.getBundle("messages_" + 
         language, new Locale(language));
 
@@ -202,7 +201,6 @@ public class MainCtrl {
         primaryStage.setScene(this.serverSetter);
         primaryStage.show();
         setMain(main);
-        System.out.println("Set main to " + main);
     }
 
     /**
@@ -238,7 +236,6 @@ public class MainCtrl {
         primaryStage.setTitle("Events: Overview");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
-//        startPageCtrl.refresh();  doesn't work (yet!)
     }
 
     /**
