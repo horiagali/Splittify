@@ -313,13 +313,13 @@ public class ExpenseService {
         /// NEED TO REVERT BALANCES
         if (!eventRepository.findById(eventId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                    .log(Level.WARNING, "404: Event not found via 'updateExpense'");
+                    .log(Level.WARNING, "404: Event not found via 'deleteExpense'");
             return ResponseEntity.notFound().build();
         }
 
         if (!expenseRepository.findById(expenseId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                    .log(Level.WARNING, "404: Expense not found via 'updateExpense'");
+                    .log(Level.WARNING, "404: Expense not found via 'deleteExpense'");
             return ResponseEntity.notFound().build();
         }
 
@@ -329,7 +329,7 @@ public class ExpenseService {
         if (expense.getEvent() != event) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING,
-                            "404: Expense does not belong to event via 'updateExpense'");
+                            "404: Expense does not belong to event via 'deleteExpense'");
             return ResponseEntity.notFound().build();
         }
 
