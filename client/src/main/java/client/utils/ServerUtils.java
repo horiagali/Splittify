@@ -15,20 +15,7 @@
  */
 package client.utils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import commons.*;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
-import org.glassfish.jersey.client.ClientConfig;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.*;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,13 +27,40 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import org.glassfish.jersey.client.ClientConfig;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import client.Main;
+import commons.Event;
+import commons.Expense;
+import commons.Mail;
+import commons.Participant;
+import commons.Quote;
+import commons.Tag;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
 	private final ObjectMapper objectMapper;
 	private final RestTemplate restTemplate;
 	public static String server = "http://localhost:8080/";
 	public static String serverPort = server.replace("http://", "");
+	private StompSession session;
+
+	
 
 	/**
 	 * Constructor
@@ -56,6 +70,7 @@ public class ServerUtils {
 	public ServerUtils() throws IOException, InterruptedException {
 		this.objectMapper = new ObjectMapper();
 		this.restTemplate = new RestTemplate();
+		checkConnectionForWebsockets();
 	}
 
 	/**
@@ -65,6 +80,14 @@ public class ServerUtils {
 	public static void setServer(String server) {
 		ServerUtils.server = server;
 		serverPort = server.replace("http://", "");
+	}
+
+	/**
+	 * 
+	 */
+	public void checkConnectionForWebsockets() {
+		if(Main.checkConnection())
+		session = connect("ws://"+ serverPort + "websocket");
 	}
 
 	/**
@@ -122,7 +145,6 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>() {});
 	}
-	private StompSession session = connect("ws://"+ serverPort + "websocket");
 
 	
 	/**
@@ -173,7 +195,6 @@ public class ServerUtils {
 	public void sendEvent(String dest, Event e) {
 		session.send(dest, e);
 	}
-
 
 	/**
 	 * 
