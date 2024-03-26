@@ -210,6 +210,7 @@ public class AddExpensesCtrl implements Initializable {
                 String amountText = amountTextField.getText();
                 double amount = Double.parseDouble(amountText);
                 Expense expense = new Expense(title, amount, payer, selectedParticipants, null);
+                System.out.println(expense.toString());
                 server.addExpenseToEvent(selectedEvent.getId(), expense);
                 selectedParticipants.clear();
                 refreshUI(); // Refresh UI
