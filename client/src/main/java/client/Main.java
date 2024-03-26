@@ -130,7 +130,7 @@ public class Main extends Application {
         var tagOverview = FXML.load(TagOverviewCtrl.class, "client", "scenes", "TagOverview.fxml");
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
         contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, balances, 
-        editParticipant,serverSetter, config.getLanguage(),  statistics, debts, tagOverview);
+        editParticipant,serverSetter, config.getLanguage(),  statistics, debts, tagOverview, this);
     }
 
     /**

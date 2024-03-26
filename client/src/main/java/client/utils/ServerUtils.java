@@ -16,6 +16,8 @@
 package client.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import client.Main;
 import commons.*;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -47,6 +49,9 @@ public class ServerUtils {
 	private final RestTemplate restTemplate;
 	public static String server = "http://localhost:8080/";
 	public static String serverPort = server.replace("http://", "");
+	private StompSession session;
+
+	
 
 	/**
 	 * Constructor
@@ -56,6 +61,8 @@ public class ServerUtils {
 	public ServerUtils() throws IOException, InterruptedException {
 		this.objectMapper = new ObjectMapper();
 		this.restTemplate = new RestTemplate();
+		if(Main.checkConnection())
+		session = connect("ws://"+ serverPort + "websocket");
 	}
 
 	/**
@@ -65,6 +72,14 @@ public class ServerUtils {
 	public static void setServer(String server) {
 		ServerUtils.server = server;
 		serverPort = server.replace("http://", "");
+	}
+
+	/**
+	 * 
+	 */
+	public void checkConnectionForWebsockets() {
+		if(Main.checkConnection())
+		session = connect("ws://"+ serverPort + "websocket");
 	}
 
 	/**
@@ -122,7 +137,6 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>() {});
 	}
-	private StompSession session = connect("ws://"+ serverPort + "websocket");
 
 	
 	/**

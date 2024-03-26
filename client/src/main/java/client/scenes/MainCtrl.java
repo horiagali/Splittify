@@ -104,6 +104,7 @@ public class MainCtrl {
      * @param statistics
      * @param debtsCtrlParentPair
      * @param tagOverview
+     * @param main
      */
 
     @SuppressWarnings({"ParameterNumber", "checkstyle:MethodLength"})
@@ -121,10 +122,11 @@ public class MainCtrl {
                             Pair<ServerSetterCtrl, Parent> serverSetter2, String language,
                            Pair<StatisticsCtrl, Parent> statistics,
                            Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair,
-                           Pair<TagOverviewCtrl, Parent> tagOverview) {
+                           Pair<TagOverviewCtrl, Parent> tagOverview, Main main) {
 
         this.primaryStage = primaryStage;
         this.main = main;
+        System.out.println("main is set to " + main);
         resourceBundle = ResourceBundle.getBundle("messages_" + 
         language, new Locale(language));
 
@@ -200,6 +202,7 @@ public class MainCtrl {
         primaryStage.setScene(this.serverSetter);
         primaryStage.show();
         setMain(main);
+        System.out.println("Set main to " + main);
     }
 
     /**
@@ -394,9 +397,6 @@ public class MainCtrl {
     }
 
     /**
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
      * goes to statistics page
      * @param event event to see statistics from
      */
