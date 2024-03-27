@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import server.service.EventService;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/events")
@@ -71,8 +73,7 @@ public class EventController {
     @MessageMapping("/events") // /app/events
     @SendTo("/topic/events")
     public Event addEvent(Event e) {
-        System.out.println("Add event reached");
-        System.out.println("Event created");
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Websocket reached");
         return createEvent(e).getBody();
     }
 
@@ -87,7 +88,6 @@ public class EventController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        System.out.println(event);
         return eventService.createEvent(event);
     }
 

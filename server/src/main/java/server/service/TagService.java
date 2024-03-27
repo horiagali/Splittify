@@ -9,6 +9,8 @@ import server.database.EventRepository;
 import server.database.TagRepository;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class TagService {
@@ -33,13 +35,16 @@ public class TagService {
      */
     public ResponseEntity<Tag> createTag(Tag tag, Long eventId){
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'createTag'");
             return ResponseEntity.notFound().build();
         }
         Event event = eventRepository.findById(eventId).get();
         Tag tagEntity = new Tag(tag.getName(), tag.getColor());
         tagEntity.setEvent(event);
         tagRepository.save(tagEntity);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Tag created: "+tagEntity);
         return ResponseEntity.ok(tagEntity);
     }
 
@@ -49,6 +54,8 @@ public class TagService {
      * @return All tags in the repository
      */
     public ResponseEntity<List<Tag>> getTags(Long eventId){
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Tags requested");
         return ResponseEntity.ok(tagRepository.findTagsByEvent_Id(eventId));
     }
 
@@ -60,12 +67,14 @@ public class TagService {
      */
     public ResponseEntity<Tag> getTagById(Long id, Long eventId){
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'getTagById'");
             return ResponseEntity.notFound().build();
         }
 
         if (!tagRepository.findById(id).isPresent()) {
-            System.out.println("Tag with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Tag not found via 'getTagById'");
             return ResponseEntity.notFound().build();
         }
 
@@ -73,9 +82,13 @@ public class TagService {
         Tag tag = tagRepository.findById(id).get();
 
         if(tag.getEvent() != event) {
-            System.out.println("Tag does not belong to event");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Tag does not belong to event via 'getTagById'");
             return ResponseEntity.notFound().build();
         }
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Tag requested: "+tag);
         return ResponseEntity.ok(tag);
     }
 
@@ -87,12 +100,14 @@ public class TagService {
      */
     public ResponseEntity<Tag> deleteTag(Long eventId, Long id){
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'deleteTag'");
             return ResponseEntity.notFound().build();
         }
 
         if (!tagRepository.findById(id).isPresent()) {
-            System.out.println("Tag with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Tag not found via 'deleteTag'");
             return ResponseEntity.notFound().build();
         }
 
@@ -100,11 +115,15 @@ public class TagService {
         Tag tag = tagRepository.findById(id).get();
 
         if(tag.getEvent() != event) {
-            System.out.println("Tag does not belong to event");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Tag does not belong to event via 'deleteTag'");
             return ResponseEntity.notFound().build();
         }
 
         tagRepository.deleteById(id);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Tag deleted: "+tag);
         return ResponseEntity.ok(tag);
     }
 
@@ -117,12 +136,14 @@ public class TagService {
      */
     public ResponseEntity<Tag> updateTag(Long eventId, Tag newTag, Long id){
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'updateTag'");
             return ResponseEntity.notFound().build();
         }
 
         if (!tagRepository.findById(id).isPresent()) {
-            System.out.println("Tag with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Tag not found via 'updateTag'");
             return ResponseEntity.notFound().build();
         }
 
@@ -130,7 +151,9 @@ public class TagService {
         Tag tag = tagRepository.findById(id).get();
 
         if(tag.getEvent() != event) {
-            System.out.println("Tag does not belong to event");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Tag does not belong to event via 'updateTag'");
             return ResponseEntity.notFound().build();
         }
 
@@ -138,6 +161,8 @@ public class TagService {
         tag.setColor(newTag.getColor());
         tag.setEvent(newTag.getEvent());
         Tag saved = tagRepository.save(tag);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Tag updated: "+saved);
         return ResponseEntity.ok(saved);
     }
 }
