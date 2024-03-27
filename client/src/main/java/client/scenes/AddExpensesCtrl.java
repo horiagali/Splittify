@@ -304,15 +304,21 @@ public class AddExpensesCtrl implements Initializable {
         String title = purposeTextField.getText();
         String amountText = amountTextField.getText();
 
-        //if () return;
-
         double amount = parseAmount(amountText);
-        if (validateAmount(amountText) || amount < 0) return;
+        if (amount < 0 || validateAmount(amountText)) {
+            return; // Return if amount is invalid or blank
+        }
 
         Participant payer = findPayer();
-        if (payer == null) return;
+        if (payer == null) {
+            return;
+        }
 
-        checkSelectedParticipants(selectedParticipants);
+        // Check if at least one participant is selected
+        if (selectedParticipants.isEmpty()) {
+            showErrorDialog("Please select at least one participant to split the cost.");
+            return;
+        }
 
         Tag selectedTag = tagComboBox.getValue();
         if (selectedTag == null) {
@@ -321,7 +327,9 @@ public class AddExpensesCtrl implements Initializable {
         }
 
         Expense expense = createExpense(title, amount, payer, selectedParticipants, selectedTag);
-        if (expense == null) return;
+        if (expense == null) {
+            return;
+        }
 
         saveExpense(selectedEvent, expense);
         clearFieldsAndShowOverview(selectedEvent);
@@ -379,7 +387,12 @@ public class AddExpensesCtrl implements Initializable {
      * @return The selected payer participant, or {@code null} if not found.
      */
     private Participant findPayer() {
-        String payerName = payerComboBox.getValue().getNickname();
+        Participant selectedPayer = payerComboBox.getValue();
+        if (selectedPayer == null) {
+            showErrorDialog("Please select a payer.");
+            return null;
+        }
+        String payerName = selectedPayer.getNickname();
         Participant payer = allParticipants.stream()
                 .filter(participant -> payerName.equals(participant.getNickname()))
                 .findFirst()
