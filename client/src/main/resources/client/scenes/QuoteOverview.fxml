@@ -22,20 +22,36 @@
 
     <fx:define>
         <ToggleGroup fx:id="languageGroup" />
+        <ToggleGroup fx:id="currencyGroup" />
     </fx:define>
 
-    <!-- MenuBar -->
+    <!-- Combined MenuBar -->
     <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
         <menus>
+            <!-- Language Menu -->
             <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
                 <items>
                     <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="languageGroup" />
-                  </toggleGroup></RadioMenuItem>
+                        <toggleGroup>
+                            <ToggleGroup fx:id="languageGroup" />
+                        </toggleGroup>
+                    </RadioMenuItem>
                     <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
                     <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
+                </items>
+            </Menu>
 
+            <!-- Currency Menu -->
+            <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
+                <items>
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="currencyGroup" />
+                        </toggleGroup>
+                    </RadioMenuItem>
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
                 </items>
             </Menu>
         </menus>

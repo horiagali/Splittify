@@ -118,7 +118,7 @@ public class InviteCtrl implements Initializable {
     }
 
     /**
-     * Refreses invite code
+     * Refreshes invite code
      */
     @FXML
     public void refresh() {
