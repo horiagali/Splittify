@@ -43,7 +43,7 @@ public class Currency {
 
     /**
      * gets the used currency
-     * @return
+     * @return returns the used currency
      */
     public static String getCurrencyUsed() {
         return currencyUsed;
