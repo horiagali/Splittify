@@ -4,7 +4,6 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
-import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -211,12 +210,12 @@ public class AddExpensesCtrl implements Initializable {
                 String amountText = amountTextField.getText();
                 double amount = Double.parseDouble(amountText);
                 Expense expense = new Expense(title, amount, payer, 
-                selectedParticipants, new Tag("testing", "#42f572"));
-                expense.getTag().setId(1l);
+                selectedParticipants, server.getTags(selectedEvent.getId()).get(0));
                 System.out.println(expense.toString());
                 server.addExpenseToEvent(selectedEvent.getId(), expense);
                 selectedParticipants.clear();
                 refreshUI(); // Refresh UI
+                mainCtrl.showEventOverview(selectedEvent);
             } else {
                 showErrorDialog("Payer not found.");
             }

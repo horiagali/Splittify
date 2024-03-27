@@ -249,6 +249,7 @@ public class Expense {
                 "  amount=" + amount + "\n" +
                 "  payer=" + payer + "\n" +
                 "  owers=" + owersList + "\n" +
+                "  tag=" + tag + "\n" +
                 "]";
     }
 
