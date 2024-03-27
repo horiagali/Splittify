@@ -1,5 +1,5 @@
-2024-03-26 22:09:39.004377+01:00 database: flush
-org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/AmandaAndree/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
+2024-03-27 11:40:13.947335+01:00 database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Horia/oopp/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
 	at org.h2.message.DbException.get(DbException.java:212)
 	at org.h2.message.DbException.convert(DbException.java:407)
 	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
@@ -96,19 +96,19 @@ org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
 	at server.Main.main(Main.java:32)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/AmandaAndree/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Horia/oopp/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 96 more
-Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/AmandaAndree/oopp-team-56/server/h2-database.mv.db [2.2.224/7]
+Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Horia/oopp/oopp-team-56/server/h2-database.mv.db [2.2.224/7]
 	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
 	at org.h2.mvstore.SingleFileStore.lockFileChannel(SingleFileStore.java:143)
 	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:117)
 	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
 	... 90 more
-2024-03-26 22:09:40.738212+01:00 database: flush
-org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/AmandaAndree/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
+2024-03-27 11:40:15.276530+01:00 database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Horia/oopp/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
 	at org.h2.message.DbException.get(DbException.java:212)
 	at org.h2.message.DbException.convert(DbException.java:407)
 	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
@@ -170,19 +170,19 @@ org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
 	at server.Main.main(Main.java:32)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/AmandaAndree/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Horia/oopp/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 61 more
-Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/AmandaAndree/oopp-team-56/server/h2-database.mv.db [2.2.224/7]
+Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Horia/oopp/oopp-team-56/server/h2-database.mv.db [2.2.224/7]
 	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
 	at org.h2.mvstore.SingleFileStore.lockFileChannel(SingleFileStore.java:143)
 	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:117)
 	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:81)
 	at org.h2.mvstore.MVStore.<init>(MVStore.java:286)
 	... 55 more
-2024-03-26 22:09:43.022775+01:00 database: flush
-org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/AmandaAndree/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
+2024-03-27 11:40:16.867761+01:00 database: flush
+org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Horia/oopp/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
 	at org.h2.message.DbException.get(DbException.java:212)
 	at org.h2.message.DbException.convert(DbException.java:407)
 	at org.h2.mvstore.db.Store.lambda$new$0(Store.java:122)
@@ -248,11 +248,11 @@ org.h2.message.DbException: General error: "org.h2.mvstore.MVStoreException: The
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
 	at server.Main.main(Main.java:32)
-Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/AmandaAndree/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
+Caused by: org.h2.jdbc.JdbcSQLNonTransientException: General error: "org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Horia/oopp/oopp-team-56/server/h2-database.mv.db [2.2.224/7]" [50000-224]
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:566)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 65 more
-Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/AmandaAndree/oopp-team-56/server/h2-database.mv.db [2.2.224/7]
+Caused by: org.h2.mvstore.MVStoreException: The file is locked: C:/Users/Horia/oopp/oopp-team-56/server/h2-database.mv.db [2.2.224/7]
 	at org.h2.mvstore.DataUtils.newMVStoreException(DataUtils.java:996)
 	at org.h2.mvstore.SingleFileStore.lockFileChannel(SingleFileStore.java:143)
 	at org.h2.mvstore.SingleFileStore.open(SingleFileStore.java:117)
