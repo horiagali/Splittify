@@ -45,6 +45,24 @@ public class Currency {
         return currencyUsed;
     }
 
+    /**
+     * Get the exchange rate from Euro to the current currency.
+     *
+     * @return The exchange rate from Euro to the specified currency.
+     */
+    public static double getRate() {
+        switch (currencyUsed) {
+            case "USD":
+                return EUR_TO_USD;
+            case "CHF":
+                return EUR_TO_CHF;
+            case "RON":
+                return EUR_TO_RON;
+            default:
+                throw new IllegalArgumentException("Unsupported currency code: " + currencyUsed);
+        }
+    }
+
     public static void setCurrencyUsed(String currencyUsed) {
         Currency.currencyUsed = currencyUsed;
     }
