@@ -247,8 +247,9 @@ public class Expense {
                 " id=" + id + "\n" +
                 "  title=" + title + "\n" +
                 "  amount=" + amount + "\n" +
-                "  payer=" + payerName + "\n" +
+                "  payer=" + payer + "\n" +
                 "  owers=" + owersList + "\n" +
+                "  tag=" + tag + "\n" +
                 "]";
     }
 

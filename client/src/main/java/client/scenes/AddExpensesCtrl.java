@@ -6,11 +6,9 @@ import commons.Expense;
 import commons.Participant;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -25,13 +23,25 @@ public class AddExpensesCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    private List<CheckBox> participantCheckboxes;
+    private List<CheckBox> participantCheckboxes = new ArrayList<>();
+    private List<Participant> selectedParticipants = new ArrayList<>();
+    private List<Participant> allParticipants = new ArrayList<>();
     @FXML
     private TextField nameTextField;
     @FXML
     private TextField purposeTextField;
     @FXML
     private AnchorPane anchorPane;
+    @FXML
+    private VBox participantsVBox;
+    @FXML
+    private TextField amountTextField;
+    @FXML
+    private ComboBox<String> currencyComboBox;
+    @FXML
+    private CheckBox equallyCheckbox;
+    @FXML
+    private Label selectedCurrencyLabel;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -45,21 +55,6 @@ public class AddExpensesCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
-    @FXML
-    private VBox participantsVBox;
-
-    @FXML
-    private TextField amountTextField;
-
-    @FXML
-    private ComboBox<String> currencyComboBox;
-
-    @FXML
-    private CheckBox equallyCheckbox;
-
-    @FXML
-    private Label selectedCurrencyLabel;
-
     /**
      * Initializes the controller.
      * From Initializable
@@ -68,41 +63,103 @@ public class AddExpensesCtrl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addKeyboardNavigationHandlers();
         currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
-        if (OverviewCtrl.getSelectedEvent() != null) {
-            Long eventId = OverviewCtrl.getSelectedEvent().getId();
-            List<String> participants = server.getParticipantNicknamesByEventId(eventId);
 
-
-            // Clear existing checkboxes
-            participantsVBox.getChildren().clear();
-
-            // Populate checkboxes with participant names
-            for (String participant : participants) {
-                CheckBox participantCheckbox = new CheckBox(participant);
-                participantCheckboxes.add(participantCheckbox);
-
-                participantCheckbox.setPrefWidth(80);
-                participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
-
-                participantsVBox.getChildren().add(participantCheckbox);
-            }
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent != null) {
+            loadParticipants();
         }
 
-        ObservableList<String> currencyList = FXCollections.observableArrayList(
-                "USD", "EUR", "GBP", "JPY");
-        currencyComboBox.setItems(currencyList);
+        // Populate currency ComboBox
+        currencyComboBox.setItems(FXCollections.observableArrayList("USD", "EUR", "GBP", "JPY"));
         currencyComboBox.getSelectionModel().select("EUR");
     }
 
+    /**
+     * Loads the participants
+     */
+    private void loadParticipants() {
+        participantsVBox.getChildren().clear();
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent != null) {
+            System.out.println("Selected event: " + selectedEvent.getTitle());
+            List<Participant> participants = server.getParticipants(selectedEvent.getId());
+            allParticipants.addAll(participants);
+            if (participants != null && !participants.isEmpty()) {
+                for (Participant participant : participants) {
+                    CheckBox participantCheckbox = new CheckBox(participant.getNickname());
+                    participantCheckbox.setPrefWidth(80);
+                    participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
+                    participantCheckbox.setOnAction(event ->
+                            handleParticipantCheckboxAction(participantCheckbox));
+                    participantsVBox.getChildren().add(participantCheckbox);
+                    participantCheckboxes.add(participantCheckbox);
+                }
+                System.out.println("Participants loaded successfully.");
+            } else {
+                showErrorDialog("No participants found for the selected event.");
+            }
+        } else {
+            showErrorDialog("No event selected.");
+        }
+    }
+
+    /**
+     * Refreshes
+     */
+    public void refreshParticipants() {
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent != null) {
+            loadParticipants();
+        }
+    }
+
+
+    /**
+     * Handles participant checkboxes
+     * @param checkBox checkbox
+     */
+    @FXML
+    private void handleParticipantCheckboxAction(CheckBox checkBox) {
+        String participantName = checkBox.getText();
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent == null) {
+            return;
+        }
+        List<Participant> participants = server.getParticipants(selectedEvent.getId());
+        Participant selectedParticipant = participants.stream()
+                .filter(participant -> participantName.equals(participant.getNickname()))
+                .findFirst()
+                .orElse(null);
+        if (selectedParticipant != null) {
+            if (checkBox.isSelected()) {
+                selectedParticipants.add(selectedParticipant);
+            } else {
+                selectedParticipants.remove(selectedParticipant);
+            }
+        }
+    }
+
+    /**
+     * Selects all checkboxes if someone presses split equally
+     */
     @FXML
     private void handleEquallyCheckbox() {
-        if(participantCheckboxes != null) {
+        if (!participantCheckboxes.isEmpty()) {
             boolean selected = equallyCheckbox.isSelected();
+            if (selected) {
+                selectedParticipants.clear();
+                Event selectedEvent = OverviewCtrl.getSelectedEvent();
+                if (selectedEvent != null) {
+                    List<Participant> participants = server.getParticipants(selectedEvent.getId());
+                    selectedParticipants.addAll(participants);
+                }
+            } else {
+                selectedParticipants.clear();
+            }
             for (CheckBox checkbox : participantCheckboxes) {
                 checkbox.setSelected(selected);
             }
-        }
-        else{
+        } else {
             showErrorDialog("There are no participants to split the cost between");
         }
     }
@@ -133,63 +190,65 @@ public class AddExpensesCtrl implements Initializable {
         }
     }
 
-
     /**
      * Handles the action when the user adds an expense.
      */
     @FXML
     private void addExpense() {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
-
-        if(selectedEvent != null && participantCheckboxes != null) {
+        if (selectedEvent != null && !selectedParticipants.isEmpty()) {
             String title = purposeTextField.getText();
             String payerName = nameTextField.getText();
-            Participant payer = server.getParticipantByNickname(selectedEvent.getId(), payerName);
 
-            // Step 2: Retrieve the amount and currency from the UI components
-            String amountText = amountTextField.getText();
-            double amount = Double.parseDouble(amountText);
+            // Find the payer in the allParticipants list
+            Participant payer = allParticipants.stream()
+                    .filter(participant -> payerName.equals(participant.getNickname()))
+                    .findFirst()
+                    .orElse(null);
 
-            // Step 3: Create an expense object
-            Expense expense = new Expense();
-            expense.setAmount(amount);
-            expense.setTitle(title);
-
-            // Step 4: Set the payer of the expense
-            expense.setPayer(payer);
-            List<Participant> owners = new ArrayList<>();
-
-            // Step 5: Add the expense to the selected event for each selected participant
-            for (CheckBox checkbox : participantCheckboxes) {
-                if (checkbox.isSelected()) {
-                    String participantName = checkbox.getText();
-                    Participant participant = server.getParticipantByNickname(
-                            selectedEvent.getId(), participantName);
-                    owners.add(participant);
-                }
+            if (payer != null) {
+                String amountText = amountTextField.getText();
+                double amount = Double.parseDouble(amountText);
+                Expense expense = new Expense(title, amount, payer, 
+                selectedParticipants, server.getTags(selectedEvent.getId()).get(0));
+                System.out.println(expense.toString());
+                server.addExpenseToEvent(selectedEvent.getId(), expense);
+                selectedParticipants.clear();
+                refreshUI(); // Refresh UI
+                mainCtrl.showEventOverview(selectedEvent);
+            } else {
+                showErrorDialog("Payer not found.");
             }
-            expense.setOwers(owners);
-            selectedEvent.addExpense(expense);
-            server.addExpenseToEvent(selectedEvent.getId(), expense);
-        }
-        else{
-            showErrorDialog("Can't add an expense, because some values may be null");
+        } else {
+            showErrorDialog("Can't add an expense because some values may be null.");
         }
     }
 
     /**
-     * Handles the action when the user navigates back to the overview screen.
+     * Refreshes the UI after adding an expense.
+     */
+    private void refreshUI() {
+        // Reload participants and clear input fields
+        loadParticipants();
+        nameTextField.clear();
+        purposeTextField.clear();
+        amountTextField.clear();
+        equallyCheckbox.setSelected(false);
+    }
+
+    /**
+     * Navigates back to the overview screen.
      */
     public void back() {
         mainCtrl.goToOverview();
     }
 
     /**
-     * Shows error message
-     * @param errorMessage message to be shown
+     * Shows an error dialog with the given error message.
+     * @param errorMessage The error message to display.
      */
     private void showErrorDialog(String errorMessage) {
-        Alert alert = new Alert(AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(errorMessage);
