@@ -9,6 +9,8 @@ import server.database.EventRepository;
 import server.database.ParticipantRepository;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 @Service
@@ -37,7 +39,8 @@ public class ParticipantService {
     @Transactional
     public ResponseEntity<Participant> createParticipant(Long eventId, Participant participant) {
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'createParticipant'");
             return ResponseEntity.notFound().build();
         }
 
@@ -51,6 +54,8 @@ public class ParticipantService {
         newParticipant.setIban(participant.getIban());
         newParticipant.setEvent(event);
         Participant saved = participantRepository.save(newParticipant);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Participant created: "+participant);
         return ResponseEntity.ok(saved);
 
     }
@@ -72,21 +77,29 @@ public class ParticipantService {
      */
     public ResponseEntity<Participant> getParticipantById(Long eventId, Long participantId) {
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'getParticipantById'");
             return ResponseEntity.notFound().build();
         }
 
         if (!participantRepository.findById(participantId).isPresent()) {
-            System.out.println("Participant with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Participant not found via 'getParticipantById'");
             return ResponseEntity.notFound().build();
         }
+
         Event event = eventRepository.findById(eventId).get();
         Participant participant = participantRepository.findById(participantId).get();
 
         if(participant.getEvent() != event) {
-            System.out.println("Participant does not belong to event");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Participant does not belong to event via 'getParticipantById'");
             return ResponseEntity.notFound().build();
         }
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO,
+                        "Participant requested: "+participant);
         return ResponseEntity.ok(participant);
     }
 
@@ -97,10 +110,14 @@ public class ParticipantService {
      */
     public ResponseEntity<Participant> removeParticipant(Long id) {
         if (!participantRepository.findById(id).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Participant not found via 'removeParticipant'");
             return ResponseEntity.notFound().build();
         }
         Participant toBeRemoved = participantRepository.findById(id).get();
         participantRepository.deleteById(id);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Participant deleted: "+toBeRemoved);
         return ResponseEntity.ok(toBeRemoved);
     }
 
@@ -116,19 +133,24 @@ public class ParticipantService {
                                                          Participant changeParticipant) {
 
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'updateParticipant'");
             return ResponseEntity.notFound().build();
         }
 
         if (!participantRepository.findById(participantId).isPresent()) {
-            System.out.println("Participant with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Participant not found via 'updateParticipant'");
             return ResponseEntity.notFound().build();
         }
+
         Event event = eventRepository.findById(eventId).get();
         Participant participant = participantRepository.findById(participantId).get();
 
         if(participant.getEvent() != event) {
-            System.out.println("Participant does not belong to event");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Participant does not belong to event via 'updateParticipant'");
             return ResponseEntity.notFound().build();
         }
         participant.setBalance(changeParticipant.getBalance());
@@ -137,6 +159,9 @@ public class ParticipantService {
         participant.setEmail(changeParticipant.getEmail());
         participant.setIban(changeParticipant.getIban());
         participant = participantRepository.save(participant);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO,
+                        "Participant updated: "+participant);
         return ResponseEntity.ok(participant);
     }
 
@@ -148,22 +173,30 @@ public class ParticipantService {
      */
     public ResponseEntity<Participant> deleteParticipant(Long eventId, Long participantId) {
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'deleteParticipant'");
             return ResponseEntity.notFound().build();
         }
 
         if (!participantRepository.findById(participantId).isPresent()) {
-            System.out.println("Participant with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Participant not found via 'deleteParticipant'");
             return ResponseEntity.notFound().build();
         }
+
         Event event = eventRepository.findById(eventId).get();
         Participant participant = participantRepository.findById(participantId).get();
 
         if(participant.getEvent() != event) {
-            System.out.println("Participant does not belong to event");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Participant does not belong to event via 'deleteParticipant'");
             return ResponseEntity.notFound().build();
         }
         participantRepository.deleteById(participantId);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO,
+                        "Participant deleted: "+participant);
         return ResponseEntity.ok(participant);
     }
 
