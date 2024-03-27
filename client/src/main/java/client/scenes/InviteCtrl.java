@@ -13,16 +13,17 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.layout.FlowPane;
 
 import java.net.URL;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -157,12 +158,12 @@ public class InviteCtrl implements Initializable {
             Label emailLabel = new Label(email);
             emailLabel.setStyle("-fx-padding: 5px;");
 
-            Button removeButton = new Button("❌");
-            removeButton.setFont(Font.font("Arial", 5));
-            removeButton.setOnAction(event -> removeEmail(email));
-            removeButton.setPrefSize(15, 15);
-            removeButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY,
-                    new CornerRadii(50), Insets.EMPTY)));
+            // Load the image
+            Image removeImage = new Image(Objects.requireNonNull(getClass().
+                    getResourceAsStream("/client/scenes/images/removeEmail.png")));
+
+            // Create an ImageView with the image
+            Button removeButton = getButton(email, removeImage);
             HBox hbox = new HBox(emailLabel, removeButton);
             hbox.setSpacing(5);
             hbox.setAlignment(Pos.CENTER_LEFT);
@@ -170,6 +171,31 @@ public class InviteCtrl implements Initializable {
             emailFlowPane.getChildren().add(hbox);
         }
         sendButton.setDisable(emailList.isEmpty());
+    }
+
+    /**
+     * Get button
+     * @param email email
+     * @param removeImage the x
+     * @return button
+     */
+    private Button getButton(String email, Image removeImage) {
+        ImageView removeIcon = new ImageView(removeImage);
+        removeIcon.setFitWidth(5);
+        removeIcon.setFitHeight(5);
+
+        // Create a button and set the ImageView as its graphic
+        Button removeButton = new Button();
+        removeButton.setGraphic(removeIcon);
+        removeButton.setOnAction(event -> removeEmail(email));
+        removeButton.setPrefSize(10, 10);
+
+        Insets smallerInsets = new Insets(3);
+        CornerRadii roundedCorners = new CornerRadii(10);
+
+        removeButton.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY,
+                roundedCorners, smallerInsets)));
+        return removeButton;
     }
 
     /**
