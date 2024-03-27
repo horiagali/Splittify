@@ -95,6 +95,8 @@ public class AddExpensesCtrl implements Initializable {
                     participantNicknames.add(participant.getNickname());
                 }
 
+                // Makes sure the combobox displays the NickName (Not the participant toString)
+                // In the dropdown menu
                 payerComboBox.setCellFactory(param -> new ListCell<Participant>() {
                     @Override
                     protected void updateItem(Participant item, boolean empty) {
@@ -107,6 +109,8 @@ public class AddExpensesCtrl implements Initializable {
                     }
                 });
 
+                // Makes sure the combobox displays the NickName (Not the participant toString)
+                // after the user selected one
                 payerComboBox.setButtonCell(new ListCell<Participant>() {
                     @Override
                     protected void updateItem(Participant item, boolean empty) {
@@ -219,8 +223,23 @@ public class AddExpensesCtrl implements Initializable {
     @FXML
     private void addExpense() {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
-        if (selectedEvent != null && !selectedParticipants.isEmpty()) {
+        if (selectedEvent != null) {
             String title = purposeTextField.getText();
+            String amountText = amountTextField.getText();
+
+            if (amountText.isEmpty()) {
+                showErrorDialog("Please enter the amount.");
+                return;
+            }
+
+            double amount;
+            try {
+                amount = Double.parseDouble(amountText);
+            } catch (NumberFormatException e) {
+                showErrorDialog("Please enter a valid number for the amount.");
+                return;
+            }
+
             String payerName = payerComboBox.getValue().getNickname();
 
             // Find the payer in the allParticipants list
@@ -229,21 +248,25 @@ public class AddExpensesCtrl implements Initializable {
                     .findFirst()
                     .orElse(null);
 
-            if (payer != null) {
-                String amountText = amountTextField.getText();
-                double amount = Double.parseDouble(amountText);
-                Expense expense = new Expense(title, amount, payer, 
-                selectedParticipants, server.getTags(selectedEvent.getId()).get(0));
-                System.out.println(expense);
-                server.addExpenseToEvent(selectedEvent.getId(), expense);
-                selectedParticipants.clear();
-                refreshUI(); // Refresh UI
-                mainCtrl.showEventOverview(selectedEvent);
-            } else {
+            if (payer == null) {
                 showErrorDialog("Payer not found.");
+                return;
             }
+
+            if (selectedParticipants.isEmpty()) {
+                showErrorDialog("Please select at least one participant to split the cost.");
+                return;
+            }
+
+            Expense expense = new Expense(title, amount, payer,
+                    selectedParticipants, server.getTags(selectedEvent.getId()).get(0));
+            System.out.println(expense);
+            server.addExpenseToEvent(selectedEvent.getId(), expense);
+            selectedParticipants.clear();
+            refreshUI();
+            mainCtrl.showEventOverview(selectedEvent);
         } else {
-            showErrorDialog("Can't add an expense because some values may be null.");
+            showErrorDialog("No event selected.");
         }
     }
 

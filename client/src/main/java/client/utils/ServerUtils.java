@@ -291,7 +291,6 @@ public class ServerUtils {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<Expense> requestEntity = new HttpEntity<>(expense, headers);
-		System.out.println(requestEntity);
 
 		return restTemplate.postForObject(url, requestEntity, Expense.class);
 	}
