@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class AddExpensesCtrl implements Initializable {
 
@@ -182,6 +183,9 @@ public class AddExpensesCtrl implements Initializable {
         if (selectedEvent != null) {
             List<Tag> tags = server.getTags(selectedEvent.getId());
             if (tags != null && !tags.isEmpty()) {
+                tags = tags.stream()
+                        .filter(tag -> !"gifting money".equalsIgnoreCase(tag.getName()))
+                        .collect(Collectors.toList());
                 ObservableList<Tag> tagList = FXCollections.observableArrayList(tags);
                 tagComboBox.setItems(tagList);
                 // Customize the appearance of the ComboBox items to display only tag names
@@ -297,6 +301,10 @@ public class AddExpensesCtrl implements Initializable {
     private void addExpense() {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         String title = purposeTextField.getText();
+        if (title.isEmpty()) {
+            showErrorDialog("Please enter a title for the expense.");
+            return;
+        }
         String amountText = amountTextField.getText();
 
         double amount = parseAmount(amountText);
@@ -322,23 +330,9 @@ public class AddExpensesCtrl implements Initializable {
         }
 
         Expense expense = createExpense(title, amount, payer, selectedParticipants, selectedTag);
-        if (expense == null) {
-            return;
-        }
 
         saveExpense(selectedEvent, expense);
         clearFieldsAndShowOverview(selectedEvent);
-    }
-
-    /**
-     * Checks if a participant has been selected
-     * @param selectedParticipants list of selected participants
-     */
-    private void checkSelectedParticipants(List<Participant> selectedParticipants) {
-        if (selectedParticipants.isEmpty()) {
-            showErrorDialog("Please select at least one participant to split the cost.");
-            return;
-        }
     }
 
     /**
