@@ -25,9 +25,10 @@
         <ToggleGroup fx:id="currencyGroup" />
     </fx:define>
 
-    <!-- Language MenuBar -->
+    <!-- Combined MenuBar -->
     <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
         <menus>
+            <!-- Language Menu -->
             <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
                 <items>
                     <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
@@ -39,12 +40,8 @@
                     <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
                 </items>
             </Menu>
-        </menus>
-    </MenuBar>
 
-    <!-- Currency MenuBar -->
-    <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
-        <menus>
+            <!-- Currency Menu -->
             <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
                 <items>
                     <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
