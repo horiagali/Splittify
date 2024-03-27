@@ -72,8 +72,12 @@ public class EventService {
             return ResponseEntity.notFound().build();
         }
         Event found = eventRepository.findById(id).get();
+<<<<<<< HEAD
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                 .log(Level.INFO, "Event requested: "+found);
+=======
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Event requested by ID: "+found);
+>>>>>>> 649522d (Added logging to Event API)
         return ResponseEntity.ok(found);
     }
 
@@ -90,8 +94,12 @@ public class EventService {
         }
         Event toBeRemoved = eventRepository.findById(id).get();
         eventRepository.deleteById(id);
+<<<<<<< HEAD
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                 .log(Level.INFO, "Event deleted: "+toBeRemoved);
+=======
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Event removed: "+toBeRemoved);
+>>>>>>> 649522d (Added logging to Event API)
         return ResponseEntity.ok(toBeRemoved);
     }
 
@@ -116,8 +124,12 @@ public class EventService {
         toBeUpdated.setTags(event.getTags());
         toBeUpdated.setExpenses(event.getExpenses());
         eventRepository.save(toBeUpdated);
+<<<<<<< HEAD
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                 .log(Level.INFO, "Event updated: "+toBeUpdated);
+=======
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Event updated: "+toBeUpdated);
+>>>>>>> 649522d (Added logging to Event API)
         return ResponseEntity.ok(toBeUpdated);
     }
 
