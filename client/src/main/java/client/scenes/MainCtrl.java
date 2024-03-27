@@ -346,6 +346,7 @@ public class MainCtrl {
 
         //inviteCtrl.setName(eventName);
         primaryStage.setScene(invite);
+        inviteCtrl.refresh();
     }
     /**
      *

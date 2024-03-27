@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -99,7 +100,7 @@ public class InviteCtrl implements Initializable {
      */
     @FXML
     private void generateInviteCode() {
-        String inviteCode = generateRandomCode();
+        String inviteCode = getInviteCode();
         inviteCodeTextField.setText(inviteCode);
         System.out.println("Invite Code: " + inviteCode);
     }
@@ -108,16 +109,20 @@ public class InviteCtrl implements Initializable {
      * Generates a unique invite code.
      * @return the invitation code
      */
-    private String generateRandomCode() {
-        // we still have to make them unique somehow?
-        StringBuilder randomChars = new StringBuilder();
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        int length = 6;
-        for (int i = 0; i < length; i++) {
-            int index = (int) (Math.random() * characters.length());
-            randomChars.append(characters.charAt(index));
+    private String getInviteCode() {
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent != null) {
+            return selectedEvent.getId().toString();
         }
-        return randomChars.toString();
+        else return null;
+    }
+
+    /**
+     * Refreses invite code
+     */
+    @FXML
+    public void refresh() {
+        generateInviteCode();
     }
 
     /**
@@ -145,7 +150,7 @@ public class InviteCtrl implements Initializable {
             updateEmailListUI();
             emailTextField.clear();
         } else {
-            System.out.println("Invalid email address or email already exists!");
+            showErrorDialog("Invalid email address or email already exists!");
         }
     }
 
@@ -216,17 +221,18 @@ public class InviteCtrl implements Initializable {
     private void sendInvitationsByEmail() {
         if (!sendingInProgress) {
             sendingInProgress = true;
-            // Disable the sendButton
             sendButton.setDisable(true);
             for (String email : emailList){
                 Mail mail = new Mail(email,event.getTitle(), "The invite code is: " +
                         event.getId().toString());
                 server.sendEmail(mail);
             }
-
-
+            emailList.clear();
+            uniqueEmails.clear();
+            updateEmailListUI();
             sendingInProgress = false;
             sendButton.setDisable(false);
+            anchorPane.requestFocus();
         }
     }
 
@@ -257,5 +263,18 @@ public class InviteCtrl implements Initializable {
      */
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    /**
+     * Displays an error dialog with the given message.
+     *
+     * @param message The error message to be displayed.
+     */
+    private void showErrorDialog(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
