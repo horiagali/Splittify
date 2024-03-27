@@ -59,6 +59,7 @@ public class Event {
                  List<Expense> expenses, List<Participant> participants, List<Tag> tags) {
         this.title = title;
         this.date = date;
+        date = new Date();
         this.description = description;
         this.location = location;
         this.expenses = expenses;

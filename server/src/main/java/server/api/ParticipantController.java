@@ -86,5 +86,4 @@ public class ParticipantController {
         return participantService.deleteParticipant(eventId, participantId);
     }
 
-
 }

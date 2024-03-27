@@ -297,6 +297,7 @@ public class MainCtrl {
     public void showAddExpenses() {
         primaryStage.setTitle("Expenses: Add Expense");
         primaryStage.setScene(addExpenses);
+        addExpensesCtrl.refreshParticipants();
         // Additional setup for the Add Expense page, if needed
     }
 
