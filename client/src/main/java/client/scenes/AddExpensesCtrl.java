@@ -73,63 +73,86 @@ public class AddExpensesCtrl implements Initializable {
     }
 
     /**
-     * Loads the participants
+     * Loads the participants for the selected event and populates the UI elements accordingly.
+     * If no event is selected or no participants are found
+     * for the selected event, an error dialog is displayed.
      */
     private void loadParticipants() {
         participantsVBox.getChildren().clear();
-        payerComboBox.getItems().clear(); // Clear previous items in payerComboBox
+        payerComboBox.getItems().clear();
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
-        if (selectedEvent != null) {
-            List<Participant> participants = server.getParticipants(selectedEvent.getId());
-            allParticipants.addAll(participants);
-            List<String> participantNicknames = new ArrayList<>();
-            if (participants != null && !participants.isEmpty()) {
-                for (Participant participant : participants) {
-                    CheckBox participantCheckbox = new CheckBox(participant.getNickname());
-                    participantCheckbox.setPrefWidth(80);
-                    participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
-                    participantCheckbox.setOnAction(event ->
-                            handleParticipantCheckboxAction(participantCheckbox));
-                    participantsVBox.getChildren().add(participantCheckbox);
-                    participantCheckboxes.add(participantCheckbox);
-                    participantNicknames.add(participant.getNickname());
-                }
-
-                // Makes sure the combobox displays the NickName (Not the participant toString)
-                // In the dropdown menu
-                payerComboBox.setCellFactory(param -> new ListCell<Participant>() {
-                    @Override
-                    protected void updateItem(Participant item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setText(null);
-                        } else {
-                            setText(item.getNickname());
-                        }
-                    }
-                });
-
-                // Makes sure the combobox displays the NickName (Not the participant toString)
-                // after the user selected one
-                payerComboBox.setButtonCell(new ListCell<Participant>() {
-                    @Override
-                    protected void updateItem(Participant item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setText(null);
-                        } else {
-                            setText(item.getNickname());
-                        }
-                    }
-                });
-
-                payerComboBox.setItems(FXCollections.observableArrayList(participants));
-            } else {
-                showErrorDialog("No participants found for the selected event.");
-            }
-        } else {
+        if (selectedEvent == null) {
             showErrorDialog("No event selected.");
+            return;
         }
+        List<Participant> participants = server.getParticipants(selectedEvent.getId());
+        if (participants == null || participants.isEmpty()) {
+            showErrorDialog("No participants found for the selected event.");
+            return;
+        }
+        allParticipants.addAll(participants);
+        populateParticipantCheckboxes(participants);
+        configurePayerComboBox(participants);
+    }
+
+    /**
+     * Populates the participant checkboxes in the UI with the provided list of participants.
+     *
+     * @param participants The list of participants to be displayed as checkboxes.
+     */
+    private void populateParticipantCheckboxes(List<Participant> participants) {
+        List<String> participantNicknames = new ArrayList<>();
+        for (Participant participant : participants) {
+            CheckBox participantCheckbox = createParticipantCheckbox(participant);
+            participantsVBox.getChildren().add(participantCheckbox);
+            participantCheckboxes.add(participantCheckbox);
+            participantNicknames.add(participant.getNickname());
+        }
+    }
+
+    /**
+     * Creates a CheckBox for the given participant.
+     *
+     * @param participant The participant for whom the CheckBox is created.
+     * @return The created CheckBox.
+     */
+    private CheckBox createParticipantCheckbox(Participant participant) {
+        CheckBox participantCheckbox = new CheckBox(participant.getNickname());
+        participantCheckbox.setPrefWidth(80);
+        participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
+        participantCheckbox.setOnAction(event ->
+                handleParticipantCheckboxAction(participantCheckbox));
+        return participantCheckbox;
+    }
+
+    /**
+     * Configures the payer ComboBox with the provided list of participants.
+     *
+     * @param participants The list of participants to populate the ComboBox.
+     */
+    private void configurePayerComboBox(List<Participant> participants) {
+        payerComboBox.setCellFactory(param -> createParticipantListCell());
+        payerComboBox.setButtonCell(createParticipantListCell());
+        payerComboBox.setItems(FXCollections.observableArrayList(participants));
+    }
+
+    /**
+     * Creates a ListCell for the ComboBox to display participant nicknames.
+     *
+     * @return The created ListCell.
+     */
+    private ListCell<Participant> createParticipantListCell() {
+        return new ListCell<>() {
+            @Override
+            protected void updateItem(Participant item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getNickname());
+                }
+            }
+        };
     }
 
     /**
