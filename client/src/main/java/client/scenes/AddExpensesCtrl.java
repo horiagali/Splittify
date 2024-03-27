@@ -296,17 +296,12 @@ public class AddExpensesCtrl implements Initializable {
     @FXML
     private void addExpense() {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
-        if (selectedEvent == null) {
-            showErrorDialog("No event selected.");
-            return;
-        }
-
         String title = purposeTextField.getText();
         String amountText = amountTextField.getText();
 
         double amount = parseAmount(amountText);
-        if (amount < 0 || validateAmount(amountText)) {
-            return; // Return if amount is invalid or blank
+        if (selectedEvent == null || amount < 0 || validateAmount(amountText)) {
+            return;
         }
 
         Participant payer = findPayer();
@@ -455,6 +450,7 @@ public class AddExpensesCtrl implements Initializable {
      * Navigates back to the overview screen.
      */
     public void back() {
+        refreshUI();
         mainCtrl.goToOverview();
     }
 
