@@ -55,7 +55,7 @@ public class ParticipantService {
         newParticipant.setEvent(event);
         Participant saved = participantRepository.save(newParticipant);
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                .log(Level.INFO, "Participant created: "+participant);
+                .log(Level.INFO, "Participant created: "+saved);
         return ResponseEntity.ok(saved);
 
     }

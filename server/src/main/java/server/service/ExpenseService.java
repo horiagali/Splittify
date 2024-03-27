@@ -126,7 +126,7 @@ public class ExpenseService {
      */
     public ResponseEntity<List<Expense>> getExpenses(Long eventId) {
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                .log(Level.INFO, "Expenses requested'");
+                .log(Level.INFO, "Expenses requested");
         return ResponseEntity.ok(expenseRepository.findExpensesByEventId(eventId));
     }
 
