@@ -60,7 +60,7 @@ public class EventService {
         }
         Event found = eventRepository.findById(id).get();
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                .log(Level.INFO, "Event requested by ID: "+found);
+                .log(Level.INFO, "Event requested: "+found);
         return ResponseEntity.ok(found);
     }
 
@@ -78,7 +78,7 @@ public class EventService {
         Event toBeRemoved = eventRepository.findById(id).get();
         eventRepository.deleteById(id);
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                .log(Level.INFO, "Event removed: "+toBeRemoved);
+                .log(Level.INFO, "Event deleted: "+toBeRemoved);
         return ResponseEntity.ok(toBeRemoved);
     }
 
