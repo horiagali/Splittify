@@ -320,6 +320,7 @@ public class ExpenseService {
         if (!expenseRepository.findById(expenseId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "404: Expense not found via 'deleteExpense'");
+
             return ResponseEntity.notFound().build();
         }
 
