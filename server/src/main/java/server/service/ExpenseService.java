@@ -331,6 +331,7 @@ public class ExpenseService {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING,
                             "404: Expense does not belong to event via 'deleteExpense'");
+
             return ResponseEntity.notFound().build();
         }
 
