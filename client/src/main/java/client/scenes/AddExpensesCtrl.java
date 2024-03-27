@@ -4,8 +4,10 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -40,6 +42,8 @@ public class AddExpensesCtrl implements Initializable {
     private CheckBox equallyCheckbox;
     @FXML
     private ComboBox<Participant> payerComboBox;
+    @FXML
+    private ComboBox<Tag> tagComboBox;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -60,6 +64,7 @@ public class AddExpensesCtrl implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addKeyboardNavigationHandlers();
+        loadTags();
         currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
 
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
@@ -162,6 +167,51 @@ public class AddExpensesCtrl implements Initializable {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         if (selectedEvent != null) {
             loadParticipants();
+            loadTags();
+        }
+    }
+
+    /**
+     * Loads the tags associated with the selected event from the
+     * server and populates the tagComboBox.
+     * If no event is selected or no tags are found for
+     * the selected event, the tagComboBox will remain empty.
+     */
+    private void loadTags() {
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent != null) {
+            List<Tag> tags = server.getTags(selectedEvent.getId());
+            if (tags != null && !tags.isEmpty()) {
+                ObservableList<Tag> tagList = FXCollections.observableArrayList(tags);
+                tagComboBox.setItems(tagList);
+                // Customize the appearance of the ComboBox items to display only tag names
+                tagComboBox.setCellFactory(param -> new ListCell<>() {
+                    @Override
+                    protected void updateItem(Tag item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            setText(item.getName());
+                        }
+                    }
+                });
+                tagComboBox.setButtonCell(new ListCell<>() {
+                    @Override
+                    protected void updateItem(Tag item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            setText(item.getName());
+                        }
+                    }
+                });
+            } else {
+                tagComboBox.getItems().clear();
+            }
+        } else {
+            tagComboBox.getItems().clear();
         }
     }
 
@@ -246,51 +296,136 @@ public class AddExpensesCtrl implements Initializable {
     @FXML
     private void addExpense() {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
-        if (selectedEvent != null) {
-            String title = purposeTextField.getText();
-            String amountText = amountTextField.getText();
-
-            if (amountText.isEmpty()) {
-                showErrorDialog("Please enter the amount.");
-                return;
-            }
-
-            double amount;
-            try {
-                amount = Double.parseDouble(amountText);
-            } catch (NumberFormatException e) {
-                showErrorDialog("Please enter a valid number for the amount.");
-                return;
-            }
-
-            String payerName = payerComboBox.getValue().getNickname();
-
-            // Find the payer in the allParticipants list
-            Participant payer = allParticipants.stream()
-                    .filter(participant -> payerName.equals(participant.getNickname()))
-                    .findFirst()
-                    .orElse(null);
-
-            if (payer == null) {
-                showErrorDialog("Payer not found.");
-                return;
-            }
-
-            if (selectedParticipants.isEmpty()) {
-                showErrorDialog("Please select at least one participant to split the cost.");
-                return;
-            }
-
-            Expense expense = new Expense(title, amount, payer,
-                    selectedParticipants, server.getTags(selectedEvent.getId()).get(0));
-            System.out.println(expense);
-            server.addExpenseToEvent(selectedEvent.getId(), expense);
-            selectedParticipants.clear();
-            refreshUI();
-            mainCtrl.showEventOverview(selectedEvent);
-        } else {
+        if (selectedEvent == null) {
             showErrorDialog("No event selected.");
+            return;
         }
+
+        String title = purposeTextField.getText();
+        String amountText = amountTextField.getText();
+
+        //if () return;
+
+        double amount = parseAmount(amountText);
+        if (validateAmount(amountText) || amount < 0) return;
+
+        Participant payer = findPayer();
+        if (payer == null) return;
+
+        checkSelectedParticipants(selectedParticipants);
+
+        Tag selectedTag = tagComboBox.getValue();
+        if (selectedTag == null) {
+            showErrorDialog("Please select a tag.");
+            return;
+        }
+
+        Expense expense = createExpense(title, amount, payer, selectedParticipants, selectedTag);
+        if (expense == null) return;
+
+        saveExpense(selectedEvent, expense);
+        clearFieldsAndShowOverview(selectedEvent);
+    }
+
+    /**
+     * Checks if a participant has been selected
+     * @param selectedParticipants list of selected participants
+     */
+    private void checkSelectedParticipants(List<Participant> selectedParticipants) {
+        if (selectedParticipants.isEmpty()) {
+            showErrorDialog("Please select at least one participant to split the cost.");
+            return;
+        }
+    }
+
+    /**
+     * Validates the amount entered by the user.
+     *
+     * @param amountText The text representing the amount entered by the user.
+     * @return {@code true} if the amount is valid, {@code false} otherwise.
+     */
+    private boolean validateAmount(String amountText) {
+        if (amountText.isEmpty()) {
+            showErrorDialog("Please enter the amount.");
+            return true;
+        }
+        try {
+            Double.parseDouble(amountText);
+        } catch (NumberFormatException e) {
+            showErrorDialog("Please enter a valid number for the amount.");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Parses the amount entered by the user.
+     *
+     * @param amountText The text representing the amount entered by the user.
+     * @return The parsed amount as a double value.
+     */
+    private double parseAmount(String amountText) {
+        try {
+            return Double.parseDouble(amountText);
+        } catch (NumberFormatException e) {
+            showErrorDialog("Please enter a valid number for the amount.");
+            return -1;
+        }
+    }
+
+    /**
+     * Finds the payer selected by the user.
+     *
+     * @return The selected payer participant, or {@code null} if not found.
+     */
+    private Participant findPayer() {
+        String payerName = payerComboBox.getValue().getNickname();
+        Participant payer = allParticipants.stream()
+                .filter(participant -> payerName.equals(participant.getNickname()))
+                .findFirst()
+                .orElse(null);
+        if (payer == null) {
+            showErrorDialog("Payer not found.");
+        }
+        return payer;
+    }
+
+
+    /**
+     * Creates an expense object.
+     *
+     * @param title               The title of the expense.
+     * @param amount              The amount of the expense.
+     * @param payer               The participant who paid the expense.
+     * @param selectedParticipants The participants involved in the expense.
+     * @param selectedTag         The tag associated with the expense.
+     * @return The created expense object.
+     */
+    private Expense createExpense(String title, double amount, Participant payer,
+                                  List<Participant> selectedParticipants, Tag selectedTag) {
+        return new Expense(title, amount, payer, selectedParticipants, selectedTag);
+    }
+
+    /**
+     * Saves the expense to the server and clears selected participants.
+     *
+     * @param selectedEvent The selected event.
+     * @param expense       The expense to be saved.
+     */
+    private void saveExpense(Event selectedEvent, Expense expense) {
+        System.out.println(expense);
+        server.addExpenseToEvent(selectedEvent.getId(), expense);
+        selectedParticipants.clear();
+    }
+
+    /**
+     * Clears input fields and shows the event overview.
+     *
+     * @param selectedEvent The selected event.
+     */
+    private void clearFieldsAndShowOverview(Event selectedEvent) {
+        refreshUI();
+        mainCtrl.showEventOverview(selectedEvent);
     }
 
     /**
