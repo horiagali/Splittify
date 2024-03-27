@@ -4,10 +4,8 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
 import server.database.ParticipantRepository;
@@ -73,7 +71,6 @@ public class ExpenseService {
         newExpense.toString();
         Expense saved = balancing(expense, event, newExpense, expense.getAmount());
         return ResponseEntity.ok(saved);
-
     }
 
     /**

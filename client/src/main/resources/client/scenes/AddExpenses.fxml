@@ -31,7 +31,7 @@
 
         <!-- List of participants with their payment amounts -->
         <ScrollPane layoutX="200.0" layoutY="270.0" prefHeight="54.0" prefWidth="176.0">
-        <VBox fx:id="participantsVBox" layoutX="200.0" layoutY="270.0">
+        <VBox fx:id="participantsVBox"  layoutX="200.0" layoutY="270.0">
         </VBox>
         </ScrollPane>
 
