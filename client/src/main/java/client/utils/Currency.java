@@ -41,6 +41,10 @@ public class Currency {
         return EUR_TO_RON;
     }
 
+    /**
+     * gets the used currency
+     * @return
+     */
     public static String getCurrencyUsed() {
         return currencyUsed;
     }
@@ -63,6 +67,11 @@ public class Currency {
         }
     }
 
+    /**
+     *
+     * @param currencyUsed
+     * sets the currency used
+     */
     public static void setCurrencyUsed(String currencyUsed) {
         Currency.currencyUsed = currencyUsed;
     }

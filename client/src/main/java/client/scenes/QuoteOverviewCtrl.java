@@ -284,6 +284,10 @@ public class QuoteOverviewCtrl implements Initializable {
         mainCtrl.goToBalances(event);
     }
 
+    /**
+     * changes the currency to whatever is selected
+     * @param event
+     */
     @FXML
     public void changeCurrency(ActionEvent event) {
         RadioMenuItem selectedCurrencyItem = (RadioMenuItem) event.getSource();
