@@ -27,8 +27,6 @@ public class AddExpensesCtrl implements Initializable {
     private List<Participant> selectedParticipants = new ArrayList<>();
     private List<Participant> allParticipants = new ArrayList<>();
     @FXML
-    private TextField nameTextField;
-    @FXML
     private TextField purposeTextField;
     @FXML
     private AnchorPane anchorPane;
@@ -41,7 +39,7 @@ public class AddExpensesCtrl implements Initializable {
     @FXML
     private CheckBox equallyCheckbox;
     @FXML
-    private Label selectedCurrencyLabel;
+    private ComboBox<Participant> payerComboBox;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -79,11 +77,12 @@ public class AddExpensesCtrl implements Initializable {
      */
     private void loadParticipants() {
         participantsVBox.getChildren().clear();
+        payerComboBox.getItems().clear(); // Clear previous items in payerComboBox
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         if (selectedEvent != null) {
-            System.out.println("Selected event: " + selectedEvent.getTitle());
             List<Participant> participants = server.getParticipants(selectedEvent.getId());
             allParticipants.addAll(participants);
+            List<String> participantNicknames = new ArrayList<>();
             if (participants != null && !participants.isEmpty()) {
                 for (Participant participant : participants) {
                     CheckBox participantCheckbox = new CheckBox(participant.getNickname());
@@ -93,8 +92,34 @@ public class AddExpensesCtrl implements Initializable {
                             handleParticipantCheckboxAction(participantCheckbox));
                     participantsVBox.getChildren().add(participantCheckbox);
                     participantCheckboxes.add(participantCheckbox);
+                    participantNicknames.add(participant.getNickname());
                 }
-                System.out.println("Participants loaded successfully.");
+
+                payerComboBox.setCellFactory(param -> new ListCell<Participant>() {
+                    @Override
+                    protected void updateItem(Participant item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            setText(item.getNickname());
+                        }
+                    }
+                });
+
+                payerComboBox.setButtonCell(new ListCell<Participant>() {
+                    @Override
+                    protected void updateItem(Participant item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            setText(item.getNickname());
+                        }
+                    }
+                });
+
+                payerComboBox.setItems(FXCollections.observableArrayList(participants));
             } else {
                 showErrorDialog("No participants found for the selected event.");
             }
@@ -146,15 +171,13 @@ public class AddExpensesCtrl implements Initializable {
     private void handleEquallyCheckbox() {
         if (!participantCheckboxes.isEmpty()) {
             boolean selected = equallyCheckbox.isSelected();
+            selectedParticipants.clear();
             if (selected) {
-                selectedParticipants.clear();
                 Event selectedEvent = OverviewCtrl.getSelectedEvent();
                 if (selectedEvent != null) {
                     List<Participant> participants = server.getParticipants(selectedEvent.getId());
                     selectedParticipants.addAll(participants);
                 }
-            } else {
-                selectedParticipants.clear();
             }
             for (CheckBox checkbox : participantCheckboxes) {
                 checkbox.setSelected(selected);
@@ -198,7 +221,7 @@ public class AddExpensesCtrl implements Initializable {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         if (selectedEvent != null && !selectedParticipants.isEmpty()) {
             String title = purposeTextField.getText();
-            String payerName = nameTextField.getText();
+            String payerName = payerComboBox.getValue().getNickname();
 
             // Find the payer in the allParticipants list
             Participant payer = allParticipants.stream()
@@ -211,7 +234,7 @@ public class AddExpensesCtrl implements Initializable {
                 double amount = Double.parseDouble(amountText);
                 Expense expense = new Expense(title, amount, payer, 
                 selectedParticipants, server.getTags(selectedEvent.getId()).get(0));
-                System.out.println(expense.toString());
+                System.out.println(expense);
                 server.addExpenseToEvent(selectedEvent.getId(), expense);
                 selectedParticipants.clear();
                 refreshUI(); // Refresh UI
@@ -228,9 +251,7 @@ public class AddExpensesCtrl implements Initializable {
      * Refreshes the UI after adding an expense.
      */
     private void refreshUI() {
-        // Reload participants and clear input fields
         loadParticipants();
-        nameTextField.clear();
         purposeTextField.clear();
         amountTextField.clear();
         equallyCheckbox.setSelected(false);
