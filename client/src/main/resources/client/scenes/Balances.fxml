@@ -1,34 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BalancesCtrl">
+<VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BalancesCtrl">
    <children>
-      <Text layoutX="225.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts" textAlignment="CENTER" wrappingWidth="149.21630859375">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Text>
-      <TableView fx:id="table" layoutX="60.0" layoutY="56.0" prefHeight="137.0" prefWidth="480.0">
-        <columns>
-          <TableColumn fx:id="colName" prefWidth="240.0" text="Participant" />
-          <TableColumn fx:id="colBalance" prefWidth="239.0" text="Balance" />
-        </columns>
-      </TableView>
-      <Button layoutX="458.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-      <Button layoutX="530.0" layoutY="360.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <TableView fx:id="settles" layoutX="60.0" layoutY="217.0" prefHeight="137.0" prefWidth="480.0">
-        <columns>
-          <TableColumn fx:id="colSettles" prefWidth="479.0" />
-        </columns>
-      </TableView>
-      <Text layoutX="60.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Partial settles" textAlignment="CENTER" wrappingWidth="480.0" />
-      <Button layoutX="250.0" layoutY="360.0" mnemonicParsing="false" onAction="#settleDebts" prefHeight="26.0" prefWidth="100.0" text="Settle Debts" />
+      <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
+         <menus>
+            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
+               <items>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="languageGroup" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
+               </items>
+            </Menu>
+            <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
+               <items>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="currencyGroup" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <Text layoutX="225.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts" textAlignment="CENTER" wrappingWidth="149.21630859375">
+               <font>
+                  <Font size="22.0" />
+               </font>
+            </Text>
+            <TableView fx:id="table" layoutX="60.0" layoutY="56.0" prefHeight="137.0" prefWidth="480.0">
+              <columns>
+                <TableColumn fx:id="colName" prefWidth="240.0" text="Participant" />
+                <TableColumn fx:id="colBalance" prefWidth="239.0" text="Balance" />
+              </columns>
+            </TableView>
+            <Button layoutX="458.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+            <Button layoutX="530.0" layoutY="360.0" mnemonicParsing="false" onAction="#back" text="Back" />
+            <TableView fx:id="settles" layoutX="60.0" layoutY="217.0" prefHeight="137.0" prefWidth="480.0">
+              <columns>
+                <TableColumn fx:id="colSettles" prefWidth="479.0" />
+              </columns>
+            </TableView>
+            <Text layoutX="60.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Partial settles" textAlignment="CENTER" wrappingWidth="480.0" />
+            <Button layoutX="250.0" layoutY="360.0" mnemonicParsing="false" onAction="#settleDebts" prefHeight="26.0" prefWidth="100.0" text="Settle Debts" />
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</VBox>

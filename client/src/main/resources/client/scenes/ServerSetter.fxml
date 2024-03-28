@@ -16,28 +16,38 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ServerSetterCtrl">
+<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ServerSetterCtrl">
 
     <fx:define>
         <ToggleGroup fx:id="languageGroup" />
     </fx:define>
-
-    <!-- MenuBar -->
-    <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
-        <menus>
-            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
-                <items>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
+   <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
+      <menus>
+         <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
+            <items>
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
                   <toggleGroup>
                      <ToggleGroup fx:id="languageGroup" />
-                  </toggleGroup></RadioMenuItem>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
-
-                </items>
-            </Menu>
-        </menus>
-    </MenuBar>
+                  </toggleGroup>
+               </RadioMenuItem>
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
+            </items>
+         </Menu>
+         <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
+            <items>
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="currencyGroup" />
+                  </toggleGroup>
+               </RadioMenuItem>
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
+            </items>
+         </Menu>
+      </menus>
+   </MenuBar>
 
     <!-- AnchorPane 1 -->
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">

@@ -195,6 +195,7 @@ public class QuoteOverviewCtrl implements Initializable {
 
     }
 
+
     /**
      * @param event event handler for mouse double click
      */
