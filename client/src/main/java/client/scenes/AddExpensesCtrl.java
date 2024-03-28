@@ -197,6 +197,7 @@ public class AddExpensesCtrl implements Initializable {
                             setText(null);
                         } else {
                             setText(item.getName());
+                            setStyle("-fx-background-color: " + item.getColor());
                         }
                     }
                 });
@@ -208,6 +209,7 @@ public class AddExpensesCtrl implements Initializable {
                             setText(null);
                         } else {
                             setText(item.getName());
+                            setStyle("-fx-background-color: " + item.getColor());
                         }
                     }
                 });
