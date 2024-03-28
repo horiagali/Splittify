@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="743.0" prefWidth="881.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagOverviewCtrl">
+<VBox alignment="CENTER" prefHeight="743.0" prefWidth="881.0" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagOverviewCtrl">
 
     <fx:define>
         <ToggleGroup fx:id="languageGroup" />
@@ -32,10 +32,10 @@
             </Menu>
         </menus>
     </MenuBar>
-   <AnchorPane prefHeight="705.0" prefWidth="882.0">
+   <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="705.0" prefWidth="882.0">
       <children>
          <Button fx:id="back" layoutX="768.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
-         <FlowPane fx:id="flowPane" hgap="10.0" layoutX="307.0" layoutY="180.0" prefHeight="260.0" prefWidth="267.0" style="-fx-background-color: pink; -fx-border-width: 2; -fx-border-color: black; -fx-border-radius: 1;" vgap="20.0">
+         <FlowPane fx:id="flowPane" hgap="10.0" layoutX="262.0" layoutY="180.0" prefHeight="24.0" prefWidth="357.0" style="-fx-border-width: 2; -fx-border-color: black; -fx-border-radius: 15;" vgap="20.0">
             <padding>
                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
             </padding>

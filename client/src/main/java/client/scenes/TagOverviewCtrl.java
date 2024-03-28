@@ -102,6 +102,12 @@ public class TagOverviewCtrl {
                 Button tagButton = setStyle(tag);
                 flowPane.getChildren().add(tagButton);
             }
+            Button newTagButton = new Button("+");
+            String style = "-fx-background-color: #d9dbd9;" +
+            "-fx-font-size: " + 20 + ";" +
+            "-fx-border-radius: " + 10 + ";";
+            newTagButton.setStyle(style);
+            flowPane.getChildren().add(newTagButton);
         }
     }
 
@@ -114,7 +120,10 @@ public class TagOverviewCtrl {
         Button button = new Button(tag.getName());
         button.setTextFill(Color.BLACK);
         // if(tag.getColor() != null)
-        button.setStyle("-fx-background-color: " + tag.getColor());
+        String style = "-fx-background-color: " + tag.getColor() + ";" +
+        "-fx-font-size: " + 20 + ";" +
+        "-fx-border-radius: " + 10 + ";";
+        button.setStyle(style);
         button.setOnMouseClicked(event -> {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
             System.out.println(button.getText());
