@@ -117,6 +117,12 @@ public class TagOverviewCtrl {
             "-fx-font-size: " + 20 + ";" +
             "-fx-border-radius: " + 10 + ";";
             newTagButton.setStyle(style);
+            addHoverAnimation(newTagButton);
+            newTagButton.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                    mainCtrl.goToEditTag(this.event, null);
+                }
+                });
             flowPane.getChildren().add(newTagButton);
         }
     }
@@ -134,6 +140,16 @@ public class TagOverviewCtrl {
         "-fx-font-size: " + 20 + ";" +
         "-fx-border-radius: " + 10 + ";";
         button.setStyle(style);
+        addHoverAnimation(button);
+        button.setOnMouseClicked(event -> {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+            mainCtrl.goToEditTag(this.event, tag);
+        }
+        });
+        return button;
+    }
+
+    private void addHoverAnimation(Button button) {
         button.setOnMouseEntered(event -> {
             ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.2), button);
             scaleTransition.setFromX(button.getScaleX());
@@ -156,11 +172,6 @@ public class TagOverviewCtrl {
             scaleTransition.play();
 
         });
-        button.setOnMouseClicked(event -> {
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-        }
-        });
-        return button;
     }
 
     /**
