@@ -5,18 +5,22 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+
 import com.google.inject.Inject;
+
 
 import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Tag;
+import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import javafx.scene.layout.FlowPane;
 
 public class TagOverviewCtrl {
@@ -108,6 +112,7 @@ public class TagOverviewCtrl {
             "-fx-border-radius: " + 10 + ";";
             newTagButton.setStyle(style);
             flowPane.getChildren().add(newTagButton);
+
         }
     }
 
@@ -124,6 +129,28 @@ public class TagOverviewCtrl {
         "-fx-font-size: " + 20 + ";" +
         "-fx-border-radius: " + 10 + ";";
         button.setStyle(style);
+        button.setOnMouseEntered(event -> {
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.2), button);
+            scaleTransition.setFromX(button.getScaleX());
+            scaleTransition.setFromY(button.getScaleY());
+            scaleTransition.setFromZ(button.getScaleZ());
+            scaleTransition.setToX(button.getScaleX()*1.1);
+            scaleTransition.setToY(button.getScaleY()*1.1);
+            scaleTransition.setToZ(button.getScaleZ()*1.1);
+            scaleTransition.play();
+
+        });
+        button.setOnMouseExited(event -> {
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.2), button);
+            scaleTransition.setFromX(button.getScaleX());
+            scaleTransition.setFromY(button.getScaleY());
+            scaleTransition.setFromZ(button.getScaleZ());
+            scaleTransition.setToX(button.getScaleX()/1.1);
+            scaleTransition.setToY(button.getScaleY()/1.1);
+            scaleTransition.setToZ(button.getScaleZ()/1.1);
+            scaleTransition.play();
+
+        });
         button.setOnMouseClicked(event -> {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
             System.out.println(button.getText());
@@ -139,6 +166,7 @@ public class TagOverviewCtrl {
     public static void setEvent(Event selectedEvent) {
         TagOverviewCtrl.event = selectedEvent;
     }
+
 
     /**
      * back button
