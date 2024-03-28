@@ -15,23 +15,33 @@
     <fx:define>
         <ToggleGroup fx:id="languageGroup" />
     </fx:define>
-
-    <!-- MenuBar -->
-    <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
-        <menus>
-            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
-                <items>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
+   <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
+      <menus>
+         <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
+            <items>
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
                   <toggleGroup>
                      <ToggleGroup fx:id="languageGroup" />
-                  </toggleGroup></RadioMenuItem>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
-
-                </items>
-            </Menu>
-        </menus>
-    </MenuBar>
+                  </toggleGroup>
+               </RadioMenuItem>
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
+            </items>
+         </Menu>
+         <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
+            <items>
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="currencyGroup" />
+                  </toggleGroup>
+               </RadioMenuItem>
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
+            </items>
+         </Menu>
+      </menus>
+   </MenuBar>
    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="882.0">
       <children>
          <PieChart fx:id="pieChart" layoutX="107.0" layoutY="27.0" prefHeight="544.0" prefWidth="667.0" title="Statistics" />
