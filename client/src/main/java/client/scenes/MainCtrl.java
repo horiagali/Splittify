@@ -222,7 +222,7 @@ public class MainCtrl {
 
     /**
      * 
-     * @param main
+     * @param main main
      */
     public void setMain(Main main) {
         this.main = main;
@@ -240,7 +240,7 @@ public class MainCtrl {
 
     /**
      * 
-     * @param name
+     * @param name name
      */
     public void addToOverview(String name) {
         overviewAppCtrl.addName(name);
@@ -275,11 +275,11 @@ public class MainCtrl {
 
     /**
      * Show tag overview page
-     * @param event
+     * @param event the event the tags belong to
      */
     public void goToTagOverview(Event event) {
         primaryStage.setTitle("Tag Manager");
-        tagOverviewCtrl.setEvent(event);
+        TagOverviewCtrl.setEvent(event);
         primaryStage.setScene(tagOverview);
         tagOverviewCtrl.refresh();
     }
@@ -321,13 +321,9 @@ public class MainCtrl {
     }
 
     /**
-     *
-     * @param participant
-     */
-    /**
      * Navigates to the Edit Participant page.
      * @param participant The participant to be edited.
-     * @param event
+     * @param event the event the participant belongs to
      */
     public void goToEditParticipant(Participant participant, Event event) {
         primaryStage.setTitle("Edit Participant");
@@ -350,6 +346,7 @@ public class MainCtrl {
 
         //inviteCtrl.setName(eventName);
         primaryStage.setScene(invite);
+        inviteCtrl.refresh();
     }
     /**
      *
@@ -400,7 +397,7 @@ public class MainCtrl {
      */
     public void goToStatistics(Event event) {
         primaryStage.setTitle("Statistics of " + event.getTitle());
-        statisticsCtrl.setEvent(event);
+        StatisticsCtrl.setEvent(event);
         primaryStage.setScene(statistics);
         statisticsCtrl.refresh();
 
@@ -408,7 +405,7 @@ public class MainCtrl {
 
     /**
      * set the title of primary stage, needed for translations
-     * @param title
+     * @param title title
      */
     public void setStageTitle(String title) {
         primaryStage.setTitle(title);
@@ -417,7 +414,7 @@ public class MainCtrl {
     /**
      * goes to settle debts
      * @param event event
-     * @param expenses
+     * @param expenses expenses
      */
     public void goToSettleDebts(Event event, List<Expense> expenses) {
         primaryStage.setTitle("Open Debts page");

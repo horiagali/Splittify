@@ -55,7 +55,7 @@ import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
 	private final ObjectMapper objectMapper;
-	private final RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 	public static String server = "http://localhost:8080/";
 	public static String serverPort = server.replace("http://", "");
 	private StompSession session;
@@ -291,7 +291,6 @@ public class ServerUtils {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<Expense> requestEntity = new HttpEntity<>(expense, headers);
-		System.out.println(requestEntity);
 
 		return restTemplate.postForObject(url, requestEntity, Expense.class);
 	}
@@ -411,6 +410,14 @@ public class ServerUtils {
 						"/participants/" + participant.getParticipantID())
 				.request()
 				.delete();
+	}
+
+	/**
+	 * Setter
+	 * @param restTemplate restTemplate
+	 */
+	public void setRestTemplate(RestTemplate restTemplate) {
+		this.restTemplate = restTemplate;
 	}
 
 

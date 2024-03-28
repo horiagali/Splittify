@@ -105,7 +105,7 @@ public class TagOverviewCtrl {
         }
     }
 
-    /**
+    /**d
      * sets the style of the button to 
      * @param tag
      * @return button of tag
