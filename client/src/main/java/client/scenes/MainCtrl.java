@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -83,6 +85,8 @@ public class MainCtrl {
     private Scene debts;
     private SettleDebtsCtrl debtsCtrl;
 
+    private Dimension dimension;
+
 
     /**
      * 
@@ -126,6 +130,8 @@ public class MainCtrl {
 
         this.primaryStage = primaryStage;
         this.main = main;
+        primaryStage.setMaximized(true);
+
         resourceBundle = ResourceBundle.getBundle("messages_" + 
         language, new Locale(language));
 
@@ -178,6 +184,12 @@ public class MainCtrl {
         this.debtsCtrl = debtsCtrlParentPair.getKey();
         this.debts = new Scene(debtsCtrlParentPair.getValue());
 
+        dimension = Toolkit. getDefaultToolkit(). getScreenSize();
+        primaryStage.setWidth(dimension.getWidth()/1.4);
+        primaryStage.setHeight(dimension.getHeight()/1.4);
+        primaryStage.setMaximized(false);
+        primaryStage.setMaximized(true);
+
         showOverview();
         primaryStage.show();
     }
@@ -196,6 +208,7 @@ public class MainCtrl {
         this.primaryStage = primaryStage;
         this.serverSetterCtrl = serverSetter.getKey();
         serverSetter.getKey().serverURL.setText(Main.config.getServerUrl());
+        primaryStage.setMaximized(true);
         this.serverSetter = new Scene(serverSetter.getValue());
         primaryStage.setTitle("Choose your server");
         primaryStage.setScene(this.serverSetter);
@@ -235,6 +248,7 @@ public class MainCtrl {
     public void showOverview() {
         primaryStage.setTitle("Events: Overview");
         primaryStage.setScene(overview);
+        
         overviewCtrl.refresh();
     }
 
@@ -289,6 +303,7 @@ public class MainCtrl {
     public void showPage() {
         primaryStage.setTitle("Iulia's Page");
         primaryStage.setScene(page);
+        
     }
 
     /**
@@ -347,6 +362,7 @@ public class MainCtrl {
         //inviteCtrl.setName(eventName);
         primaryStage.setScene(invite);
         inviteCtrl.refresh();
+
     }
     /**
      *
@@ -421,5 +437,6 @@ public class MainCtrl {
         debtsCtrl.setEvent(event);
         debtsCtrl.setExpenses(expenses);
         primaryStage.setScene(debts);
+        
     }
 }
