@@ -324,6 +324,20 @@ public class ServerUtils {
 	}
 
 	/**
+	  * Update the tag in the DB.
+	  *
+	  * @param updatedTag   the tag
+	  * @param eventId current event
+	  */
+	  public void updateTag(Tag updatedTag, long eventId) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId + "/tags/" + updatedTag.getId())
+				.request()
+				.put(Entity.entity(updatedTag, APPLICATION_JSON));
+	}
+
+	/**
 	 * Adds a participant to an event.
 	 *
 	 * @param eventId     The ID of the event to which the participant will be added.
