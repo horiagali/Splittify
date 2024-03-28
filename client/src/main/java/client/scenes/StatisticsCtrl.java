@@ -7,17 +7,20 @@ import java.util.ResourceBundle;
 import com.google.inject.Inject;
 
 import client.Main;
+import client.utils.Currency;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Tag;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 
 public class StatisticsCtrl {
@@ -33,6 +36,9 @@ public class StatisticsCtrl {
     
     @FXML
     private Menu languageMenu;
+    
+    @FXML
+    private ToggleGroup currencyGroup;
 
     @FXML
     private PieChart pieChart;
@@ -138,6 +144,22 @@ public class StatisticsCtrl {
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+    }
+
+    /**
+     * changes the currency to whatever is selected
+     * @param event
+     */
+    @FXML
+    public void changeCurrency(ActionEvent event) {
+        RadioMenuItem selectedCurrencyItem = (RadioMenuItem) event.getSource();
+        String currency = selectedCurrencyItem.getText();
+
+        // Set the selected currency as the currency used for exchange rates
+        Currency.setCurrencyUsed(currency.toUpperCase());
+
+        // Print confirmation message
+        System.out.println("Currency changed to: " + currency);
     }
 
     /**
