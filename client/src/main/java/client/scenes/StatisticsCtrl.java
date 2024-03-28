@@ -70,6 +70,18 @@ public class StatisticsCtrl {
         eventTotalAmount.setText("" + totalAmount);
         updateUIWithNewLanguage();
 
+        //giving the pie chart the correct colors. Cant get the legend to have the correct colors,
+        //so i also wont change to colors in the pie chart itself.
+        // for(var data : pieChartData) {
+        //     var tag = expenses.stream().map(x -> x.getTag())
+        //     .filter(x -> data.getName().substring(0, data.getName().indexOf(':'))
+        //     .equals(x.getName()))
+        //     .findFirst();
+        //     if(tag.isEmpty()) continue;
+
+        //     data.getNode().setStyle("-fx-pie-color: " + tag.get().getColor());
+        // }
+
     }
 
     /**
