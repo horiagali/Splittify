@@ -9,6 +9,8 @@ import com.google.inject.Inject;
 import client.Main;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Expense;
+import commons.Tag;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -57,21 +59,36 @@ public class StatisticsCtrl {
      * uses rounding to ensure percentages round to 100%
      */
     public void refresh() {
-        totalAmount = 0;
+        totalAmount = 0; //reset total amount every refresh (else it becomes more and mroe)
         if(!(this.pieChartData == null))
         pieChartData.clear();
         var expenses = server.getExpensesByEventId(event.getId());
         var tags = server.getTags(event.getId());
-        List<String> names = tags.stream().map(x -> x.getName()).distinct().toList();
         pieChartData = FXCollections.observableArrayList();
-        for(String name : names) {
-            if(name.equals("gifting money"))
+        createData(expenses, tags);
+        pieChart.setData(pieChartData);
+        eventTotalAmount.setText("" + totalAmount);
+        updateUIWithNewLanguage();
+
+    }
+
+    /**
+     * creates the data to put in the piechart
+     * @param expenses list of expenses of this event.
+     * @param tags list of tags of this event.
+     */
+    private void createData(List<Expense> expenses, List<Tag> tags) {
+        //method to group all expenses on tag and get their total amount
+        for(Tag tag : tags) {
+            if(tag.getName().equals("gifting money"))
             continue;
-            double amount = expenses.stream().filter(x -> x.getTag().getName().equals(name))
-            .mapToDouble(x  -> (int) x.getAmount()).sum(); 
-            pieChartData.add(new PieChart.Data(name + ": " + amount, amount));
+            double amount = expenses.stream().filter(x -> x.getTag().equals(tag))
+            .mapToDouble(x  -> (int) x.getAmount()).sum();
+            if(amount != 0)
+            pieChartData.add(new PieChart.Data(tag.getName() + ": " + amount, amount));
             totalAmount += amount;
         }
+        //method to set the percentage per tag group
         long remainingPercentage = 100;
         String lastName = "";
         for(PieChart.Data data : pieChartData) {
@@ -80,6 +97,8 @@ public class StatisticsCtrl {
             data.setName(data.getName() + " - " + percentage + "%");
             remainingPercentage = remainingPercentage - percentage;
         }
+        //if percentage does not match due to rounding, 
+        //just add or substract the last 1 or 2 percent to the last tag
         if(remainingPercentage != 0 && pieChartData != null) {
             PieChart.Data dataToEdit = pieChartData.get(pieChartData.size()-1);
             long percentage = Math.round((dataToEdit.getPieValue() / totalAmount)*100);
@@ -88,10 +107,6 @@ public class StatisticsCtrl {
             remainingPercentage = 0;
             
         }
-        pieChart.setData(pieChartData);
-        eventTotalAmount.setText("" + totalAmount);
-        updateUIWithNewLanguage();
-
     }
 
     /**
