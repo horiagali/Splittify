@@ -326,7 +326,7 @@ public class ServerUtils {
 	/**
 	  * Update the tag in the DB.
 	  *
-	  * @param updatedTag   the tag
+	  * @param updatedTag the tag
 	  * @param eventId current event
 	  */
 	  public void updateTag(Tag updatedTag, long eventId) {

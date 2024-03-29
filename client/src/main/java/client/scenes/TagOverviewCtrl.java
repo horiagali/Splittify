@@ -144,14 +144,11 @@ public class TagOverviewCtrl {
         String style = "-fx-background-color: " + tag.getColor() + ";" +
         "-fx-font-size: " + 20 + ";" +
         "-fx-border-radius: " + 10 + ";";
-        Button tagInfoButton = new Button(tag.getName());
-        tagInfoButton.setTextFill(Color.BLACK);
-        tagInfoButton.setStyle(style);
         button.setStyle(style);
         addHoverAnimation(button);
         button.setOnMouseClicked(event -> {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-            showTagInfo(tag, tagInfoButton);
+            showTagInfo(tag);
         }
         });
         return button;
@@ -160,10 +157,13 @@ public class TagOverviewCtrl {
     /**
      * shows info of tag to edit or remove it
      * @param tag
-     * @param button
      */
-    private void showTagInfo(Tag tag, Button button) {
-        
+    private void showTagInfo(Tag tag) {
+        Button button = new Button(tag.getName());
+        button.setTextFill(Color.BLACK);
+        button.setStyle("-fx-background-color: " + tag.getColor() + ";" +
+        "-fx-font-size: " + 20 + ";" +
+        "-fx-border-radius: " + 10 + ";");
         tagInfo.getChildren().clear();
         tagInfo.getChildren().add(button);
         ColorPicker colorPicker = new ColorPicker();
@@ -188,10 +188,12 @@ public class TagOverviewCtrl {
             redColor = "0" + redColor;
             if(blueColor.length() == 1)
             blueColor = "0" + blueColor;
-            String hex = redColor + greenColor + blueColor;
-            tag.setColor("#" + hex);
-            server.updateTag(tag, this.event.getId());
-            refresh();
+            String hex = "#" + redColor + greenColor + blueColor;
+            tag.setColor(hex);
+            showTagInfo(tag);
+            // button.setStyle("-fx-background-color: " + hex + ";" + "-fx-font-size: " + 20 + ";" +
+            // "-fx-border-radius: " + 10 + ";");
+
             });
         tagInfo.getChildren().add(colorPicker);
         tagInfo.setOpacity(1);

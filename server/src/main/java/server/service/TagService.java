@@ -159,7 +159,7 @@ public class TagService {
 
         tag.setName(newTag.getName());
         tag.setColor(newTag.getColor());
-        tag.setEvent(newTag.getEvent());
+        // tag.setEvent(newTag.getEvent());
         Tag saved = tagRepository.save(tag);
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                 .log(Level.INFO, "Tag updated: "+saved);
