@@ -130,10 +130,9 @@ public class Main extends Application {
         var serverSetter = FXML.load(ServerSetterCtrl.class, "client", 
         "scenes", "ServerSetter.fxml");
         var tagOverview = FXML.load(TagOverviewCtrl.class, "client", "scenes", "TagOverview.fxml");
-        var editTag = FXML.load(EditTagCtrl.class, "client", "scenes", "EditTag.fxml");
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
         contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, balances, 
-        editParticipant,serverSetter, config.getLanguage(),  statistics, debts, tagOverview, editTag, this);
+        editParticipant,serverSetter, config.getLanguage(),  statistics, debts, tagOverview, this);
     }
 
     /**

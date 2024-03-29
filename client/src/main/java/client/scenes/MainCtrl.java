@@ -24,7 +24,6 @@ import java.util.ResourceBundle;
 import client.Main;
 import commons.Event;
 import commons.Participant;
-import commons.Tag;
 import commons.Expense;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -80,9 +79,6 @@ public class MainCtrl {
     private AddEventCtrl addEventCtrl;
     private Scene addEvent;
 
-    private Scene editTag;
-    private EditTagCtrl editTagCtrl;
-
     public static ResourceBundle resourceBundle;
     private Scene balances;
     private BalancesCtrl balancesCtrl;
@@ -112,7 +108,6 @@ public class MainCtrl {
      * @param statistics
      * @param debtsCtrlParentPair
      * @param tagOverview
-     * @param editTag 
      * @param main
      */
 
@@ -131,8 +126,8 @@ public class MainCtrl {
                             Pair<ServerSetterCtrl, Parent> serverSetter2, String language,
                            Pair<StatisticsCtrl, Parent> statistics,
                            Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair,
-                           Pair<TagOverviewCtrl, Parent> tagOverview, 
-                           Pair<EditTagCtrl, Parent> editTag, Main main) {
+                           Pair<TagOverviewCtrl, Parent> tagOverview,
+                           Main main) {
 
         this.primaryStage = primaryStage;
         this.main = main;
@@ -151,9 +146,6 @@ public class MainCtrl {
 
         this.tagOverviewCtrl = tagOverview.getKey();
         this.tagOverview = new Scene(tagOverview.getValue());
-
-        this.editTagCtrl = editTag.getKey();
-        this.editTag = new Scene(editTag.getValue());
 
         this.pageCtrl = page.getKey();
         this.page = new Scene(page.getValue());
@@ -304,20 +296,6 @@ public class MainCtrl {
         primaryStage.setTitle("Tag Manager");
         TagOverviewCtrl.setEvent(event);
         primaryStage.setScene(tagOverview);
-        tagOverviewCtrl.refresh();
-    }
-
-    /**
-     * Show tag overview page
-     * @param event the event the tags belong to
-     * @param tag the tag to edit
-     */
-    public void goToEditTag(Event event, Tag tag) {
-        primaryStage.setTitle("Tag Editor");
-        EditTagCtrl.setEvent(event);
-        if(tag != null)
-        EditTagCtrl.setTag(tag);
-        primaryStage.setScene(editTag);
         tagOverviewCtrl.refresh();
     }
 
