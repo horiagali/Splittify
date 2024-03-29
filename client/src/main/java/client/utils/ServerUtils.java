@@ -337,8 +337,9 @@ public class ServerUtils {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
 		HttpEntity<Tag> requestEntity = new HttpEntity<>(tag, headers);
-
-		return restTemplate.postForObject(url, requestEntity, Tag.class);
+		Tag tagCheck = restTemplate.postForObject(url, requestEntity, Tag.class);
+		System.out.println(tagCheck);
+		return tagCheck;
 	}
 
 	/**
@@ -387,7 +388,7 @@ public class ServerUtils {
 
 		return restTemplate.postForObject(url, requestEntity, Participant.class);
 	}
-	
+
 	/**
 	 * Retrieves all participants of an event by event ID.
 	 *

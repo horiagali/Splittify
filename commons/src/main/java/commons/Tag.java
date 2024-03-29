@@ -49,6 +49,8 @@ public class Tag {
      * @return The ID of the tag.
      */
     public long getId() {
+        if(id == null)
+        return 0;
         return id;
     }
 

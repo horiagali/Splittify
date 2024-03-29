@@ -171,11 +171,15 @@ public class TagOverviewCtrl {
         tagInfo.getChildren().add(name);
         Button createButton = new Button("create tag");
         createButton.setOnAction(event -> {
-            System.out.println(newTag);
-            Tag tagToAdd = new Tag(newTag.getName(), newTag.getColor());
-            tagToAdd.setEvent(this.event);
-            server.addTag(this.event.getId(), tagToAdd);
-            refresh();
+            if(!server.getTags(this.event.getId())
+            .stream()
+            .map(x -> x.getName()).toList().contains(name.getText())) {
+                newTag.setName(name.getText());
+                server.addTag(this.event.getId(), newTag);
+                refresh();
+            } else {
+                System.out.println("error! name already exists!");
+            }
         });
         tagInfo.getChildren().add(createButton);
 
@@ -243,7 +247,7 @@ public class TagOverviewCtrl {
      * @param newTag the new version of this tag
      */
     private void showTagInfo(Tag oldTag, Tag newTag) {
-        
+        tagInfo.getChildren().clear();
         Button originalTag = new Button(oldTag.getName());
         originalTag.setTextFill(Color.BLACK);
         Button newTagButton = new Button(newTag.getName());
@@ -254,7 +258,6 @@ public class TagOverviewCtrl {
         originalTag.setStyle("-fx-background-color: " + oldTag.getColor() + ";" +
         "-fx-font-size: " + 20 + ";" +
         "-fx-border-radius: " + 10 + ";");
-        tagInfo.getChildren().clear();
         Text text = new Text("↓");
         text.setStyle("-fx-font-size: 20");
         tagInfo.getChildren().add(originalTag);
@@ -276,8 +279,9 @@ public class TagOverviewCtrl {
         name.setStyle("-fx-font-size: " + 20 + ";");
         name.setAlignment(Pos.CENTER);
         name.setOnAction(event -> {
-            newTag.setName(name.getText());
-            showTagInfo(oldTag, newTag);
+            // doesnt work properly
+            // newTag.setName(name.getText());
+            // showTagInfo(oldTag, newTag);
             });
         name.setOnMouseExited(event -> {
             newTag.setName(name.getText());
@@ -308,8 +312,6 @@ public class TagOverviewCtrl {
             } else {
                 System.out.println("error! name already exists!");
             }
-            
-            
         });
         hbox.getChildren().add(update);
         hbox.getChildren().add(delete);

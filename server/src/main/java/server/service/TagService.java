@@ -33,7 +33,7 @@ public class TagService {
      * @param eventId the eventId
      * @return The new Tag
      */
-    public ResponseEntity<Tag> createTag(Tag tag, Long eventId){
+    public ResponseEntity<Tag> createTag(Tag tag, long eventId){
         if (!eventRepository.findById(eventId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "404: Event not found via 'createTag'");
