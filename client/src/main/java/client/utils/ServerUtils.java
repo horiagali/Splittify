@@ -324,6 +324,24 @@ public class ServerUtils {
 	}
 
 	/**
+	 * Adds a tag to an event.
+	 *
+	 * @param eventId     The ID of the event to which the tag will be added.
+	 * @param tag The tag to be added.
+	 * @return The added tag.
+	 */
+	public Tag addTag(long eventId, Tag tag) {
+		String url = server + "api/events/" + eventId + "/tags";
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<Tag> requestEntity = new HttpEntity<>(tag, headers);
+
+		return restTemplate.postForObject(url, requestEntity, Tag.class);
+	}
+
+	/**
 	  * Update the tag in the DB.
 	  *
 	  * @param updatedTag the tag
@@ -335,6 +353,21 @@ public class ServerUtils {
 				.path("api/events/" + eventId + "/tags/" + updatedTag.getId())
 				.request()
 				.put(Entity.entity(updatedTag, APPLICATION_JSON));
+	}
+
+	/**
+	 * Deletes a participant from an event.
+	 *
+	 * @param eventId     The ID of the event from which the participant will be deleted.
+	 * @param tagId 	  The tag to be deleted.
+	 */
+	public void deleteTag(long eventId, long tagId) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId +
+						"/tags/" + tagId)
+				.request()
+				.delete();
 	}
 
 	/**
@@ -354,6 +387,7 @@ public class ServerUtils {
 
 		return restTemplate.postForObject(url, requestEntity, Participant.class);
 	}
+	
 	/**
 	 * Retrieves all participants of an event by event ID.
 	 *

@@ -107,7 +107,7 @@ public class Tag {
      */
     @Override
     public String toString() {
-        return "ID: " + id + " name: " + name + " color: " + color + "eventid: " + event.getId();
+        return "ID: " + id + " name: " + name + " color: " + color;
     }
 
     /**
