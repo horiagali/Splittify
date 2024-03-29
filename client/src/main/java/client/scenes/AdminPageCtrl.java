@@ -64,6 +64,15 @@ public class AdminPageCtrl implements Initializable {
 
         refresh();
         addKeyboardNavigationHandlers();
+
+        server.registerForUpdates(e -> {data.add(e);});
+    }
+
+    /**
+     * Stops long polling thread
+     */
+    public void stop() {
+        server.stop();
     }
 
     /**
