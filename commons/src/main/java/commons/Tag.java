@@ -48,9 +48,7 @@ public class Tag {
      * Retrieves the ID of the tag.
      * @return The ID of the tag.
      */
-    public long getId() {
-        if(id == null)
-        return 0;
+    public Long getId() {
         return id;
     }
 

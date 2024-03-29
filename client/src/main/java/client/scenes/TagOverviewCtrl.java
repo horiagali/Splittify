@@ -13,6 +13,7 @@ import client.Main;
 import client.utils.Currency;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Expense;
 import commons.Tag;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
@@ -118,10 +119,11 @@ public class TagOverviewCtrl {
         if (event != null) {
             List<Tag> tags =
                     server.getTags(OverviewCtrl.getSelectedEvent().getId());
-
+            tags.remove(1);
             flowPane.getChildren().clear();
             for (Tag tag : tags) {
                 Button tagButton = setStyle(tag);
+                tagButton.setMaxWidth(300);
                 flowPane.getChildren().add(tagButton);
             }
             Button newTagButton = new Button("+");
@@ -178,7 +180,9 @@ public class TagOverviewCtrl {
                 server.addTag(this.event.getId(), newTag);
                 refresh();
             } else {
-                System.out.println("error! name already exists!");
+                Text text = new Text("A tag with this name already exists!");
+                text.setFill(Color.RED);
+                tagInfo.getChildren().add(text);
             }
         });
         tagInfo.getChildren().add(createButton);
@@ -248,6 +252,10 @@ public class TagOverviewCtrl {
      */
     private void showTagInfo(Tag oldTag, Tag newTag) {
         tagInfo.getChildren().clear();
+        if(oldTag.getName().equals("no tag")) {
+            noTagSelected(oldTag, newTag);
+            return;
+        }
         Button originalTag = new Button(oldTag.getName());
         originalTag.setTextFill(Color.BLACK);
         Button newTagButton = new Button(newTag.getName());
@@ -256,33 +264,19 @@ public class TagOverviewCtrl {
         "-fx-font-size: " + 20 + ";" +
         "-fx-border-radius: " + 10 + ";");
         originalTag.setStyle("-fx-background-color: " + oldTag.getColor() + ";" +
-        "-fx-font-size: " + 20 + ";" +
-        "-fx-border-radius: " + 10 + ";");
+        "-fx-font-size: " + 20 + ";" + "-fx-border-radius: " + 10 + ";");
         Text text = new Text("↓");
         text.setStyle("-fx-font-size: 20");
         tagInfo.getChildren().add(originalTag);
         tagInfo.getChildren().add(text);
         tagInfo.getChildren().add(newTagButton);
         ColorPicker colorPicker = new ColorPicker();
-        String colorString = newTag.getColor();
-        double red = Integer.decode(colorString.substring(0, 3));
-        double green = Integer.decode("#" + colorString.substring(3, 5));
-        double blue = Integer.decode("#" + colorString.substring(5, colorString.length()));
-        Color color = new Color(red/255, green/255, blue/255, 1);
-        colorPicker.setValue(color);
-
-        setClickEventColorPicker(oldTag, newTag, colorPicker);
-        
+        colorPickerLogic(oldTag, newTag, colorPicker);
 
         tagInfo.getChildren().add(colorPicker);
         name = new TextField(newTag.getName());
         name.setStyle("-fx-font-size: " + 20 + ";");
         name.setAlignment(Pos.CENTER);
-        name.setOnAction(event -> {
-            // doesnt work properly
-            // newTag.setName(name.getText());
-            // showTagInfo(oldTag, newTag);
-            });
         name.setOnMouseExited(event -> {
             newTag.setName(name.getText());
             showTagInfo(oldTag, newTag);
@@ -293,32 +287,38 @@ public class TagOverviewCtrl {
         tagInfo.setOpacity(1);
     }
 
-    private HBox deleteUpdateButtons(Tag newTag) {
-        HBox hbox = new HBox(10);
-        hbox.setAlignment(Pos.CENTER);
-        Button delete = new Button("delete tag");
-        delete.setOnAction(event -> {
-            server.deleteTag(this.event.getId(), newTag.getId());
-            refresh();
-        });
+    /**
+     * if the tag 'no tag' is selected. Is different because name cannot be changed.
+     * @param oldTag
+     * @param newTag
+     */
+    private void noTagSelected(Tag oldTag, Tag newTag) {
+        Button originalTag = new Button(oldTag.getName());
+        originalTag.setTextFill(Color.BLACK);
+        originalTag.setStyle("-fx-background-color: " + newTag.getColor() + ";" +
+        "-fx-font-size: " + 20 + ";" +
+        "-fx-border-radius: " + 10 + ";");
+        ColorPicker colorPicker = new ColorPicker();
+        colorPickerLogic(oldTag, oldTag, colorPicker);
+        tagInfo.getChildren().add(originalTag);
+        tagInfo.getChildren().add(colorPicker);
         Button update = new Button("update tag");
         update.setOnAction(event -> {
-            if(!server.getTags(this.event.getId())
-            .stream().filter(x -> x.getId() != newTag.getId())
-            .map(x -> x.getName()).toList().contains(name.getText())) {
-                newTag.setName(name.getText());
-                server.updateTag(newTag, this.event.getId());
-                refresh();
-            } else {
-                System.out.println("error! name already exists!");
-            }
-        });
-        hbox.getChildren().add(update);
-        hbox.getChildren().add(delete);
-        return hbox;
+            oldTag.setEvent(this.event);
+            oldTag.setId(server.getTags(this.event.getId()).get(0).getId());
+            server.updateTag(oldTag, this.event.getId());
+            refresh();
+            });
+        tagInfo.getChildren().add(update);
     }
 
-    private void setClickEventColorPicker(Tag oldTag, Tag newTag, ColorPicker colorPicker) {
+    private void colorPickerLogic(Tag oldTag, Tag newTag, ColorPicker colorPicker) {
+        String colorString = newTag.getColor();
+        double red = Integer.decode(colorString.substring(0, 3));
+        double green = Integer.decode("#" + colorString.substring(3, 5));
+        double blue = Integer.decode("#" + colorString.substring(5, colorString.length()));
+        Color color = new Color(red/255, green/255, blue/255, 1);
+        colorPicker.setValue(color);
         colorPicker.setOnAction(event -> {
             String redColor = Integer.toHexString((int) 
             Math.round(colorPicker.getValue().getRed() * 255));
@@ -336,6 +336,38 @@ public class TagOverviewCtrl {
             newTag.setColor(hex);
             showTagInfo(oldTag, newTag);
             });
+    }
+
+    private HBox deleteUpdateButtons(Tag newTag) {
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.CENTER);
+        Button delete = new Button("delete tag");
+        delete.setOnAction(event -> {
+            List<Expense> list = server.getExpensesByEventId(this.event.getId());
+            for(Expense expense : list) {
+                expense.setTag(server.getTags(this.event.getId()).get(0));
+                server.updateExpense(this.event.getId(), expense);
+            }
+            server.deleteTag(this.event.getId(), newTag.getId());
+            refresh();
+        });
+        Button update = new Button("update tag");
+        update.setOnAction(event -> {
+            if(!server.getTags(this.event.getId())
+            .stream().filter(x -> x.getId() != newTag.getId())
+            .map(x -> x.getName()).toList().contains(name.getText())) {
+                newTag.setName(name.getText());
+                server.updateTag(newTag, this.event.getId());
+                refresh();
+            } else {
+                Text text = new Text("A tag with this name already exists!");
+                text.setFill(Color.RED);
+                tagInfo.getChildren().add(text);
+            }
+        });
+        hbox.getChildren().add(update);
+        hbox.getChildren().add(delete);
+        return hbox;
     }
 
     private void addHoverAnimation(Node node) {

@@ -431,6 +431,25 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Expense>>() {});
 	}
+
+	/**
+	 * Update a expense in the database.
+	 *
+	 * @param eventId     The ID of the event to which the expense belongs.
+	 * @param expense The updated expense information.
+	 */
+	public void updateExpense(long eventId, Expense expense) {
+		expense.setEvent(getEvent(eventId));
+		System.out.println(expense);
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId +
+						"/expenses/" + expense.getId())
+				.request()
+				.put(Entity.entity(expense, APPLICATION_JSON));
+	}
+
+
 	/**
 	 * Update a participant in the database.
 	 *
