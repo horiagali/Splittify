@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 public class EventController {
 
     private final EventService eventService;
+    private Map<Object, Consumer<Event>> listeners = new HashMap<>();
 
     /**
      * Constructor for the eventController
@@ -70,8 +71,12 @@ public class EventController {
         return eventService.getEventById(id);
     }
 
-    private Map<Object, Consumer<Event>> listeners = new HashMap<>();
 
+
+    /**
+     * Endpoint for long polling
+     * @return Event
+     */
     @GetMapping("/updates")
     @ResponseBody
     public DeferredResult<ResponseEntity<Event>> getUpdates() {
@@ -85,7 +90,6 @@ public class EventController {
         res.onCompletion(() -> {
             listeners.remove(key);
         });
-
 
         return res;
     }
