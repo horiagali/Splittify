@@ -255,7 +255,8 @@ public class QuoteOverviewCtrl implements Initializable {
     private void importJson(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Import JSON File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         File file = fileChooser.showOpenDialog(table.getScene().getWindow());
 
         if (file != null) {
@@ -288,7 +289,8 @@ public class QuoteOverviewCtrl implements Initializable {
         // You can use JavaFX FileChooser to choose where to save the file
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save JSON File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         File file = fileChooser.showSaveDialog(table.getScene().getWindow());
 
         if (file != null) {
