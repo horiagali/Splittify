@@ -68,6 +68,9 @@ public class AdminPageCtrl implements Initializable {
         server.registerForUpdates(e -> {data.add(e);});
     }
 
+    /**
+     * Stops long polling thread
+     */
     public void stop() {
         server.stop();
     }

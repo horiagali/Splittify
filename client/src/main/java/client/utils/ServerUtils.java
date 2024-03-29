@@ -62,6 +62,7 @@ public class ServerUtils {
 	public static String server = "http://localhost:8080/";
 	public static String serverPort = server.replace("http://", "");
 	private StompSession session;
+	private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
 	
 
@@ -148,7 +149,12 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>() {});
 	}
-	private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+
+
+	/**
+	 * Implementation for long polling
+	 * @param consumer consumer
+	 */
 	public void registerForUpdates(Consumer<Event> consumer) {
 		EXEC.submit(() -> {
 			while (!Thread.interrupted()) {
@@ -168,6 +174,9 @@ public class ServerUtils {
 
 	}
 
+	/**
+	 * Stops long polling thread
+	 */
 	public void stop() {
 		EXEC.shutdownNow();
 	}
