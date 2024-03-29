@@ -36,7 +36,7 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl overviewCtrl;
+    private MainPageCtrl overviewCtrl;
     private Scene overview;
 
     private AddQuoteCtrl addCtrl;
@@ -112,7 +112,7 @@ public class MainCtrl {
      */
 
     @SuppressWarnings({"ParameterNumber", "checkstyle:MethodLength"})
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
+    public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
                            Pair<AddExpensesCtrl, Parent> addExpense,
                            Pair<ContactDetailsCtrl, Parent> contactDetails,
