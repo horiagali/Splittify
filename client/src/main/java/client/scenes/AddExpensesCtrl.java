@@ -1,9 +1,12 @@
 package client.scenes;
 
+import client.Main;
+import client.utils.Currency;
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,39 +14,51 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.time.ZoneId;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AddExpensesCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    private List<CheckBox> participantCheckboxes;
-    @FXML
-    private TextField nameTextField;
+    private List<CheckBox> participantCheckboxes = new ArrayList<>();
+    private List<Participant> selectedParticipants = new ArrayList<>();
+    private List<Participant> allParticipants = new ArrayList<>();
     @FXML
     private TextField purposeTextField;
     @FXML
     private AnchorPane anchorPane;
     @FXML
-    private ListView<Participant> participantsListView;
+    private VBox participantsVBox;
+    @FXML
+    private TextField amountTextField;
+    @FXML
+    private ComboBox<String> currencyComboBox;
+    @FXML
+    private CheckBox equallyCheckbox;
+    @FXML
+    private ComboBox<Participant> payerComboBox;
+    @FXML
+    private ComboBox<Tag> tagComboBox;
+    @FXML
+    private Menu languageMenu;
+    @FXML
+    private ToggleGroup currencyGroup;
+    @FXML
+    private DatePicker datePicker;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
      *
-     * @param server    The ServerUtils instance.
-     * @param mainCtrl  The MainCtrl instance.
+     * @param server   The ServerUtils instance.
+     * @param mainCtrl The MainCtrl instance.
      */
     @Inject
     public AddExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -51,67 +66,271 @@ public class AddExpensesCtrl implements Initializable {
         this.mainCtrl = mainCtrl;
     }
 
-    @FXML
-    private VBox participantsVBox;
-
-    @FXML
-    private TextField amountTextField;
-
-    @FXML
-    private ComboBox<String> currencyComboBox;
-
-    @FXML
-    private CheckBox equallyCheckbox;
-    @FXML
-    private Label selectedCurrencyLabel;
-    @FXML
-    private DatePicker datePicker;
-
     /**
      * Initializes the controller.
      * From Initializable
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         addKeyboardNavigationHandlers();
-        participantCheckboxes = new ArrayList<>();
+        loadTags();
         currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
-        if (OverviewCtrl.getSelectedEvent() != null) {
+        datePicker.setValue(null);
 
-            Long eventId = OverviewCtrl.getSelectedEvent().getId();
-            List<String> participants = server.getParticipantNicknamesByEventId(eventId);
-
-            // Clear existing checkboxes
-            participantsVBox.getChildren().clear();
-
-            // Populate checkboxes with participant names
-            for (String participant : participants) {
-                CheckBox participantCheckbox = new CheckBox(participant);
-                participantCheckboxes.add(participantCheckbox);
-
-                participantCheckbox.setPrefWidth(80);
-                participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
-
-                participantsVBox.getChildren().add(participantCheckbox);
-            }
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent != null) {
+            loadParticipants();
         }
 
-        ObservableList<String> currencyList = FXCollections.observableArrayList(
-                "USD", "EUR", "GBP", "JPY");
-        currencyComboBox.setItems(currencyList);
+        // Populate currency ComboBox
+        currencyComboBox.setItems(FXCollections.observableArrayList("USD", "EUR", "GBP", "JPY"));
         currencyComboBox.getSelectionModel().select("EUR");
     }
 
+    /**
+     * Loads the participants for the selected event and populates the UI elements accordingly.
+     * If no event is selected or no participants are found
+     * for the selected event, an error dialog is displayed.
+     */
+    private void loadParticipants() {
+        participantsVBox.getChildren().clear();
+        payerComboBox.getItems().clear();
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent == null) {
+            showErrorDialog("No event selected.");
+            return;
+        }
+        List<Participant> participants = server.getParticipants(selectedEvent.getId());
+        if (participants == null || participants.isEmpty()) {
+            showErrorDialog("No participants found for the selected event.");
+            return;
+        }
+        allParticipants.addAll(participants);
+        populateParticipantCheckboxes(participants);
+        configurePayerComboBox(participants);
+    }
+
+    /**
+     * Populates the participant checkboxes in the UI with the provided list of participants.
+     *
+     * @param participants The list of participants to be displayed as checkboxes.
+     */
+    private void populateParticipantCheckboxes(List<Participant> participants) {
+        List<String> participantNicknames = new ArrayList<>();
+        for (Participant participant : participants) {
+            CheckBox participantCheckbox = createParticipantCheckbox(participant);
+            participantsVBox.getChildren().add(participantCheckbox);
+            participantCheckboxes.add(participantCheckbox);
+            participantNicknames.add(participant.getNickname());
+        }
+    }
+
+    /**
+     * Functionality for the date picker.
+     *
+     * @return the date inserted.
+     */
+    private Date getDateFromPicker() {
+        if (datePicker.getValue() != null)
+            return Date.from(datePicker.getValue()
+                    .atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return null;
+    }
+
+    /**
+     * Creates a CheckBox for the given participant.
+     *
+     * @param participant The participant for whom the CheckBox is created.
+     * @return The created CheckBox.
+     */
+    private CheckBox createParticipantCheckbox(Participant participant) {
+        CheckBox participantCheckbox = new CheckBox(participant.getNickname());
+        participantCheckbox.setPrefWidth(80);
+        participantCheckbox.setStyle("-fx-padding: 0 0 0 5;");
+        participantCheckbox.setOnAction(event ->
+                handleParticipantCheckboxAction(participantCheckbox));
+        return participantCheckbox;
+    }
+
+    /**
+     * Configures the payer ComboBox with the provided list of participants.
+     *
+     * @param participants The list of participants to populate the ComboBox.
+     */
+    private void configurePayerComboBox(List<Participant> participants) {
+        payerComboBox.setCellFactory(param -> createParticipantListCell());
+        payerComboBox.setButtonCell(createParticipantListCell());
+        payerComboBox.setItems(FXCollections.observableArrayList(participants));
+    }
+
+    /**
+     * Creates a ListCell for the ComboBox to display participant nicknames.
+     *
+     * @return The created ListCell.
+     */
+    private ListCell<Participant> createParticipantListCell() {
+        return new ListCell<>() {
+            @Override
+            protected void updateItem(Participant item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getNickname());
+                }
+            }
+        };
+    }
+
+    /**
+     * Refreshes
+     */
+    public void refreshParticipants() {
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent != null) {
+            loadParticipants();
+            loadTags();
+        }
+    }
+
+    /**
+     * Loads the tags associated with the selected event from the
+     * server and populates the tagComboBox.
+     * If no event is selected or no tags are found for
+     * the selected event, the tagComboBox will remain empty.
+     */
+    private void loadTags() {
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent != null) {
+            List<Tag> tags = server.getTags(selectedEvent.getId());
+            if (tags != null && !tags.isEmpty()) {
+                tags = tags.stream()
+                        .filter(tag -> !"gifting money".equalsIgnoreCase(tag.getName()))
+                        .collect(Collectors.toList());
+                ObservableList<Tag> tagList = FXCollections.observableArrayList(tags);
+                tagComboBox.setItems(tagList);
+                // Customize the appearance of the ComboBox items to display only tag names
+                tagComboBox.setCellFactory(param -> new ListCell<>() {
+                    @Override
+                    protected void updateItem(Tag item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            setText(item.getName());
+                            setStyle("-fx-background-color: " + item.getColor());
+                        }
+                    }
+                });
+                tagComboBox.setButtonCell(new ListCell<>() {
+                    @Override
+                    protected void updateItem(Tag item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            setText(item.getName());
+                            setStyle("-fx-background-color: " + item.getColor());
+                        }
+                    }
+                });
+            } else {
+                tagComboBox.getItems().clear();
+            }
+        } else {
+            tagComboBox.getItems().clear();
+        }
+    }
+
+    /**
+     * Changes the language of the site
+     *
+     * @param event
+     */
+    @FXML
+    public void changeLanguage(javafx.event.ActionEvent event) {
+        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
+        String language = selectedLanguageItem.getText().toLowerCase();
+
+        // Load the appropriate resource bundle based on the selected language
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
+        Main.config.setLanguage(language);
+
+        // Update UI elements with the new resource bundle
+        updateUIWithNewLanguage();
+    }
+
+    /**
+     * Method to update UI elements with the new language from the resource bundle
+     */
+    public void updateUIWithNewLanguage() {
+        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+    }
+
+    /**
+     * changes the currency to whatever is selected
+     *
+     * @param event
+     */
+    @FXML
+    public void changeCurrency(ActionEvent event) {
+        RadioMenuItem selectedCurrencyItem = (RadioMenuItem) event.getSource();
+        String currency = selectedCurrencyItem.getText();
+
+        // Set the selected currency as the currency used for exchange rates
+        Currency.setCurrencyUsed(currency.toUpperCase());
+
+        // Print confirmation message
+        System.out.println("Currency changed to: " + currency);
+    }
+
+    /**
+     * Handles participant checkboxes
+     *
+     * @param checkBox checkbox
+     */
+    @FXML
+    private void handleParticipantCheckboxAction(CheckBox checkBox) {
+        String participantName = checkBox.getText();
+        Event selectedEvent = OverviewCtrl.getSelectedEvent();
+        if (selectedEvent == null) {
+            return;
+        }
+        List<Participant> participants = server.getParticipants(selectedEvent.getId());
+        Participant selectedParticipant = participants.stream()
+                .filter(participant -> participantName.equals(participant.getNickname()))
+                .findFirst()
+                .orElse(null);
+        if (selectedParticipant != null) {
+            if (checkBox.isSelected()) {
+                selectedParticipants.add(selectedParticipant);
+            } else {
+                selectedParticipants.remove(selectedParticipant);
+            }
+        }
+    }
+
+    /**
+     * Selects all checkboxes if someone presses split equally
+     */
     @FXML
     private void handleEquallyCheckbox() {
-        if(participantCheckboxes != null) {
+        if (!participantCheckboxes.isEmpty()) {
             boolean selected = equallyCheckbox.isSelected();
+            selectedParticipants.clear();
+            if (selected) {
+                Event selectedEvent = OverviewCtrl.getSelectedEvent();
+                if (selectedEvent != null) {
+                    List<Participant> participants = server.getParticipants(selectedEvent.getId());
+                    selectedParticipants.addAll(participants);
+                }
+            }
             for (CheckBox checkbox : participantCheckboxes) {
                 checkbox.setSelected(selected);
             }
-        }
-        else{
+        } else {
             showErrorDialog("There are no participants to split the cost between");
         }
     }
@@ -132,6 +351,7 @@ public class AddExpensesCtrl implements Initializable {
 
     /**
      * Handles switching of currencies with just keyboard presses
+     *
      * @param event keyboard press
      */
     private void handleCurrencySwitch(KeyEvent event) {
@@ -142,79 +362,179 @@ public class AddExpensesCtrl implements Initializable {
         }
     }
 
-
     /**
      * Handles the action when the user adds an expense.
      */
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
     @FXML
     private void addExpense() {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
-
-        if(selectedEvent != null && participantCheckboxes != null) {
-            String title = purposeTextField.getText();
-            String payerName = nameTextField.getText();
-            Participant payer = server.getParticipantByNickname(selectedEvent.getId(), payerName);
-
-            // Step 2: Retrieve the amount and currency from the UI components
-            String amountText = amountTextField.getText();
-            double amount = Double.parseDouble(amountText);
-
-            // Step 3: Create an expense object
-            Expense expense = new Expense();
-            expense.setAmount(amount);
-            expense.setTitle(title);
-
-            // Step 4: Set the payer of the expense
-            expense.setPayer(payer);
-            List<Participant> owners = new ArrayList<>();
-
-            // Step 5: Add the expense to the selected event for each selected participant
-            for (CheckBox checkbox : participantCheckboxes) {
-                if (checkbox.isSelected()) {
-                    String participantName = checkbox.getText();
-                    Participant participant = server.getParticipantByNickname(
-                            selectedEvent.getId(), participantName);
-                    owners.add(participant);
-                }
-            }
-
-            // Step 6: Add the date of the expense
-            LocalDate localDate = datePicker.getValue();
-            Date date = Date.from(localDate.atStartOfDay().toInstant(ZoneOffset.UTC));
-            expense.setDate(date);
-
-            expense.setOwers(owners);
-            selectedEvent.addExpense(expense);
-            server.addExpenseToEvent(selectedEvent.getId(), expense);
+        String title = purposeTextField.getText();
+        if (title.isEmpty()) {
+            showErrorDialog("Please enter a title for the expense.");
+            return;
         }
-        else{
-            showErrorDialog("Can't add an expense, because some values may be null");
+        String amountText = amountTextField.getText();
+
+        double amount = parseAmount(amountText);
+        if (selectedEvent == null || amount < 0 || validateAmount(amountText)) {
+            return;
+        }
+
+        Participant payer = findPayer();
+        if (payer == null) {
+            return;
+        }
+
+        // Check if at least one participant is selected
+        if (selectedParticipants.isEmpty()) {
+            showErrorDialog("Please select at least one participant to split the cost.");
+            return;
+        }
+
+        Tag selectedTag = tagComboBox.getValue();
+        if (selectedTag == null) {
+            showErrorDialog("Please select a tag.");
+            return;
+        }
+
+        Date date = getDateFromPicker();
+        if (date == null) {
+            showErrorDialog("Please select a date.");
+            return;
+        }
+
+        Expense expense = createExpense(title, amount, date,
+                payer, selectedParticipants, selectedTag);
+
+        saveExpense(selectedEvent, expense);
+        clearFieldsAndShowOverview(selectedEvent);
+    }
+
+    /**
+     * Validates the amount entered by the user.
+     *
+     * @param amountText The text representing the amount entered by the user.
+     * @return {@code true} if the amount is valid, {@code false} otherwise.
+     */
+    private boolean validateAmount(String amountText) {
+        if (amountText.isEmpty()) {
+            showErrorDialog("Please enter the amount.");
+            return true;
+        }
+        try {
+            Double.parseDouble(amountText);
+        } catch (NumberFormatException e) {
+            showErrorDialog("Please enter a valid number for the amount.");
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Parses the amount entered by the user.
+     *
+     * @param amountText The text representing the amount entered by the user.
+     * @return The parsed amount as a double value.
+     */
+    private double parseAmount(String amountText) {
+        try {
+            return Double.parseDouble(amountText);
+        } catch (NumberFormatException e) {
+            showErrorDialog("Please enter a valid number for the amount.");
+            return -1;
         }
     }
 
     /**
-     * Handles the action when the user navigates back to the overview screen.
+     * Finds the payer selected by the user.
+     *
+     * @return The selected payer participant, or {@code null} if not found.
+     */
+    private Participant findPayer() {
+        Participant selectedPayer = payerComboBox.getValue();
+        if (selectedPayer == null) {
+            showErrorDialog("Please select a payer.");
+            return null;
+        }
+        String payerName = selectedPayer.getNickname();
+        Participant payer = allParticipants.stream()
+                .filter(participant -> payerName.equals(participant.getNickname()))
+                .findFirst()
+                .orElse(null);
+        if (payer == null) {
+            showErrorDialog("Payer not found.");
+        }
+        return payer;
+    }
+
+
+    /**
+     * Creates an expense object.
+     *
+     * @param title                The title of the expense.
+     * @param amount               The amount of the expense.
+     * @param date                 The date of the expense.
+     * @param payer                The participant who paid the expense.
+     * @param selectedParticipants The participants involved in the expense.
+     * @param selectedTag          The tag associated with the expense.
+     * @return The created expense object.
+     */
+    private Expense createExpense(String title, double amount, Date date, Participant payer,
+                                  List<Participant> selectedParticipants, Tag selectedTag) {
+        return new Expense(title, amount, date, payer, selectedParticipants, selectedTag);
+    }
+
+    /**
+     * Saves the expense to the server and clears selected participants.
+     *
+     * @param selectedEvent The selected event.
+     * @param expense       The expense to be saved.
+     */
+    private void saveExpense(Event selectedEvent, Expense expense) {
+        System.out.println(expense);
+        server.addExpenseToEvent(selectedEvent.getId(), expense);
+        selectedParticipants.clear();
+    }
+
+    /**
+     * Clears input fields and shows the event overview.
+     *
+     * @param selectedEvent The selected event.
+     */
+    private void clearFieldsAndShowOverview(Event selectedEvent) {
+        refreshUI();
+        mainCtrl.showEventOverview(selectedEvent);
+    }
+
+    /**
+     * Refreshes the UI after adding an expense.
+     */
+    private void refreshUI() {
+        loadParticipants();
+        purposeTextField.clear();
+        amountTextField.clear();
+        equallyCheckbox.setSelected(false);
+    }
+
+    /**
+     * Navigates back to the overview screen.
      */
     public void back() {
+        refreshUI();
         mainCtrl.goToOverview();
     }
 
     /**
-     * Shows error message
-     * @param errorMessage message to be shown
+     * Shows an error dialog with the given error message.
+     *
+     * @param errorMessage The error message to display.
      */
     private void showErrorDialog(String errorMessage) {
-        Alert alert = new Alert(AlertType.ERROR);
+        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
         alert.setContentText(errorMessage);
         alert.showAndWait();
-    }
-
-    /**
-     *
-     * @param event
-     */
-    public void getDateFromPicker(ActionEvent event) {
     }
 }

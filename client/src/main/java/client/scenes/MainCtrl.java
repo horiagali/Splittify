@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -85,6 +87,8 @@ public class MainCtrl {
     private Scene debts;
     private SettleDebtsCtrl debtsCtrl;
 
+    private Dimension dimension;
+
 
     /**
      * 
@@ -130,6 +134,8 @@ public class MainCtrl {
 
         this.primaryStage = primaryStage;
         this.main = main;
+        primaryStage.setMaximized(true);
+
         resourceBundle = ResourceBundle.getBundle("messages_" + 
         language, new Locale(language));
 
@@ -185,6 +191,12 @@ public class MainCtrl {
         this.debtsCtrl = debtsCtrlParentPair.getKey();
         this.debts = new Scene(debtsCtrlParentPair.getValue());
 
+        dimension = Toolkit. getDefaultToolkit(). getScreenSize();
+        primaryStage.setWidth(dimension.getWidth()/1.4);
+        primaryStage.setHeight(dimension.getHeight()/1.4);
+        primaryStage.setMaximized(false);
+        primaryStage.setMaximized(true);
+
         showOverview();
         primaryStage.show();
     }
@@ -203,6 +215,7 @@ public class MainCtrl {
         this.primaryStage = primaryStage;
         this.serverSetterCtrl = serverSetter.getKey();
         serverSetter.getKey().serverURL.setText(Main.config.getServerUrl());
+        primaryStage.setMaximized(true);
         this.serverSetter = new Scene(serverSetter.getValue());
         primaryStage.setTitle("Choose your server");
         primaryStage.setScene(this.serverSetter);
@@ -229,7 +242,7 @@ public class MainCtrl {
 
     /**
      * 
-     * @param main
+     * @param main main
      */
     public void setMain(Main main) {
         this.main = main;
@@ -242,12 +255,13 @@ public class MainCtrl {
     public void showOverview() {
         primaryStage.setTitle("Events: Overview");
         primaryStage.setScene(overview);
+        
         overviewCtrl.refresh();
     }
 
     /**
      * 
-     * @param name
+     * @param name name
      */
     public void addToOverview(String name) {
         overviewAppCtrl.addName(name);
@@ -282,11 +296,11 @@ public class MainCtrl {
 
     /**
      * Show tag overview page
-     * @param event
+     * @param event the event the tags belong to
      */
     public void goToTagOverview(Event event) {
         primaryStage.setTitle("Tag Manager");
-        tagOverviewCtrl.setEvent(event);
+        TagOverviewCtrl.setEvent(event);
         primaryStage.setScene(tagOverview);
         tagOverviewCtrl.refresh();
     }
@@ -296,6 +310,7 @@ public class MainCtrl {
     public void showPage() {
         primaryStage.setTitle("Iulia's Page");
         primaryStage.setScene(page);
+        
     }
 
     /**
@@ -304,6 +319,7 @@ public class MainCtrl {
     public void showAddExpenses() {
         primaryStage.setTitle("Expenses: Add Expense");
         primaryStage.setScene(addExpenses);
+        addExpensesCtrl.refreshParticipants();
         // Additional setup for the Add Expense page, if needed
     }
 
@@ -327,13 +343,9 @@ public class MainCtrl {
     }
 
     /**
-     *
-     * @param participant
-     */
-    /**
      * Navigates to the Edit Participant page.
      * @param participant The participant to be edited.
-     * @param event
+     * @param event the event the participant belongs to
      */
     public void goToEditParticipant(Participant participant, Event event) {
         primaryStage.setTitle("Edit Participant");
@@ -356,6 +368,8 @@ public class MainCtrl {
 
         //inviteCtrl.setName(eventName);
         primaryStage.setScene(invite);
+        inviteCtrl.refresh();
+
     }
     /**
      *
@@ -406,7 +420,7 @@ public class MainCtrl {
      */
     public void goToStatistics(Event event) {
         primaryStage.setTitle("Statistics of " + event.getTitle());
-        statisticsCtrl.setEvent(event);
+        StatisticsCtrl.setEvent(event);
         primaryStage.setScene(statistics);
         statisticsCtrl.refresh();
 
@@ -414,7 +428,7 @@ public class MainCtrl {
 
     /**
      * set the title of primary stage, needed for translations
-     * @param title
+     * @param title title
      */
     public void setStageTitle(String title) {
         primaryStage.setTitle(title);
@@ -423,13 +437,14 @@ public class MainCtrl {
     /**
      * goes to settle debts
      * @param event event
-     * @param expenses
+     * @param expenses expenses
      */
     public void goToSettleDebts(Event event, List<Expense> expenses) {
         primaryStage.setTitle("Open Debts page");
         debtsCtrl.setEvent(event);
         debtsCtrl.setExpenses(expenses);
         primaryStage.setScene(debts);
+        
     }
 
     /**
@@ -439,8 +454,8 @@ public class MainCtrl {
      */
     public void goToEditExpense(Event event, Expense expense) {
         primaryStage.setTitle("Edit Expense page");
-        editExpenseCtrl.setExpense(expense);
-        editExpenseCtrl.setEvent(event);
+        EditExpenseCtrl.setExpense(expense);
+        EditExpenseCtrl.setEvent(event);
         primaryStage.setScene(editExpenseScene);
     }
 }

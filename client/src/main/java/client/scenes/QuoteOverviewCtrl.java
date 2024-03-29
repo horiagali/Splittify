@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.utils.Currency;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -57,6 +58,10 @@ public class QuoteOverviewCtrl implements Initializable {
     private javafx.scene.text.Text yourEventsText;
     @FXML
     private Menu languageMenu;
+
+    @FXML
+    private ToggleGroup currencyGroup;
+
 
     /**
      * @param server
@@ -190,6 +195,7 @@ public class QuoteOverviewCtrl implements Initializable {
 
     }
 
+
     /**
      * @param event event handler for mouse double click
      */
@@ -277,5 +283,21 @@ public class QuoteOverviewCtrl implements Initializable {
      */
     public void goToBalances(Event event){
         mainCtrl.goToBalances(event);
+    }
+
+    /**
+     * changes the currency to whatever is selected
+     * @param event
+     */
+    @FXML
+    public void changeCurrency(ActionEvent event) {
+        RadioMenuItem selectedCurrencyItem = (RadioMenuItem) event.getSource();
+        String currency = selectedCurrencyItem.getText();
+
+        // Set the selected currency as the currency used for exchange rates
+        Currency.setCurrencyUsed(currency.toUpperCase());
+
+        // Print confirmation message
+        System.out.println("Currency changed to: " + currency);
     }
 }

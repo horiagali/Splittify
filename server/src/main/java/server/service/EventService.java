@@ -9,6 +9,8 @@ import server.database.EventRepository;
 import server.database.TagRepository;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class EventService {
@@ -38,11 +40,14 @@ public class EventService {
                 event.getDescription(),
                 event.getLocation(),
                 event.getDate()));
+
         tagService.createTag(new Tag("food", "#42f572"), saved.getId());
         tagService.createTag(new Tag("travel", "#f54254"), saved.getId());
         tagService.createTag(new Tag("entrance fees", "#07dafa"), saved.getId());
         tagService.createTag(new Tag("no tag", "#9fa9ab"), saved.getId());
         tagService.createTag(new Tag("gifting money","#e5ff00"), saved.getId());
+
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Event created: "+saved);
         return ResponseEntity.ok(saved);
     }
 
@@ -51,6 +56,7 @@ public class EventService {
      * @return all the events in the repository
      */
     public ResponseEntity<List<Event>> getEvents(){
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Events requested");
         return ResponseEntity.ok(eventRepository.findAll());
     }
 
@@ -61,10 +67,13 @@ public class EventService {
      */
     public ResponseEntity<Event> getEventById(Long id) {
         if (!eventRepository.findById(id).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'getEventById'");
             return ResponseEntity.notFound().build();
         }
         Event found = eventRepository.findById(id).get();
-//        found.getParticipants();
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Event requested: "+found);
         return ResponseEntity.ok(found);
     }
 
@@ -75,10 +84,14 @@ public class EventService {
      */
     public ResponseEntity<Event> deleteEvent(Long id){
         if (!eventRepository.findById(id).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'deleteEvent'");
             return ResponseEntity.notFound().build();
         }
         Event toBeRemoved = eventRepository.findById(id).get();
         eventRepository.deleteById(id);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Event deleted: "+toBeRemoved);
         return ResponseEntity.ok(toBeRemoved);
     }
 
@@ -90,6 +103,8 @@ public class EventService {
      */
     public ResponseEntity<Event> updateEvent(Event event, Long id){
         if (!eventRepository.findById(id).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'updateEvent'");
             return ResponseEntity.notFound().build();
         }
         Event toBeUpdated = eventRepository.findById(id).get();
@@ -101,6 +116,8 @@ public class EventService {
         toBeUpdated.setTags(event.getTags());
         toBeUpdated.setExpenses(event.getExpenses());
         eventRepository.save(toBeUpdated);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Event updated: "+toBeUpdated);
         return ResponseEntity.ok(toBeUpdated);
     }
 

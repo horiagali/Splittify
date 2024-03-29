@@ -54,394 +54,413 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 
 public class ServerUtils {
-	private final ObjectMapper objectMapper;
-	private final RestTemplate restTemplate;
-	public static String server = "http://localhost:8080/";
-	public static String serverPort = server.replace("http://", "");
-	private StompSession session;
-
-	
-
-	/**
-	 * Constructor
-	 * @throws IOException IOException
-	 * @throws InterruptedException InterruptedException
-	 */
-	public ServerUtils() throws IOException, InterruptedException {
-		this.objectMapper = new ObjectMapper();
-		this.restTemplate = new RestTemplate();
-		checkConnectionForWebsockets();
-	}
-
-	/**
-	 * 
-	 * @param server
-	 */
-	public static void setServer(String server) {
-		ServerUtils.server = server;
-		serverPort = server.replace("http://", "");
-	}
-
-	/**
-	 * 
-	 */
-	public void checkConnectionForWebsockets() {
-		if(Main.checkConnection())
-		session = connect("ws://"+ serverPort + "websocket");
-	}
-
-	/**
-	 * 
-	 * @throws IOException
-	 * @throws URISyntaxException
-	 */
-	public void getQuotesTheHardWay() throws IOException {
-		String url = server + "/api/quotes";
-		var connection = new URL(url).openConnection();
-		var is = connection.getInputStream();
-		var br = new BufferedReader(new InputStreamReader(is));
-		String line;
-		while ((line = br.readLine()) != null) {
-			System.out.println(line);
-		}
-	}
+    private final ObjectMapper objectMapper;
+    private RestTemplate restTemplate;
+    public static String server = "http://localhost:8080/";
+    public static String serverPort = server.replace("http://", "");
+    private StompSession session;
 
 
-	/**
-	 * 
-	 * @return list of quotes
-	 */
-	public List<Quote> getQuotes() {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(server).path("api/quotes") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
-	}
+    /**
+     * Constructor
+     *
+     * @throws IOException          IOException
+     * @throws InterruptedException InterruptedException
+     */
+    public ServerUtils() throws IOException, InterruptedException {
+        this.objectMapper = new ObjectMapper();
+        this.restTemplate = new RestTemplate();
+        checkConnectionForWebsockets();
+    }
 
-	
+    /**
+     * @param server
+     */
+    public static void setServer(String server) {
+        ServerUtils.server = server;
+        serverPort = server.replace("http://", "");
+    }
 
-	/**
-	 * 
-	 * @return list of events
-	 */
-	public List<Event> getEvents() {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get(new GenericType<List<Event>>() {});
-	}
+    /**
+     *
+     */
+    public void checkConnectionForWebsockets() {
+        if (Main.checkConnection())
+            session = connect("ws://" + serverPort + "websocket");
+    }
 
-	/**
-	 * Get event by event ID
-	 * @param id id of the event
-	 * @return event
-	 */
-	public Event getEvent(Long id) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events/"+id)
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get(new GenericType<Event>() {});
-	}
-
-	
-	/**
-	 * Connect to a stomp session with url to websocket
-	 * @param url websocket url
-	 * @return stomp session
-	 */
-	private StompSession connect(String url) {
-		var client = new StandardWebSocketClient();
-		var stomp = new WebSocketStompClient(client);
-		stomp.setMessageConverter(new MappingJackson2MessageConverter());
-		try {
-			return stomp.connect(url, new StompSessionHandlerAdapter() {}).get();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			Thread.currentThread().interrupt();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		throw new IllegalStateException();
-	}
-
-	/**
-	 * Subscribe to topic
-	 * @param dest url to topic endpoint
-	 * @param consumer consumer
-	 */
-	public void registerForEvents(String dest, Consumer<Event> consumer) {
-		session.subscribe(dest, new StompFrameHandler() {
-			@Override
-			public Type getPayloadType(StompHeaders headers) {
-				return Event.class;
-			}
-
-			@Override
-			public void handleFrame(StompHeaders headers, Object payload) {
-				consumer.accept((Event) payload);
-			}
-		});
-	}
-
-	/**
-	 * Use this to add an event to the database using websockets
-	 * @param dest destination of the app endpoint
-	 * @param e event to be added
-	 */
-	public void sendEvent(String dest, Event e) {
-		session.send(dest, e);
-	}
-
-	/**
-	 * 
-	 * @param quote quote
-	 * @return quote that is added
-	 */
-	public Quote addQuote(Quote quote) {
-		return ClientBuilder.newClient(new ClientConfig()) //
-				.target(server).path("api/quotes") //
-				.request(APPLICATION_JSON) //
-				.accept(APPLICATION_JSON) //
-				.post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-	}
-
-	/**
-	 * 
-	 * @param event
-	 * @return event that is added (as quote for now)
-	 */
-	public Event addEvent(Event event) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
-	}
-
-	/**
-	 * Retrieves all nicknames of participants of an event.
-	 *
-	 * @param eventId ID of the event to retrieve participants for
-	 * @return list of participants belonging to the event
-	 */
-	public List<String> getParticipantNicknamesByEventId(long eventId) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + eventId + "/participants/nicknames")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get(new GenericType<List<String>>() {});
-	}
-
-	/**
-	 * get participants by eventId
-	 * @param eventId the eventId
-	 * @return the participants
-	 */
-	public List<Participant> getParticipantsByEventId(long eventId) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + eventId + "/participants")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get(new GenericType<List<Participant>>() {});
-	}
-
-	/**
-	 * return a list of all tags related to 1 event
-	 * @param eventId
-	 * @return list of tags
-	 */
-	public List<Tag> getTags(long eventId) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + eventId + "/tags")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get(new GenericType<List<Tag>>() {});
-	}
-
-	/**
-	 *
-	 * @param selectedEvent
-	 *   deletes an event from the database
-	 */
-	public void deleteEvent(Event selectedEvent) {
-		ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + selectedEvent.getId())
-				.request()
-				.delete();
-	}
-
-	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
-	 * Add an expense to an event
-	 * @param eventId id of the event to add the expense to
-	 * @param expense expense to be added
-	 */
-	public void addExpenseToEvent(long eventId, Expense expense) {
-		// Construct the URL for the specific event's expenses endpoint
-		String url = String.format("%s/events/%d/expenses", server, eventId);
-
-		// Create HttpHeaders with JSON content type
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		// Create HttpEntity with expense object and headers
-		HttpEntity<Expense> requestEntity = new HttpEntity<>(expense, headers);
-		restTemplate.postForObject(url, requestEntity, Void.class);
-	}
-
-	/**
-	 * Get participant by nickname
-	 * @param eventID id of the event the participant is a part of
-	 * @param nickname nickname
-	 * @return participant
-	 */
-	public Participant getParticipantByNickname(Long eventID, String nickname) {
-		String url = server + "api/events/" + eventID + "/participants/" + nickname;
-
-		// Make the HTTP GET request and directly retrieve the participant
-		Participant participant = restTemplate.getForObject(url, Participant.class);
-
-		return participant;
-	}
-
-	 /**
-	  * Update the event in the DB.
-	  *
-	  * @param updatedEvent   the event
-	  */
-	 public void updateEvent(Event updatedEvent) {
-		ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + updatedEvent.getId())
-				.request()
-				.put(Entity.entity(updatedEvent, APPLICATION_JSON));
-	}
-
-	/**
-	 * Adds a participant to an event.
-	 *
-	 * @param eventId     The ID of the event to which the participant will be added.
-	 * @param participant The participant to be added.
-	 * @return The added participant.
-	 */
-	public Participant addParticipant(long eventId, Participant participant) {
-		String url = server + "api/events/" + eventId + "/participants";
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		HttpEntity<Participant> requestEntity = new HttpEntity<>(participant, headers);
-
-		return restTemplate.postForObject(url, requestEntity, Participant.class);
-	}
-	/**
-	 * Retrieves all participants of an event by event ID.
-	 *
-	 * @param eventId ID of the event to retrieve participants for
-	 * @return list of participants belonging to the event
-	 */
-	public List<Participant> getParticipants(long eventId) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + eventId + "/participants")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get(new GenericType<List<Participant>>() {});
-	}
+    /**
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    public void getQuotesTheHardWay() throws IOException {
+        String url = server + "/api/quotes";
+        var connection = new URL(url).openConnection();
+        var is = connection.getInputStream();
+        var br = new BufferedReader(new InputStreamReader(is));
+        String line;
+        while ((line = br.readLine()) != null) {
+            System.out.println(line);
+        }
+    }
 
 
-	/**
-	 * sends a mail
-	 * @param mail the mail
-	 * @return the sent mail
-	 */
-	public Mail sendEmail(Mail mail) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/mail")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(mail, APPLICATION_JSON), Mail.class);
-	}
+    /**
+     * @return list of quotes
+     */
+    public List<Quote> getQuotes() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/quotes") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Quote>>() {
+                });
+    }
 
-	/**
-	 * get expense by eventId
-	 * @param eventId the eventId
-	 * @return the expenses
-	 */
-	public List<Expense> getExpensesByEventId(Long eventId) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + eventId + "/expenses")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.get(new GenericType<List<Expense>>() {});
-	}
 
-	/**
-	 * Update a participant in the database.
-	 *
-	 * @param eventId     The ID of the event to which the participant belongs.
-	 * @param participant The updated participant information.
-	 */
-	public void updateParticipant(long eventId, Participant participant) {
-		ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + eventId +
-						"/participants/" + participant.getParticipantID())
-				.request()
-				.put(Entity.entity(participant, APPLICATION_JSON));
-	}
+    /**
+     * @return list of events
+     */
+    public List<Event> getEvents() {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/events")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Event>>() {
+                });
+    }
 
-	/**
-	 * Deletes a participant from an event.
-	 *
-	 * @param eventId     The ID of the event from which the participant will be deleted.
-	 * @param participant The participant to be deleted.
-	 */
-	public void deleteParticipant(long eventId, Participant participant) {
-		ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + eventId +
-						"/participants/" + participant.getParticipantID())
-				.request()
-				.delete();
-	}
+    /**
+     * Get event by event ID
+     *
+     * @param id id of the event
+     * @return event
+     */
+    public Event getEvent(Long id) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/events/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<Event>() {
+                });
+    }
 
-	/**
-	 * Deletes an expense from an event.
-	 * @param expense the expense to be deleted.
-	 */
-	public void deleteExpense(Expense expense) {
-		//I am not sure about this, someone fix if wrong please
-		ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + expense.getEvent()
-						.getId() + "/expenses/" + expense.getId())
-				.request()
-				.delete();
-	}
 
-	/**
-	 * Edits an expense from an event.
-	 * @param newExpense the expense to be edited.
-	 */
-	public void editExpense(Expense newExpense) {
-		ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + newExpense.getEvent()
-						.getId() + "/expenses/" + newExpense.getId())
-				.request()
-				.put(Entity.entity(newExpense, APPLICATION_JSON));
-	}
+    /**
+     * Connect to a stomp session with url to websocket
+     *
+     * @param url websocket url
+     * @return stomp session
+     */
+    private StompSession connect(String url) {
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        try {
+            return stomp.connect(url, new StompSessionHandlerAdapter() {
+            }).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        throw new IllegalStateException();
+    }
+
+    /**
+     * Subscribe to topic
+     *
+     * @param dest     url to topic endpoint
+     * @param consumer consumer
+     */
+    public void registerForEvents(String dest, Consumer<Event> consumer) {
+        session.subscribe(dest, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return Event.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((Event) payload);
+            }
+        });
+    }
+
+    /**
+     * Use this to add an event to the database using websockets
+     *
+     * @param dest destination of the app endpoint
+     * @param e    event to be added
+     */
+    public void sendEvent(String dest, Event e) {
+        session.send(dest, e);
+    }
+
+    /**
+     * @param quote quote
+     * @return quote that is added
+     */
+    public Quote addQuote(Quote quote) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/quotes") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+    }
+
+    /**
+     * @param event
+     * @return event that is added (as quote for now)
+     */
+    public Event addEvent(Event event) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/events")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(event, APPLICATION_JSON), Event.class);
+    }
+
+    /**
+     * Retrieves all nicknames of participants of an event.
+     *
+     * @param eventId ID of the event to retrieve participants for
+     * @return list of participants belonging to the event
+     */
+    public List<String> getParticipantNicknamesByEventId(long eventId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + eventId + "/participants/nicknames")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<String>>() {
+                });
+    }
+
+    /**
+     * get participants by eventId
+     *
+     * @param eventId the eventId
+     * @return the participants
+     */
+    public List<Participant> getParticipantsByEventId(long eventId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + eventId + "/participants")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Participant>>() {
+                });
+    }
+
+    /**
+     * return a list of all tags related to 1 event
+     *
+     * @param eventId
+     * @return list of tags
+     */
+    public List<Tag> getTags(long eventId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + eventId + "/tags")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Tag>>() {
+                });
+    }
+
+    /**
+     * @param selectedEvent deletes an event from the database
+     */
+    public void deleteEvent(Event selectedEvent) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + selectedEvent.getId())
+                .request()
+                .delete();
+    }
+
+    /**
+     * Add an expense to an event
+     *
+     * @param eventId id of the event to add the expense to
+     * @param expense expense to be added
+     * @return Expense expense
+     */
+    public Expense addExpenseToEvent(long eventId, Expense expense) {
+        String url = server + "api/events/" + eventId + "/expenses";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Expense> requestEntity = new HttpEntity<>(expense, headers);
+
+        return restTemplate.postForObject(url, requestEntity, Expense.class);
+    }
+
+    /**
+     * Get participant by nickname
+     *
+     * @param eventID  id of the event the participant is a part of
+     * @param nickname nickname
+     * @return participant
+     */
+    public Participant getParticipantByNickname(Long eventID, String nickname) {
+        String url = server + "api/events/" + eventID + "/participants/" + nickname;
+
+        // Make the HTTP GET request and directly retrieve the participant
+        Participant participant = restTemplate.getForObject(url, Participant.class);
+
+        return participant;
+    }
+
+    /**
+     * Update the event in the DB.
+     *
+     * @param updatedEvent the event
+     */
+    public void updateEvent(Event updatedEvent) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + updatedEvent.getId())
+                .request()
+                .put(Entity.entity(updatedEvent, APPLICATION_JSON));
+    }
+
+    /**
+     * Adds a participant to an event.
+     *
+     * @param eventId     The ID of the event to which the participant will be added.
+     * @param participant The participant to be added.
+     * @return The added participant.
+     */
+    public Participant addParticipant(long eventId, Participant participant) {
+        String url = server + "api/events/" + eventId + "/participants";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Participant> requestEntity = new HttpEntity<>(participant, headers);
+
+        return restTemplate.postForObject(url, requestEntity, Participant.class);
+    }
+
+    /**
+     * Retrieves all participants of an event by event ID.
+     *
+     * @param eventId ID of the event to retrieve participants for
+     * @return list of participants belonging to the event
+     */
+    public List<Participant> getParticipants(long eventId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + eventId + "/participants")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Participant>>() {
+                });
+    }
+
+
+    /**
+     * sends a mail
+     *
+     * @param mail the mail
+     * @return the sent mail
+     */
+    public Mail sendEmail(Mail mail) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/mail")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(mail, APPLICATION_JSON), Mail.class);
+    }
+
+    /**
+     * get expense by eventId
+     *
+     * @param eventId the eventId
+     * @return the expenses
+     */
+    public List<Expense> getExpensesByEventId(Long eventId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + eventId + "/expenses")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(new GenericType<List<Expense>>() {
+                });
+    }
+
+    /**
+     * Update a participant in the database.
+     *
+     * @param eventId     The ID of the event to which the participant belongs.
+     * @param participant The updated participant information.
+     */
+    public void updateParticipant(long eventId, Participant participant) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + eventId +
+                        "/participants/" + participant.getParticipantID())
+                .request()
+                .put(Entity.entity(participant, APPLICATION_JSON));
+    }
+
+    /**
+     * Deletes a participant from an event.
+     *
+     * @param eventId     The ID of the event from which the participant will be deleted.
+     * @param participant The participant to be deleted.
+     */
+    public void deleteParticipant(long eventId, Participant participant) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + eventId +
+                        "/participants/" + participant.getParticipantID())
+                .request()
+                .delete();
+    }
+
+    /**
+     * <<<<<<< HEAD
+     * Deletes an expense from an event.
+     *
+     * @param expense the expense to be deleted.
+     */
+    public void deleteExpense(Expense expense) {
+        //I am not sure about this, someone fix if wrong please
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + expense.getEvent()
+                        .getId() + "/expenses/" + expense.getId())
+                .request()
+                .delete();
+    }
+
+    /**
+     * Edits an expense from an event.
+     *
+     * @param newExpense the expense to be edited.
+     */
+    public void editExpense(Expense newExpense) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server)
+                .path("api/events/" + newExpense.getEvent()
+                        .getId() + "/expenses/" + newExpense.getId())
+                .request()
+                .put(Entity.entity(newExpense, APPLICATION_JSON));
+    }
+
+    /**
+     * Setter.
+     * @param restTemplate restTemplate
+     */
+    public void setRestTemplate(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
 
 }

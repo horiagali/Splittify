@@ -1,5 +1,7 @@
 package client.scenes;
 
+import client.Main;
+import client.utils.Currency;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -24,6 +26,7 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
@@ -35,13 +38,12 @@ public class OverviewCtrl implements Initializable {
     private Label myLabel2;
     @FXML
     private HBox hbox;
-
     private ArrayList<String> names;
     private ArrayList<Label> labels;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private static Event selectedEvent;
-    private static Expense selectedExpense = null;
+    private static Expense selectedExpense;
 
     @FXML
     private Label eventName;
@@ -62,13 +64,15 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private VBox participantsVBox;
     @FXML
-    private VBox expensesVBox;
-    @FXML
     private ListView<Label> listExpenses;
+
     @FXML
-    private Button editExpenseButton;
+    private Menu languageMenu;
+
     @FXML
-    private Button removeExpenseButton;
+    private ToggleGroup currencyGroup;
+    @FXML
+    private ChoiceBox<String> myChoiceBox;
 
 
     /**
@@ -92,7 +96,6 @@ public class OverviewCtrl implements Initializable {
         if(!(selectedEvent.getDate() == null))
             eventDate.setText(selectedEvent.getDate().toString());
         setSelectedEvent(selectedEvent);
-
         displayExpenses();
     }
 
@@ -104,6 +107,8 @@ public class OverviewCtrl implements Initializable {
     public void removeExpense() {
 
         try {
+            setSelectedExpense(selectedEvent.getExpenses().stream().filter
+                    (x -> x.getTitle().equals(myChoiceBox.getValue())).findFirst().orElseThrow());
             Expense expense = selectedExpense;
             selectedEvent.getExpenses().remove(expense);
             server.deleteExpense(expense);
@@ -126,7 +131,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     * @param name
+     * @param name name.
      */
 
     public void addName(String name) {
@@ -145,7 +150,10 @@ public class OverviewCtrl implements Initializable {
      */
    @FXML
     public void editExpense() {
-
+        String expenseName = myChoiceBox.getSelectionModel().getSelectedItem();
+        setSelectedExpense(selectedEvent.getExpenses()
+                .stream().filter(x -> x.getTitle()
+                .equals(expenseName)).findFirst().orElseThrow());
         if (selectedExpense != null)
             mainCtrl.goToEditExpense(selectedEvent, selectedExpense);
         else {
@@ -168,6 +176,49 @@ public class OverviewCtrl implements Initializable {
      */
     public void goToTagOverview() {
         mainCtrl.goToTagOverview(selectedEvent);
+    }
+
+    /**
+     * Changes the language of the site
+     * @param event
+     */
+    @FXML
+    public void changeLanguage(javafx.event.ActionEvent event) {
+        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
+        String language = selectedLanguageItem.getText().toLowerCase();
+
+        // Load the appropriate resource bundle based on the selected language
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
+        + language, new Locale(language));
+        
+        Main.config.setLanguage(language);
+
+        // Update UI elements with the new resource bundle
+        updateUIWithNewLanguage();
+    }
+
+
+    /**
+     * Method to update UI elements with the new language from the resource bundle
+     */
+    public void updateUIWithNewLanguage() {
+        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+    }
+
+    /**
+     * changes the currency to whatever is selected
+     * @param event
+     */
+    @FXML
+    public void changeCurrency(ActionEvent event) {
+        RadioMenuItem selectedCurrencyItem = (RadioMenuItem) event.getSource();
+        String currency = selectedCurrencyItem.getText();
+
+        // Set the selected currency as the currency used for exchange rates
+        Currency.setCurrencyUsed(currency.toUpperCase());
+
+        // Print confirmation message
+        System.out.println("Currency changed to: " + currency);
     }
 
     /**
@@ -199,14 +250,14 @@ public class OverviewCtrl implements Initializable {
             eventName.setText(selectedEvent.getTitle());
             eventLocation.setText(selectedEvent.getLocation());
             eventDate.setText(selectedEvent.getDate().toString());
-            displayExpenses();
+            //displayExpenses();
         }
 
 //        hbox.setSpacing(5);    doesn't work, has to be fixed
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
 //        hbox.getChildren().addAll(labels);
-        loadParticipants();
+        //loadParticipants();
     }
 
     /**
@@ -238,20 +289,27 @@ public class OverviewCtrl implements Initializable {
      * Displays the expenses on the Overview page.
      */
     private void displayExpenses() {
+
         if (getSelectedEvent() != null) {
-            List<Expense> expenses = server.getExpensesByEventId(getSelectedEvent().getId());
+            List<Expense> expensesList = selectedEvent.getExpenses();
+            if (!expensesList.isEmpty())
+                for (Expense e : expensesList)
+                    myChoiceBox.getItems().add(e.getTitle());
+
+            List<Expense> expenses = selectedEvent.getExpenses();
             
             listExpenses.getItems().clear();
 
             for (Expense expense : expenses) {
 
                 Label expenseLabel = getLabel(expense);
-                expenseLabel.setOnMouseClicked(event -> {
-                    if (event.getButton() == MouseButton.PRIMARY)
-                        setSelectedExpense(selectedEvent.getExpenses().stream()
-                                .filter(x -> expenseLabel.getText().equals(x.getTitle()))
-                                .toList().getFirst());
-                });
+
+//                expenseLabel.setOnMouseClicked(event -> {
+//                    if (event.getButton() == MouseButton.PRIMARY)
+//                        setSelectedExpense(selectedEvent.getExpenses().stream()
+//                                .filter(x -> expenseLabel.getText().equals(x.getTitle()))
+//                                .toList().getFirst());
+//                });
                     //TODO: Add currency to label
                 listExpenses.getItems().add(expenseLabel);
             }
@@ -265,7 +323,8 @@ public class OverviewCtrl implements Initializable {
      */
     private static Label getLabel(Expense expense) {
         Label expenseLabel = new Label
-                (expense.getTitle() + " - " + expense.getPayer() + " - " + expense.getAmount());
+                (expense.getTitle() + " - " + expense.getPayer() + " - "
+                        + expense.getAmount() + " - " + expense.getTag());
         expenseLabel.setTextFill(Color.BLACK);
         return expenseLabel;
     }
@@ -327,6 +386,8 @@ public class OverviewCtrl implements Initializable {
     public static Event getSelectedEvent() {
         return OverviewCtrl.selectedEvent;
     }
+
+    public static Expense getSelectedExpense() {return OverviewCtrl.selectedExpense;}
 
 
     /**

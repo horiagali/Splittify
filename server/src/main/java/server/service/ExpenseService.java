@@ -4,10 +4,8 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import server.database.EventRepository;
 import server.database.ExpenseRepository;
 import server.database.ParticipantRepository;
@@ -15,6 +13,8 @@ import server.database.TagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class ExpenseService {
@@ -57,7 +57,8 @@ public class ExpenseService {
      */
     public ResponseEntity<Expense> createExpense(Long eventId, Expense expense) {
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'createExpense'");
             return ResponseEntity.notFound().build();
         }
 
@@ -72,8 +73,9 @@ public class ExpenseService {
         newExpense.setEvent(event);
         newExpense.toString();
         Expense saved = balancing(expense, event, newExpense, expense.getAmount());
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Expense created: "+saved);
         return ResponseEntity.ok(saved);
-
     }
 
     /**
@@ -123,6 +125,8 @@ public class ExpenseService {
      * @return List of expenses
      */
     public ResponseEntity<List<Expense>> getExpenses(Long eventId) {
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Expenses requested");
         return ResponseEntity.ok(expenseRepository.findExpensesByEventId(eventId));
     }
 
@@ -134,13 +138,35 @@ public class ExpenseService {
      * @return list of expenses where the participant is the payer
      */
     public ResponseEntity<List<Expense>> getExpensesOfPayer(Long eventId, Long participantId) {
-        Event event = eventService.getEventById(eventId).getBody();
-        Participant payer = participantService.getParticipantById(eventId, participantId).getBody();
+        if (!eventRepository.findById(eventId).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'getExpensesOfPayer'");
+            return ResponseEntity.notFound().build();
+        }
+
+        if (!participantRepository.findById(participantId).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Participant not found via 'getExpensesOfPayer'");
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventRepository.findById(eventId).get();
+        Participant payer = participantRepository.findById(participantId).get();
+
+        if(payer.getEvent() != event) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Participant does not belong to event via 'getExpensesOfPayer'");
+            return ResponseEntity.notFound().build();
+        }
+
         List<Expense> expenses = event.getExpenses();
         for (Expense expense : expenses) {
             if (!expense.getPayer().equals(payer))
                 expenses.remove(expense);
         }
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Expenses requested of participant with ID: "+participantId);
         return ResponseEntity.ok(expenses);
     }
 
@@ -152,13 +178,35 @@ public class ExpenseService {
      * @return list of expenses where the participant is an ower
      */
     public ResponseEntity<List<Expense>> getExpensesOfOwer(Long eventId, Long participantId) {
-        Event event = eventService.getEventById(eventId).getBody();
-        Participant ower = participantService.getParticipantById(eventId, participantId).getBody();
+        if (!eventRepository.findById(eventId).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'getExpensesOfOwer'");
+            return ResponseEntity.notFound().build();
+        }
+
+        if (!participantRepository.findById(participantId).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Participant not found via 'getExpensesOfOwer'");
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventRepository.findById(eventId).get();
+        Participant ower = participantRepository.findById(participantId).get();
+
+        if(ower.getEvent() != event) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Participant does not belong to event via 'getExpensesOfOwer'");
+            return ResponseEntity.notFound().build();
+        }
+
         List<Expense> expenses = event.getExpenses();
         for (Expense expense : expenses) {
             if (!expense.getOwers().contains(ower))
                 expenses.remove(expense);
         }
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Expenses requested of participant with ID: "+participantId);
         return ResponseEntity.ok(expenses);
     }
 
@@ -172,12 +220,14 @@ public class ExpenseService {
     public ResponseEntity<Expense> getExpenseById(Long eventId, Long expenseId) {
 
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'getExpensesById'");
             return ResponseEntity.notFound().build();
         }
 
         if (!expenseRepository.findById(expenseId).isPresent()) {
-            System.out.println("Expense with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Expense not found via 'getExpensesById'");
             return ResponseEntity.notFound().build();
         }
 
@@ -185,9 +235,13 @@ public class ExpenseService {
         Expense expense = expenseRepository.findById(expenseId).get();
 
         if (expense.getEvent() != event) {
-            System.out.println("Expense does not belong to event");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Expense does not belong to event via 'getExpensesById'");
             return ResponseEntity.notFound().build();
         }
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Expense requested: "+expense);
         return ResponseEntity.ok(expense);
     }
 
@@ -203,20 +257,24 @@ public class ExpenseService {
                                                  Expense expense) {
 
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'updateExpense'");
             return ResponseEntity.notFound().build();
         }
 
         if (!expenseRepository.findById(expenseId).isPresent()) {
-            System.out.println("Expense with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Expense not found via 'updateExpense'");
             return ResponseEntity.notFound().build();
         }
 
         Event event = eventRepository.findById(eventId).get();
         Expense oldExpense = expenseRepository.findById(expenseId).get();
 
-        if(expense.getEvent() != event) {
-            System.out.println("Expense does not belong to event");
+        if (expense.getEvent() != event) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Expense does not belong to event via 'updateExpense'");
             return ResponseEntity.notFound().build();
         }
 
@@ -239,7 +297,8 @@ public class ExpenseService {
 
         newExpense.setOwers(expense.getOwers());
         Expense realUpdatedExpense = balancing(expense, event, newExpense, expense.getAmount());
-
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Expense updated: "+realUpdatedExpense);
         return ResponseEntity.ok(realUpdatedExpense);
     }
 
@@ -253,20 +312,24 @@ public class ExpenseService {
     public ResponseEntity<Expense> deleteExpense(Long eventId, Long expenseId) {
         /// NEED TO REVERT BALANCES
         if (!eventRepository.findById(eventId).isPresent()) {
-            System.out.println("Event with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'deleteExpense'");
             return ResponseEntity.notFound().build();
         }
 
         if (!expenseRepository.findById(expenseId).isPresent()) {
-            System.out.println("Expense with given ID not found");
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Expense not found via 'deleteExpense'");
             return ResponseEntity.notFound().build();
         }
 
         Event event = eventRepository.findById(eventId).get();
         Expense expense = expenseRepository.findById(expenseId).get();
 
-        if(expense.getEvent() != event) {
-            System.out.println("Expense does not belong to event");
+        if (expense.getEvent() != event) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Expense does not belong to event via 'deleteExpense'");
             return ResponseEntity.notFound().build();
         }
 
@@ -281,6 +344,8 @@ public class ExpenseService {
 
         expenseRepository.deleteById(expenseId);
         expenseRepository.delete(oldExpenseAfterBalancing);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Expense deleted: "+expense);
 
         return ResponseEntity.ok(expense);
     }
