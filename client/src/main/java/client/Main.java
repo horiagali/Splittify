@@ -101,6 +101,8 @@ public class Main extends Application {
             mainCtrl.initializeServerSetter(primaryStage, serverSetter, this);
         }
 
+
+
     }
 
     /**
@@ -133,6 +135,10 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, 
         contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, balances, 
         editParticipant,serverSetter, config.getLanguage(),  statistics, debts, tagOverview, this);
+
+        primaryStage.setOnCloseRequest(e -> {
+            adminPage.getKey().stop();
+        });
     }
 
     /**

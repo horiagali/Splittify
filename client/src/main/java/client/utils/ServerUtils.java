@@ -25,8 +25,11 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -145,7 +148,29 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<Event>() {});
 	}
+	private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
+	public void registerForUpdates(Consumer<Event> consumer) {
+		EXEC.submit(() -> {
+			while (!Thread.interrupted()) {
+				Response res = ClientBuilder.newClient(new ClientConfig())
+						.target(server).path("api/events/updates")
+						.request(APPLICATION_JSON)
+						.accept(APPLICATION_JSON)
+						.get(Response.class);
 
+				if (res.getStatus() == 204) {
+					continue;
+				}
+				Event e = res.readEntity(Event.class);
+				consumer.accept(e);
+			}
+		});
+
+	}
+
+	public void stop() {
+		EXEC.shutdownNow();
+	}
 	
 	/**
 	 * Connect to a stomp session with url to websocket

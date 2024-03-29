@@ -16,13 +16,18 @@
 package server.api;
 
 import commons.Event;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.service.EventService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,6 +70,25 @@ public class EventController {
         return eventService.getEventById(id);
     }
 
+    private Map<Object, Consumer<Event>> listeners = new HashMap<>();
+
+    @GetMapping("/updates")
+    @ResponseBody
+    public DeferredResult<ResponseEntity<Event>> getUpdates() {
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<Event>>(500L, noContent);
+
+        var key = new Object();
+        listeners.put(key, e -> {
+            res.setResult(ResponseEntity.ok(e));
+        });
+        res.onCompletion(() -> {
+            listeners.remove(key);
+        });
+
+
+        return res;
+    }
     /**
      * Controller for websocket connection
      * @param e event to be added
@@ -74,6 +98,8 @@ public class EventController {
     @SendTo("/topic/events")
     public Event addEvent(Event e) {
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Websocket reached");
+
+        listeners.forEach((k, l) -> l.accept(e));
         return createEvent(e).getBody();
     }
 
