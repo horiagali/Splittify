@@ -18,6 +18,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.FlowPane;
@@ -34,6 +36,8 @@ public class TagOverviewCtrl {
 
     @FXML
     private Button back;
+    @FXML
+    private ImageView languageFlagImageView;
 
     @FXML
     private ScrollPane tagsScrollPane;
@@ -82,13 +86,13 @@ public class TagOverviewCtrl {
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         String stageTitleString = "title.statistics";
         if(event !=null){
@@ -97,6 +101,27 @@ public class TagOverviewCtrl {
         }
         else{mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));}
         
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
 
     /**

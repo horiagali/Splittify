@@ -451,6 +451,23 @@ public class MainCtrl {
 
         // Notify controllers about the language change
         notifyControllers();
+        updateFlags(language);
+    }
+
+    /**
+     * updates flags
+     * @param language chosen language
+     */
+    private void updateFlags(String language) {
+        inviteCtrl.updateFlagImageURL(language);
+        adminPassCtrl.updateFlagImageURL(language);
+        adminPageCtrl.updateFlagImageURL(language);
+        statisticsCtrl.updateFlagImageURL(language);
+        overviewAppCtrl.updateFlagImageURL(language);
+        tagOverviewCtrl.updateFlagImageURL(language);
+        addExpensesCtrl.updateFlagImageURL(language);
+        overviewCtrl.updateFlagImageURL(language);
+        balancesCtrl.updateFlagImageURL(language);
     }
 
 
@@ -462,8 +479,9 @@ public class MainCtrl {
         overviewCtrl.updateUIWithNewLanguage();
         statisticsCtrl.updateUIWithNewLanguage();
         tagOverviewCtrl.updateUIWithNewLanguage();
-        overviewCtrl.updateUIWithNewLanguage();
+        overviewAppCtrl.updateUIWithNewLanguage();
         inviteCtrl.updateUIWithNewLanguage();
         adminPageCtrl.updateUIWithNewLanguage();
+        balancesCtrl.updateUIWithNewLanguage();
     }
 }

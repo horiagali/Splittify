@@ -15,6 +15,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -52,6 +54,8 @@ public class AddExpensesCtrl implements Initializable {
     private ComboBox<Tag> tagComboBox;
     @FXML
     private Menu languageMenu;
+    @FXML
+    private ImageView languageFlagImageView;
     @FXML
     private Button back;
     @FXML
@@ -487,14 +491,35 @@ public class AddExpensesCtrl implements Initializable {
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
 
     /**

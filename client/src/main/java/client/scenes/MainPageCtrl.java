@@ -15,6 +15,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -49,6 +51,8 @@ public class MainPageCtrl implements Initializable {
     private ToggleGroup languageGroup;
     @FXML
     private Button createEventButton;
+    @FXML
+    private ImageView languageFlagImageView;
 
     @FXML
     private Button joinEventButton;
@@ -97,6 +101,7 @@ public class MainPageCtrl implements Initializable {
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
     }
 
 
@@ -104,7 +109,6 @@ public class MainPageCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-
         createEventButton.setText(MainCtrl.resourceBundle.getString("button.createEvent"));
         joinEventButton.setText(MainCtrl.resourceBundle.getString("button.joinEvent"));
         refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
@@ -113,7 +117,27 @@ public class MainPageCtrl implements Initializable {
         colDate.setText(MainCtrl.resourceBundle.getString("TableColumn.colDate"));
         colName.setText(MainCtrl.resourceBundle.getString("TableColumn.colName"));
         colLocation.setText(MainCtrl.resourceBundle.getString("TableColumn.colLocation"));
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
 
 

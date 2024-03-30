@@ -63,6 +63,18 @@ public class InviteCtrl implements Initializable {
     private boolean sendingInProgress = false;
     @FXML
     private ToggleGroup currencyGroup;
+    @FXML
+    private ImageView languageFlagImageView;
+
+    @FXML
+    private ToggleGroup languageGroup;
+    @FXML
+    private RadioMenuItem englishMenuItem;
+    @FXML
+    private RadioMenuItem romanianMenuItem;
+    @FXML
+    private RadioMenuItem dutchMenuItem;
+
 
     /**
      * Constructor for the InviteCtrl class.
@@ -88,6 +100,7 @@ public class InviteCtrl implements Initializable {
         generateInviteCode();
         addKeyboardNavigationHandlers();
     }
+
 
     /**
      * Add keyboard navigation
@@ -210,14 +223,36 @@ public class InviteCtrl implements Initializable {
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        //languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
 
     /**
