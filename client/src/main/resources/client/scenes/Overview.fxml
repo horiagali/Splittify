@@ -106,12 +106,6 @@
       <Button fx:id="goToBalances" layoutX="399.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToBalances" prefHeight="26.0" prefWidth="79.0" text="Balances" />
       <Button layoutX="496.0" layoutY="196.0" mnemonicParsing="false" onAction="#showStatistics" text="See Statistics" />
       <Button fx:id="tagButton" layoutX="246.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToTagOverview" prefHeight="26.0" prefWidth="129.0" text="Manage tags" />
-      
-            <Button layoutX="491.0" layoutY="228.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
             <Text fill="WHITE" layoutX="14.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
                <font>
                   <Font size="16.0" />
