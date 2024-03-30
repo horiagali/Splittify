@@ -1,18 +1,18 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class AdminPassCtrl implements Initializable {
@@ -25,6 +25,8 @@ public class AdminPassCtrl implements Initializable {
     private PasswordField passwordField;
     @FXML
     private VBox vbox;
+    @FXML
+    private Menu languageMenu;
 
 
     /**
@@ -85,6 +87,34 @@ public class AdminPassCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         addKeyboardNavigationHandlers();
     }
+
+    /**
+     * Changes the language of the site
+     * @param event
+     */
+    @FXML
+    public void changeLanguage(javafx.event.ActionEvent event) {
+        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
+        String language = selectedLanguageItem.getText().toLowerCase();
+
+        // Load the appropriate resource bundle based on the selected language
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
+        Main.config.setLanguage(language);
+
+        // Update UI elements with the new resource bundle
+        updateUIWithNewLanguage();
+    }
+
+    /**
+     * Method to update UI elements with the new language from the resource bundle
+     */
+    public void updateUIWithNewLanguage() {
+        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+    }
+
+
 
     /**
      * Add keyboard navigation

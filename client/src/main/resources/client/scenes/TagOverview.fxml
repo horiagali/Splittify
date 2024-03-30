@@ -10,6 +10,8 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <VBox alignment="CENTER" prefHeight="743.0" prefWidth="881.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagOverviewCtrl">
 
     <fx:define>
@@ -22,12 +24,41 @@
             <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
                 <items>
                     <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="languageGroup" />
-                  </toggleGroup></RadioMenuItem>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
-
+                        <graphic>
+                            <ImageView fitHeight="25" fitWidth="30">
+                                <image>
+                                    <Image url="@/client/scenes/images/BritishFlag.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                        <toggleGroup>
+                            <ToggleGroup fx:id="englishGroup" />
+                        </toggleGroup>
+                    </RadioMenuItem>
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana">
+                        <graphic>
+                            <ImageView fitHeight="25" fitWidth="30">
+                                <image>
+                                    <Image url="@/client/scenes/images/RomanianFlag.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                        <toggleGroup>
+                            <ToggleGroup fx:id="romanaGroup" />
+                        </toggleGroup>
+                    </RadioMenuItem>
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands">
+                        <graphic>
+                            <ImageView fitHeight="25" fitWidth="30">
+                                <image>
+                                    <Image url="@/client/scenes/images/DutchFlag.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                        <toggleGroup>
+                            <ToggleGroup fx:id="dutchGroup" />
+                        </toggleGroup>
+                    </RadioMenuItem>
                 </items>
             </Menu>
         </menus>

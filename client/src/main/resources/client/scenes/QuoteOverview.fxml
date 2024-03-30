@@ -18,12 +18,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <VBox fx:id="vbox" alignment="CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.QuoteOverviewCtrl">
-
-    <fx:define>
-        <ToggleGroup fx:id="languageGroup" />
-        <ToggleGroup fx:id="currencyGroup" />
-    </fx:define>
 
     <!-- Combined MenuBar -->
     <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
@@ -32,12 +29,41 @@
             <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
                 <items>
                     <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
+                        <graphic>
+                            <ImageView fitHeight="25" fitWidth="30">
+                                <image>
+                                    <Image url="@/client/scenes/images/BritishFlag.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
                         <toggleGroup>
-                            <ToggleGroup fx:id="languageGroup" />
+                            <ToggleGroup fx:id="englishGroup" />
                         </toggleGroup>
                     </RadioMenuItem>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana">
+                        <graphic>
+                            <ImageView fitHeight="25" fitWidth="30">
+                                <image>
+                                    <Image url="@/client/scenes/images/RomanianFlag.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                        <toggleGroup>
+                            <ToggleGroup fx:id="romanaGroup" />
+                        </toggleGroup>
+                    </RadioMenuItem>
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands">
+                        <graphic>
+                            <ImageView fitHeight="25" fitWidth="30">
+                                <image>
+                                    <Image url="@/client/scenes/images/DutchFlag.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                        <toggleGroup>
+                            <ToggleGroup fx:id="dutchGroup" />
+                        </toggleGroup>
+                    </RadioMenuItem>
                 </items>
             </Menu>
 
