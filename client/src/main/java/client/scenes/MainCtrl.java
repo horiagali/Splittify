@@ -130,7 +130,8 @@ public class MainCtrl {
                            Pair<ServerSetterCtrl, Parent> serverSetter2, String language,
                            Pair<StatisticsCtrl, Parent> statistics,
                            Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair,
-                           Pair<TagOverviewCtrl, Parent> tagOverview, Main main) {
+                           Pair<TagOverviewCtrl, Parent> tagOverview,
+                           Main main) {
 
         this.primaryStage = primaryStage;
         this.main = main;
@@ -304,6 +305,8 @@ public class MainCtrl {
         primaryStage.setScene(tagOverview);
         tagOverviewCtrl.refresh();
     }
+
+
     /**
      *
      */

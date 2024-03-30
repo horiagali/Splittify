@@ -358,6 +358,54 @@ public class ServerUtils {
 	}
 
 	/**
+	 * Adds a tag to an event.
+	 *
+	 * @param eventId     The ID of the event to which the tag will be added.
+	 * @param tag The tag to be added.
+	 * @return The added tag.
+	 */
+	public Tag addTag(long eventId, Tag tag) {
+		String url = server + "api/events/" + eventId + "/tags";
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<Tag> requestEntity = new HttpEntity<>(tag, headers);
+		Tag tagCheck = restTemplate.postForObject(url, requestEntity, Tag.class);
+		System.out.println(tagCheck);
+		return tagCheck;
+	}
+
+	/**
+	  * Update the tag in the DB.
+	  *
+	  * @param updatedTag the tag
+	  * @param eventId current event
+	  */
+	  public void updateTag(Tag updatedTag, long eventId) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId + "/tags/" + updatedTag.getId())
+				.request()
+				.put(Entity.entity(updatedTag, APPLICATION_JSON));
+	}
+
+	/**
+	 * Deletes a participant from an event.
+	 *
+	 * @param eventId     The ID of the event from which the participant will be deleted.
+	 * @param tagId 	  The tag to be deleted.
+	 */
+	public void deleteTag(long eventId, long tagId) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId +
+						"/tags/" + tagId)
+				.request()
+				.delete();
+	}
+
+	/**
 	 * Adds a participant to an event.
 	 *
 	 * @param eventId     The ID of the event to which the participant will be added.
@@ -374,6 +422,7 @@ public class ServerUtils {
 
 		return restTemplate.postForObject(url, requestEntity, Participant.class);
 	}
+
 	/**
 	 * Retrieves all participants of an event by event ID.
 	 *
@@ -416,6 +465,25 @@ public class ServerUtils {
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Expense>>() {});
 	}
+
+	/**
+	 * Update a expense in the database.
+	 *
+	 * @param eventId     The ID of the event to which the expense belongs.
+	 * @param expense The updated expense information.
+	 */
+	public void updateExpense(long eventId, Expense expense) {
+		expense.setEvent(getEvent(eventId));
+		System.out.println(expense);
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId +
+						"/expenses/" + expense.getId())
+				.request()
+				.put(Entity.entity(expense, APPLICATION_JSON));
+	}
+
+
 	/**
 	 * Update a participant in the database.
 	 *

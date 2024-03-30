@@ -96,7 +96,6 @@ public class ContactDetailsCtrl implements Initializable {
             Participant participant = new Participant(name, email, bic, iban, 0.0);
             server.addParticipant(OverviewCtrl.getSelectedEvent().getId(),participant);
 
-
             clearFields();
             mainCtrl.goToOverview();
         } else {
