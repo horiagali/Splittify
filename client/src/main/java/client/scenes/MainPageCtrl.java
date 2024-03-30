@@ -21,11 +21,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.FileChooser;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 
@@ -389,5 +391,39 @@ public class MainPageCtrl implements Initializable {
 
         // Print confirmation message
         System.out.println("Currency changed to: " + currency);
+    }
+
+    /**
+     * add new language
+     * @param actionEvent
+     */
+    public void addNewLanguage(ActionEvent actionEvent) {
+        Properties newLang = new Properties();
+        try (BufferedReader reader =
+                     new BufferedReader(new FileReader("client/src/main/resources/langTemplate.txt"))) {
+            newLang.load(reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String newLangPath;
+        try (OutputStream output = new FileOutputStream("client/src/main/resources/newLang.properties")) {
+            newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n"+
+                    "Send the final translation version to ooppteam56@gmail.com");
+
+            newLangPath = "client/src/main/resources/newLang.properties";
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        File file = new File(newLangPath);
+        String saveDir = System.getProperty("user.home") + "/Downloads" + "/" + file.getName();
+        try {
+            Files.move(file.toPath(), Paths.get(saveDir), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File downloaded to: " + saveDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

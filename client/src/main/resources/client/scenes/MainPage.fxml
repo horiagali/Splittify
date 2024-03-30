@@ -38,6 +38,7 @@
                     </RadioMenuItem>
                     <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
                     <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
+                    <RadioMenuItem mnemonicParsing="false" onAction="#addNewLanguage" text="Add new language" toggleGroup="$languageGroup" />
                 </items>
             </Menu>
 
