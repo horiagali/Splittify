@@ -445,5 +445,8 @@ public class MainCtrl {
         overviewCtrl.updateUIWithNewLanguage();
         statisticsCtrl.updateUIWithNewLanguage();
         tagOverviewCtrl.updateUIWithNewLanguage();
+        overviewCtrl.updateUIWithNewLanguage();
+        inviteCtrl.updateUIWithNewLanguage();
+        adminPageCtrl.updateUIWithNewLanguage();
     }
 }

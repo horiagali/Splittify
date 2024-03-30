@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.Main;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -14,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class AdminPageCtrl implements Initializable {
@@ -31,6 +33,10 @@ public class AdminPageCtrl implements Initializable {
     private TableColumn<Event, String> colLocation;
     @FXML
     private TableColumn<Event, String> colDate;
+    @FXML
+    private Menu languageMenu;
+    @FXML
+    private Button backButton;
 
     /**
      * @param server
@@ -78,6 +84,34 @@ public class AdminPageCtrl implements Initializable {
                 deleteSelectedEvent();
             }
         });
+    }
+
+    /**
+     * Changes the language of the site
+     * @param event
+     */
+    @FXML
+    public void changeLanguage(javafx.event.ActionEvent event) {
+        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
+        String language = selectedLanguageItem.getText().toLowerCase();
+
+        // Load the appropriate resource bundle based on the selected language
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
+        Main.config.setLanguage(language);
+
+        // Update UI elements with the new resource bundle
+        updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
+    }
+
+    /**
+     * Method to update UI elements with the new language from the resource bundle
+     */
+    public void updateUIWithNewLanguage() {
+        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
     }
 
     /**

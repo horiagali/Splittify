@@ -49,6 +49,8 @@ public class OverviewCtrl implements Initializable {
     private Label eventLocation;
     @FXML
     private Label eventDate;
+    @FXML
+    private Button backButton;
 
     @FXML
     private TextField eventNameTextField;
@@ -372,6 +374,13 @@ public class OverviewCtrl implements Initializable {
         switchToLocationLabel();
         server.updateEvent(selectedEvent);
 
+    }
+
+    /**
+     * Method to update UI elements with the new language from the resource bundle
+     */
+    public void updateUIWithNewLanguage() {
+        backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
     }
 
     /**

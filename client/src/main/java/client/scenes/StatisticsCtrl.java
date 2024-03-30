@@ -121,18 +121,22 @@ public class StatisticsCtrl {
         languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
         String piechartString = "Text.statisticsTitle";
         if(event !=null){
-            piechartString += event.getTitle();
+            pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString) + event.getTitle());
         }
-        pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString));
+        else {
+            pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString));
+        }
         eventTotalAmount.setText(MainCtrl.resourceBundle.getString("Text.statisticsTotal") + 
         totalAmount);
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         refresh.setText(MainCtrl.resourceBundle.getString("button.refresh"));
         String stageTitleString = "title.statistics";
         if(event !=null){
-            stageTitleString += event.getTitle();
+            mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString) +  event.getTitle());
         }
-        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));
+        else{
+            mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));
+        }
     }
 
     /**

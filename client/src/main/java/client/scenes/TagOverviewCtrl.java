@@ -86,9 +86,9 @@ public class TagOverviewCtrl {
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         String stageTitleString = "title.statistics";
         if(event !=null){
-            stageTitleString += event.getTitle();
+            mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString)+event.getTitle());
         }
-        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));
+        else{mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));}
         
     }
 
