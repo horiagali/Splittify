@@ -121,7 +121,7 @@ public class StatisticsCtrl {
         }
         //if percentage does not match due to rounding, 
         //just add or substract the last 1 or 2 percent to the last tag
-        if(remainingPercentage != 0 && pieChartData != null) {
+        if(remainingPercentage != 0 && pieChartData != null && pieChartData.size() > 0) {
             PieChart.Data dataToEdit = pieChartData.get(pieChartData.size()-1);
             long percentage = Math.round((dataToEdit.getPieValue() / totalAmount)*100);
             remainingPercentage = remainingPercentage + percentage;

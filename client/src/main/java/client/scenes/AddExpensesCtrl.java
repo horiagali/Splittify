@@ -198,6 +198,9 @@ public class AddExpensesCtrl implements Initializable {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         if (selectedEvent != null) {
             List<Tag> tags = server.getTags(selectedEvent.getId());
+            for(Tag tag : tags) {
+                tag.setEvent(selectedEvent);
+            }
             if (tags != null && !tags.isEmpty()) {
                 tags = tags.stream()
                         .filter(tag -> !"gifting money".equalsIgnoreCase(tag.getName()))

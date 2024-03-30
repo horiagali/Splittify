@@ -41,11 +41,13 @@ public class EventService {
                 event.getLocation(),
                 event.getDate()));
 
+        tagService.createTag(new Tag("no tag", "#9fa9ab"), saved.getId());
+        tagService.createTag(new Tag("gifting money","#e5ff00"), saved.getId());
         tagService.createTag(new Tag("food", "#42f572"), saved.getId());
         tagService.createTag(new Tag("travel", "#f54254"), saved.getId());
         tagService.createTag(new Tag("entrance fees", "#07dafa"), saved.getId());
-        tagService.createTag(new Tag("no tag", "#9fa9ab"), saved.getId());
-        tagService.createTag(new Tag("gifting money","#e5ff00"), saved.getId());
+        
+        
 
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Event created: "+saved);
         return ResponseEntity.ok(saved);

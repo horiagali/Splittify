@@ -255,7 +255,7 @@ public class ExpenseService {
     public ResponseEntity<Expense> updateExpense(Long eventId,
                                                  Long expenseId,
                                                  Expense expense) {
-
+                                                        
         if (!eventRepository.findById(eventId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "404: Event not found via 'updateExpense'");
@@ -271,7 +271,7 @@ public class ExpenseService {
         Event event = eventRepository.findById(eventId).get();
         Expense oldExpense = expenseRepository.findById(expenseId).get();
 
-        if (expense.getEvent() != event) {
+        if (expenseRepository.findById(expenseId).get().getEvent() != event) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING,
                             "404: Expense does not belong to event via 'updateExpense'");

@@ -5,24 +5,37 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+
 import com.google.inject.Inject;
+
 
 import client.Main;
 import client.utils.Currency;
 import client.utils.ServerUtils;
 import commons.Event;
+import commons.Expense;
 import commons.Tag;
+import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class TagOverviewCtrl {
     private final ServerUtils server;
@@ -48,6 +61,11 @@ public class TagOverviewCtrl {
     @FXML
     private ToggleGroup currencyGroup;
 
+    @FXML
+    private VBox tagInfo;
+
+    TextField name;
+
     /**
      * @param server
      * @param mainCtrl
@@ -64,6 +82,7 @@ public class TagOverviewCtrl {
      * uses rounding to ensure percentages round to 100%
      */
     public void refresh() {
+        tagInfo.getChildren().clear();
         loadTags();
 
     }
@@ -131,11 +150,11 @@ public class TagOverviewCtrl {
         if (event != null) {
             List<Tag> tags =
                     server.getTags(OverviewCtrl.getSelectedEvent().getId());
-
+            tags.remove(1);
             flowPane.getChildren().clear();
-
             for (Tag tag : tags) {
                 Button tagButton = setStyle(tag);
+                tagButton.setMaxWidth(300);
                 flowPane.getChildren().add(tagButton);
             }
             Button newTagButton = new Button("+");
@@ -143,9 +162,115 @@ public class TagOverviewCtrl {
             "-fx-font-size: " + 20 + ";" +
             "-fx-border-radius: " + 10 + ";";
             newTagButton.setStyle(style);
+            addHoverAnimation(newTagButton);
+            newTagButton.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                    createNewTag();
+                }
+                });
             flowPane.getChildren().add(newTagButton);
         }
     }
+
+    /**
+     * gives the menu for creating a new tag.
+     */
+    public void createNewTag() {
+        Tag newTag = new Tag();
+        newTag.setName("new tag");
+        newTag.setEvent(event);
+        tagInfo.getChildren().clear();
+        Button button = new Button("new tag");
+        button.setTextFill(Color.BLACK);
+        String style = "-fx-background-color: " + "#d9dbd9" + ";" +
+        "-fx-font-size: " + 20 + ";" +
+        "-fx-border-radius: " + 10 + ";";
+        button.setStyle(style);
+        tagInfo.getChildren().add(button);
+        ColorPicker colorPicker = new ColorPicker();
+        colorPickerCreateTag(newTag, button, colorPicker);
+        tagInfo.getChildren().add(colorPicker);
+        name = new TextField("new tag");
+        name.setStyle("-fx-font-size: " + 20 + ";");
+        name.setAlignment(Pos.CENTER);
+        name.setOnAction(event -> {
+            newTag.setName(name.getText());
+            button.setText(name.getText());
+            });
+        name.setOnMouseExited(event -> {
+            newTag.setName(name.getText());
+            button.setText(name.getText());
+            });
+        tagInfo.getChildren().add(name);
+        Button createButton = new Button("create tag");
+        createButton.setOnAction(event -> {
+            if(!server.getTags(this.event.getId())
+            .stream()
+            .map(x -> x.getName()).toList().contains(name.getText())) {
+                newTag.setName(name.getText());
+                server.addTag(this.event.getId(), newTag);
+                refresh();
+            } else {
+                Text text = new Text("A tag with this name already exists!");
+                text.setFill(Color.RED);
+                tagInfo.getChildren().add(text);
+            }
+        });
+        tagInfo.getChildren().add(createButton);
+
+
+    }
+
+    private void colorPickerCreateTag(Tag newTag, Button button, ColorPicker colorPicker) {
+        String colorString = "#d9dbd9";
+        double red = Integer.decode(colorString.substring(0, 3));
+        double green = Integer.decode("#" + colorString.substring(3, 5));
+        double blue = Integer.decode("#" + colorString.substring(5, colorString.length()));
+        Color color = new Color(red/255, green/255, blue/255, 1);
+        colorPicker.setValue(color);
+        newTag.setColor("#d9dbd9");
+        colorPicker.setOnAction(event -> {
+            String hex = String.format("#%02X%02X%02X",
+                (int)(colorPicker.getValue().getRed() * 255),
+                (int)(colorPicker.getValue().getGreen() * 255),
+                (int)(colorPicker.getValue().getBlue() * 255));
+            button.setStyle("-fx-background-color: " + hex + ";" +
+            "-fx-font-size: " + 20 + ";" +
+            "-fx-border-radius: " + 10 + ";");
+            newTag.setColor(hex);
+            });
+    }
+
+    @FXML
+    private void deleteTag(Tag tag) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Tag");
+        alert.setHeaderText("Are you sure you want to delete this tag?");
+        alert.setContentText("This action cannot be undone. All expenses associated " +
+        "with this tag, will get the tag 'no tag'");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == javafx.scene.control.ButtonType.OK) {
+                // Delete the participant from the server
+                List<Expense> list = server.getExpensesByEventId(this.event.getId());
+                for(Expense expense : list) {
+                expense.setTag(server.getTags(this.event.getId()).get(0));
+                server.updateExpense(this.event.getId(), expense);
+                
+                }
+                server.deleteTag(event.getId(), tag.getId());
+                refresh();
+
+                // Show confirmation message
+                Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
+                deleteConfirmation.setTitle("Tag Deleted");
+                deleteConfirmation.setHeaderText(null);
+                deleteConfirmation.setContentText("Tag deleted successfully!");
+                deleteConfirmation.showAndWait();
+            }
+        });
+    }
+
 
     /**d
      * sets the style of the button to 
@@ -160,12 +285,157 @@ public class TagOverviewCtrl {
         "-fx-font-size: " + 20 + ";" +
         "-fx-border-radius: " + 10 + ";";
         button.setStyle(style);
+        addHoverAnimation(button);
         button.setOnMouseClicked(event -> {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+            tag.setEvent(this.event);
+            showTagInfo(new Tag(tag.getName(), tag.getColor()), tag);
         }
         });
         return button;
     }
+
+
+
+    /**
+     * shows info of tag to edit or remove it
+     * @param oldTag the old version of this tag
+     * @param newTag the new version of this tag
+     */
+    private void showTagInfo(Tag oldTag, Tag newTag) {
+        tagInfo.getChildren().clear();
+        if(oldTag.getName().equals("no tag")) {
+            noTagSelected(oldTag, newTag);
+            return;
+        }
+        Button originalTag = new Button(oldTag.getName());
+        originalTag.setTextFill(Color.BLACK);
+        Button newTagButton = new Button(newTag.getName());
+        newTagButton.setTextFill(Color.BLACK);
+        newTagButton.setStyle("-fx-background-color: " + newTag.getColor() + ";" +
+        "-fx-font-size: " + 20 + ";" +
+        "-fx-border-radius: " + 10 + ";");
+        originalTag.setStyle("-fx-background-color: " + oldTag.getColor() + ";" +
+        "-fx-font-size: " + 20 + ";" + "-fx-border-radius: " + 10 + ";");
+        Text text = new Text("↓");
+        text.setStyle("-fx-font-size: 20");
+        tagInfo.getChildren().add(originalTag);
+        tagInfo.getChildren().add(text);
+        tagInfo.getChildren().add(newTagButton);
+        ColorPicker colorPicker = new ColorPicker();
+        colorPickerLogic(oldTag, newTag, colorPicker);
+
+        tagInfo.getChildren().add(colorPicker);
+        name = new TextField(newTag.getName());
+        name.setStyle("-fx-font-size: " + 20 + ";");
+        name.setAlignment(Pos.CENTER);
+        name.setOnMouseExited(event -> {
+            newTag.setName(name.getText());
+            showTagInfo(oldTag, newTag);
+            });
+        tagInfo.getChildren().add(name);
+        HBox hbox = deleteUpdateButtons(newTag, oldTag);
+        tagInfo.getChildren().add(hbox);
+        tagInfo.setOpacity(1);
+    }
+
+    /**
+     * if the tag 'no tag' is selected. Is different because name cannot be changed.
+     * @param oldTag
+     * @param newTag
+     */
+    private void noTagSelected(Tag oldTag, Tag newTag) {
+        Button originalTag = new Button(oldTag.getName());
+        originalTag.setTextFill(Color.BLACK);
+        originalTag.setStyle("-fx-background-color: " + newTag.getColor() + ";" +
+        "-fx-font-size: " + 20 + ";" +
+        "-fx-border-radius: " + 10 + ";");
+        ColorPicker colorPicker = new ColorPicker();
+        colorPickerLogic(oldTag, oldTag, colorPicker);
+        tagInfo.getChildren().add(originalTag);
+        tagInfo.getChildren().add(colorPicker);
+        Button update = new Button("update tag");
+        update.setOnAction(event -> {
+            oldTag.setEvent(this.event);
+            oldTag.setId(server.getTags(this.event.getId()).get(0).getId());
+            server.updateTag(oldTag, this.event.getId());
+            refresh();
+            });
+        tagInfo.getChildren().add(update);
+    }
+
+    private void colorPickerLogic(Tag oldTag, Tag newTag, ColorPicker colorPicker) {
+        String colorString = newTag.getColor();
+        double red = Integer.decode(colorString.substring(0, 3));
+        double green = Integer.decode("#" + colorString.substring(3, 5));
+        double blue = Integer.decode("#" + colorString.substring(5, colorString.length()));
+        Color color = new Color(red/255, green/255, blue/255, 1);
+        colorPicker.setValue(color);
+        colorPicker.setOnAction(event -> {
+            String hex = String.format("#%02X%02X%02X",
+            (int)(colorPicker.getValue().getRed() * 255),
+            (int)(colorPicker.getValue().getGreen() * 255),
+            (int)(colorPicker.getValue().getBlue() * 255));
+            newTag.setColor(hex);
+            showTagInfo(oldTag, newTag);
+            });
+    }
+
+    private HBox deleteUpdateButtons(Tag newTag, Tag oldTag) {
+        HBox hbox = new HBox(10);
+        hbox.setAlignment(Pos.CENTER);
+        Button delete = new Button("delete tag");
+        delete.setOnAction(event -> {
+            deleteTag(newTag);
+        });
+        Button update = new Button("update tag");
+        update.setOnAction(event -> { 
+            if(oldTag.getName().equals(name.getText()) ||
+                !server.getTags(this.event.getId()).stream()
+                .map(x -> x.getName()).toList().contains(name.getText()))
+            {
+                newTag.setName(name.getText());
+                server.updateTag(newTag, this.event.getId());
+                refresh();
+            } else {
+                Text text = new Text("A tag with this name already exists!");
+                text.setFill(Color.RED);
+                tagInfo.getChildren().add(text);
+            }
+        });
+        hbox.getChildren().add(update);
+        hbox.getChildren().add(delete);
+        return hbox;
+    }
+
+    private void addHoverAnimation(Node node) {
+        double startX = node.getScaleX();
+        double startY = node.getScaleY();
+        double startZ = node.getScaleZ();
+        node.setOnMouseEntered(event -> {
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.1), node);
+            scaleTransition.setFromX(startX);
+            scaleTransition.setFromY(startY);
+            scaleTransition.setFromZ(startZ);
+            scaleTransition.setToX(node.getScaleX()*1.1);
+            scaleTransition.setToY(node.getScaleY()*1.1);
+            scaleTransition.setToZ(node.getScaleZ()*1.1);
+            scaleTransition.play();
+
+        });
+        node.setOnMouseExited(event -> {
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.1), node);
+            scaleTransition.setFromX(node.getScaleX());
+            scaleTransition.setFromY(node.getScaleY());
+            scaleTransition.setFromZ(node.getScaleZ());
+            scaleTransition.setToX(startX);
+            scaleTransition.setToY(startY);
+            scaleTransition.setToZ(startZ);
+            scaleTransition.play();
+
+        });
+    }
+
 
     /**
      * set the selected event to see statistics from.
@@ -175,10 +445,12 @@ public class TagOverviewCtrl {
         TagOverviewCtrl.event = selectedEvent;
     }
 
+
     /**
      * back button
      */
     public void back(){
+        tagInfo.getChildren().clear();
         mainCtrl.goToOverview();
     }
 
