@@ -427,12 +427,14 @@ public class MainPageCtrl implements Initializable {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Download Template File");
         fileChooser.getExtensionFilters()
-                .add(new FileChooser.ExtensionFilter("properties files (*.properties)", "*.properties"));
+                .add(new FileChooser.ExtensionFilter("properties files (*.properties)",
+                        "*.properties"));
         File file = fileChooser.showSaveDialog(table.getScene().getWindow());
         String saveDir = file.toString();
         if (file != null) {
             try {
-                Files.move(fileLang.toPath(), Paths.get(saveDir), StandardCopyOption.REPLACE_EXISTING);
+                Files.move(fileLang.toPath(), Paths.get(saveDir),
+                        StandardCopyOption.REPLACE_EXISTING);
                 System.out.println("File downloaded to: " + saveDir);
             } catch (IOException e) {
                 e.printStackTrace();
