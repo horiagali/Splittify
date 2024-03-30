@@ -75,6 +75,15 @@
                             </ImageView>
                         </graphic>
                     </RadioMenuItem>
+                    <RadioMenuItem mnemonicParsing="false" onAction="#addNewLanguage" text="add new language">
+                        <graphic>
+                            <ImageView fitHeight="35" fitWidth="40">
+                                <image>
+                                    <Image url="@/client/scenes/images/addLanguage.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </RadioMenuItem>
                 </items>
             </Menu>
             <!-- Currency Menu -->
