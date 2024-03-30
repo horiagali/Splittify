@@ -181,7 +181,8 @@ public class StatisticsCtrl {
         refresh.setText(MainCtrl.resourceBundle.getString("button.refresh"));
         String stageTitleString = "title.statistics";
         if(event !=null){
-            mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString) +  event.getTitle());
+            mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString)
+                    +  event.getTitle());
         }
         else{
             mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));

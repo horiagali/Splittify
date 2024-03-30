@@ -1,10 +1,8 @@
 package client.scenes;
 
 import client.Main;
-<<<<<<< HEAD
-=======
 import client.utils.Currency;
->>>>>>> fa911f81fc3c9dcbfc4213575114a332f17d7a5c
+
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
@@ -55,12 +53,10 @@ public class AddExpensesCtrl implements Initializable {
     @FXML
     private Menu languageMenu;
     @FXML
-<<<<<<< HEAD
     private Button back;
-
-=======
+    @FXML
     private ToggleGroup currencyGroup;
->>>>>>> fa911f81fc3c9dcbfc4213575114a332f17d7a5c
+
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -235,32 +231,6 @@ public class AddExpensesCtrl implements Initializable {
         } else {
             tagComboBox.getItems().clear();
         }
-    }
-
-    /**
-     * Changes the language of the site
-     * @param event
-     */
-    @FXML
-    public void changeLanguage(javafx.event.ActionEvent event) {
-        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
-        String language = selectedLanguageItem.getText().toLowerCase();
-
-        // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
-        + language, new Locale(language));
-        
-        Main.config.setLanguage(language);
-
-        // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
-    }
-    
-    /**
-     * Method to update UI elements with the new language from the resource bundle
-     */
-    public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
     }
 
     /**

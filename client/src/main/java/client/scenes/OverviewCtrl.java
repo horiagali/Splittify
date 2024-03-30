@@ -429,13 +429,6 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     * Method to update UI elements with the new language from the resource bundle
-     */
-    public void updateUIWithNewLanguage() {
-        backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
-    }
-
-    /**
      * c
      *
      * @param actionEvent
