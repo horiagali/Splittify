@@ -31,7 +31,6 @@ import java.util.function.Consumer;
 
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.message.internal.EntityInputStream;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
