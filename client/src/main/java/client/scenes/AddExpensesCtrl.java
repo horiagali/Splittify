@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.Main;
 import client.utils.Currency;
+
 import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
@@ -14,6 +15,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -52,7 +55,12 @@ public class AddExpensesCtrl implements Initializable {
     @FXML
     private Menu languageMenu;
     @FXML
+    private ImageView languageFlagImageView;
+    @FXML
+    private Button back;
+    @FXML
     private ToggleGroup currencyGroup;
+
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -230,32 +238,6 @@ public class AddExpensesCtrl implements Initializable {
         } else {
             tagComboBox.getItems().clear();
         }
-    }
-
-    /**
-     * Changes the language of the site
-     * @param event
-     */
-    @FXML
-    public void changeLanguage(javafx.event.ActionEvent event) {
-        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
-        String language = selectedLanguageItem.getText().toLowerCase();
-
-        // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
-        + language, new Locale(language));
-        
-        Main.config.setLanguage(language);
-
-        // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
-    }
-    
-    /**
-     * Method to update UI elements with the new language from the resource bundle
-     */
-    public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
     }
 
     /**
@@ -492,6 +474,55 @@ public class AddExpensesCtrl implements Initializable {
         purposeTextField.clear();
         amountTextField.clear();
         equallyCheckbox.setSelected(false);
+    }
+
+    /**
+     * Changes the language of the site
+     * @param event
+     */
+    @FXML
+    public void changeLanguage(javafx.event.ActionEvent event) {
+        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
+        String language = selectedLanguageItem.getText().toLowerCase();
+
+        // Load the appropriate resource bundle based on the selected language
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
+        Main.config.setLanguage(language);
+
+        // Update UI elements with the new resource bundle
+        updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
+    }
+
+    /**
+     * Method to update UI elements with the new language from the resource bundle
+     */
+    public void updateUIWithNewLanguage() {
+        back.setText(MainCtrl.resourceBundle.getString("button.back"));
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
 
     /**

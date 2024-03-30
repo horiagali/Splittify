@@ -1,47 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <!--suppress ALL -->
 
-<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
    <children>
-      <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
+      <MenuBar layoutX="-14.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
          <menus>
-            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
+            <Menu fx:id="languageMenu" mnemonicParsing="false">
+               <graphic>
+                  <StackPane alignment="CENTER_LEFT">
+                     <!-- ImageView for the flag -->
+                     <ImageView fx:id="languageFlagImageView" fitHeight="25" fitWidth="30">
+                        <image>
+                           <Image fx:id="languageFlagImage" url="@/client/scenes/images/BritishFlag.png" />
+                        </image>
+                     </ImageView>
+                  </StackPane>
+               </graphic>
                <items>
                   <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
                      <toggleGroup>
                         <ToggleGroup fx:id="languageGroup" />
                      </toggleGroup>
+                     <graphic>
+                        <ImageView fitHeight="25" fitWidth="30">
+                           <image>
+                              <Image url="@/client/scenes/images/BritishFlag.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </RadioMenuItem>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
-               </items>
-            </Menu>
-            <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
-               <items>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana">
                      <toggleGroup>
-                        <ToggleGroup fx:id="currencyGroup" />
+                        <fx:reference source="languageGroup" />
                      </toggleGroup>
+                     <graphic>
+                        <ImageView fitHeight="25" fitWidth="30">
+                           <image>
+                              <Image url="@/client/scenes/images/RomanianFlag.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </RadioMenuItem>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands">
+                     <toggleGroup>
+                        <fx:reference source="languageGroup" />
+                     </toggleGroup>
+                     <graphic>
+                        <ImageView fitHeight="25" fitWidth="30">
+                           <image>
+                              <Image url="@/client/scenes/images/DutchFlag.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </RadioMenuItem>
                </items>
             </Menu>
          </menus>
@@ -82,20 +100,46 @@
             <DatePicker fx:id="eventDatePicker" layoutX="350.0" layoutY="40.0" onAction="#updateEventDate" prefHeight="17.0" prefWidth="150.0" visible="false">
 
       </DatePicker>
-      
-            <Button layoutX="491.0" layoutY="228.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
+
+      <Button layoutX="495.0" layoutY="13.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Text fill="WHITE" layoutX="14.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Button layoutX="400.0" layoutY="358.0" mnemonicParsing="false" onAction="#goToAreYouSure" prefHeight="28.0" prefWidth="90.0" text="Delete Event" />
+
+      <Button fx:id="backButton" layoutX="501.0" layoutY="358.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="54.0" text="Back" />
+      <Text fill="WHITE" layoutX="19.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" wrappingWidth="69.6728515625">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <ChoiceBox fx:id="myChoiceBox" layoutX="14.0" layoutY="144.0" prefHeight="19.0" prefWidth="112.0" />
+      <Button layoutX="496.0" layoutY="157.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
+      <VBox layoutX="14.0" layoutY="209.0" prefHeight="177.0" prefWidth="322.0" style="-fx-background-color: white;" />
+      <ScrollPane fx:id="participantsScrollPane" layoutX="9.0" layoutY="82.0" prefHeight="41.0" prefWidth="582.0" style="-fx-background-color: pink;">
+         <content>
+            <VBox fx:id="participantsVBox" spacing="5" />
+         </content>
+      </ScrollPane>
+      <Label fx:id="myLabel2" alignment="CENTER" layoutX="237.0" layoutY="192.0" prefHeight="17.0" prefWidth="99.0" style="-fx-background-color: grey;" textFill="WHITE" />
+      <Label fx:id="myLabel" alignment="CENTER" layoutX="122.0" layoutY="192.0" prefHeight="17.0" prefWidth="99.0" style="-fx-background-color: grey;" textFill="WHITE" />
+      <Label fx:id="myLabel1" alignment="CENTER" layoutX="14.0" layoutY="192.0" prefHeight="17.0" prefWidth="89.0" style="-fx-background-color: grey;" text="All" textFill="WHITE" />
+      <Button layoutX="103.0" layoutY="54.0" mnemonicParsing="false" onAction="#goToContact" prefHeight="17.0" prefWidth="60.0" text="Add" />
+
+      <Button fx:id="goToBalances" layoutX="399.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToBalances" prefHeight="26.0" prefWidth="79.0" text="Balances" />
+      <Button layoutX="496.0" layoutY="196.0" mnemonicParsing="false" onAction="#showStatistics" text="See Statistics" />
+      <Button fx:id="tagButton" layoutX="246.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToTagOverview" prefHeight="26.0" prefWidth="129.0" text="Manage tags" />
             <Text fill="WHITE" layoutX="14.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
-            <Button layoutX="490.0" layoutY="358.0" mnemonicParsing="false" onAction="#goToAreYouSure" prefHeight="28.0" prefWidth="90.0" text="Delete Event" />
-      
-            <Button layoutX="511.0" layoutY="13.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="54.0" text="Back" />
             <Text fill="WHITE" layoutX="19.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" wrappingWidth="69.6728515625">
                <font>
                   <Font size="16.0" />
