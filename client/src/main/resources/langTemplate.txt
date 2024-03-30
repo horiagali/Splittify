@@ -1,0 +1,17 @@
+button.createEvent=Create Event
+button.joinEvent=Join Event
+button.refresh=Refresh
+button.admin=Admin
+button.connectToServer=Connect!
+button.back=Back
+button.refresh=Refresh
+Text.yourEvents=Your events:
+Text.invalidUrl=Please enter a valid URL!
+Text.enterUrl=Enter server URL:
+Text.statisticsTitle=Statistics of
+Text.statisticsTotal=Total cost of event:
+TableColumn.colDate=Event date
+TableColumn.colName=Event name
+TableColumn.colLocation=Event location
+menu.languageMenu=Language
+title.statistics=Statistics of
