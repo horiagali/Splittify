@@ -251,7 +251,7 @@ public class OverviewCtrl implements Initializable {
                 participantLabel.setOnMouseEntered(event -> {
                     participantLabel.setFont(Font.font(22));
                 });
-                addHoverAnimation(participantLabel);
+                addHoverAnimation(participantLabel, 1.1);
 
                 participantLabel.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
@@ -276,29 +276,21 @@ public class OverviewCtrl implements Initializable {
         }
         for(Expense expense : expenses) {
             VBox vbox = new VBox();
-            HBox row1 = new HBox();
+            setUpRow1(expense, vbox);
             HBox row2 = new HBox();
-            Label label = new Label(expense.getTitle());
-            label.setFont(Font.font(20));
-            label.setAlignment(Pos.CENTER);
-            Button tag = new Button(expense.getTag().getName());
-            tag.setStyle("-fx-background-color: " + expense.getTag().getColor());
-            Label date = new Label(expense.getDate().toString());
-            row1.getChildren().add(label);
-            row1.getChildren().add(tag);
-            row1.getChildren().add(date);
-            vbox.getChildren().add(row1);
+            row2.setMinWidth(300);
+            row2.setMaxWidth(300);
+            row2.setSpacing(5);
             Label payer = new Label(expense.getPayer().getNickname());
+            payer.setStyle("-fx-font-style: Bold");
             payer.setAlignment(Pos.CENTER);
-            Label arrow = new Label("→");
-            Label amount = new Label(expense.getAmount() + "");
+            Label text = new Label("payed " + expense.getAmount() + " for");
             String owers = "";
             if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
             owers = "everyone";
             else {
-                List<String> nameList = server.getParticipants(selectedEvent.getId()).stream()
-                .map(x -> x.getNickname())
-                .toList();
+                List<String> nameList = expense.getOwers().stream()
+                .map(x -> x.getNickname()).toList();
                 owers = nameList.get(0);
                 for(int i = 1; i < nameList.size(); i++) {
                     owers = owers + ", " + nameList.get(i);
@@ -306,13 +298,39 @@ public class OverviewCtrl implements Initializable {
             }
             Label owersNames = new Label(owers);
             row2.getChildren().add(payer);
-            row2.getChildren().add(arrow);
-            row2.getChildren().add(amount);
-            row2.getChildren().add(arrow);
+            row2.getChildren().add(text);
             row2.getChildren().add(owersNames);
             vbox.getChildren().add(row2);
+            addHoverAnimation(vbox, 1.05);
             expensesBox.getChildren().add(vbox);
         }
+    }
+
+    private void setUpRow1(Expense expense, VBox vbox) {
+        HBox row1 = new HBox();
+        
+        Label label = new Label(expense.getTitle());
+        Button tag = new Button(expense.getTag().getName());
+        Label date = new Label("DATE HERE");
+        vbox.setMinWidth(300);
+        vbox.setMaxWidth(300);
+        vbox.setStyle("-fx-border-width: 2; -fx-border-radius: 10; -fx-border-color: black");
+        
+        row1.setMinWidth(300);
+        row1.setMaxWidth(300);
+        row1.setSpacing(10);
+        row1.setAlignment(Pos.CENTER_LEFT);
+
+        
+        label.setFont(Font.font(20));
+        label.setAlignment(Pos.CENTER);
+        
+        tag.setStyle("-fx-background-color: " + expense.getTag().getColor());
+        date.setAlignment(Pos.CENTER);
+        row1.getChildren().add(label);
+        row1.getChildren().add(tag);
+        row1.getChildren().add(date);
+        vbox.getChildren().add(row1);
     }
 
 
@@ -583,7 +601,7 @@ public class OverviewCtrl implements Initializable {
         mainCtrl.goToBalances(selectedEvent);
     }
 
-    private void addHoverAnimation(Node node) {
+    private void addHoverAnimation(Node node, double factor) {
         double startX = node.getScaleX();
         double startY = node.getScaleY();
         double startZ = node.getScaleZ();
@@ -592,9 +610,9 @@ public class OverviewCtrl implements Initializable {
             scaleTransition.setFromX(startX);
             scaleTransition.setFromY(startY);
             scaleTransition.setFromZ(startZ);
-            scaleTransition.setToX(node.getScaleX()*1.1);
-            scaleTransition.setToY(node.getScaleY()*1.1);
-            scaleTransition.setToZ(node.getScaleZ()*1.1);
+            scaleTransition.setToX(node.getScaleX()*factor);
+            scaleTransition.setToY(node.getScaleY()*factor);
+            scaleTransition.setToZ(node.getScaleZ()*factor);
             scaleTransition.play();
 
         });
