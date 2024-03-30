@@ -17,7 +17,7 @@
 
 <!--suppress ALL -->
 
-<VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
+<VBox alignment="TOP_CENTER" prefHeight="593.0" prefWidth="839.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.OverviewCtrl">
    <children>
       <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
          <menus>
@@ -46,10 +46,10 @@
             </Menu>
          </menus>
       </MenuBar>
-      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: pink;">
+      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="498.0" prefWidth="748.0">
          <children>
             <!-- Event Name -->
-            <Label fx:id="eventName" layoutX="14.0" layoutY="23.0" onMouseClicked="#switchToNameTextField" prefHeight="28.0" prefWidth="194.0" textFill="WHITE">
+            <Label fx:id="eventName" layoutX="14.0" layoutY="23.0" onMouseClicked="#switchToNameTextField" prefHeight="28.0" prefWidth="194.0">
                <font>
                   <Font size="22.0" />
                </font>
@@ -61,7 +61,7 @@
             </TextField>
       
             <!-- Event Location -->
-            <Label fx:id="eventLocation" layoutX="220.0" layoutY="40.0" onMouseClicked="#switchToLocTextField" prefHeight="17.0" prefWidth="150.0" textFill="WHITE">
+            <Label fx:id="eventLocation" layoutX="220.0" layoutY="40.0" onMouseClicked="#switchToLocTextField" prefHeight="17.0" prefWidth="150.0">
                <font>
                   <Font size="12.0" />
                </font>
@@ -74,7 +74,7 @@
       
       
             <!-- Event Date -->
-            <Label fx:id="eventDate" layoutX="350.0" layoutY="40.0" onMouseClicked="#switchToDateTextField" prefHeight="17.0" prefWidth="150.0" textFill="WHITE">
+            <Label fx:id="eventDate" layoutX="350.0" layoutY="40.0" onMouseClicked="#switchToDateTextField" prefHeight="17.0" prefWidth="150.0">
                <font>
                   <Font size="12.0" />
                </font>
@@ -83,40 +83,39 @@
 
       </DatePicker>
       
-            <Button layoutX="491.0" layoutY="228.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Button>
-            <Text fill="WHITE" layoutX="14.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
+            <Button layoutX="385.0" layoutY="14.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites" />
+            <Text layoutX="73.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
-            <Button layoutX="490.0" layoutY="358.0" mnemonicParsing="false" onAction="#goToAreYouSure" prefHeight="28.0" prefWidth="90.0" text="Delete Event" />
+            <Button layoutX="604.0" layoutY="436.0" mnemonicParsing="false" onAction="#goToAreYouSure" prefHeight="28.0" prefWidth="90.0" text="Delete Event" />
       
-            <Button layoutX="511.0" layoutY="13.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="54.0" text="Back" />
-            <Text fill="WHITE" layoutX="19.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" wrappingWidth="69.6728515625">
+            <Button layoutX="659.0" layoutY="25.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="54.0" text="Back" />
+            <Text layoutX="335.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" wrappingWidth="68.07281494140625">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
-            <ChoiceBox fx:id="myChoiceBox" layoutX="14.0" layoutY="144.0" prefHeight="19.0" prefWidth="112.0" />
-            <Button layoutX="496.0" layoutY="157.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
-            <VBox layoutX="14.0" layoutY="209.0" prefHeight="177.0" prefWidth="322.0" style="-fx-background-color: white;" />
-            <ScrollPane fx:id="participantsScrollPane" layoutX="9.0" layoutY="82.0" prefHeight="41.0" prefWidth="582.0" style="-fx-background-color: pink;">
+            <ChoiceBox fx:id="myChoiceBox" layoutX="593.0" layoutY="134.0" prefHeight="19.0" prefWidth="112.0" />
+            <Button layoutX="327.0" layoutY="96.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
+            <ScrollPane fx:id="participantsScrollPane" hbarPolicy="NEVER" layoutX="35.0" layoutY="135.0" prefHeight="330.0" prefWidth="158.0">
                <content>
                   <VBox fx:id="participantsVBox" spacing="5" />
                </content>
             </ScrollPane>
-            <Label fx:id="myLabel2" alignment="CENTER" layoutX="237.0" layoutY="192.0" prefHeight="17.0" prefWidth="99.0" style="-fx-background-color: grey;" textFill="WHITE" />
-            <Label fx:id="myLabel" alignment="CENTER" layoutX="122.0" layoutY="192.0" prefHeight="17.0" prefWidth="99.0" style="-fx-background-color: grey;" textFill="WHITE" />
-            <Label fx:id="myLabel1" alignment="CENTER" layoutX="14.0" layoutY="192.0" prefHeight="17.0" prefWidth="89.0" style="-fx-background-color: grey;" text="All" textFill="WHITE" />
-            <Button layoutX="103.0" layoutY="54.0" mnemonicParsing="false" onAction="#goToContact" prefHeight="17.0" prefWidth="60.0" text="Add" />
+            <Button layoutX="43.0" layoutY="108.0" mnemonicParsing="false" onAction="#goToContact" prefHeight="17.0" prefWidth="60.0" text="Add" />
       
-            <Button fx:id="goToBalances" layoutX="399.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToBalances" prefHeight="26.0" prefWidth="79.0" text="Balances" />
-            <Button layoutX="496.0" layoutY="196.0" mnemonicParsing="false" onAction="#showStatistics" text="See Statistics" />
-            <Button fx:id="tagButton" layoutX="246.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToTagOverview" prefHeight="26.0" prefWidth="129.0" text="Manage tags" />
+            <Button fx:id="goToBalances" layoutX="113.0" layoutY="108.0" mnemonicParsing="false" onAction="#goToBalances" prefHeight="26.0" prefWidth="79.0" text="Balances" />
+            <Button layoutX="451.0" layoutY="96.0" mnemonicParsing="false" onAction="#showStatistics" text="See Statistics" />
+            <Button fx:id="tagButton" layoutX="244.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToTagOverview" prefHeight="26.0" prefWidth="129.0" text="Manage tags" />
+            <ScrollPane hbarPolicy="NEVER" layoutX="203.0" layoutY="134.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="334.0">
+               <content>
+                  <VBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="326.0" prefWidth="331.0" style="-fx-background-color: white;" />
+               </content>
+            </ScrollPane>
+            <ChoiceBox fx:id="myChoiceBox1" layoutX="593.0" layoutY="170.0" prefHeight="19.0" prefWidth="112.0" />
+            <Text layoutX="553.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Payer" />
       
          </children>
       </AnchorPane>
