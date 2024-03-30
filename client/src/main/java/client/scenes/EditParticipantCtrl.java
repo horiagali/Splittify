@@ -1,5 +1,7 @@
 package client.scenes;
 
+import client.Main;
+import client.utils.Currency;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -9,9 +11,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class EditParticipantCtrl implements Initializable {
@@ -42,6 +48,12 @@ public class EditParticipantCtrl implements Initializable {
     private TextField bicTextField;
     @FXML
     private Label bicLabel;
+
+    @FXML
+    private Menu languageMenu;
+    
+    @FXML
+    private ToggleGroup currencyGroup;
 
     @FXML
     private TextField ibanTextField;
@@ -264,6 +276,49 @@ public class EditParticipantCtrl implements Initializable {
 
     public void goToOverview(ActionEvent actionEvent) {
         mainCtrl.goToOverview();
+    }
+
+    /**
+     * Changes the language of the site
+     * @param event
+     */
+    @FXML
+    public void changeLanguage(javafx.event.ActionEvent event) {
+        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
+        String language = selectedLanguageItem.getText().toLowerCase();
+
+        // Load the appropriate resource bundle based on the selected language
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
+        + language, new Locale(language));
+        
+        Main.config.setLanguage(language);
+
+        // Update UI elements with the new resource bundle
+        updateUIWithNewLanguage();
+    }
+
+    /**
+     * changes the currency to whatever is selected
+     * @param event
+     */
+    @FXML
+    public void changeCurrency(ActionEvent event) {
+        RadioMenuItem selectedCurrencyItem = (RadioMenuItem) event.getSource();
+        String currency = selectedCurrencyItem.getText();
+
+        // Set the selected currency as the currency used for exchange rates
+        Currency.setCurrencyUsed(currency.toUpperCase());
+
+        // Print confirmation message
+        System.out.println("Currency changed to: " + currency);
+    }
+
+    /**
+     * Method to update UI elements with the new language from the resource bundle
+     */
+    public void updateUIWithNewLanguage() {
+        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        
     }
 }
 

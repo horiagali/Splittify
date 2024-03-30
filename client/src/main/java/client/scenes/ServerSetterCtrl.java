@@ -6,7 +6,9 @@ import java.util.ResourceBundle;
 import com.google.inject.Inject;
 
 import client.Main;
+import client.utils.Currency;
 import client.utils.ServerUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -31,6 +33,8 @@ public class ServerSetterCtrl {
     public TextField serverURL;
     @FXML
     private Menu languageMenu;
+    @FXML
+    private ToggleGroup currencyGroup;
 
     @FXML 
     public Stage primaryStage;
@@ -117,6 +121,22 @@ public class ServerSetterCtrl {
         invalidURL.setText("");
         enterUrl.setText(MainCtrl.resourceBundle.getString("Text.enterUrl"));
         languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+    }
+
+    /**
+     * changes the currency to whatever is selected
+     * @param event
+     */
+    @FXML
+    public void changeCurrency(ActionEvent event) {
+        RadioMenuItem selectedCurrencyItem = (RadioMenuItem) event.getSource();
+        String currency = selectedCurrencyItem.getText();
+
+        // Set the selected currency as the currency used for exchange rates
+        Currency.setCurrencyUsed(currency.toUpperCase());
+
+        // Print confirmation message
+        System.out.println("Currency changed to: " + currency);
     }
 
     /**

@@ -1,17 +1,32 @@
 package client.scenes;
 
 import client.Main;
+<<<<<<< HEAD
+=======
+import client.utils.Currency;
+>>>>>>> fa911f81fc3c9dcbfc4213575114a332f17d7a5c
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Mail;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+<<<<<<< HEAD
 import javafx.scene.control.*;
+=======
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+>>>>>>> fa911f81fc3c9dcbfc4213575114a332f17d7a5c
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
@@ -21,7 +36,15 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
+<<<<<<< HEAD
 import java.util.*;
+=======
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.ResourceBundle;
+import java.util.Set;
+>>>>>>> fa911f81fc3c9dcbfc4213575114a332f17d7a5c
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,6 +71,10 @@ public class InviteCtrl implements Initializable {
     private final ObservableList<String> emailList = FXCollections.observableArrayList();
     private final Set<String> uniqueEmails = new HashSet<>();
     private boolean sendingInProgress = false;
+    @FXML
+    private Menu languageMenu;
+    @FXML
+    private ToggleGroup currencyGroup;
 
     /**
      * Constructor for the InviteCtrl class.
@@ -303,5 +330,47 @@ public class InviteCtrl implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    /**
+     * Changes the language of the site
+     * @param event
+     */
+    @FXML
+    public void changeLanguage(javafx.event.ActionEvent event) {
+        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
+        String language = selectedLanguageItem.getText().toLowerCase();
+
+        // Load the appropriate resource bundle based on the selected language
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
+        + language, new Locale(language));
+        
+        Main.config.setLanguage(language);
+
+        // Update UI elements with the new resource bundle
+        updateUIWithNewLanguage();
+    }
+    
+    /**
+     * Method to update UI elements with the new language from the resource bundle
+     */
+    public void updateUIWithNewLanguage() {
+        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+    }
+
+    /**
+     * changes the currency to whatever is selected
+     * @param event
+     */
+    @FXML
+    public void changeCurrency(ActionEvent event) {
+        RadioMenuItem selectedCurrencyItem = (RadioMenuItem) event.getSource();
+        String currency = selectedCurrencyItem.getText();
+
+        // Set the selected currency as the currency used for exchange rates
+        Currency.setCurrencyUsed(currency.toUpperCase());
+
+        // Print confirmation message
+        System.out.println("Currency changed to: " + currency);
     }
 }
