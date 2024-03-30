@@ -10,10 +10,10 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
-<<<<<<< HEAD
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<VBox alignment="CENTER" prefHeight="743.0" prefWidth="881.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagOverviewCtrl">
+
+<VBox alignment="TOP_CENTER" prefHeight="743.0" prefWidth="881.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagOverviewCtrl">
 
     <MenuBar layoutX="-40.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
         <menus>
@@ -59,42 +59,7 @@
             </Menu>
         </menus>
     </MenuBar>
-   <AnchorPane prefHeight="705.0" prefWidth="882.0">
-=======
-<VBox alignment="TOP_CENTER" prefHeight="743.0" prefWidth="881.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TagOverviewCtrl">
-
-    <fx:define>
-        <ToggleGroup fx:id="languageGroup" />
-    </fx:define>
-   <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
-      <menus>
-         <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
-            <items>
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="languageGroup" />
-                  </toggleGroup>
-               </RadioMenuItem>
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
-            </items>
-         </Menu>
-         <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
-            <items>
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="currencyGroup" />
-                  </toggleGroup>
-               </RadioMenuItem>
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
-            </items>
-         </Menu>
-      </menus>
-   </MenuBar>
    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="882.0">
->>>>>>> fa911f81fc3c9dcbfc4213575114a332f17d7a5c
       <children>
          <Button fx:id="back" layoutX="768.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
          <FlowPane fx:id="flowPane" hgap="10.0" layoutX="307.0" layoutY="180.0" prefWidth="267.0" style="-fx-border-width: 2; -fx-border-color: black; -fx-border-radius: 15;" vgap="20.0">

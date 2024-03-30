@@ -10,79 +10,58 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<<<<<<< HEAD
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <VBox alignment="CENTER" prefHeight="743.0" prefWidth="881.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
-=======
-<VBox alignment="TOP_CENTER" prefHeight="743.0" prefWidth="881.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.StatisticsCtrl">
->>>>>>> fa911f81fc3c9dcbfc4213575114a332f17d7a5c
 
     <fx:define>
         <ToggleGroup fx:id="languageGroup" />
     </fx:define>
-<<<<<<< HEAD
 
-    <!-- MenuBar -->
-    <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
-        <menus>
-            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
-                <items>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
-                        <graphic>
-                            <ImageView fitHeight="25" fitWidth="30">
-                                <image>
-                                    <Image url="@/client/scenes/images/BritishFlag.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                        <toggleGroup>
-                            <ToggleGroup fx:id="englishGroup" />
-                        </toggleGroup>
-                    </RadioMenuItem>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana">
-                        <graphic>
-                            <ImageView fitHeight="25" fitWidth="30">
-                                <image>
-                                    <Image url="@/client/scenes/images/RomanianFlag.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                        <toggleGroup>
-                            <ToggleGroup fx:id="romanaGroup" />
-                        </toggleGroup>
-                    </RadioMenuItem>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands">
-                        <graphic>
-                            <ImageView fitHeight="25" fitWidth="30">
-                                <image>
-                                    <Image url="@/client/scenes/images/DutchFlag.png" />
-                                </image>
-                            </ImageView>
-                        </graphic>
-                        <toggleGroup>
-                            <ToggleGroup fx:id="dutchGroup" />
-                        </toggleGroup>
-                    </RadioMenuItem>
-                </items>
-            </Menu>
-        </menus>
-    </MenuBar>
-   <AnchorPane prefHeight="705.0" prefWidth="882.0">
-=======
    <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
       <menus>
-         <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
-            <items>
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="languageGroup" />
-                  </toggleGroup>
-               </RadioMenuItem>
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
-            </items>
-         </Menu>
+          <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
+              <items>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
+                      <graphic>
+                          <ImageView fitHeight="25" fitWidth="30">
+                              <image>
+                                  <Image url="@/client/scenes/images/BritishFlag.png" />
+                              </image>
+                          </ImageView>
+                      </graphic>
+                      <toggleGroup>
+                          <ToggleGroup fx:id="englishGroup" />
+                      </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana">
+                      <graphic>
+                          <ImageView fitHeight="25" fitWidth="30">
+                              <image>
+                                  <Image url="@/client/scenes/images/RomanianFlag.png" />
+                              </image>
+                          </ImageView>
+                      </graphic>
+                      <toggleGroup>
+                          <ToggleGroup fx:id="romanaGroup" />
+                      </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands">
+                      <graphic>
+                          <ImageView fitHeight="25" fitWidth="30">
+                              <image>
+                                  <Image url="@/client/scenes/images/DutchFlag.png" />
+                              </image>
+                          </ImageView>
+                      </graphic>
+                      <toggleGroup>
+                          <ToggleGroup fx:id="dutchGroup" />
+                      </toggleGroup>
+                  </RadioMenuItem>
+              </items>
+          </Menu>
          <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
             <items>
                <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
@@ -98,7 +77,6 @@
       </menus>
    </MenuBar>
    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="882.0">
->>>>>>> fa911f81fc3c9dcbfc4213575114a332f17d7a5c
       <children>
          <PieChart fx:id="pieChart" layoutX="107.0" layoutY="27.0" prefHeight="544.0" prefWidth="667.0" title="Statistics" />
          <Button fx:id="refresh" layoutX="760.0" layoutY="51.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
@@ -106,5 +84,4 @@
          <Text fx:id="eventTotalAmount" layoutX="310.0" layoutY="584.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total cost of event: " wrappingWidth="262.13671875" />
       </children>
    </AnchorPane>
-
 </VBox>
