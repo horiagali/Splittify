@@ -20,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Menu;
@@ -210,6 +211,36 @@ public class TagOverviewCtrl {
             });
     }
 
+    @FXML
+    private void deleteTag(Tag tag) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Tag");
+        alert.setHeaderText("Are you sure you want to delete this tag?");
+        alert.setContentText("This action cannot be undone. All expenses associated " +
+        "with this tag, will get the tag 'no tag'");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == javafx.scene.control.ButtonType.OK) {
+                // Delete the participant from the server
+                List<Expense> list = server.getExpensesByEventId(this.event.getId());
+                for(Expense expense : list) {
+                expense.setTag(server.getTags(this.event.getId()).get(0));
+                server.updateExpense(this.event.getId(), expense);
+                
+                }
+                server.deleteTag(event.getId(), tag.getId());
+                refresh();
+
+                // Show confirmation message
+                Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
+                deleteConfirmation.setTitle("Tag Deleted");
+                deleteConfirmation.setHeaderText(null);
+                deleteConfirmation.setContentText("Tag deleted successfully!");
+                deleteConfirmation.showAndWait();
+            }
+        });
+    }
+
 
     /**d
      * sets the style of the button to 
@@ -325,13 +356,7 @@ public class TagOverviewCtrl {
         hbox.setAlignment(Pos.CENTER);
         Button delete = new Button("delete tag");
         delete.setOnAction(event -> {
-            List<Expense> list = server.getExpensesByEventId(this.event.getId());
-            for(Expense expense : list) {
-                expense.setTag(server.getTags(this.event.getId()).get(0));
-                server.updateExpense(this.event.getId(), expense);
-            }
-            server.deleteTag(this.event.getId(), newTag.getId());
-            refresh();
+            deleteTag(newTag);
         });
         Button update = new Button("update tag");
         update.setOnAction(event -> { 
