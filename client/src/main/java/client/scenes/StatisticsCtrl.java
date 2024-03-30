@@ -33,7 +33,7 @@ public class StatisticsCtrl {
 
     @FXML
     private Text eventTotalAmount;
-
+    
     @FXML
     private Menu languageMenu;
 
@@ -67,7 +67,7 @@ public class StatisticsCtrl {
     public void refresh() {
         totalAmount = 0; //reset total amount every refresh (else it becomes more and mroe)
         if(!(this.pieChartData == null))
-            pieChartData.clear();
+        pieChartData.clear();
         var expenses = server.getExpensesByEventId(event.getId());
         var tags = server.getTags(event.getId());
         pieChartData = FXCollections.observableArrayList();
@@ -99,11 +99,11 @@ public class StatisticsCtrl {
         //method to group all expenses on tag and get their total amount
         for(Tag tag : tags) {
             if(tag.getName().equals("gifting money"))
-                continue;
+            continue;
             double amount = expenses.stream().filter(x -> x.getTag().equals(tag))
-                    .mapToDouble(x  -> (int) x.getAmount()).sum();
+            .mapToDouble(x  -> (int) x.getAmount()).sum();
             if(amount != 0)
-                pieChartData.add(new PieChart.Data(tag.getName() + ": " + amount, amount));
+            pieChartData.add(new PieChart.Data(tag.getName() + ": " + amount, amount));
             totalAmount += amount;
         }
         //method to set the percentage per tag group
@@ -123,8 +123,12 @@ public class StatisticsCtrl {
             remainingPercentage = remainingPercentage + percentage;
             dataToEdit.setName(lastName + " - " + remainingPercentage + "%");
             remainingPercentage = 0;
-
+            
         }
+        pieChart.setData(pieChartData);
+        eventTotalAmount.setText("" + totalAmount);
+        updateUIWithNewLanguage();
+
     }
 
     /**
@@ -137,9 +141,9 @@ public class StatisticsCtrl {
         String language = selectedLanguageItem.getText().toLowerCase();
 
         // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
-                + language, new Locale(language));
-
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
+        + language, new Locale(language));
+        
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
@@ -167,15 +171,15 @@ public class StatisticsCtrl {
      */
     public void updateUIWithNewLanguage() {
         languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
-        pieChart.setTitle(MainCtrl.resourceBundle.getString("Text.statisticsTitle") +
-                event.getTitle());
-        eventTotalAmount.setText(MainCtrl.resourceBundle.getString("Text.statisticsTotal") +
-                totalAmount);
+        pieChart.setTitle(MainCtrl.resourceBundle.getString("Text.statisticsTitle") + 
+        event.getTitle());
+        eventTotalAmount.setText(MainCtrl.resourceBundle.getString("Text.statisticsTotal") + 
+        totalAmount);
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         refresh.setText(MainCtrl.resourceBundle.getString("button.refresh"));
-        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.statistics")
-                + event.getTitle());
-
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.statistics") 
+        + event.getTitle());
+        
     }
 
     /**

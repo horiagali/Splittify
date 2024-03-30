@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="vbox" alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.QuoteOverviewCtrl">
+<VBox fx:id="vbox" alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.MainPageCtrl">
 
     <fx:define>
         <ToggleGroup fx:id="languageGroup" />
@@ -82,6 +82,8 @@
             <Text fx:id="yourEventsText" layoutX="283.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your events:" />
          <Button fx:id="createEventButton1" alignment="CENTER" layoutX="494.0" layoutY="17.0" mnemonicParsing="false" onAction="#disconnect" text="Disconnect" />
              <Button fx:id="refreshButton" layoutX="497.0" layoutY="239.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+
+
         </children>
     </AnchorPane>
 
@@ -96,6 +98,8 @@
                     <TableColumn fx:id="colDate" prefWidth="344.0" text="Event date" />
                 </columns>
             </TableView>
+            <Button fx:id="downloadJsonButton" layoutX="390.0" layoutY="240.0" mnemonicParsing="false" onAction="#downloadJson" text="Download JSON" />
+            <Button fx:id="importJsonButton" layoutX="500.0" layoutY="240.0" mnemonicParsing="false" onAction="#importJson" text="Import JSON" />
              <Button fx:id="adminButton" layoutX="274.0" layoutY="240.0" mnemonicParsing="false" onAction="#goToAdminPass" text="Admin" />
         </children>
     </AnchorPane>

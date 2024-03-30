@@ -101,6 +101,8 @@ public class Main extends Application {
             mainCtrl.initializeServerSetter(primaryStage, serverSetter, this);
         }
 
+
+
     }
 
     /**
@@ -108,7 +110,7 @@ public class Main extends Application {
      */
     public void loadScenes() {
 
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
+        var overview = FXML.load(MainPageCtrl.class, "client", "scenes", "MainPage.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
         var page = FXML.load(PageCtrl.class, "client", "scenes", "Page.fxml");
         var addExpense = FXML.load(AddExpensesCtrl.class, "client", "scenes", "AddExpenses.fxml");
@@ -130,11 +132,13 @@ public class Main extends Application {
         var serverSetter = FXML.load(ServerSetterCtrl.class, "client", 
         "scenes", "ServerSetter.fxml");
         var tagOverview = FXML.load(TagOverviewCtrl.class, "client", "scenes", "TagOverview.fxml");
-
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, editExpense,
-                contactDetails, overviewApp, invite, adminPage, adminPass,
-                addEvent, balances, editParticipant,serverSetter,
-                config.getLanguage(), statistics, debts, tagOverview,this);
+        contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, balances, 
+        editParticipant,serverSetter, config.getLanguage(),  statistics, debts, tagOverview, this);
+
+        primaryStage.setOnCloseRequest(e -> {
+            adminPage.getKey().stop();
+        });
     }
 
     /**

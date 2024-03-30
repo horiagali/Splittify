@@ -16,66 +16,66 @@
 <?import javafx.scene.text.Text?>
 
 <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpensesCtrl">
-    <children>
-        <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
-            <menus>
-                <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
-                    <items>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
-                            <toggleGroup>
-                                <ToggleGroup fx:id="languageGroup" />
-                            </toggleGroup>
-                        </RadioMenuItem>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
-                        <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
-                    </items>
-                </Menu>
-                <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
-                    <items>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
-                            <toggleGroup>
-                                <ToggleGroup fx:id="currencyGroup" />
-                            </toggleGroup>
-                        </RadioMenuItem>
-                        <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
-                        <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
-                        <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-        <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+   <children>
+      <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
+         <menus>
+            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
+               <items>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="languageGroup" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
+               </items>
+            </Menu>
+            <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
+               <items>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="currencyGroup" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
 
-            <children>
-                <Rectangle arcHeight="5.0" fill="#d9d9d9" height="301.0" layoutX="175.0" layoutY="62.0" stroke="BLACK" strokeType="INSIDE" />
-                <Text layoutX="197.0" layoutY="73.0" text="Who Paid?" />
-                <ComboBox fx:id="payerComboBox" layoutX="197.0" layoutY="76.0" prefHeight="25.0" prefWidth="176.0" promptText="Select name" />
-                <ComboBox fx:id="tagComboBox" layoutX="276.0" layoutY="159.0" prefHeight="25.0" prefWidth="101.0" promptText="Select Tag" />
+          <children>
+              <Rectangle arcHeight="5.0" fill="#d9d9d9" height="301.0" layoutX="175.0" layoutY="62.0" stroke="BLACK" strokeType="INSIDE" />
+              <Text layoutX="197.0" layoutY="77.0" text="Who Paid?" />
+              <ComboBox fx:id="payerComboBox" layoutX="197.0" layoutY="80.0" prefHeight="25.0" prefWidth="176.0" promptText="Select name" />
+              <ComboBox fx:id="tagComboBox" layoutX="276.0" layoutY="163.0" prefHeight="25.0" prefWidth="101.0" promptText="Select Tag" />
 
-                <Text layoutX="201.0" layoutY="119.0" text="What For?" wrappingWidth="53.900390625" />
-                <TextField fx:id="purposeTextField" layoutX="200.0" layoutY="125.0" prefHeight="25.0" prefWidth="176.0" promptText="Enter purpose" />
+              <Text layoutX="201.0" layoutY="123.0" text="What For?" wrappingWidth="53.900390625" />
+              <TextField fx:id="purposeTextField" layoutX="200.0" layoutY="129.0" prefHeight="25.0" prefWidth="176.0" promptText="Enter purpose" />
 
-                <Text layoutX="201.0" layoutY="177.0" text="How Much?" />
-                <TextField fx:id="amountTextField" layoutX="198.0" layoutY="194.0" prefHeight="25.0" prefWidth="93.0" promptText="Enter amount" />
+              <Text layoutX="201.0" layoutY="181.0" text="How Much?" />
+              <TextField fx:id="amountTextField" layoutX="198.0" layoutY="198.0" prefHeight="25.0" prefWidth="93.0" promptText="Enter amount" />
 
-                <Text layoutX="206.0" layoutY="269.0" text="How to Split?" />
-                <CheckBox fx:id="equallyCheckbox" layoutX="306.0" layoutY="256.0" onAction="#handleEquallyCheckbox" text="Equally" />
+              <Text layoutX="206.0" layoutY="269.0" text="How to Split?" />
+              <CheckBox fx:id="equallyCheckbox" layoutX="306.0" layoutY="256.0" onAction="#handleEquallyCheckbox" text="Equally" />
 
-                <Button layoutX="339.0" layoutY="333.0" mnemonicParsing="false" onAction="#addExpense" text="Add" />  <!-- TODO add actual functionality -->
-                <Button layoutX="200.0" layoutY="333.0" mnemonicParsing="false" onAction="#back" prefHeight="16.0" prefWidth="63.0" text="Cancel" />
+              <Button layoutX="339.0" layoutY="333.0" mnemonicParsing="false" onAction="#addExpense" text="Add" />  <!-- TODO add actual functionality -->
+              <Button layoutX="200.0" layoutY="333.0" mnemonicParsing="false" onAction="#back" prefHeight="16.0" prefWidth="63.0" text="Cancel" />
 
-                <ComboBox fx:id="currencyComboBox" layoutX="306.0" layoutY="194.0" prefHeight="25.0" prefWidth="68.0" VBox.vgrow="NEVER" />
-                <!--        <Label fx:id="selectedCurrencyLabel" layoutX="370.0" layoutY="216.0" />-->
-                <Text layoutX="254.0" layoutY="56.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Expense" />
+              <ComboBox fx:id="currencyComboBox" layoutX="306.0" layoutY="198.0" prefHeight="25.0" prefWidth="68.0" VBox.vgrow="NEVER" />
+      <!--        <Label fx:id="selectedCurrencyLabel" layoutX="370.0" layoutY="216.0" />-->
+              <Text layoutX="254.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Expense" />
 
-                <!-- List of participants with their payment amounts -->
-                <ScrollPane layoutX="200.0" layoutY="278.0" prefHeight="54.0" prefWidth="176.0">
-                    <VBox fx:id="participantsVBox" layoutX="200.0" layoutY="270.0">
-                    </VBox>
-                </ScrollPane>
-            <DatePicker fx:id="datePicker" layoutX="198.0" layoutY="227.0" promptText="Enter a date" />
+              <!-- List of participants with their payment amounts -->
+              <ScrollPane layoutX="200.0" layoutY="278.0" prefHeight="54.0" prefWidth="176.0">
+              <VBox fx:id="participantsVBox" layoutX="200.0" layoutY="270.0">
+        </VBox>
+              </ScrollPane>
+            <DatePicker fx:id="datePicker" layoutX="199.0" layoutY="229.0" promptText="Select a date" />
 
-            </children>
-        </AnchorPane>
-    </children>
+          </children>
+      </AnchorPane>
+   </children>
 </VBox>

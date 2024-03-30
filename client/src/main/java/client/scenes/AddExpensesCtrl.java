@@ -57,8 +57,8 @@ public class AddExpensesCtrl implements Initializable {
     /**
      * Constructs an instance of AddExpensesCtrl.
      *
-     * @param server   The ServerUtils instance.
-     * @param mainCtrl The MainCtrl instance.
+     * @param server    The ServerUtils instance.
+     * @param mainCtrl  The MainCtrl instance.
      */
     @Inject
     public AddExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
@@ -123,18 +123,6 @@ public class AddExpensesCtrl implements Initializable {
             participantCheckboxes.add(participantCheckbox);
             participantNicknames.add(participant.getNickname());
         }
-    }
-
-    /**
-     * Functionality for the date picker.
-     *
-     * @return the date inserted.
-     */
-    private Date getDateFromPicker() {
-        if (datePicker.getValue() != null)
-            return Date.from(datePicker.getValue()
-                    .atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return null;
     }
 
     /**
@@ -244,7 +232,6 @@ public class AddExpensesCtrl implements Initializable {
 
     /**
      * Changes the language of the site
-     *
      * @param event
      */
     @FXML
@@ -253,15 +240,15 @@ public class AddExpensesCtrl implements Initializable {
         String language = selectedLanguageItem.getText().toLowerCase();
 
         // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
-                + language, new Locale(language));
-
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
+        + language, new Locale(language));
+        
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
     }
-
+    
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
@@ -271,7 +258,6 @@ public class AddExpensesCtrl implements Initializable {
 
     /**
      * changes the currency to whatever is selected
-     *
      * @param event
      */
     @FXML
@@ -288,7 +274,6 @@ public class AddExpensesCtrl implements Initializable {
 
     /**
      * Handles participant checkboxes
-     *
      * @param checkBox checkbox
      */
     @FXML
@@ -351,7 +336,6 @@ public class AddExpensesCtrl implements Initializable {
 
     /**
      * Handles switching of currencies with just keyboard presses
-     *
      * @param event keyboard press
      */
     private void handleCurrencySwitch(KeyEvent event) {
@@ -397,15 +381,14 @@ public class AddExpensesCtrl implements Initializable {
             showErrorDialog("Please select a tag.");
             return;
         }
-
-        Date date = getDateFromPicker();
+        Date date = getDate();
         if (date == null) {
             showErrorDialog("Please select a date.");
             return;
         }
 
-        Expense expense = createExpense(title, amount, date,
-                payer, selectedParticipants, selectedTag);
+        Expense expense = createExpense(title, amount,
+                date, payer, selectedParticipants, selectedTag);
 
         saveExpense(selectedEvent, expense);
         clearFieldsAndShowOverview(selectedEvent);
@@ -468,16 +451,28 @@ public class AddExpensesCtrl implements Initializable {
         return payer;
     }
 
+    /**
+     * Gets the date from the datePicker.
+     * @return the date.
+     */
+    private Date getDate() {
+        if (datePicker.getValue() != null) {
+            return Date.from(datePicker.getValue().atStartOfDay
+                    (ZoneId.systemDefault()).toInstant());
+        }
+        return null;
+    }
+
 
     /**
      * Creates an expense object.
      *
-     * @param title                The title of the expense.
-     * @param amount               The amount of the expense.
-     * @param date                 The date of the expense.
-     * @param payer                The participant who paid the expense.
+     * @param title               The title of the expense.
+     * @param amount              The amount of the expense.
+     * @param date                THe date of the expense.
+     * @param payer               The participant who paid the expense.
      * @param selectedParticipants The participants involved in the expense.
-     * @param selectedTag          The tag associated with the expense.
+     * @param selectedTag         The tag associated with the expense.
      * @return The created expense object.
      */
     private Expense createExpense(String title, double amount, Date date, Participant payer,
@@ -527,7 +522,6 @@ public class AddExpensesCtrl implements Initializable {
 
     /**
      * Shows an error dialog with the given error message.
-     *
      * @param errorMessage The error message to display.
      */
     private void showErrorDialog(String errorMessage) {

@@ -132,7 +132,6 @@ public class Expense {
 
     /**
      * Returns the amount of the expense.
-     *
      * @return The amount of the expense.
      */
     public double getAmount() {
@@ -249,7 +248,7 @@ public class Expense {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Expense expense = (Expense) o;
-        return Objects.equals(id, expense.id) &&
+        return id == expense.id &&
                 Double.compare(expense.amount, amount) == 0 &&
                 Objects.equals(title, expense.title);
     }
@@ -274,5 +273,7 @@ public class Expense {
                 "  tag=" + tag + "\n" +
                 "]";
     }
+
+
 }
 

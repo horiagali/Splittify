@@ -21,7 +21,7 @@ import com.google.inject.Scopes;
 
 import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
-import client.scenes.QuoteOverviewCtrl;
+import client.scenes.MainPageCtrl;
 
 public class MyModule implements Module {
 
@@ -29,6 +29,6 @@ public class MyModule implements Module {
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(QuoteOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(MainPageCtrl.class).in(Scopes.SINGLETON);
     }
 }
