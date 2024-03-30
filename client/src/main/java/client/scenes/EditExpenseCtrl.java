@@ -20,8 +20,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -94,6 +94,22 @@ public class EditExpenseCtrl implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        display();
+    }
+
+    private void loadExpense() {
+        payerComboBox.getSelectionModel().select(expense.getPayer());
+        purposeTextField.setText(expense.getTitle());
+        tagComboBox.getSelectionModel().select(expense.getTag());
+        amountTextField.setText(String.valueOf(expense.getAmount()));
+        datePicker.setValue(LocalDate.parse(expense.getDate().toString()));
+        equallyCheckbox.setSelected(expense.getOwers().equals(event.getParticipants()));
+    }
+
+    /**
+     * Updates the page.
+     */
+    protected void display() {
         addKeyboardNavigationHandlers();
         currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
         datePicker.setValue(null);
@@ -109,15 +125,6 @@ public class EditExpenseCtrl implements Initializable {
 
         if (expense != null)
             loadExpense();
-    }
-
-    private void loadExpense() {
-        payerComboBox.getSelectionModel().select(expense.getPayer());
-        purposeTextField.setText(expense.getTitle());
-        tagComboBox.getSelectionModel().select(expense.getTag());
-        amountTextField.setText(String.valueOf(expense.getAmount()));
-        datePicker.setValue(LocalDate.parse(expense.getDate().toString()));
-        equallyCheckbox.setSelected(expense.getOwers().equals(event.getParticipants()));
     }
 
     /**
@@ -401,11 +408,11 @@ public class EditExpenseCtrl implements Initializable {
             return;
         }
 
-        Date date = Date.from(Instant.from(datePicker.getValue()));
-        if (datePicker.getValue() == null) {
-            showErrorDialog("Please select a date.");
-            return;
-        }
+        Date date = null;
+        try {
+            date = Date.from(datePicker.getValue().atStartOfDay
+                    (ZoneId.systemDefault()).toInstant());
+        } catch (Exception e) {showErrorDialog("Please select a valid date!");}
 
         setExpense(title, amount, date, payer, selectedParticipants, selectedTag);
 
@@ -426,12 +433,14 @@ public class EditExpenseCtrl implements Initializable {
      */
     private void setExpense(String title, double amount, Date date, Participant payer,
                             List<Participant> selectedParticipants, Tag selectedTag) {
+        expense.reverseSettleBalance();
         expense.setTitle(title);
         expense.setAmount(amount);
         expense.setDate(date);
         expense.setPayer(payer);
         expense.setOwers(selectedParticipants);
         expense.setTag(selectedTag);
+        expense.settleBalance();
     }
 
     /**
@@ -439,7 +448,8 @@ public class EditExpenseCtrl implements Initializable {
      */
     private void saveExpense() {
         server.editExpense(event.getId(), expense);
-        selectedParticipants.clear();
+        refreshParticipants();
+        refreshUI();
     }
 
     /**
@@ -460,6 +470,7 @@ public class EditExpenseCtrl implements Initializable {
         purposeTextField.clear();
         amountTextField.clear();
         equallyCheckbox.setSelected(false);
+        datePicker.setValue(null);
     }
 
     /**

@@ -237,7 +237,8 @@ public class OverviewCtrl implements Initializable {
                 } else {
                     setText(expense.getTitle() + " - " + expense.getTag().getName()
                             + " - " + expense.getAmount() + " - Paid by "
-                            + expense.getPayer().getNickname());
+                            + expense.getPayer().getNickname()
+                            + " - " + expense.getDate());
                     setStyle("-fx-background-color: " + expense.getTag().getColor() + ";");
                 }
             }

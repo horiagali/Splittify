@@ -453,8 +453,9 @@ public class MainCtrl {
      */
     public void goToEditExpense(Event event, Expense expense) {
         primaryStage.setTitle("Edit expense page");
-        editExpenseCtrl.setEvent(event);
-        editExpenseCtrl.setExpense(expense);
+        EditExpenseCtrl.setEvent(event);
+        EditExpenseCtrl.setExpense(expense);
         primaryStage.setScene(editExpense);
+        editExpenseCtrl.display();
     }
 }

@@ -457,8 +457,8 @@ public class AddExpensesCtrl implements Initializable {
      */
     private Date getDate() {
         if (datePicker.getValue() != null) {
-            return Date.from(datePicker.getValue().atStartOfDay
-                    (ZoneId.systemDefault()).toInstant());
+            return Date.from(datePicker.getValue()
+                    .atStartOfDay(ZoneId.systemDefault()).toInstant());
         }
         return null;
     }
@@ -510,6 +510,7 @@ public class AddExpensesCtrl implements Initializable {
         purposeTextField.clear();
         amountTextField.clear();
         equallyCheckbox.setSelected(false);
+        datePicker.setValue(null);
     }
 
     /**
