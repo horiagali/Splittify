@@ -11,6 +11,7 @@ import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -248,6 +249,9 @@ public class OverviewCtrl implements Initializable {
                 Label participantLabel = new Label(participant.getNickname());
                 participantLabel.setTextFill(Color.BLACK);
                 participantLabel.setFont(Font.font(20));
+                participantLabel.setMinWidth(150);
+                participantLabel.setMaxWidth(150);
+                participantLabel.setAlignment(Pos.CENTER);
                 participantLabel.setOnMouseEntered(event -> {
                     participantLabel.setFont(Font.font(22));
                 });
