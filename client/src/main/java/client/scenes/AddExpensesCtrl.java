@@ -20,10 +20,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class AddExpensesCtrl implements Initializable {
@@ -53,6 +51,8 @@ public class AddExpensesCtrl implements Initializable {
     private Menu languageMenu;
     @FXML
     private ToggleGroup currencyGroup;
+    @FXML
+    private DatePicker datePicker;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -75,6 +75,7 @@ public class AddExpensesCtrl implements Initializable {
         addKeyboardNavigationHandlers();
         loadTags();
         currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
+        datePicker.setValue(null);
 
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         if (selectedEvent != null) {
@@ -348,6 +349,7 @@ public class AddExpensesCtrl implements Initializable {
     /**
      * Handles the action when the user adds an expense.
      */
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
     @FXML
     private void addExpense() {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
@@ -379,8 +381,14 @@ public class AddExpensesCtrl implements Initializable {
             showErrorDialog("Please select a tag.");
             return;
         }
+        Date date = getDate();
+        if (date == null) {
+            showErrorDialog("Please select a date.");
+            return;
+        }
 
-        Expense expense = createExpense(title, amount, payer, selectedParticipants, selectedTag);
+        Expense expense = createExpense(title, amount,
+                date, payer, selectedParticipants, selectedTag);
 
         saveExpense(selectedEvent, expense);
         clearFieldsAndShowOverview(selectedEvent);
@@ -443,20 +451,33 @@ public class AddExpensesCtrl implements Initializable {
         return payer;
     }
 
+    /**
+     * Gets the date from the datePicker.
+     * @return the date.
+     */
+    private Date getDate() {
+        if (datePicker.getValue() != null) {
+            return Date.from(datePicker.getValue()
+                    .atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+        return null;
+    }
+
 
     /**
      * Creates an expense object.
      *
      * @param title               The title of the expense.
      * @param amount              The amount of the expense.
+     * @param date                THe date of the expense.
      * @param payer               The participant who paid the expense.
      * @param selectedParticipants The participants involved in the expense.
      * @param selectedTag         The tag associated with the expense.
      * @return The created expense object.
      */
-    private Expense createExpense(String title, double amount, Participant payer,
+    private Expense createExpense(String title, double amount, Date date, Participant payer,
                                   List<Participant> selectedParticipants, Tag selectedTag) {
-        return new Expense(title, amount, payer, selectedParticipants, selectedTag);
+        return new Expense(title, amount, date, payer, selectedParticipants, selectedTag);
     }
 
     /**
@@ -489,6 +510,7 @@ public class AddExpensesCtrl implements Initializable {
         purposeTextField.clear();
         amountTextField.clear();
         equallyCheckbox.setSelected(false);
+        datePicker.setValue(null);
     }
 
     /**

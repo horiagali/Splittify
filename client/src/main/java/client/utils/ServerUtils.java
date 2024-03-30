@@ -180,7 +180,7 @@ public class ServerUtils {
 	public void stop() {
 		EXEC.shutdownNow();
 	}
-	
+
 	/**
 	 * Connect to a stomp session with url to websocket
 	 * @param url websocket url
@@ -455,4 +455,31 @@ public class ServerUtils {
 	}
 
 
+	/**
+	 * Updates an expense.
+	 * @param eventId the event ID.
+	 * @param expense the updated expense.
+	 */
+	public void editExpense(long eventId, Expense expense) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId +
+						"expenses/" + expense.getId())
+				.request()
+				.put(Entity.entity(expense, APPLICATION_JSON));
+	}
+
+	/**
+	 * Deletes an expense.
+	 * @param eventId the event id.
+	 * @param expense the expense.
+	 */
+	public void deleteExpense(long eventId, Expense expense) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId +
+						"/expenses/" + expense.getId())
+				.request()
+				.delete();
+	}
 }

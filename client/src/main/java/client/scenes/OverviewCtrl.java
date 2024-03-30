@@ -77,6 +77,8 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     private Menu languageMenu;
+    @FXML
+    private ListView<Expense> expensesListView;
 
     @FXML
     private ToggleGroup currencyGroup;
@@ -119,7 +121,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     * @param name
+     * @param name name.
      */
 
     public void addName(String name) {
@@ -149,6 +151,7 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * Changes the language of the site
+     *
      * @param event
      */
     @FXML
@@ -157,9 +160,9 @@ public class OverviewCtrl implements Initializable {
         String language = selectedLanguageItem.getText().toLowerCase();
 
         // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
-        + language, new Locale(language));
-        
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
@@ -176,6 +179,7 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * changes the currency to whatever is selected
+     *
      * @param event
      */
     @FXML
@@ -221,9 +225,8 @@ public class OverviewCtrl implements Initializable {
             eventDescription.setText(selectedEvent.getDescription());
         }
 
-
-        myChoiceBox.getItems().addAll(names);
-        myChoiceBox.setOnAction(this::getName);
+//        myChoiceBox.getItems().addAll(names);
+//        myChoiceBox.setOnAction(this::getName);
 //        hbox.setSpacing(5);    doesn't work, has to be fixed
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
@@ -252,7 +255,7 @@ public class OverviewCtrl implements Initializable {
 
                 participantLabel.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-                        mainCtrl.goToEditParticipant(participant,selectedEvent);
+                        mainCtrl.goToEditParticipant(participant, selectedEvent);
                     }
                 });
                 participantsVBox.getChildren().add(participantLabel);
@@ -328,12 +331,12 @@ public class OverviewCtrl implements Initializable {
 
 
     /**
-     * 
+     *
      */
     public void showStatistics() {
         mainCtrl.goToStatistics(selectedEvent);
     }
-    
+
     /**
      * asks if you really want to delete
      *
@@ -489,6 +492,39 @@ public class OverviewCtrl implements Initializable {
         switchToDescriptionLabel();
         refresh();
 
+    }
+
+    /**
+     * Deletes an expense.
+     */
+    public void deleteExpense() {
+        try {
+            Expense expense = expensesListView.getSelectionModel().getSelectedItem();
+            selectedEvent.getExpenses().remove(expense);
+            server.deleteExpense(selectedEvent.getId(), expense);
+            refresh();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Delete expense");
+            alert.setHeaderText("Error deleting");
+            alert.setContentText("Please choose an expense!");
+            alert.showAndWait();
+        }
+    }
+
+    /**
+     * Goes to edit expense.
+     */
+    public void goToEditExpense() {
+        Expense selectedExpense = expensesListView.getSelectionModel().getSelectedItem();
+        if (selectedExpense == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Edit expense");
+            alert.setHeaderText("Error loading page");
+            alert.setContentText("Please choose an expense!");
+            alert.showAndWait();
+        } else
+            mainCtrl.goToEditExpense(selectedEvent, selectedExpense);
     }
 
     /**
