@@ -276,48 +276,55 @@ public class OverviewCtrl implements Initializable {
         }
         for(Expense expense : expenses) {
             VBox vbox = new VBox();
+            vbox.setAlignment(Pos.CENTER);
             setUpRow1(expense, vbox);
-            HBox row2 = new HBox();
-            row2.setMinWidth(300);
-            row2.setMaxWidth(300);
-            row2.setSpacing(5);
-            Label payer = new Label(expense.getPayer().getNickname());
-            payer.setStyle("-fx-font-style: Bold");
-            payer.setAlignment(Pos.CENTER);
-            Label text = new Label("payed " + expense.getAmount() + " for");
-            String owers = "";
-            if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
-            owers = "everyone";
-            else {
-                List<String> nameList = expense.getOwers().stream()
-                .map(x -> x.getNickname()).toList();
-                owers = nameList.get(0);
-                for(int i = 1; i < nameList.size(); i++) {
-                    owers = owers + ", " + nameList.get(i);
-                }
-            }
-            Label owersNames = new Label(owers);
-            row2.getChildren().add(payer);
-            row2.getChildren().add(text);
-            row2.getChildren().add(owersNames);
-            vbox.getChildren().add(row2);
+            setUpRow2(expense, vbox);
             addHoverAnimation(vbox, 1.05);
             expensesBox.getChildren().add(vbox);
         }
+    }
+
+    private void setUpRow2(Expense expense, VBox vbox) {
+        HBox row2 = new HBox();
+        row2.setMinWidth(280);
+        row2.setMaxWidth(280);
+        row2.setSpacing(5);
+        Label payer = new Label(expense.getPayer().getNickname());
+        // payer.setStyle("-fx-font-style: Bold");
+        payer.setAlignment(Pos.CENTER);
+        Label text = new Label("payed " + expense.getAmount() + " for");
+        String owers = "";
+        if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
+        owers = "everyone";
+        else {
+            List<String> nameList = expense.getOwers().stream()
+            .map(x -> x.getNickname()).toList();
+            owers = nameList.get(0);
+            for(int i = 1; i < nameList.size(); i++) {
+                owers = owers + ", " + nameList.get(i);
+            }
+        }
+        Label owersNames = new Label(owers);
+        row2.getChildren().add(payer);
+        row2.getChildren().add(text);
+        row2.getChildren().add(owersNames);
+        vbox.getChildren().add(row2);
     }
 
     private void setUpRow1(Expense expense, VBox vbox) {
         HBox row1 = new HBox();
         
         Label label = new Label(expense.getTitle());
+        label.setMaxWidth(100);
         Button tag = new Button(expense.getTag().getName());
+        tag.setMaxHeight(100);
         Label date = new Label("DATE HERE");
         vbox.setMinWidth(300);
         vbox.setMaxWidth(300);
         vbox.setStyle("-fx-border-width: 2; -fx-border-radius: 10; -fx-border-color: black");
         
-        row1.setMinWidth(300);
-        row1.setMaxWidth(300);
+        row1.setMinWidth(280);
+        row1.setMaxWidth(280);
         row1.setSpacing(10);
         row1.setAlignment(Pos.CENTER_LEFT);
 
