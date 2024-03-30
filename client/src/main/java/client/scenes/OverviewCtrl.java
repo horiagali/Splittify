@@ -5,10 +5,13 @@ import client.utils.Currency;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
+import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.KeyCode;
@@ -16,6 +19,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -52,6 +58,8 @@ public class OverviewCtrl implements Initializable {
     private Label eventLocation;
     @FXML
     private Label eventDate;
+    @FXML
+    private Label eventDescription;
 
     @FXML
     private TextField eventNameTextField;
@@ -60,6 +68,8 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     private TextField eventLocationTextField;
+    @FXML 
+    private TextField eventDescriptionTextField;
     @FXML
     private ScrollPane participantsScrollPane;
     @FXML
@@ -70,6 +80,9 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     private ToggleGroup currencyGroup;
+
+    @FXML
+    private VBox expensesBox;
 
 
     /**
@@ -90,6 +103,8 @@ public class OverviewCtrl implements Initializable {
         eventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
         eventDate.setText("");
+        eventDescription.setText(selectedEvent.getDescription());
+        
         if(!(selectedEvent.getDate() == null))
         eventDate.setText(selectedEvent.getDate().toString());
         setSelectedEvent(selectedEvent);
@@ -203,6 +218,7 @@ public class OverviewCtrl implements Initializable {
             eventName.setText(selectedEvent.getTitle());
             eventLocation.setText(selectedEvent.getLocation());
             eventDate.setText(selectedEvent.getDate().toString());
+            eventDescription.setText(selectedEvent.getDescription());
         }
 
 
@@ -228,8 +244,14 @@ public class OverviewCtrl implements Initializable {
             for (Participant participant : participants) {
                 Label participantLabel = new Label(participant.getNickname());
                 participantLabel.setTextFill(Color.BLACK);
+                participantLabel.setFont(Font.font(20));
+                participantLabel.setOnMouseEntered(event -> {
+                    participantLabel.setFont(Font.font(22));
+                });
+                addHoverAnimation(participantLabel);
+
                 participantLabel.setOnMouseClicked(event -> {
-                    if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                    if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
                         mainCtrl.goToEditParticipant(participant,selectedEvent);
                     }
                 });
@@ -237,6 +259,16 @@ public class OverviewCtrl implements Initializable {
             }
 
             participantsScrollPane.setContent(participantsVBox);
+        }
+    }
+
+    private void loadExpenses() {
+        expensesBox.getChildren().clear();
+        List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId());
+        
+        if(expenses.size() == 0) {
+            expensesBox.getChildren()
+            .add(new Text("There are no expenses matching your criteria."));
         }
     }
 
@@ -427,6 +459,39 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
+     * switches to text field for description
+     */
+    public void switchToDescriptionTextField() {
+        eventDescriptionTextField.setVisible(true);
+        eventDescriptionTextField.requestFocus();
+        eventDescription.setVisible(false);
+    }
+
+    /**
+     * switchces back to label
+     */
+
+    public void switchToDescriptionLabel() {
+        eventDescriptionTextField.setVisible(false);
+        eventDescription.setVisible(true);
+    }
+
+    /**
+     * updated the description in the db
+     *
+     * @param event
+     */
+    public void updateEventDescription(ActionEvent event) {
+        String description = eventDescriptionTextField.getText();
+        selectedEvent.setDescription(description);
+        server.updateEvent(selectedEvent);
+
+        switchToDescriptionLabel();
+        refresh();
+
+    }
+
+    /**
      * c
      *
      * @param actionEvent
@@ -440,5 +505,33 @@ public class OverviewCtrl implements Initializable {
      */
     public void goToBalance() {
         mainCtrl.goToBalances(selectedEvent);
+    }
+
+    private void addHoverAnimation(Node node) {
+        double startX = node.getScaleX();
+        double startY = node.getScaleY();
+        double startZ = node.getScaleZ();
+        node.setOnMouseEntered(event -> {
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.1), node);
+            scaleTransition.setFromX(startX);
+            scaleTransition.setFromY(startY);
+            scaleTransition.setFromZ(startZ);
+            scaleTransition.setToX(node.getScaleX()*1.1);
+            scaleTransition.setToY(node.getScaleY()*1.1);
+            scaleTransition.setToZ(node.getScaleZ()*1.1);
+            scaleTransition.play();
+
+        });
+        node.setOnMouseExited(event -> {
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.1), node);
+            scaleTransition.setFromX(node.getScaleX());
+            scaleTransition.setFromY(node.getScaleY());
+            scaleTransition.setFromZ(node.getScaleZ());
+            scaleTransition.setToX(startX);
+            scaleTransition.setToY(startY);
+            scaleTransition.setToZ(startZ);
+            scaleTransition.play();
+
+        });
     }
 }
