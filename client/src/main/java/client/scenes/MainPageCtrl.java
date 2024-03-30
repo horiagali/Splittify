@@ -400,15 +400,18 @@ public class MainPageCtrl implements Initializable {
     public void addNewLanguage(ActionEvent actionEvent) {
         Properties newLang = new Properties();
         try (BufferedReader reader =
-                     new BufferedReader(new FileReader("client/src/main/resources/langTemplate.txt"))) {
+                     new BufferedReader(new FileReader("client/src" +
+                             "/main/resources/langTemplate.txt"))) {
             newLang.load(reader);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         String newLangPath;
-        try (OutputStream output = new FileOutputStream("client/src/main/resources/newLang.properties")) {
-            newLang.store(output, "Add the name of your new language to the first line of this file as a comment\n"+
+        try (OutputStream output = new FileOutputStream("client/src/main/resources" +
+                "/newLang.properties")) {
+            newLang.store(output, "Add the name of your new language to " +
+                    "the first line of this file as a comment\n"+
                     "Send the final translation version to ooppteam56@gmail.com");
 
             newLangPath = "client/src/main/resources/newLang.properties";
