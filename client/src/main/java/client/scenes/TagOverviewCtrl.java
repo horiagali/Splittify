@@ -199,19 +199,10 @@ public class TagOverviewCtrl {
         colorPicker.setValue(color);
         newTag.setColor("#d9dbd9");
         colorPicker.setOnAction(event -> {
-            String redColor = Integer.toHexString((int) 
-            Math.round(colorPicker.getValue().getRed() * 255));
-            String greenColor = Integer.toHexString((int) 
-            Math.round(colorPicker.getValue().getGreen() * 255));
-            String blueColor = Integer.toHexString((int) 
-            Math.round(colorPicker.getValue().getBlue() * 255));
-            if(greenColor.length() == 1)
-            greenColor = "0" + greenColor;
-            if(redColor.length() == 1)
-            redColor = "0" + redColor;
-            if(blueColor.length() == 1)
-            blueColor = "0" + blueColor;
-            String hex = "#" + redColor + greenColor + blueColor;
+            String hex = String.format("#%02X%02X%02X",
+                (int)(colorPicker.getValue().getRed() * 255),
+                (int)(colorPicker.getValue().getGreen() * 255),
+                (int)(colorPicker.getValue().getBlue() * 255));
             button.setStyle("-fx-background-color: " + hex + ";" +
             "-fx-font-size: " + 20 + ";" +
             "-fx-border-radius: " + 10 + ";");
@@ -282,7 +273,7 @@ public class TagOverviewCtrl {
             showTagInfo(oldTag, newTag);
             });
         tagInfo.getChildren().add(name);
-        HBox hbox = deleteUpdateButtons(newTag);
+        HBox hbox = deleteUpdateButtons(newTag, oldTag);
         tagInfo.getChildren().add(hbox);
         tagInfo.setOpacity(1);
     }
@@ -320,25 +311,16 @@ public class TagOverviewCtrl {
         Color color = new Color(red/255, green/255, blue/255, 1);
         colorPicker.setValue(color);
         colorPicker.setOnAction(event -> {
-            String redColor = Integer.toHexString((int) 
-            Math.round(colorPicker.getValue().getRed() * 255));
-            String greenColor = Integer.toHexString((int) 
-            Math.round(colorPicker.getValue().getGreen() * 255));
-            String blueColor = Integer.toHexString((int) 
-            Math.round(colorPicker.getValue().getBlue() * 255));
-            if(greenColor.length() == 1)
-            greenColor = "0" + greenColor;
-            if(redColor.length() == 1)
-            redColor = "0" + redColor;
-            if(blueColor.length() == 1)
-            blueColor = "0" + blueColor;
-            String hex = "#" + redColor + greenColor + blueColor;
+            String hex = String.format("#%02X%02X%02X",
+            (int)(colorPicker.getValue().getRed() * 255),
+            (int)(colorPicker.getValue().getGreen() * 255),
+            (int)(colorPicker.getValue().getBlue() * 255));
             newTag.setColor(hex);
             showTagInfo(oldTag, newTag);
             });
     }
 
-    private HBox deleteUpdateButtons(Tag newTag) {
+    private HBox deleteUpdateButtons(Tag newTag, Tag oldTag) {
         HBox hbox = new HBox(10);
         hbox.setAlignment(Pos.CENTER);
         Button delete = new Button("delete tag");
@@ -352,10 +334,11 @@ public class TagOverviewCtrl {
             refresh();
         });
         Button update = new Button("update tag");
-        update.setOnAction(event -> {
-            if(!server.getTags(this.event.getId())
-            .stream().filter(x -> x.getId() != newTag.getId())
-            .map(x -> x.getName()).toList().contains(name.getText())) {
+        update.setOnAction(event -> { 
+            if(oldTag.getName().equals(name.getText()) ||
+                !server.getTags(this.event.getId()).stream()
+                .map(x -> x.getName()).toList().contains(name.getText()))
+            {
                 newTag.setName(name.getText());
                 server.updateTag(newTag, this.event.getId());
                 refresh();
