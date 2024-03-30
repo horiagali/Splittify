@@ -42,10 +42,10 @@ public class TagService {
         Event event = eventRepository.findById(eventId).get();
         Tag tagEntity = new Tag(tag.getName(), tag.getColor());
         tagEntity.setEvent(event);
-        tagRepository.save(tagEntity);
+        Tag saved = tagRepository.save(tagEntity);
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                .log(Level.INFO, "Tag created: "+tagEntity);
-        return ResponseEntity.ok(tagEntity);
+                .log(Level.INFO, "Tag created: "+saved);
+        return ResponseEntity.ok(saved);
     }
 
     /**
