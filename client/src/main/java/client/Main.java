@@ -110,7 +110,7 @@ public class Main extends Application {
      */
     public void loadScenes() {
 
-        var overview = FXML.load(QuoteOverviewCtrl.class, "client", "scenes", "QuoteOverview.fxml");
+        var overview = FXML.load(MainPageCtrl.class, "client", "scenes", "MainPage.fxml");
         var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
         var page = FXML.load(PageCtrl.class, "client", "scenes", "Page.fxml");
         var addExpense = FXML.load

@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 
-public class QuoteOverviewCtrl implements Initializable {
+public class MainPageCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -74,7 +74,7 @@ public class QuoteOverviewCtrl implements Initializable {
      * @param mainCtrl
      */
     @Inject
-    public QuoteOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public MainPageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
