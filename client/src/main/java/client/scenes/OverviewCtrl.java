@@ -225,13 +225,9 @@ public class OverviewCtrl implements Initializable {
             eventDate.setText(selectedEvent.getDate().toString());
             eventDescription.setText(selectedEvent.getDescription());
         }
-
-//        myChoiceBox.getItems().addAll(names);
-//        myChoiceBox.setOnAction(this::getName);
-//        hbox.setSpacing(5);    doesn't work, has to be fixed
+        loadExpenses();
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
-//        hbox.getChildren().addAll(labels);
         loadParticipants();
     }
 
@@ -271,11 +267,51 @@ public class OverviewCtrl implements Initializable {
 
     private void loadExpenses() {
         expensesBox.getChildren().clear();
+        if(selectedEvent == null) return;
         List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId());
-        
         if(expenses.size() == 0) {
             expensesBox.getChildren()
             .add(new Text("There are no expenses matching your criteria."));
+            return;
+        }
+        for(Expense expense : expenses) {
+            VBox vbox = new VBox();
+            HBox row1 = new HBox();
+            HBox row2 = new HBox();
+            Label label = new Label(expense.getTitle());
+            label.setFont(Font.font(20));
+            label.setAlignment(Pos.CENTER);
+            Button tag = new Button(expense.getTag().getName());
+            tag.setStyle("-fx-background-color: " + expense.getTag().getColor());
+            Label date = new Label(expense.getDate().toString());
+            row1.getChildren().add(label);
+            row1.getChildren().add(tag);
+            row1.getChildren().add(date);
+            vbox.getChildren().add(row1);
+            Label payer = new Label(expense.getPayer().getNickname());
+            payer.setAlignment(Pos.CENTER);
+            Label arrow = new Label("→");
+            Label amount = new Label(expense.getAmount() + "");
+            String owers = "";
+            if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
+            owers = "everyone";
+            else {
+                List<String> nameList = server.getParticipants(selectedEvent.getId()).stream()
+                .map(x -> x.getNickname())
+                .toList();
+                owers = nameList.get(0);
+                for(int i = 1; i < nameList.size(); i++) {
+                    owers = owers + ", " + nameList.get(i);
+                }
+            }
+            Label owersNames = new Label(owers);
+            row2.getChildren().add(payer);
+            row2.getChildren().add(arrow);
+            row2.getChildren().add(amount);
+            row2.getChildren().add(arrow);
+            row2.getChildren().add(owersNames);
+            vbox.getChildren().add(row2);
+            expensesBox.getChildren().add(vbox);
         }
     }
 
