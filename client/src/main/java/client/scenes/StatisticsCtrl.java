@@ -111,6 +111,7 @@ public class StatisticsCtrl {
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
     }
 
     /**
@@ -118,15 +119,20 @@ public class StatisticsCtrl {
      */
     public void updateUIWithNewLanguage() {
         languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
-        pieChart.setTitle(MainCtrl.resourceBundle.getString("Text.statisticsTitle") + 
-        event.getTitle());
+        String piechartString = "Text.statisticsTitle";
+        if(event !=null){
+            piechartString += event.getTitle();
+        }
+        pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString));
         eventTotalAmount.setText(MainCtrl.resourceBundle.getString("Text.statisticsTotal") + 
         totalAmount);
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         refresh.setText(MainCtrl.resourceBundle.getString("button.refresh"));
-        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.statistics") 
-        + event.getTitle());
-        
+        String stageTitleString = "title.statistics";
+        if(event !=null){
+            stageTitleString += event.getTitle();
+        }
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));
     }
 
     /**

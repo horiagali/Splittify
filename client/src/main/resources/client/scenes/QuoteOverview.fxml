@@ -22,13 +22,15 @@
 <?import javafx.scene.image.ImageView?>
 <VBox fx:id="vbox" alignment="CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.QuoteOverviewCtrl">
 
+    <fx:define>
+        <ToggleGroup fx:id="languageGroup" />
+    </fx:define>
     <!-- Combined MenuBar -->
     <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
         <menus>
-            <!-- Language Menu -->
             <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
                 <items>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English" toggleGroup="$languageGroup">
                         <graphic>
                             <ImageView fitHeight="25" fitWidth="30">
                                 <image>
@@ -36,11 +38,8 @@
                                 </image>
                             </ImageView>
                         </graphic>
-                        <toggleGroup>
-                            <ToggleGroup fx:id="englishGroup" />
-                        </toggleGroup>
                     </RadioMenuItem>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana">
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup">
                         <graphic>
                             <ImageView fitHeight="25" fitWidth="30">
                                 <image>
@@ -48,11 +47,8 @@
                                 </image>
                             </ImageView>
                         </graphic>
-                        <toggleGroup>
-                            <ToggleGroup fx:id="romanaGroup" />
-                        </toggleGroup>
                     </RadioMenuItem>
-                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands">
+                    <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup">
                         <graphic>
                             <ImageView fitHeight="25" fitWidth="30">
                                 <image>
@@ -60,13 +56,9 @@
                                 </image>
                             </ImageView>
                         </graphic>
-                        <toggleGroup>
-                            <ToggleGroup fx:id="dutchGroup" />
-                        </toggleGroup>
                     </RadioMenuItem>
                 </items>
             </Menu>
-
             <!-- Currency Menu -->
             <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
                 <items>

@@ -27,6 +27,10 @@ public class AdminPassCtrl implements Initializable {
     private VBox vbox;
     @FXML
     private Menu languageMenu;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button enterButton;
 
 
     /**
@@ -105,6 +109,7 @@ public class AdminPassCtrl implements Initializable {
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
     }
 
     /**
@@ -112,6 +117,8 @@ public class AdminPassCtrl implements Initializable {
      */
     public void updateUIWithNewLanguage() {
         languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+        enterButton.setText(MainCtrl.resourceBundle.getString("button.enterPassword"));
     }
 
 

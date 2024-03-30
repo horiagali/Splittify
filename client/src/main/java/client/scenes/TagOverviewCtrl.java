@@ -75,6 +75,7 @@ public class TagOverviewCtrl {
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
     }
 
     /**
@@ -83,8 +84,11 @@ public class TagOverviewCtrl {
     public void updateUIWithNewLanguage() {
         languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
-        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.statistics") 
-        + event.getTitle());
+        String stageTitleString = "title.statistics";
+        if(event !=null){
+            stageTitleString += event.getTitle();
+        }
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));
         
     }
 

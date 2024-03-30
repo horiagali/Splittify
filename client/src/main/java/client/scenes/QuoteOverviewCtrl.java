@@ -90,6 +90,7 @@ public class QuoteOverviewCtrl implements Initializable {
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
     }
 
 
