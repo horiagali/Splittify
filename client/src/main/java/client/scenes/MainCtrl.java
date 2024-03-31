@@ -342,8 +342,8 @@ public class MainCtrl {
         primaryStage.setTitle("Overview");
         overviewAppCtrl.resetComboBoxes();
         primaryStage.setScene(overviewApp);
-        
         overviewAppCtrl.refresh();
+        
 
     }
 

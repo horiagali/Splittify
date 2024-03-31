@@ -102,6 +102,7 @@ public class EditExpenseCtrl implements Initializable {
         purposeTextField.setText(expense.getTitle());
         tagComboBox.getSelectionModel().select(expense.getTag());
         amountTextField.setText(String.valueOf(expense.getAmount()));
+        if(!(expense.getDate() == null))
         datePicker.setValue(LocalDate.parse(expense.getDate().toString()));
         equallyCheckbox.setSelected(expense.getOwers().equals(event.getParticipants()));
     }
@@ -459,6 +460,9 @@ public class EditExpenseCtrl implements Initializable {
      */
     private void clearFieldsAndShowOverview(Event selectedEvent) {
         refreshUI();
+        // call it twice because css will complain (most likely because this was entered
+        // through an OnClick action)
+        mainCtrl.showEventOverview(selectedEvent);
         mainCtrl.showEventOverview(selectedEvent);
     }
 
@@ -478,6 +482,9 @@ public class EditExpenseCtrl implements Initializable {
      */
     public void back() {
         refreshUI();
+        mainCtrl.goToOverview();
+        // call it twice because css will complain (most likely because this was entered
+        // through an OnClick action)
         mainCtrl.goToOverview();
     }
 

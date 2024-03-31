@@ -319,7 +319,6 @@ public class OverviewCtrl implements Initializable {
      * resets comboboxes to 'anyone' state
      */
     public void resetComboBoxes() {
-        System.out.println("reset");
         payer.setValue("anyone");
         ower.setValue("anyone");
     }
@@ -331,6 +330,28 @@ public class OverviewCtrl implements Initializable {
         expensesBox.getChildren().clear();
         if(selectedEvent == null) return;
         List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId());
+        expenses = applyFilters(expenses);
+        if(expenses.size() == 0) {
+            expensesBox.getChildren()
+            .add(new Text("There are no expenses matching your criteria."));
+            return;
+        }
+        for(Expense expense : expenses) {
+            VBox vbox = new VBox();
+            vbox.setAlignment(Pos.CENTER);
+            vbox.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                    goToEditExpense(expense);
+                }
+            });
+            setUpRow1(expense, vbox);
+            setUpRow2(expense, vbox);
+            addHoverAnimation(vbox, 1.05);
+            expensesBox.getChildren().add(vbox);
+        }
+    }
+
+    private List<Expense> applyFilters(List<Expense> expenses) {
         String payerBox = payer.getValue();
         String owerBox = ower.getValue();
         if(!payerBox.equals("anyone")) {
@@ -343,20 +364,7 @@ public class OverviewCtrl implements Initializable {
             expenses = expenses.stream()
         .filter(x -> x.getOwers().contains(owerOfExpense)).toList();
         }
-
-        if(expenses.size() == 0) {
-            expensesBox.getChildren()
-            .add(new Text("There are no expenses matching your criteria."));
-            return;
-        }
-        for(Expense expense : expenses) {
-            VBox vbox = new VBox();
-            vbox.setAlignment(Pos.CENTER);
-            setUpRow1(expense, vbox);
-            setUpRow2(expense, vbox);
-            addHoverAnimation(vbox, 1.05);
-            expensesBox.getChildren().add(vbox);
-        }
+        return expenses;
     }
 
     private void setUpRow2(Expense expense, VBox vbox) {
@@ -654,9 +662,9 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * Goes to edit expense.
+     * @param selectedExpense the expense to edit
      */
-    public void goToEditExpense() {
-        Expense selectedExpense = expensesListView.getSelectionModel().getSelectedItem();
+    public void goToEditExpense(Expense selectedExpense){
         if (selectedExpense == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Edit expense");

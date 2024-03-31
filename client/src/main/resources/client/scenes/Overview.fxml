@@ -84,7 +84,7 @@
                      </padding></VBox>
                </content>
             </ScrollPane>
-            <Text layoutX="561.0" layoutY="253.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Payer" />
+            <Text layoutX="554.0" layoutY="290.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Payer" />
             <VBox alignment="CENTER" layoutX="200.0" layoutY="44.0" prefHeight="127.0" prefWidth="334.0">
                <children>
                   <AnchorPane prefHeight="32.0" prefWidth="338.0">
@@ -141,10 +141,16 @@
                   </AnchorPane>
                </children>
             </VBox>
-            <Text layoutX="561.0" layoutY="288.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ower" />
+            <Text layoutX="554.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ower" />
             <HBox layoutY="44.0" prefHeight="100.0" prefWidth="200.0" />
-            <ComboBox fx:id="payer" layoutX="601.0" layoutY="236.0" onAction="#loadExpenses" prefHeight="26.0" prefWidth="139.0" />
-            <ComboBox fx:id="ower" layoutX="601.0" layoutY="270.0" onAction="#loadExpenses" prefHeight="26.0" prefWidth="139.0" />
+            <ComboBox fx:id="payer" layoutX="594.0" layoutY="273.0" onAction="#loadExpenses" prefHeight="26.0" prefWidth="139.0" />
+            <ComboBox fx:id="ower" layoutX="594.0" layoutY="307.0" onAction="#loadExpenses" prefHeight="26.0" prefWidth="139.0" />
+            <Button layoutX="203.0" layoutY="196.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+            <Text layoutX="629.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filters">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
       
          </children>
       </AnchorPane>
