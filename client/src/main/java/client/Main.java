@@ -31,7 +31,6 @@ import java.net.URL;
 import client.scenes.*;
 import client.utils.Currency;
 import client.utils.ServerUtils;
-import commons.Mail;
 import jakarta.ws.rs.BadRequestException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
