@@ -3,9 +3,10 @@ package commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ExpenseTest {
@@ -96,6 +97,8 @@ public class ExpenseTest {
         assertEquals(30, expense.getAmount());
         assertEquals(newPayer, expense.getPayer());
         assertEquals(newOwers, expense.getOwers());
+
+        assertThrows(IllegalArgumentException.class, () -> expense.setAmount(-19));
     }
 
     @Test
@@ -121,7 +124,6 @@ public class ExpenseTest {
     public void testDefaultConstructor() {
         // Create an Expense object using the default constructor
         Expense expense = new Expense();
-        Long x = 0L;
         // Test if the default constructor initializes the object correctly
         assertNotNull(expense);
         assertNull(expense.getId());
@@ -143,6 +145,24 @@ public class ExpenseTest {
         Tag newTag = new Tag("newTag", "HEXcolor");
         expense.setTag(newTag);
         assertEquals(newTag, expense.getTag());
+    }
+
+    @Test
+    public void testGetEventAndSetEvent() {
+        Event event = new Event(/* provide necessary parameters */);
+        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
+        expense.setEvent(event);
+        assertEquals(event, expense.getEvent());
+
+        // Test setting null
+        expense.setEvent(null);
+        assertNull(expense.getEvent());
+    }
+
+    @Test
+    public void testToString() {
+        Expense expense = new Expense("Dinner", amount, payer, owers, tag);
+        assertNotNull(expense.toString());
     }
 
 }

@@ -222,15 +222,23 @@ public class Expense {
         }
     }
 
-    // Equals, HashCode, ToString
+    /**
+     * equals
+     * @param o object to compare to
+     * @return true iff same
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Expense expense = (Expense) o;
-        return id == expense.id &&
-                Double.compare(expense.amount, amount) == 0 &&
-                Objects.equals(title, expense.title);
+        return Double.compare(amount, expense.amount) == 0
+                && Objects.equals(id, expense.id)
+                && Objects.equals(title, expense.title)
+                && Objects.equals(payer, expense.payer)
+                && Objects.equals(owers, expense.owers)
+                && Objects.equals(event, expense.event)
+                && Objects.equals(tag, expense.tag);
     }
 
     @Override
@@ -240,7 +248,6 @@ public class Expense {
 
     @Override
     public String toString() {
-        String payerName = payer != null ? payer.getNickname() : null;
         String owersList = owers != null ? owers.toString() : null;
 
         return "Expense{" +
