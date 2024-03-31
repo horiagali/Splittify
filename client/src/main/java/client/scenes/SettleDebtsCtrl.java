@@ -61,6 +61,7 @@ public class SettleDebtsCtrl implements Initializable {
     }
 
 
+    @SuppressWarnings("checkstyle:MethodLength")
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         debtColumn.setCellValueFactory(q ->
@@ -76,7 +77,8 @@ public class SettleDebtsCtrl implements Initializable {
                     Participant participant = getTableView().getItems().get(getIndex()).getPayer();
                     Participant owed = getTableView().getItems().get(getIndex()).getOwers().get(0);
                     double amount = getTableView().getItems().get(getIndex()).getAmount();
-                    Mail mail = new Mail(participant.getEmail(), "Payment reminder for event " + event.getId().toString(), "You owe " +
+                    Mail mail = new Mail(participant.getEmail(), "Payment reminder " +
+                            "for event " + event.getId().toString(), "You owe " +
                             owed.getNickname() + " " + String.valueOf(amount));
                     server.sendEmail(mail);
                 });
@@ -95,14 +97,12 @@ public class SettleDebtsCtrl implements Initializable {
         tableView.getColumns().add(reminderColumn);
         actionColumn.setCellFactory(col -> new TableCell<Expense, Void>() {
             private final Button actionButton = new Button("Mark Received");
-
             {
                 actionButton.setOnAction(myevent -> {
                     Expense currentExpense = getTableView().getItems().get(getIndex());
                     getTableView().getItems().remove(currentExpense);
                 });
             }
-
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
