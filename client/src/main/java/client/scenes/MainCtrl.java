@@ -175,6 +175,7 @@ public class MainCtrl {
         this.adminPageCtrl = adminPage.getKey();
         this.adminPage = new Scene(adminPage.getValue());
 
+        adminPass.getKey().updateUIWithNewLanguage();
         this.adminPassCtrl = adminPass.getKey();
         this.adminPass = new Scene(adminPass.getValue());
 
@@ -464,5 +465,49 @@ public class MainCtrl {
         EditExpenseCtrl.setExpense(expense);
         primaryStage.setScene(editExpense);
         editExpenseCtrl.display();
+    }
+
+    /**
+     * method to update language
+     * @param language lanuage from button
+     */
+    public void updateLanguage(String language) {
+        // Load the appropriate resource bundle based on the selected language
+        resourceBundle = ResourceBundle.getBundle("messages_" + language, new Locale(language));
+
+        // Notify controllers about the language change
+        notifyControllers();
+        updateFlags(language);
+    }
+
+    /**
+     * updates flags
+     * @param language chosen language
+     */
+    private void updateFlags(String language) {
+        inviteCtrl.updateFlagImageURL(language);
+        adminPassCtrl.updateFlagImageURL(language);
+        adminPageCtrl.updateFlagImageURL(language);
+        statisticsCtrl.updateFlagImageURL(language);
+        overviewAppCtrl.updateFlagImageURL(language);
+        tagOverviewCtrl.updateFlagImageURL(language);
+        addExpensesCtrl.updateFlagImageURL(language);
+        overviewCtrl.updateFlagImageURL(language);
+        balancesCtrl.updateFlagImageURL(language);
+    }
+
+
+    /**
+     * Method to notify all controllers about the language change
+     */
+    private void notifyControllers() {
+        adminPassCtrl.updateUIWithNewLanguage();
+        overviewCtrl.updateUIWithNewLanguage();
+        statisticsCtrl.updateUIWithNewLanguage();
+        tagOverviewCtrl.updateUIWithNewLanguage();
+        overviewAppCtrl.updateUIWithNewLanguage();
+        inviteCtrl.updateUIWithNewLanguage();
+        adminPageCtrl.updateUIWithNewLanguage();
+        balancesCtrl.updateUIWithNewLanguage();
     }
 }

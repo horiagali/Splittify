@@ -15,6 +15,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -48,6 +50,8 @@ public class OverviewCtrl implements Initializable {
     private ChoiceBox<String> myChoiceBox;
     @FXML
     private HBox hbox;
+    @FXML
+    private ImageView languageFlagImageView;
 
     private ArrayList<String> names;
     private ArrayList<Label> labels;
@@ -63,6 +67,8 @@ public class OverviewCtrl implements Initializable {
     private Label eventDate;
     @FXML
     private Label eventDescription;
+    @FXML
+    private Button backButton;
 
     @FXML
     private TextField eventNameTextField;
@@ -77,12 +83,10 @@ public class OverviewCtrl implements Initializable {
     private ScrollPane participantsScrollPane;
     @FXML
     private VBox participantsVBox;
-
     @FXML
     private Menu languageMenu;
     @FXML
     private ListView<Expense> expensesListView;
-
     @FXML
     private ToggleGroup currencyGroup;
 
@@ -178,6 +182,7 @@ public class OverviewCtrl implements Initializable {
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        updateFlagImageURL(language);
     }
 
 
@@ -186,7 +191,28 @@ public class OverviewCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
 
     /**

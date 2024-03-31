@@ -6,6 +6,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Mail;
+import commons.Participant;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
@@ -52,14 +54,28 @@ public class InviteCtrl implements Initializable {
     @FXML
     private FlowPane emailFlowPane;
     @FXML
+    private Menu languageMenu;
+    @FXML
+    private Button backButton;
+    @FXML
     private Event event;
     private final ObservableList<String> emailList = FXCollections.observableArrayList();
     private final Set<String> uniqueEmails = new HashSet<>();
     private boolean sendingInProgress = false;
     @FXML
-    private Menu languageMenu;
-    @FXML
     private ToggleGroup currencyGroup;
+    @FXML
+    private ImageView languageFlagImageView;
+
+    @FXML
+    private ToggleGroup languageGroup;
+    @FXML
+    private RadioMenuItem englishMenuItem;
+    @FXML
+    private RadioMenuItem romanianMenuItem;
+    @FXML
+    private RadioMenuItem dutchMenuItem;
+
 
     /**
      * Constructor for the InviteCtrl class.
@@ -85,6 +101,7 @@ public class InviteCtrl implements Initializable {
         generateInviteCode();
         addKeyboardNavigationHandlers();
     }
+
 
     /**
      * Add keyboard navigation
@@ -190,6 +207,56 @@ public class InviteCtrl implements Initializable {
     }
 
     /**
+     * Changes the language of the site
+     * @param event
+     */
+    @FXML
+    public void changeLanguage(javafx.event.ActionEvent event) {
+        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
+        String language = selectedLanguageItem.getText().toLowerCase();
+
+        // Load the appropriate resource bundle based on the selected language
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
+        Main.config.setLanguage(language);
+
+        // Update UI elements with the new resource bundle
+        updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
+    }
+
+    /**
+     * Method to update UI elements with the new language from the resource bundle
+     */
+    public void updateUIWithNewLanguage() {
+        //languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
+    }
+
+    /**
      * Get button
      * @param email email
      * @param removeImage the x
@@ -236,6 +303,7 @@ public class InviteCtrl implements Initializable {
             for (String email : emailList){
                 Mail mail = new Mail(email,event.getTitle(), "The invite code is: " +
                         event.getId().toString());
+                server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
                 server.sendEmail(mail);
             }
             emailList.clear();
@@ -287,32 +355,6 @@ public class InviteCtrl implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    /**
-     * Changes the language of the site
-     * @param event
-     */
-    @FXML
-    public void changeLanguage(javafx.event.ActionEvent event) {
-        RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
-        String language = selectedLanguageItem.getText().toLowerCase();
-
-        // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
-        + language, new Locale(language));
-        
-        Main.config.setLanguage(language);
-
-        // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
-    }
-    
-    /**
-     * Method to update UI elements with the new language from the resource bundle
-     */
-    public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
     }
 
     /**

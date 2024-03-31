@@ -1,49 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.*?>
 
 <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddExpensesCtrl">
    <children>
-      <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
-         <menus>
-            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
-               <items>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="languageGroup" />
-                     </toggleGroup>
-                  </RadioMenuItem>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
-               </items>
-            </Menu>
-            <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
-               <items>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="currencyGroup" />
-                     </toggleGroup>
-                  </RadioMenuItem>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
+       <!-- MenuBar -->
+       <MenuBar layoutX="-14.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
+           <menus>
+               <Menu fx:id="languageMenu" mnemonicParsing="false">
+                   <graphic>
+                       <StackPane alignment="CENTER_LEFT">
+                           <!-- ImageView for the flag -->
+                           <ImageView fx:id="languageFlagImageView" fitHeight="25" fitWidth="30">
+                               <image>
+                                   <Image fx:id="languageFlagImage" url="@/client/scenes/images/BritishFlag.png" />
+                               </image>
+                           </ImageView>
+                       </StackPane>
+                   </graphic>
+                   <items>
+                       <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
+                           <toggleGroup>
+                               <ToggleGroup fx:id="languageGroup" />
+                           </toggleGroup>
+                           <graphic>
+                               <ImageView fitHeight="25" fitWidth="30">
+                                   <image>
+                                       <Image url="@/client/scenes/images/BritishFlag.png" />
+                                   </image>
+                               </ImageView>
+                           </graphic>
+                       </RadioMenuItem>
+                       <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana">
+                           <toggleGroup>
+                               <fx:reference source="languageGroup" />
+                           </toggleGroup>
+                           <graphic>
+                               <ImageView fitHeight="25" fitWidth="30">
+                                   <image>
+                                       <Image url="@/client/scenes/images/RomanianFlag.png" />
+                                   </image>
+                               </ImageView>
+                           </graphic>
+                       </RadioMenuItem>
+                       <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands">
+                           <toggleGroup>
+                               <fx:reference source="languageGroup" />
+                           </toggleGroup>
+                           <graphic>
+                               <ImageView fitHeight="25" fitWidth="30">
+                                   <image>
+                                       <Image url="@/client/scenes/images/DutchFlag.png" />
+                                   </image>
+                               </ImageView>
+                           </graphic>
+                       </RadioMenuItem>
+                   </items>
+               </Menu>
+           </menus>
+       </MenuBar>
       <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
 
           <children>

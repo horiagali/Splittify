@@ -21,6 +21,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
 public class StatisticsCtrl {
@@ -39,6 +41,8 @@ public class StatisticsCtrl {
 
     @FXML
     private ToggleGroup currencyGroup;
+    @FXML
+    private ImageView languageFlagImageView;
 
     @FXML
     private PieChart pieChart;
@@ -148,6 +152,8 @@ public class StatisticsCtrl {
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
     }
 
     /**
@@ -170,16 +176,46 @@ public class StatisticsCtrl {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
-        pieChart.setTitle(MainCtrl.resourceBundle.getString("Text.statisticsTitle") + 
-        event.getTitle());
+        String piechartString = "Text.statisticsTitle";
+        if(event !=null){
+            pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString) + event.getTitle());
+        }
+        else {
+            pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString));
+        }
         eventTotalAmount.setText(MainCtrl.resourceBundle.getString("Text.statisticsTotal") + 
         totalAmount);
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         refresh.setText(MainCtrl.resourceBundle.getString("button.refresh"));
-        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.statistics") 
-        + event.getTitle());
-        
+        String stageTitleString = "title.statistics";
+        if(event !=null){
+            mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString)
+                    +  event.getTitle());
+        }
+        else{
+            mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));
+        }
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
 
     /**
