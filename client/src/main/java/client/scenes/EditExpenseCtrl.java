@@ -415,8 +415,9 @@ public class EditExpenseCtrl implements Initializable {
                     (ZoneId.systemDefault()).toInstant());
         } catch (Exception e) {showErrorDialog("Please select a valid date!");}
 
+        System.out.println(expense);
         setExpense(title, amount, date, payer, selectedParticipants, selectedTag);
-
+        System.out.println(expense);
         saveExpense();
         clearFieldsAndShowOverview(event);
     }
@@ -444,11 +445,34 @@ public class EditExpenseCtrl implements Initializable {
         expense.settleBalance();
     }
 
+    @FXML
+    private void deleteExpense() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Expense");
+        alert.setHeaderText("Are you sure you want to delete this expense?");
+        alert.setContentText("This action cannot be undone");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == javafx.scene.control.ButtonType.OK) {
+                // Delete the expense from the server
+                server.deleteExpense(event.getId(), expense);
+
+                // Show confirmation message
+                Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
+                deleteConfirmation.setTitle("Expense Deleted");
+                deleteConfirmation.setHeaderText(null);
+                deleteConfirmation.setContentText("Expense deleted successfully!");
+                deleteConfirmation.showAndWait();
+                back();
+            }
+        });
+    }
+
     /**
      * Saves the expense to the server and clears selected participants.
      */
     private void saveExpense() {
-        server.editExpense(event.getId(), expense);
+        server.updateExpense(event.getId(), expense);
         refreshParticipants();
         refreshUI();
     }
@@ -460,9 +484,6 @@ public class EditExpenseCtrl implements Initializable {
      */
     private void clearFieldsAndShowOverview(Event selectedEvent) {
         refreshUI();
-        // call it twice because css will complain (most likely because this was entered
-        // through an OnClick action)
-        mainCtrl.showEventOverview(selectedEvent);
         mainCtrl.showEventOverview(selectedEvent);
     }
 
@@ -481,8 +502,8 @@ public class EditExpenseCtrl implements Initializable {
      * Navigates back to the overview screen.
      */
     public void back() {
-        refreshUI();
-        mainCtrl.goToOverview();
+        // refreshUI();
+        // mainCtrl.goToOverview();
         // call it twice because css will complain (most likely because this was entered
         // through an OnClick action)
         mainCtrl.goToOverview();

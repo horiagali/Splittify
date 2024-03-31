@@ -146,6 +146,7 @@
                </VBox>
             </ScrollPane>
             <DatePicker fx:id="datePicker" layoutX="199.0" layoutY="229.0" promptText="Select a date" />
+            <Button layoutX="263.0" layoutY="363.0" mnemonicParsing="false" onAction="#deleteExpense" text="Delete" />
 
          </children>
       </AnchorPane>

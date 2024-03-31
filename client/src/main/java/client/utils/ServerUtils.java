@@ -482,7 +482,6 @@ public class ServerUtils {
 	 */
 	public void updateExpense(long eventId, Expense expense) {
 		expense.setEvent(getEvent(eventId));
-		System.out.println(expense);
 		ClientBuilder.newClient(new ClientConfig())
 				.target(server)
 				.path("api/events/" + eventId +
@@ -528,21 +527,6 @@ public class ServerUtils {
 	 */
 	public void setRestTemplate(RestTemplate restTemplate) {
 		this.restTemplate = restTemplate;
-	}
-
-
-	/**
-	 * Updates an expense.
-	 * @param eventId the event ID.
-	 * @param expense the updated expense.
-	 */
-	public void editExpense(long eventId, Expense expense) {
-		ClientBuilder.newClient(new ClientConfig())
-				.target(server)
-				.path("api/events/" + eventId +
-						"expenses/" + expense.getId())
-				.request()
-				.put(Entity.entity(expense, APPLICATION_JSON));
 	}
 
 	/**

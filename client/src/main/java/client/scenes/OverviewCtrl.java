@@ -240,6 +240,7 @@ public class OverviewCtrl implements Initializable {
             eventDescription.setText(selectedEvent.getDescription());
             
         }
+    
 
         loadParticipants();
         loadComboBoxes();
@@ -333,11 +334,14 @@ public class OverviewCtrl implements Initializable {
         expenses = applyFilters(expenses);
         if(expenses.size() == 0) {
             expensesBox.getChildren()
-            .add(new Text("There are no expenses matching your criteria."));
+            .add(new Text("There are no expenses matching your filters."));
             return;
         }
         for(Expense expense : expenses) {
             VBox vbox = new VBox();
+            vbox.setMinWidth(300);
+            vbox.setMaxWidth(300);
+            vbox.setStyle("-fx-border-width: 2; -fx-border-radius: 5; -fx-border-color: black");
             vbox.setAlignment(Pos.CENTER);
             vbox.setOnMouseClicked(event -> {
                 if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
@@ -354,11 +358,11 @@ public class OverviewCtrl implements Initializable {
     private List<Expense> applyFilters(List<Expense> expenses) {
         String payerBox = payer.getValue();
         String owerBox = ower.getValue();
-        if(!payerBox.equals("anyone")) {
+        if(payerBox != null && !payerBox.equals("anyone")) {
             expenses = expenses.stream()
             .filter(x -> x.getPayer().getNickname().equals(payerBox)).toList();
         }
-        if(!owerBox.equals("anyone")) {
+        if(owerBox != null && !owerBox.equals("anyone")) {
             Participant owerOfExpense = server
             .getParticipantByNickname(selectedEvent.getId(), owerBox);
             expenses = expenses.stream()
@@ -372,9 +376,8 @@ public class OverviewCtrl implements Initializable {
         row2.setMinWidth(280);
         row2.setMaxWidth(280);
         row2.setSpacing(5);
+        row2.setAlignment(Pos.CENTER);
         Label payer = new Label(expense.getPayer().getNickname());
-        // payer.setStyle("-fx-font-style: Bold");
-        payer.setAlignment(Pos.CENTER);
         Label text = new Label("payed " + expense.getAmount() + " for");
         String owers = "";
         if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
@@ -390,21 +393,18 @@ public class OverviewCtrl implements Initializable {
         Label owersNames = new Label(owers);
         row2.getChildren().add(payer);
         row2.getChildren().add(text);
-        row2.getChildren().add(owersNames);
         vbox.getChildren().add(row2);
+        vbox.getChildren().add(owersNames);
     }
 
     private void setUpRow1(Expense expense, VBox vbox) {
         HBox row1 = new HBox();
-        
         Label label = new Label(expense.getTitle());
-        label.setMaxWidth(100);
-        Button tag = new Button(expense.getTag().getName());
-        tag.setMaxHeight(100);
+        label.setFont(Font.font(20));
+        label.setAlignment(Pos.CENTER);
         Label date = new Label("DATE HERE");
-        vbox.setMinWidth(300);
-        vbox.setMaxWidth(300);
-        vbox.setStyle("-fx-border-width: 2; -fx-border-radius: 10; -fx-border-color: black");
+        date.setMaxWidth(80);
+        Button tag = new Button(expense.getTag().getName());
         
         row1.setMinWidth(280);
         row1.setMaxWidth(280);
@@ -412,14 +412,13 @@ public class OverviewCtrl implements Initializable {
         row1.setAlignment(Pos.CENTER_LEFT);
 
         
-        label.setFont(Font.font(20));
-        label.setAlignment(Pos.CENTER);
+        
         
         tag.setStyle("-fx-background-color: " + expense.getTag().getColor());
         date.setAlignment(Pos.CENTER);
         row1.getChildren().add(label);
-        row1.getChildren().add(tag);
         row1.getChildren().add(date);
+        row1.getChildren().add(tag);
         vbox.getChildren().add(row1);
     }
 
