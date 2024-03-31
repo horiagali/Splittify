@@ -115,8 +115,11 @@ public class OverviewCtrl implements Initializable {
         eventDate.setText("");
         eventDescription.setText(selectedEvent.getDescription());
         
-        if(!(selectedEvent.getDate() == null))
-        eventDate.setText(selectedEvent.getDate().toString());
+        if(!(selectedEvent.getDate() == null)){
+            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+            String dateInString = ft.format(selectedEvent.getDate());
+            eventDate.setText(dateInString);
+        }
         setSelectedEvent(selectedEvent);
     }
 
@@ -237,7 +240,9 @@ public class OverviewCtrl implements Initializable {
         if (selectedEvent != null) {
             eventName.setText(selectedEvent.getTitle());
             eventLocation.setText(selectedEvent.getLocation());
-            eventDate.setText(selectedEvent.getDate().toString());
+            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+            String dateInString = ft.format(selectedEvent.getDate());
+            eventDate.setText(dateInString);
             eventDescription.setText(selectedEvent.getDescription());
             
         }
@@ -409,7 +414,6 @@ public class OverviewCtrl implements Initializable {
         var dateInString = ft.format(expense.getDate());
         Label date = new Label(dateInString);
         
-        System.out.println(date);
         date.setMaxWidth(80);
         Button tag = new Button(expense.getTag().getName());
         
@@ -570,7 +574,11 @@ public class OverviewCtrl implements Initializable {
 
     public void switchToDateLabel() {
         eventDatePicker.setVisible(false);
-        eventDate.setText(String.valueOf(eventDatePicker.getValue()));
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+        String dateInString = eventDatePicker.getValue().getDayOfMonth() + "/" +
+        eventDatePicker.getValue().getMonthValue() + "/" +
+        eventDatePicker.getValue().getYear();
+        eventDate.setText(dateInString);
         eventDate.setVisible(true);
     }
 
@@ -586,7 +594,9 @@ public class OverviewCtrl implements Initializable {
             Date date = Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             selectedEvent.setDate(date);
             server.updateEvent(selectedEvent);
-            eventDate.setText(String.valueOf(newDate));
+            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+            String dateInString = ft.format(selectedEvent.getDate());
+            eventDate.setText(dateInString);
             switchToDateLabel();
         } catch (DateTimeParseException e) {
             System.err.println("Error parsing date: " + e.getMessage());
