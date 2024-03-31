@@ -52,6 +52,7 @@ import commons.Mail;
 import commons.Participant;
 import commons.Quote;
 import commons.Tag;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -336,12 +337,19 @@ public class ServerUtils {
 	 * @return participant
 	 */
 	public Participant getParticipantByNickname(Long eventID, String nickname) {
-		String url = server + "api/events/" + eventID + "/participants/" + nickname;
+		List<Participant> list = getParticipants(eventID);
+		List<String> names = list.stream().map(x -> x.getNickname()).toList();
+		int index = names.indexOf(nickname);
+		if(index == -1) {
+			throw new BadRequestException
+			("there is no participant with nickname " + nickname + " in this event!");
+		}
+		else {
+			return list.get(index);
+		}
+		
+		
 
-		// Make the HTTP GET request and directly retrieve the participant
-		Participant participant = restTemplate.getForObject(url, Participant.class);
-
-		return participant;
 	}
 
 	 /**

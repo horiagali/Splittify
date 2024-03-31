@@ -8,6 +8,7 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import javafx.animation.ScaleTransition;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -86,6 +87,11 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     private VBox expensesBox;
+    @FXML
+    private ComboBox<String> payer;
+    @FXML
+    private ComboBox<String> ower;
+
 
 
     /**
@@ -171,6 +177,7 @@ public class OverviewCtrl implements Initializable {
     }
 
 
+
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
@@ -213,6 +220,13 @@ public class OverviewCtrl implements Initializable {
         refresh();
         loadParticipants();
         addKeyboardNavigationHandlers();
+        payer.setValue("anyone");
+        ower.setValue("anyone");
+        ower.setCellFactory(param -> createParticipantListCell());
+        ower.setButtonCell(createParticipantListCell());
+        payer.setCellFactory(param -> createParticipantListCell());
+        payer.setButtonCell(createParticipantListCell());
+        
     }
 
     /**
@@ -224,11 +238,47 @@ public class OverviewCtrl implements Initializable {
             eventLocation.setText(selectedEvent.getLocation());
             eventDate.setText(selectedEvent.getDate().toString());
             eventDescription.setText(selectedEvent.getDescription());
+            
         }
+
+        loadParticipants();
+        loadComboBoxes();
         loadExpenses();
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
-        loadParticipants();
+        
+    }
+
+    private void loadComboBoxes() {
+        if(selectedEvent == null) return;
+        List<String> participants = new ArrayList<>();
+        participants.add("anyone");
+        participants.addAll(server.getParticipants(selectedEvent.getId()).stream()
+        .map(x -> x.getNickname()).toList());
+        payer.setItems(FXCollections.observableArrayList(participants));
+        ower.setItems(FXCollections.observableArrayList(participants));
+        
+        
+
+    }
+
+    /**
+     * Creates a ListCell for the ComboBox to display participant nicknames.
+     *
+     * @return The created ListCell.
+     */
+    private ListCell<String> createParticipantListCell() {
+        return new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item);
+                }
+            }
+        };
     }
 
     /**
@@ -265,10 +315,26 @@ public class OverviewCtrl implements Initializable {
         }
     }
 
-    private void loadExpenses() {
+    /**
+     * loads all expenses into event overview
+     */
+    public void loadExpenses() {
         expensesBox.getChildren().clear();
         if(selectedEvent == null) return;
         List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId());
+        String payerBox = payer.getValue();
+        String owerBox = ower.getValue();
+        if(!payerBox.equals("anyone")) {
+            expenses = expenses.stream()
+            .filter(x -> x.getPayer().getNickname().equals(payerBox)).toList();
+        }
+        if(!owerBox.equals("anyone")) {
+            Participant owerOfExpense = server
+            .getParticipantByNickname(selectedEvent.getId(), owerBox);
+            expenses = expenses.stream()
+        .filter(x -> x.getOwers().contains(owerOfExpense)).toList();
+        }
+
         if(expenses.size() == 0) {
             expensesBox.getChildren()
             .add(new Text("There are no expenses matching your criteria."));
