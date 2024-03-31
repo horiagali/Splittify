@@ -35,7 +35,7 @@ public class EventService {
      * @return the new Event
      */
     public ResponseEntity<Event> createEvent(Event event){
-        if (event.getTitle() == null || event.getTitle().isEmpty()) {
+        if (event.getTitle() == null || event.getTitle().isBlank()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "400: Some required values may be null or empty");
             return ResponseEntity.badRequest().build();
@@ -109,7 +109,7 @@ public class EventService {
      * @return the new event
      */
     public ResponseEntity<Event> updateEvent(Event event, Long id){
-        if (event.getTitle() == null || event.getTitle().isEmpty()) {
+        if (event.getTitle() == null || event.getTitle().isBlank()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "400: Some required values may be null or empty");
             return ResponseEntity.badRequest().build();
