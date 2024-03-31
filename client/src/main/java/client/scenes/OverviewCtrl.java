@@ -123,7 +123,7 @@ public class OverviewCtrl implements Initializable {
         eventDescription.setText(selectedEvent.getDescription());
         
         if(!(selectedEvent.getDate() == null)){
-            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
             String dateInString = ft.format(selectedEvent.getDate());
             eventDate.setText(dateInString);
         }
@@ -273,20 +273,18 @@ public class OverviewCtrl implements Initializable {
         if (selectedEvent != null) {
             eventName.setText(selectedEvent.getTitle());
             eventLocation.setText(selectedEvent.getLocation());
-            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
             String dateInString = ft.format(selectedEvent.getDate());
             eventDate.setText(dateInString);
             eventDescription.setText(selectedEvent.getDescription());
             
         }
     
-
         loadParticipants();
         loadComboBoxes();
         loadExpenses();
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
-        
     }
 
     private void loadComboBoxes() {
@@ -303,9 +301,6 @@ public class OverviewCtrl implements Initializable {
         payer.setItems(FXCollections.observableArrayList(participants));
         ower.setItems(FXCollections.observableArrayList(participants));
         tag.setItems(FXCollections.observableArrayList(tags));
-        
-        
-
     }
 
     /**
@@ -457,7 +452,7 @@ public class OverviewCtrl implements Initializable {
         label.setFont(Font.font(20));
         label.setAlignment(Pos.CENTER);
         label.setMaxWidth(150);
-        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
         var dateInString = ft.format(expense.getDate());
         Label date = new Label(dateInString);
         
@@ -621,7 +616,7 @@ public class OverviewCtrl implements Initializable {
 
     public void switchToDateLabel() {
         eventDatePicker.setVisible(false);
-        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
         String dateInString = eventDatePicker.getValue().getDayOfMonth() + "/" +
         eventDatePicker.getValue().getMonthValue() + "/" +
         eventDatePicker.getValue().getYear();
@@ -641,7 +636,7 @@ public class OverviewCtrl implements Initializable {
             Date date = Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             selectedEvent.setDate(date);
             server.updateEvent(selectedEvent);
-            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
             String dateInString = ft.format(selectedEvent.getDate());
             eventDate.setText(dateInString);
             switchToDateLabel();
@@ -665,7 +660,7 @@ public class OverviewCtrl implements Initializable {
      * @param event
      */
     public void updateEventLocation(ActionEvent event) {
-        String location = eventLocation.getText();
+        String location = eventLocationTextField.getText();
         selectedEvent.setLocation(location);
         switchToLocationLabel();
         server.updateEvent(selectedEvent);

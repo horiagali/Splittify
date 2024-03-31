@@ -20,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -102,8 +103,13 @@ public class EditExpenseCtrl implements Initializable {
         purposeTextField.setText(expense.getTitle());
         tagComboBox.getSelectionModel().select(expense.getTag());
         amountTextField.setText(String.valueOf(expense.getAmount()));
-        if(!(expense.getDate() == null))
-        datePicker.setValue(LocalDate.parse(expense.getDate().toString()));
+        Date dateDate = expense.getDate();
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy.MM.dd");
+        String dateInString = ft.format(dateDate);
+        LocalDate date = LocalDate.of(Integer.parseInt(dateInString.substring(0, 4)), 
+        Integer.parseInt(dateInString.substring(5, 7)), 
+        Integer.parseInt(dateInString.substring(8, 10)));
+        datePicker.setValue(date);
         equallyCheckbox.setSelected(expense.getOwers().equals(event.getParticipants()));
     }
 
