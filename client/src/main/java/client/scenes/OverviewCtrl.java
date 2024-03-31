@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import javafx.animation.ScaleTransition;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -96,6 +97,8 @@ public class OverviewCtrl implements Initializable {
     private ComboBox<String> payer;
     @FXML
     private ComboBox<String> ower;
+    @FXML
+    private ComboBox<String> tag;
 
 
 
@@ -253,10 +256,13 @@ public class OverviewCtrl implements Initializable {
         addKeyboardNavigationHandlers();
         payer.setValue("anyone");
         ower.setValue("anyone");
-        ower.setCellFactory(param -> createParticipantListCell());
-        ower.setButtonCell(createParticipantListCell());
-        payer.setCellFactory(param -> createParticipantListCell());
-        payer.setButtonCell(createParticipantListCell());
+        tag.setValue("any tag");
+        tag.setCellFactory(param -> createStringListCell());
+        tag.setButtonCell(createStringListCell());
+        ower.setCellFactory(param -> createStringListCell());
+        ower.setButtonCell(createStringListCell());
+        payer.setCellFactory(param -> createStringListCell());
+        payer.setButtonCell(createStringListCell());
         
     }
 
@@ -289,8 +295,14 @@ public class OverviewCtrl implements Initializable {
         participants.add("anyone");
         participants.addAll(server.getParticipants(selectedEvent.getId()).stream()
         .map(x -> x.getNickname()).toList());
+        List<String> tags = new ArrayList<>();
+        tags.add("any tag");
+        tags.addAll(server.getTags(selectedEvent.getId()).stream()
+        .map(x -> x.getName()).filter(x -> !x.equals("gifting money")).toList());
+        
         payer.setItems(FXCollections.observableArrayList(participants));
         ower.setItems(FXCollections.observableArrayList(participants));
+        tag.setItems(FXCollections.observableArrayList(tags));
         
         
 
@@ -301,7 +313,7 @@ public class OverviewCtrl implements Initializable {
      *
      * @return The created ListCell.
      */
-    private ListCell<String> createParticipantListCell() {
+    private ListCell<String> createStringListCell() {
         return new ListCell<>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -356,6 +368,7 @@ public class OverviewCtrl implements Initializable {
     public void resetComboBoxes() {
         payer.setValue("anyone");
         ower.setValue("anyone");
+        tag.setValue("any tag");
     }
 
     /**
@@ -392,6 +405,7 @@ public class OverviewCtrl implements Initializable {
     private List<Expense> applyFilters(List<Expense> expenses) {
         String payerBox = payer.getValue();
         String owerBox = ower.getValue();
+        String tagBox = tag.getValue();
         if(payerBox != null && !payerBox.equals("anyone")) {
             expenses = expenses.stream()
             .filter(x -> x.getPayer().getNickname().equals(payerBox)).toList();
@@ -401,6 +415,12 @@ public class OverviewCtrl implements Initializable {
             .getParticipantByNickname(selectedEvent.getId(), owerBox);
             expenses = expenses.stream()
         .filter(x -> x.getOwers().contains(owerOfExpense)).toList();
+        }
+        if(tagBox != null && !tagBox.equals("any tag")) {
+            Tag selectedTag = server.getTags(selectedEvent.getId())
+            .stream().filter(x -> x.getName().equals(tagBox)).findFirst().get();
+            expenses = expenses.stream().filter(x -> x.getTag().equals(selectedTag))
+            .toList();
         }
         return expenses;
     }
