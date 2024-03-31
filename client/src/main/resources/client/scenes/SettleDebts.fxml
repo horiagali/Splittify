@@ -12,8 +12,9 @@
       <Button layoutX="520.0" layoutY="353.0" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="65.0" text="Back" />
       <TableView fx:id="tableView" layoutX="28.0" layoutY="59.0" prefHeight="283.0" prefWidth="545.0">
         <columns>
-          <TableColumn fx:id="debtColumn" prefWidth="414.0" text="Debt" />
-          <TableColumn fx:id="actionColumn" prefWidth="130.0" text="Status" />
+          <TableColumn fx:id="debtColumn" prefWidth="336.0" text="Debt" />
+            <TableColumn fx:id="reminderColumn" maxWidth="101.0" prefWidth="101.0" />
+          <TableColumn fx:id="actionColumn" prefWidth="107.0" text="Status" />
         </columns>
       </TableView>
       <Text layoutX="244.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts" wrappingWidth="111.21630859375">
