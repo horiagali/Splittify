@@ -64,7 +64,13 @@ public class ServerUtils {
 	private StompSession session;
 	private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
-	
+	/**
+	 * getter for url
+	 * @return url
+	 */
+	public static String getServer() {
+		return server;
+	}
 
 	/**
 	 * Constructor

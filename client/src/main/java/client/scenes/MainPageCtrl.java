@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Mail;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -83,6 +84,9 @@ public class MainPageCtrl implements Initializable {
     public MainPageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        Mail mail = new Mail("ooppteam56@gmail.com","Testing the credentials", "The provided" +
+                "email works as expected!");
+        server.sendEmail(mail);
     }
 
     /**

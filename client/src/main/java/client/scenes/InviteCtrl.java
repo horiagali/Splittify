@@ -6,6 +6,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Mail;
+import commons.Participant;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -302,6 +303,7 @@ public class InviteCtrl implements Initializable {
             for (String email : emailList){
                 Mail mail = new Mail(email,event.getTitle(), "The invite code is: " +
                         event.getId().toString());
+                server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
                 server.sendEmail(mail);
             }
             emailList.clear();
