@@ -289,7 +289,6 @@ public class ExpenseService {
         }
 
         Expense newExpense = new Expense();
-
         newExpense.setId(expenseId);
         newExpense.setAmount(expense.getAmount());
         newExpense.setOwers(oldExpense.getOwers());
@@ -304,7 +303,6 @@ public class ExpenseService {
                 event,
                 newExpense,
                 -oldExpense.getAmount());
-
         newExpense.setOwers(expense.getOwers());
         Expense realUpdatedExpense = balancing(expense, event, newExpense, expense.getAmount());
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)

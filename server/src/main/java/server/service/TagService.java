@@ -33,7 +33,12 @@ public class TagService {
      * @param eventId the eventId
      * @return The new Tag
      */
-    public ResponseEntity<Tag> createTag(Tag tag, long eventId){
+    public ResponseEntity<Tag> createTag(Tag tag, long eventId) {
+        if (tag.getName() == null || tag.getName().isBlank()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "400: Some required values may be null or empty");
+            return ResponseEntity.badRequest().build();
+        }
         if (!eventRepository.findById(eventId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "404: Event not found via 'createTag'");
@@ -135,6 +140,11 @@ public class TagService {
      * @return The updated tag
      */
     public ResponseEntity<Tag> updateTag(Long eventId, Tag newTag, Long id){
+        if (newTag.getName() == null || newTag.getName().isBlank()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "400: Some required values may be null or empty");
+            return ResponseEntity.badRequest().build();
+        }
         if (!eventRepository.findById(eventId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "404: Event not found via 'updateTag'");
