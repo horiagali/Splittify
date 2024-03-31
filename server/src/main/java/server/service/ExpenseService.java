@@ -71,6 +71,7 @@ public class ExpenseService {
         newExpense.setTag(tag);
         newExpense.setTitle(expense.getTitle());
         newExpense.setEvent(event);
+        newExpense.setDate(expense.getDate());
         newExpense.toString();
         Expense saved = balancing(expense, event, newExpense, expense.getAmount());
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
@@ -286,6 +287,7 @@ public class ExpenseService {
         Tag tag = tagRepository
                 .findById(expense.getTag().getId()).orElse(null);
         newExpense.setTag(tag);
+        newExpense.setDate(expense.getDate());
         newExpense.setTitle(expense.getTitle());
         newExpense.setEvent(event);
 

@@ -26,6 +26,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
@@ -403,7 +404,12 @@ public class OverviewCtrl implements Initializable {
         Label label = new Label(expense.getTitle());
         label.setFont(Font.font(20));
         label.setAlignment(Pos.CENTER);
-        Label date = new Label("DATE HERE");
+        label.setMaxWidth(150);
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+        var dateInString = ft.format(expense.getDate());
+        Label date = new Label(dateInString);
+        
+        System.out.println(date);
         date.setMaxWidth(80);
         Button tag = new Button(expense.getTag().getName());
         
