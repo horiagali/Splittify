@@ -413,7 +413,10 @@ public class EditExpenseCtrl implements Initializable {
         try {
             date = Date.from(datePicker.getValue().atStartOfDay
                     (ZoneId.systemDefault()).toInstant());
-        } catch (Exception e) {showErrorDialog("Please select a valid date!");}
+        } catch (Exception e) {
+            showErrorDialog("Please select a valid date!");
+            return;
+        }
 
         System.out.println(expense);
         setExpense(title, amount, date, payer, selectedParticipants, selectedTag);

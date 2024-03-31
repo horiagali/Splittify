@@ -78,7 +78,7 @@
             </Text>
             <Button layoutX="612.0" layoutY="536.0" mnemonicParsing="false" onAction="#goToAreYouSure" prefHeight="28.0" prefWidth="90.0" text="Delete Event" />
       
-            <Button layoutX="657.0" layoutY="13.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="54.0" text="Back" />
+            <Button layoutX="657.0" layoutY="13.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="54.0" text="Back" fx:id="backButton"/>
             <Text layoutX="335.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" wrappingWidth="68.07281494140625">
                <font>
                   <Font size="16.0" />
