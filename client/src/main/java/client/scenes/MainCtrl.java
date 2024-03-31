@@ -340,7 +340,9 @@ public class MainCtrl {
      */
     public void goToOverview() {
         primaryStage.setTitle("Overview");
+        overviewAppCtrl.resetComboBoxes();
         primaryStage.setScene(overviewApp);
+        
         overviewAppCtrl.refresh();
 
     }
@@ -382,7 +384,9 @@ public class MainCtrl {
     public void showEventOverview(Event selectedEvent) {
         primaryStage.setTitle(selectedEvent.getTitle());
         primaryStage.setScene(overviewApp);
+        overviewAppCtrl.resetComboBoxes();
         overviewAppCtrl.displayEvent(selectedEvent);
+        
         overviewAppCtrl.refresh();
 
     }

@@ -316,6 +316,15 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
+     * resets comboboxes to 'anyone' state
+     */
+    public void resetComboBoxes() {
+        System.out.println("reset");
+        payer.setValue("anyone");
+        ower.setValue("anyone");
+    }
+
+    /**
      * loads all expenses into event overview
      */
     public void loadExpenses() {
