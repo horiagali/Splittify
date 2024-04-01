@@ -31,9 +31,7 @@ import java.util.function.Consumer;
 
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -250,17 +248,29 @@ public class ServerUtils {
 	}
 
 	/**
-	 * 
-	 * @param event
-	 * @return event that is added (as quote for now)
+	 * Add an event to the database
+	 * @param event The event to be added
+	 * @return The added event
 	 */
 	public Event addEvent(Event event) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/events")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
+		String url = server + "api/events";
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<Event> requestEntity = new HttpEntity<>(event, headers);
+
+		ResponseEntity<Event> responseEntity =
+				restTemplate.postForEntity(url, requestEntity, Event.class);
+
+		if (responseEntity.getStatusCode() == HttpStatus.CREATED) {
+			return responseEntity.getBody();
+		} else {
+			throw new RuntimeException("Failed to add event. Status code: "
+					+ responseEntity.getStatusCodeValue());
+		}
 	}
+
 
 	/**
 	 * Retrieves all nicknames of participants of an event.
