@@ -22,7 +22,7 @@ public class TagService {
      * @param tagRepository a TagRepository
      * @param eventRepository a eventRepository
      */
-    protected TagService(TagRepository tagRepository, EventRepository eventRepository){
+    public TagService(TagRepository tagRepository, EventRepository eventRepository){
         this.tagRepository = tagRepository;
         this.eventRepository = eventRepository;
     }
