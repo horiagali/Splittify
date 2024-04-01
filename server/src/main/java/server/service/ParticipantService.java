@@ -38,6 +38,11 @@ public class ParticipantService {
      */
     @Transactional
     public ResponseEntity<Participant> createParticipant(Long eventId, Participant participant) {
+        if (participant.getNickname() == null || participant.getNickname().isBlank()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "400: Some required values may be null or empty");
+            return ResponseEntity.badRequest().build();
+        }
         if (!eventRepository.findById(eventId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "404: Event not found via 'createParticipant'");
@@ -131,6 +136,11 @@ public class ParticipantService {
     public ResponseEntity<Participant> updateParticipant(Long eventId,
                                                          Long participantId,
                                                          Participant changeParticipant) {
+        if (changeParticipant.getNickname() == null || changeParticipant.getNickname().isBlank()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "400: Some required values may be null or empty");
+            return ResponseEntity.badRequest().build();
+        }
 
         if (!eventRepository.findById(eventId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
