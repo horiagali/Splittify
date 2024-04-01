@@ -99,6 +99,7 @@ public class EditExpenseCtrl implements Initializable {
     }
 
     private void loadExpense() {
+        selectedParticipants.clear();
         payerComboBox.getSelectionModel().select(expense.getPayer());
         purposeTextField.setText(expense.getTitle());
         tagComboBox.getSelectionModel().select(expense.getTag());
@@ -115,6 +116,11 @@ public class EditExpenseCtrl implements Initializable {
             if(expense.getOwers().stream()
             .map(Participant::getNickname).toList().contains(checkBox.getText())) {
                 checkBox.setSelected(true);
+                Participant part = server
+                .getParticipantByNickname(event.getId(), checkBox.getText());
+                if(!selectedParticipants.contains(part))
+                selectedParticipants.add(part);
+                System.out.println("participant " + checkBox.getText() + " added");
             }
         }
     }
@@ -515,10 +521,8 @@ public class EditExpenseCtrl implements Initializable {
      * Navigates back to the overview screen.
      */
     public void back() {
-        // refreshUI();
-        // mainCtrl.goToOverview();
-        // call it twice because css will complain (most likely because this was entered
-        // through an OnClick action)
+        refreshUI();
+        selectedParticipants.clear();
         mainCtrl.goToOverview();
     }
 
