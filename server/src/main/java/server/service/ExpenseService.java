@@ -13,6 +13,7 @@ import server.database.TagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -77,6 +78,7 @@ public class ExpenseService {
         newExpense.setTitle(expense.getTitle());
         newExpense.setEvent(event);
         newExpense.setDate(expense.getDate());
+        newExpense.setPayer(expense.getPayer());
         newExpense.toString();
         Expense saved = balancing(expense, event, newExpense, expense.getAmount());
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
