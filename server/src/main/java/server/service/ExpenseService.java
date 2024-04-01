@@ -56,6 +56,11 @@ public class ExpenseService {
      * @return expense
      */
     public ResponseEntity<Expense> createExpense(Long eventId, Expense expense) {
+        if (expense.getTitle() == null || expense.getTitle().isBlank()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "400: Some required values may be null or empty");
+            return ResponseEntity.badRequest().build();
+        }
         if (!eventRepository.findById(eventId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "404: Event not found via 'createExpense'");
@@ -256,6 +261,11 @@ public class ExpenseService {
     public ResponseEntity<Expense> updateExpense(Long eventId,
                                                  Long expenseId,
                                                  Expense expense) {
+        if (expense.getTitle() == null || expense.getTitle().isBlank()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "400: Some required values may be null or empty");
+            return ResponseEntity.badRequest().build();
+        }
                                                         
         if (!eventRepository.findById(eventId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
@@ -280,7 +290,6 @@ public class ExpenseService {
         }
 
         Expense newExpense = new Expense();
-
         newExpense.setId(expenseId);
         newExpense.setAmount(expense.getAmount());
         newExpense.setOwers(oldExpense.getOwers());
@@ -296,7 +305,6 @@ public class ExpenseService {
                 event,
                 newExpense,
                 -oldExpense.getAmount());
-
         newExpense.setOwers(expense.getOwers());
         Expense realUpdatedExpense = balancing(expense, event, newExpense, expense.getAmount());
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)

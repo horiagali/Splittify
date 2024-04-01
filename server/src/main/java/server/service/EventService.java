@@ -35,6 +35,11 @@ public class EventService {
      * @return the new Event
      */
     public ResponseEntity<Event> createEvent(Event event){
+        if (event.getTitle() == null || event.getTitle().isBlank()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "400: Some required values may be null or empty");
+            return ResponseEntity.badRequest().build();
+        }
         Event saved = eventRepository.save(new Event(
                 event.getTitle(),
                 event.getDescription(),
@@ -104,6 +109,12 @@ public class EventService {
      * @return the new event
      */
     public ResponseEntity<Event> updateEvent(Event event, Long id){
+        if (event.getTitle() == null || event.getTitle().isBlank()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "400: Some required values may be null or empty");
+            return ResponseEntity.badRequest().build();
+        }
+
         if (!eventRepository.findById(id).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "404: Event not found via 'updateEvent'");
