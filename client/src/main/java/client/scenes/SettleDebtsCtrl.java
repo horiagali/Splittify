@@ -123,9 +123,22 @@ public class SettleDebtsCtrl implements Initializable {
             private final Button actionButton = new Button("Mark Received");
             {
                 actionButton.setOnAction(myevent -> {
-                    Expense currentExpense = getTableView().getItems().get(getIndex());
-                    server.deleteExpenseDebt(event.getId(), currentExpense);
-                    refresh();
+                    Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+                    confirmationDialog.setTitle("Confirmation");
+                    confirmationDialog.setHeaderText("Are you sure you want" +
+                            " to mark this payment as received?");
+                    confirmationDialog.setContentText("This action cannot be undone");
+
+                    confirmationDialog.showAndWait().ifPresent(response -> {
+                        if (response == ButtonType.OK) {
+                            back();
+                            Expense currentExpense = getTableView().getItems().get(getIndex());
+                            server.deleteExpenseDebt(event.getId(), currentExpense);
+                            refresh();
+                        } else {
+                            System.out.println("Settling of debts canceled.");
+                        }
+                    });
                 });
             }
             @Override
