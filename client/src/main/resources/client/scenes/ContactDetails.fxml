@@ -88,7 +88,7 @@
                         <TextField fx:id="nameField" promptText="Enter Name" />
                      </children>
                   </HBox>
-                  <HBox fx:id="emal" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                  <HBox fx:id="email" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" />
                         <TextField fx:id="emailField" promptText="Enter Email" />
@@ -96,7 +96,7 @@
                   </HBox>
                   <HBox fx:id="iban" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="IBAN:" wrappingWidth="31.32647681236267" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="IBAN:" />
                         <TextField fx:id="ibanField" promptText="Enter IBAN" />
                      </children>
                   </HBox>
@@ -109,7 +109,9 @@
                </children>
             </VBox>
             <Button layoutX="500.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToEventOverview" text="Back" />
-            <Button layoutX="288.0" layoutY="325.0" mnemonicParsing="false" onAction="#ok" text="Add" />
+            <Button fx:id="addButton" layoutX="288.0" layoutY="325.0" mnemonicParsing="false" onAction="#ok" text="Add" />
+            <Button fx:id="updateButton" disable="true" layoutX="351.0" layoutY="325.0" mnemonicParsing="false" onAction="#updateParticipant" opacity="0.0" text="Update" />
+            <Button fx:id="deleteButton" disable="true" layoutX="252.0" layoutY="325.0" mnemonicParsing="false" onAction="#deleteParticipant" opacity="0.0" text="Delete" />
          </children>
          <effect>
             <Blend />

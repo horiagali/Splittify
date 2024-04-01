@@ -124,8 +124,6 @@ public class Main extends Application {
         var adminPass = FXML.load(AdminPassCtrl.class, "client", "scenes", "AdminPass.fxml");
         var addEvent = FXML.load(AddEventCtrl.class, "client", "scenes", "AddEventPage.fxml");
         var balances = FXML.load(BalancesCtrl.class, "client", "scenes", "Balances.fxml");
-        var editParticipant = FXML.load(EditParticipantCtrl.class,
-                "client", "scenes", "EditParticipant.fxml");
 
         var debts = FXML.load(SettleDebtsCtrl.class, "client", "scenes", "SettleDebts.fxml");
         var statistics = FXML.load(StatisticsCtrl.class, "client", "scenes", "Statistics.fxml");
@@ -134,7 +132,7 @@ public class Main extends Application {
         var tagOverview = FXML.load(TagOverviewCtrl.class, "client", "scenes", "TagOverview.fxml");
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, editExpense,
         contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, balances, 
-        editParticipant,serverSetter, config.getLanguage(),  statistics, debts, tagOverview, this);
+        serverSetter, config.getLanguage(),  statistics, debts, tagOverview, this);
 
         primaryStage.setOnCloseRequest(e -> {
             adminPage.getKey().stop();
