@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class EventServiceTest {
@@ -83,23 +84,6 @@ class EventServiceTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    /**
-     * a getter by id for an event
-     * @param id an Integer
-     * @return the found Event
-     */
-    public ResponseEntity<Event> getEventById(Long id) {
-        if (!eventRepository.findById(id).isPresent()) {
-            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                    .log(Level.WARNING, "404: Event not found via 'getEventById'");
-            return ResponseEntity.notFound().build();
-        }
-        Event found = eventRepository.findById(id).get();
-        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                .log(Level.INFO, "Event requested: "+found);
-        return ResponseEntity.ok(found);
-    }
-
     @Test
     void testGetEventById() {
         Event event1 = new Event("Test Event", "Description", "Location", null);
@@ -109,5 +93,17 @@ class EventServiceTest {
         ResponseEntity<Event> response = eventService.getEventById(1L);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(event1, response.getBody());
+    }
+
+    @Test
+    void testGetEventById_NotFound() {
+        Long id = 1L;
+
+        when(eventRepository.findById(id)).thenReturn(Optional.empty());
+
+        ResponseEntity<Event> response = eventService.getEventById(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
     }
 }
