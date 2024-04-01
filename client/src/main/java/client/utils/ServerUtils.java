@@ -29,6 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 import org.springframework.http.HttpEntity;
@@ -63,6 +64,7 @@ public class ServerUtils {
 	public static String server = "http://localhost:8080/";
 	public static String serverPort = server.replace("http://", "");
 	private StompSession session;
+	private Client client;
 	private static final ExecutorService EXEC = Executors.newSingleThreadExecutor();
 
 	/**
@@ -547,5 +549,14 @@ public class ServerUtils {
 						"/expenses/" + expense.getId())
 				.request()
 				.delete();
+	}
+
+	/**
+	 * Sets the JAX-RS client to be used by this utility.
+	 *
+	 * @param client the JAX-RS client to be set
+	 */
+	public void setClient(Client client) {
+		this.client = client;
 	}
 }
