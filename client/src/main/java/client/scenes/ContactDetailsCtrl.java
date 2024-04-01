@@ -151,8 +151,19 @@ public class ContactDetailsCtrl implements Initializable {
      */
     public void updateParticipant() {
         String newNickname = nameField.getText();
-        if(!newNickname.equals(""))
-        participant.setNickname(newNickname);
+        if(!newNickname.equals("")) {
+            List<String> nicknames = server.getParticipants(eventId).stream()
+            .map(x -> x.getNickname()).toList();
+            if(nicknames.contains(newNickname) && !participant.getNickname().equals(newNickname)) {
+                showAlert(AlertType.ERROR, "Error", "There is already" +
+                " a participant with this name in this event", "Please enter another name.");
+                return;
+            }
+            participant.setNickname(newNickname);
+        }
+        
+        
+        
 
         String newEmail = emailField.getText();
         if(!newEmail.equals(""))
@@ -271,6 +282,12 @@ public class ContactDetailsCtrl implements Initializable {
 
     public void ok() {
         String name = nameField.getText();
+        if(server.getParticipants(eventId).stream()
+        .map(x -> x.getNickname()).toList().contains(name)) {
+            showAlert(AlertType.ERROR, "Error", "There is already" +
+            " a participant with this name in this event", "Please enter another name.");
+            return;
+        }
         String email = emailField.getText();
         String iban = ibanField.getText();
         String bic = bicField.getText();
