@@ -144,8 +144,6 @@
                     <TableColumn fx:id="colDate" prefWidth="344.0" text="Event date" />
                 </columns>
             </TableView>
-            <Button fx:id="downloadJsonButton" layoutX="390.0" layoutY="240.0" mnemonicParsing="false" onAction="#downloadJson" text="Download JSON" />
-            <Button fx:id="importJsonButton" layoutX="500.0" layoutY="240.0" mnemonicParsing="false" onAction="#importJson" text="Import JSON" />
              <Button fx:id="adminButton" layoutX="274.0" layoutY="240.0" mnemonicParsing="false" onAction="#goToAdminPass" text="Admin" />
         </children>
     </AnchorPane>
