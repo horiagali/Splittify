@@ -87,6 +87,7 @@ public class MainPageCtrl implements Initializable {
         Mail mail = new Mail("ooppteam56@gmail.com","Testing the credentials", "The provided" +
                 "email works as expected!");
         server.sendEmail(mail);
+
     }
 
     /**
