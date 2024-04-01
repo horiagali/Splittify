@@ -206,7 +206,11 @@ public class ContactDetailsCtrl implements Initializable {
                 .filter(x -> x.getOwers().contains(participant)).toList();
                 for(Expense expenseToUpdate : expensesWithParticipantAsOwer) {
                     expenseToUpdate.getOwers().remove(participant);
-                    server.updateExpense(eventId, expenseToUpdate);
+                    if(expenseToUpdate.getOwers().size() == 0) {
+                        server.deleteExpense(eventId, expenseToUpdate);
+                    } else{
+                        server.updateExpense(eventId, expenseToUpdate);
+                    }
                 }
                 
                 server.deleteParticipant(eventId, participant);
