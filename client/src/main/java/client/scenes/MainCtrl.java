@@ -67,8 +67,6 @@ public class MainCtrl {
     private Scene tagOverview;
     private TagOverviewCtrl tagOverviewCtrl;
 
-    private Scene editParticipant;
-    private EditParticipantCtrl editParticipantCtrl;
     private Scene serverSetter;
     private ServerSetterCtrl serverSetterCtrl;
     Pair<ServerSetterCtrl, Parent> serverPair;
@@ -106,7 +104,6 @@ public class MainCtrl {
      * @param language
      * @param addEvent
      * @param balances
-     * @param editParticipant
      * @param serverSetter2
      * @param statistics
      * @param debtsCtrlParentPair
@@ -126,7 +123,6 @@ public class MainCtrl {
                            Pair<AdminPassCtrl, Parent> adminPass,
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
-                           Pair<EditParticipantCtrl,Parent> editParticipant,
                            Pair<ServerSetterCtrl, Parent> serverSetter2, String language,
                            Pair<StatisticsCtrl, Parent> statistics,
                            Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair,
@@ -178,9 +174,6 @@ public class MainCtrl {
         adminPass.getKey().updateUIWithNewLanguage();
         this.adminPassCtrl = adminPass.getKey();
         this.adminPass = new Scene(adminPass.getValue());
-
-        this.editParticipantCtrl = editParticipant.getKey();
-        this.editParticipant = new Scene(editParticipant.getValue());
 
         this.balancesCtrl = balances.getKey();
         this.balances = new Scene(balances.getValue());
@@ -332,6 +325,17 @@ public class MainCtrl {
      */
     public void goToContact() {
         primaryStage.setTitle("Contact Details");
+        contactDetailsCtrl.loadInfo(null);
+        primaryStage.setScene(contactDetails);
+    }
+
+     /**
+     * go to Contact details but instead get the update view
+     * @param participant
+     */
+    public void goToContact(Participant participant) {
+        primaryStage.setTitle("Contact Details");
+        contactDetailsCtrl.loadInfo(participant);
         primaryStage.setScene(contactDetails);
     }
 
@@ -347,21 +351,6 @@ public class MainCtrl {
         
 
     }
-
-    /**
-     * Navigates to the Edit Participant page.
-     * @param participant The participant to be edited.
-     * @param event the event the participant belongs to
-     */
-    public void goToEditParticipant(Participant participant, Event event) {
-        primaryStage.setTitle("Edit Participant");
-        primaryStage.setScene(editParticipant);
-        EditParticipantCtrl.setParticipant(participant);
-        EditParticipantCtrl.setEvent(event);
-        editParticipantCtrl.displayParticipantDetails();
-    }
-
-
 
     /**
      * send invites
@@ -420,6 +409,7 @@ public class MainCtrl {
         primaryStage.setTitle("Balances page");
         balancesCtrl.setEvent(event);
         primaryStage.setScene(balances);
+        balancesCtrl.refresh();
     }
 
     /**
@@ -450,8 +440,11 @@ public class MainCtrl {
     public void goToSettleDebts(Event event, List<Expense> expenses) {
         primaryStage.setTitle("Open Debts page");
         debtsCtrl.setEvent(event);
-        debtsCtrl.setExpenses(expenses);
+        List<Expense> debtExpense = expenses.stream()
+                        .filter(x->x.getTag().getName().equals("debt")).toList();
+        debtsCtrl.setExpenses(debtExpense);
         primaryStage.setScene(debts);
+        debtsCtrl.refresh();
     }
 
     /**

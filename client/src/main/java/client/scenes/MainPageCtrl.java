@@ -3,8 +3,7 @@ package client.scenes;
 import client.Main;
 import client.utils.Currency;
 import client.utils.ServerUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.google.inject.Inject;
 import commons.Event;
 import commons.Mail;
@@ -163,7 +162,11 @@ public class MainPageCtrl implements Initializable {
         try {
             Long eventCode = Long.parseLong(joinEventCode.getText());
             try {
-                mainCtrl.showEventOverview(server.getEvent(eventCode));
+                if (!server.getEvent(eventCode).isClosed())
+                    mainCtrl.showEventOverview(server.getEvent(eventCode));
+                else
+                    mainCtrl.goToSettleDebts(server.getEvent(eventCode),
+                            server.getExpensesByEventId(eventCode));
             } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -248,92 +251,16 @@ public class MainPageCtrl implements Initializable {
                     return;
                 }
                 OverviewCtrl.setSelectedEvent(selectedEvent);
-                mainCtrl.showEventOverview(selectedEvent);
+                if (!selectedEvent.isClosed())
+                    mainCtrl.showEventOverview(selectedEvent);
+                else
+                    mainCtrl.goToSettleDebts(selectedEvent,
+                            server.getExpensesByEventId(selectedEvent.getId()));
             }
         }
     }
 
-    /**
-     * call the download of the json of the selected event
-     * @param event
-     */
-    @FXML
-    private void downloadJson(ActionEvent event) {
-        Event selectedEvent = table.getSelectionModel().getSelectedItem();
-        if (selectedEvent != null) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                String json = objectMapper.writeValueAsString(selectedEvent);
 
-                downloadJsonFile(json);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setHeaderText(null);
-            alert.setContentText("Please select an event to download JSON.");
-            alert.showAndWait();
-        }
-    }
-
-    /**
-     * imports an event from a json file
-     * @param event
-     */
-    @FXML
-    private void importJson(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Import JSON File");
-        fileChooser.getExtensionFilters()
-                .add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
-        File file = fileChooser.showOpenDialog(table.getScene().getWindow());
-
-        if (file != null) {
-            try {
-                ObjectMapper objectMapper = new ObjectMapper();
-                Event importedEvent = objectMapper.readValue(file, Event.class);
-
-                try {
-                    server.addEvent(importedEvent);
-                } catch (WebApplicationException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                refresh();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        refresh();
-    }
-
-
-
-    /**
-     * acually downloads the json
-     * @param json
-     */
-    private void downloadJsonFile(String json) {
-        // You can use JavaFX FileChooser to choose where to save the file
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save JSON File");
-        fileChooser.getExtensionFilters()
-                .add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
-        File file = fileChooser.showSaveDialog(table.getScene().getWindow());
-
-        if (file != null) {
-            try {
-                FileWriter fileWriter = new FileWriter(file);
-                fileWriter.write(json);
-                fileWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
 
 
@@ -417,10 +344,8 @@ public class MainPageCtrl implements Initializable {
         RadioMenuItem selectedCurrencyItem = (RadioMenuItem) event.getSource();
         String currency = selectedCurrencyItem.getText();
 
-        // Set the selected currency as the currency used for exchange rates
         Currency.setCurrencyUsed(currency.toUpperCase());
 
-        // Print confirmation message
         System.out.println("Currency changed to: " + currency);
     }
 

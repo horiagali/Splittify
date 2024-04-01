@@ -86,6 +86,19 @@ public class ExpenseController {
     }
 
     /**
+     * Creates an expense debt
+     * @param eventId event where the expense is supposed to be created in
+     * @param expense the expense that needs to be created
+     * @return expense
+     */
+    @PostMapping("/debt")
+    @ResponseBody
+    public ResponseEntity<Expense> createExpenseDebt(@PathVariable(name = "event_id")Long eventId,
+                                                 @RequestBody Expense expense) {
+        return expenseService.createExpenseDebt(eventId, expense);
+    }
+
+    /**
      * updates an expense
      * @param eventId event the expense belongs to
      * @param expenseId id of expense
@@ -108,6 +121,18 @@ public class ExpenseController {
     public ResponseEntity<Expense> delete(@PathVariable(name = "event_id") Long eventId, 
     @PathVariable(name = "expense_id") Long expenseId) {
         return expenseService.deleteExpense(eventId, expenseId);
+    }
+
+    /**
+     * deletes an expense.
+     * @param eventId id of event this expense belongs to,
+     * @param expenseId id of expense that needs to be deleted
+     * @return expense
+     */
+    @DeleteMapping("/debt/{expense_id}")
+    public ResponseEntity<Expense> deleteDebt(@PathVariable(name = "event_id") Long eventId,
+                                          @PathVariable(name = "expense_id") Long expenseId) {
+        return expenseService.deleteExpenseDebt(eventId, expenseId);
     }
 }
 
