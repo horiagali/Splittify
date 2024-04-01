@@ -102,7 +102,7 @@ public class StatisticsCtrl {
     private void createData(List<Expense> expenses, List<Tag> tags) {
         //method to group all expenses on tag and get their total amount
         for(Tag tag : tags) {
-            if(tag.getName().equals("gifting money"))
+            if(tag.getName().equals("gifting money") || tag.getName().equals("debt"))
             continue;
             double amount = expenses.stream().filter(x -> x.getTag().equals(tag))
             .mapToDouble(x  -> (int) x.getAmount()).sum();
@@ -230,6 +230,9 @@ public class StatisticsCtrl {
      * back button
      */
     public void back(){
+        if (!event.isClosed())
         mainCtrl.goToOverview();
+        else
+            mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
     }
 }
