@@ -16,6 +16,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.Locale;
@@ -41,6 +43,19 @@ public class ContactDetailsCtrl implements Initializable {
     private Menu languageMenu;
     @FXML
     private ToggleGroup currencyGroup;
+    @FXML
+    Text title;
+    @FXML
+    HBox name;
+    @FXML
+    HBox email;
+    @FXML
+    HBox iban;
+    @FXML
+    HBox bic;
+
+
+    private Participant participant;
 
     /**
      *
@@ -66,6 +81,19 @@ public class ContactDetailsCtrl implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addKeyboardNavigationHandlers();
+    }
+
+    /**
+     * loads the info of the participant, if part = null the you create, if not null you update
+     * @param participant
+     */
+    public void loadInfo(Participant participant) {
+            title.setText("Edit Participant");
+            Text participantName = (Text) name.getChildren().get(0);
+            participantName.setText(participantName.getText() + " " + participant.getNickname());
+            TextField newParticipantName = (TextField) name.getChildren().get(1);
+            newParticipantName.setPromptText("Enter new Name");
+            // name.getChildren().set(0, participantName);
     }
 
     /**

@@ -335,6 +335,16 @@ public class MainCtrl {
         primaryStage.setScene(contactDetails);
     }
 
+     /**
+     * go to Contact details but instead get the update view
+     * @param participant
+     */
+    public void goToContact(Participant participant) {
+        primaryStage.setTitle("Contact Details");
+        contactDetailsCtrl.loadInfo(participant);
+        primaryStage.setScene(contactDetails);
+    }
+
 
     /**
      *
