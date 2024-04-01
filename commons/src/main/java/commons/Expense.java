@@ -269,6 +269,7 @@ public class Expense {
     @Override
     public String toString() {
         String owersList = owers != null ? owers.toString() : null;
+        String payerName = payer != null ? payer.toString() : null;
 
         return "Expense{" +
                 " id=" + id + "\n" +
