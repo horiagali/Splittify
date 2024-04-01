@@ -103,9 +103,15 @@
                     </columns>
                 </TableView>
             </children>
-            <Button fx:id="backButton" layoutX="346.0" layoutY="350.0" onAction="#goBack" mnemonicParsing="false"
-                    text="Back"/>
+            <VBox layoutX="346.0" layoutY="360.0" spacing="10">
+                <HBox spacing="10">
+                    <Button fx:id="backButton" onAction="#goBack" mnemonicParsing="false" text="Back"/>
+                    <Button fx:id="downloadJsonButton" mnemonicParsing="false" onAction="#downloadJson" text="Download JSON" />
+                    <Button fx:id="importJsonButton" mnemonicParsing="false" onAction="#importJson" text="Import JSON" />
+                    <Button fx:id="refreshButton"  mnemonicParsing="false" onAction="#refresh" text="Refresh" />
 
+                </HBox>
+            </VBox>
         </AnchorPane>
         <AnchorPane prefHeight="200.0" prefWidth="200.0"/>
     </children>

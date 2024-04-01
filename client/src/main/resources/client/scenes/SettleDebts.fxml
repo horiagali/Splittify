@@ -23,5 +23,6 @@
          </font>
       </Text>
       <Button layoutX="449.0" layoutY="354.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+      <Button layoutX="370.0" layoutY="354.0" mnemonicParsing="false" onAction="#goToStatistics" text="Statistics" />
    </children>
 </AnchorPane>
