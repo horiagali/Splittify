@@ -265,20 +265,17 @@ public class ExpenseService {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "400: Some required values may be null or empty");
             return ResponseEntity.badRequest().build();
-        }
-                                                        
+        }                                  
         if (!eventRepository.findById(eventId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "404: Event not found via 'updateExpense'");
             return ResponseEntity.notFound().build();
         }
-
         if (!expenseRepository.findById(expenseId).isPresent()) {
             Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                     .log(Level.WARNING, "404: Expense not found via 'updateExpense'");
             return ResponseEntity.notFound().build();
         }
-
         Event event = eventRepository.findById(eventId).get();
         Expense oldExpense = expenseRepository.findById(expenseId).get();
 
@@ -288,7 +285,6 @@ public class ExpenseService {
                             "404: Expense does not belong to event via 'updateExpense'");
             return ResponseEntity.notFound().build();
         }
-
         Expense newExpense = new Expense();
         newExpense.setId(expenseId);
         newExpense.setAmount(expense.getAmount());
