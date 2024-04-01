@@ -49,9 +49,11 @@ public class ServerUtilsTest {
     @BeforeEach
     public void setUp() throws IOException, InterruptedException {
         MockitoAnnotations.openMocks(this);
-        serverUtils = new ServerUtils(); // Initialize only once
+        restTemplate = mock(RestTemplate.class);
+        serverUtils = new ServerUtils();
         serverUtils.setClient(clientMock);
-        serverUtils.setRestTemplate(restTemplate); // Inject the mocked RestTemplate
+        serverUtils.setRestTemplate(restTemplate);
+
 
         when(clientMock.target(anyString())).thenReturn(webTargetMock);
         when(webTargetMock.request()).thenReturn(builderMock);
