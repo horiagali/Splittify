@@ -106,4 +106,77 @@ class EventServiceTest {
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertNull(response.getBody());
     }
+
+    @Test
+    void testDeleteEvent() {
+        Long id = 1L;
+        Event eventToDelete = new Event();
+        eventToDelete.setId(id);
+
+        when(eventRepository.findById(id)).thenReturn(Optional.of(eventToDelete));
+
+        ResponseEntity<Event> response = eventService.deleteEvent(id);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(eventToDelete, response.getBody());
+
+        verify(eventRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void testDeleteEvent_NotFound() {
+        Long id = 1L;
+        when(eventRepository.findById(id)).thenReturn(Optional.empty());
+
+        ResponseEntity<Event> response = eventService.deleteEvent(id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    void testUpdateEvent() {
+        Long id = 1L;
+        Event existingEvent = new Event();
+        existingEvent.setId(id);
+
+        Event updatedEvent = new Event("Updated Title", "Updated Description", "Updated Location", null);
+        updatedEvent.setId(id);
+
+        when(eventRepository.findById(id)).thenReturn(Optional.of(existingEvent));
+        when(eventRepository.save(any(Event.class))).thenReturn(updatedEvent);
+
+        ResponseEntity<Event> response = eventService.updateEvent(updatedEvent, id);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(updatedEvent, response.getBody());
+    }
+
+    @Test
+    void testUpdateEvent_NotFound() {
+        Long id = 1L;
+        Event updatedEvent = new Event("Updated Title", "Updated Description", "Updated Location", null);
+        updatedEvent.setId(id);
+
+        when(eventRepository.findById(id)).thenReturn(Optional.empty());
+        ResponseEntity<Event> response = eventService.updateEvent(updatedEvent, id);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
+    void testUpdateEvent_InvalidTitle() {
+        Long id = 1L;
+        Event existingEvent = new Event();
+        existingEvent.setId(id);
+
+        Event updatedEvent = new Event();
+
+        when(eventRepository.findById(id)).thenReturn(Optional.of(existingEvent));
+        ResponseEntity<Event> response = eventService.updateEvent(updatedEvent, id);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNull(response.getBody());
+    }
 }
