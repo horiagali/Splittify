@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
@@ -412,10 +413,16 @@ public class OverviewCtrl implements Initializable {
         .filter(x -> x.getOwers().contains(owerOfExpense)).toList();
         }
         if(tagBox != null && !tagBox.equals("any tag")) {
-            Tag selectedTag = server.getTags(selectedEvent.getId())
-            .stream().filter(x -> x.getName().equals(tagBox)).findFirst().get();
-            expenses = expenses.stream().filter(x -> x.getTag().equals(selectedTag))
-            .toList();
+            Optional<Tag> selectedTag = server.getTags(selectedEvent.getId())
+            .stream().filter(x -> x.getName().equals(tagBox)).findFirst();
+            if(!selectedTag.isEmpty()) {
+                Tag actualTag = selectedTag.get();
+                expenses = expenses.stream().filter(x -> x.getTag().equals(actualTag))
+                .toList();
+            } else {
+                System.out.println("No tag with name " + tagBox + " was found!");
+            }
+            
         }
         return expenses;
     }
