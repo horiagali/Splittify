@@ -171,4 +171,11 @@ public class SettleDebtsCtrl implements Initializable {
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
     }
+
+    /**
+     * go to statistics page
+     */
+    public void goToStatistics(){
+        mainCtrl.goToStatistics(event);
+    }
 }
