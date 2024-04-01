@@ -415,7 +415,8 @@ public class EditExpenseCtrl implements Initializable {
         }
 
         if (selectedParticipants.isEmpty()) {
-            selectedParticipants = expense.getOwers();
+            showErrorDialog("Please select at least one participant to split the cost.");
+            return;
         }
 
         Date date = null;
