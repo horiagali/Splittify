@@ -124,8 +124,8 @@ public class SettleDebtsCtrl implements Initializable {
             {
                 actionButton.setOnAction(myevent -> {
                     Expense currentExpense = getTableView().getItems().get(getIndex());
-                    getTableView().getItems().remove(currentExpense);
                     server.deleteExpenseDebt(event.getId(), currentExpense);
+                    refresh();
                 });
             }
             @Override
@@ -145,7 +145,9 @@ public class SettleDebtsCtrl implements Initializable {
      * refresh function
      */
     public void refresh() {
-        data = FXCollections.observableList(expenses);
+        List<Expense> expenses2 = server.getExpensesByEventId(event.getId())
+                .stream().filter(x->x.getTag().getName().equals("debt")).toList();
+        data = FXCollections.observableList(expenses2);
         tableView.setItems(data);
     }
 
