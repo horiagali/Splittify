@@ -387,8 +387,6 @@ public class EditExpenseCtrl implements Initializable {
             showErrorDialog("Please set a title");
             return;
         }
-
-
         double amount;
         try {
             amount = Double.parseDouble(amountTextField.getText());
@@ -411,8 +409,7 @@ public class EditExpenseCtrl implements Initializable {
         }
 
         if (selectedParticipants.isEmpty()) {
-            showErrorDialog("Please select at least one participant to split the cost.");
-            return;
+            selectedParticipants = expense.getOwers();
         }
 
         Date date = null;
