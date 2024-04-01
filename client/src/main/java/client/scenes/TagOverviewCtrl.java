@@ -251,8 +251,10 @@ public class TagOverviewCtrl {
 
         alert.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
-                // Delete the participant from the server
-                List<Expense> list = server.getExpensesByEventId(this.event.getId());
+                // Delete the tag from the server
+                List<Expense> list = server.getExpensesByEventId(this.event.getId()).stream()
+                .filter(x -> x.getTag().getName().equals(tag.getName())).toList();
+                System.out.println(list);
                 for(Expense expense : list) {
                 expense.setTag(server.getTags(this.event.getId()).get(0));
                 server.updateExpense(this.event.getId(), expense);

@@ -163,7 +163,11 @@ public class MainPageCtrl implements Initializable {
         try {
             Long eventCode = Long.parseLong(joinEventCode.getText());
             try {
-                mainCtrl.showEventOverview(server.getEvent(eventCode));
+                if (!server.getEvent(eventCode).isClosed())
+                    mainCtrl.showEventOverview(server.getEvent(eventCode));
+                else
+                    mainCtrl.goToSettleDebts(server.getEvent(eventCode),
+                            server.getExpensesByEventId(eventCode));
             } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -248,7 +252,11 @@ public class MainPageCtrl implements Initializable {
                     return;
                 }
                 OverviewCtrl.setSelectedEvent(selectedEvent);
-                mainCtrl.showEventOverview(selectedEvent);
+                if (!selectedEvent.isClosed())
+                    mainCtrl.showEventOverview(selectedEvent);
+                else
+                    mainCtrl.goToSettleDebts(selectedEvent,
+                            server.getExpensesByEventId(selectedEvent.getId()));
             }
         }
     }

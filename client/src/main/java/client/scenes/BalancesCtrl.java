@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
+import commons.Tag;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -142,8 +143,10 @@ public class BalancesCtrl implements Initializable {
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 back();
+                event.setClosed(true);
+                server.updateEvent(event);
                 letsSettle();
-                mainCtrl.goToSettleDebts(event, expenses);
+                mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
             } else {
                 System.out.println("Settling of debts canceled.");
             }
@@ -153,7 +156,11 @@ public class BalancesCtrl implements Initializable {
     /**
      * lets settle
      */
+    @SuppressWarnings("checkstyle:MethodLength")
     private void letsSettle() {
+        Tag debt = new Tag("debt", null);
+        debt.setEvent(event);
+        debt = server.addTag(event.getId(), debt);
         expenses = new ArrayList<>();
         List<Participant> participants = server.getParticipantsByEventId(event.getId());
         List<Participant> owe = participants.stream()
@@ -179,6 +186,11 @@ public class BalancesCtrl implements Initializable {
                 List<Participant> owed = new ArrayList<>();
                 owed.add(inDepted);expense.setOwers(owed);
                 expense.setAmount(-deptor.getBalance());
+                expense.setDate(event.getDate());
+                expense.setEvent(event);
+                expense.setTitle("debts");
+                expense.setTag(debt);
+                server.addExpenseToEvent(event.getId(), expense);
                 expenses.add(expense);j++;
                 if (inDepted.getBalance() == 0)
                     i++;
@@ -190,6 +202,12 @@ public class BalancesCtrl implements Initializable {
                 List<Participant> owed = new ArrayList<>();
                 owed.add(inDepted);expense.setOwers(owed);
                 expense.setAmount(inDepted.getBalance());
+                expense.setDate(event.getDate());
+                expense.setEvent(event);
+                expense.setTag(debt);
+                expense.setTitle("debts");
+                System.out.println(expense);
+                server.addExpenseToEventDebt(event.getId(), expense);
                 expenses.add(expense);i++;
             }
         }

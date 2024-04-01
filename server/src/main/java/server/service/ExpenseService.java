@@ -357,4 +357,49 @@ public class ExpenseService {
         return ResponseEntity.ok(expense);
     }
 
+    /**
+     * create expense debt
+     * @param eventId eventid
+     * @param expense expense
+     * @return expense
+     */
+    public ResponseEntity<Expense> createExpenseDebt(Long eventId, Expense expense) {
+        if (!eventRepository.findById(eventId).isPresent()) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING, "404: Event not found via 'createExpenseDebt'");
+            return ResponseEntity.notFound().build();
+        }
+        Event event = eventRepository.findById(eventId).get();
+        Expense expenseEntity = new Expense(expense.getTitle(),
+                expense.getAmount(), expense.getDate(),
+                expense.getPayer(), expense.getOwers(), expense.getTag());
+        expenseEntity.setEvent(event);
+        Expense saved = expenseRepository.save(expenseEntity);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Expense created: "+saved);
+        return ResponseEntity.ok(saved);
+    }
+
+    /**
+     * delete
+     * @param eventId
+     * @param expenseId
+     * @return expense
+     */
+    public ResponseEntity<Expense> deleteExpenseDebt(Long eventId, Long expenseId) {
+        Event event = eventRepository.findById(eventId).get();
+        Expense expense = expenseRepository.findById(expenseId).get();
+
+        if(expense.getEvent() != event) {
+            Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                    .log(Level.WARNING,
+                            "404: Expense does not belong to event via 'deleteTag'");
+            return ResponseEntity.notFound().build();
+        }
+
+        expenseRepository.deleteById(expenseId);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+                .log(Level.INFO, "Expense deleted: "+expense);
+        return ResponseEntity.ok(expense);
+    }
 }

@@ -347,7 +347,7 @@ public class OverviewCtrl implements Initializable {
 
                 participantLabel.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-                        mainCtrl.goToEditParticipant(participant, selectedEvent);
+                        mainCtrl.goToContact(participant);
                         expensesBox.getChildren().clear();
                     }
                 });

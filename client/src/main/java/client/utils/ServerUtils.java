@@ -365,9 +365,6 @@ public class ServerUtils {
 		else {
 			return list.get(index);
 		}
-		
-		
-
 	}
 
 	 /**
@@ -568,5 +565,36 @@ public class ServerUtils {
 	 */
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	 /**
+	 * debt expenses
+	 * @param eventId the id
+	 * @param expense
+	 * @return expense
+	 */
+	public Expense addExpenseToEventDebt(Long eventId, Expense expense) {
+		String url = server + "api/events/" + eventId + "/expenses/debt";
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<Expense> requestEntity = new HttpEntity<>(expense, headers);
+
+		return restTemplate.postForObject(url, requestEntity, Expense.class);
+	}
+
+	/**
+	 * deletes a debt expense
+	 * @param eventId eventid
+	 * @param expense expense
+	 */
+	public void deleteExpenseDebt(Long eventId, Expense expense) {
+		ClientBuilder.newClient(new ClientConfig())
+				.target(server)
+				.path("api/events/" + eventId +
+						"/expenses/debt/" + expense.getId())
+				.request()
+				.delete();
 	}
 }
