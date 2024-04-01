@@ -451,7 +451,9 @@ public class MainCtrl {
     public void goToSettleDebts(Event event, List<Expense> expenses) {
         primaryStage.setTitle("Open Debts page");
         debtsCtrl.setEvent(event);
-        debtsCtrl.setExpenses(expenses);
+        List<Expense> debtExpense = expenses.stream()
+                        .filter(x->x.getTag().getName().equals("debt")).toList();
+        debtsCtrl.setExpenses(debtExpense);
         primaryStage.setScene(debts);
         debtsCtrl.refresh();
     }

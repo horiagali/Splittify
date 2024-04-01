@@ -125,8 +125,7 @@ public class SettleDebtsCtrl implements Initializable {
                 actionButton.setOnAction(myevent -> {
                     Expense currentExpense = getTableView().getItems().get(getIndex());
                     getTableView().getItems().remove(currentExpense);
-                    event.getExpenses().remove(currentExpense);
-                    server.updateEvent(event);
+                    server.deleteExpenseDebt(event.getId(), currentExpense);
                 });
             }
             @Override

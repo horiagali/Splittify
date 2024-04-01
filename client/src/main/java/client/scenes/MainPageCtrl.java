@@ -167,7 +167,7 @@ public class MainPageCtrl implements Initializable {
                     mainCtrl.showEventOverview(server.getEvent(eventCode));
                 else
                     mainCtrl.goToSettleDebts(server.getEvent(eventCode),
-                            server.getEvent(eventCode).getExpenses());
+                            server.getExpensesByEventId(eventCode));
             } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -255,7 +255,7 @@ public class MainPageCtrl implements Initializable {
                 if (!selectedEvent.isClosed())
                     mainCtrl.showEventOverview(selectedEvent);
                 else
-                    mainCtrl.goToSettleDebts(selectedEvent, selectedEvent.getExpenses());
+                    mainCtrl.goToSettleDebts(selectedEvent, server.getExpensesByEventId(selectedEvent.getId()));
             }
         }
     }

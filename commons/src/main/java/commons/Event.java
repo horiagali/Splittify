@@ -28,6 +28,7 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     private List<Tag> tags;
 
+
     /**
      * constructor for the event
      * @param title the title as a String
