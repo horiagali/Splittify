@@ -111,6 +111,12 @@ public class EditExpenseCtrl implements Initializable {
         Integer.parseInt(dateInString.substring(8, 10)));
         datePicker.setValue(date);
         equallyCheckbox.setSelected(expense.getOwers().equals(event.getParticipants()));
+        for(CheckBox checkBox : participantCheckboxes) {
+            if(expense.getOwers().stream()
+            .map(Participant::getNickname).toList().contains(checkBox.getText())) {
+                checkBox.setSelected(true);
+            }
+        }
     }
 
     /**

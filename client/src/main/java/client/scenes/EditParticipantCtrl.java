@@ -175,7 +175,12 @@ public class EditParticipantCtrl implements Initializable {
                 .filter(x -> x.getOwers().contains(participant)).toList();
                 for(Expense expenseToUpdate : expensesWithParticipantAsOwer) {
                     expenseToUpdate.getOwers().remove(participant);
-                    server.updateExpense(event.getId(), expenseToUpdate);
+                    if(expenseToUpdate.getOwers().size() == 0) {
+                        server.deleteExpense(event.getId(), expenseToUpdate);
+                    } else{
+                        server.updateExpense(event.getId(), expenseToUpdate);
+                    }
+                    
                 }
                 
                 server.deleteParticipant(event.getId(), participant);
