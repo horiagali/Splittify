@@ -369,7 +369,8 @@ public class ExpenseService {
             return ResponseEntity.notFound().build();
         }
         Event event = eventRepository.findById(eventId).get();
-        Expense expenseEntity = new Expense(expense.getTitle(), expense.getAmount(), expense.getDate(),
+        Expense expenseEntity = new Expense(expense.getTitle(),
+                expense.getAmount(), expense.getDate(),
                 expense.getPayer(), expense.getOwers(), expense.getTag());
         expenseEntity.setEvent(event);
         Expense saved = expenseRepository.save(expenseEntity);
@@ -382,7 +383,7 @@ public class ExpenseService {
      * delete
      * @param eventId
      * @param expenseId
-     * @return
+     * @return expense
      */
     public ResponseEntity<Expense> deleteExpenseDebt(Long eventId, Long expenseId) {
         Event event = eventRepository.findById(eventId).get();
