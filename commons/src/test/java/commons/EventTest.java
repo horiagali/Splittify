@@ -3,7 +3,6 @@ package commons;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -76,14 +75,14 @@ public class EventTest {
 
     @Test
     public void testAddExpense() {
-        Expense expense = new Expense("Food", 100, participant, new ArrayList<>(), new Tag("Food", "HEXcolor"));
+        Expense expense = new Expense("Food", 100, new Date(), participant, new ArrayList<>(), new Tag("Food", "HEXcolor"));
         assertTrue(event.addExpense(expense));
         assertTrue(event.getExpenses().contains(expense));
     }
 
     @Test
     public void testRemoveExpense() {
-        Expense expense = new Expense("Decorations", 50, participant, new ArrayList<>(), new Tag("Decorations", "HEXcolor"));
+        Expense expense = new Expense("Decorations", 50, new Date(), participant, new ArrayList<>(), new Tag("Decorations", "HEXcolor"));
         event.addExpense(expense);
         assertTrue(event.removeExpense(expense));
         assertFalse(event.getExpenses().contains(expense));
@@ -91,9 +90,9 @@ public class EventTest {
 
     @Test
     public void testEditExpense() {
-        Expense oldExpense = new Expense("Music", 200, participant, new ArrayList<>(), new Tag("Music", "HEXcolor"));
+        Expense oldExpense = new Expense("Music", 200, new Date(), participant, new ArrayList<>(), new Tag("Music", "HEXcolor"));
         event.addExpense(oldExpense);
-        Expense newExpense = new Expense("Lighting", 150, participant, new ArrayList<>(), new Tag("Lighting", "HEXcolor"));
+        Expense newExpense = new Expense("Lighting", 150, new Date(), participant, new ArrayList<>(), new Tag("Lighting", "HEXcolor"));
         assertTrue(event.editExpense(oldExpense, newExpense));
         assertFalse(event.getExpenses().contains(oldExpense));
         assertTrue(event.getExpenses().contains(newExpense));
@@ -210,9 +209,9 @@ public class EventTest {
         owers.add(new Participant("Alice", "alice@example.com", "bic", "iban", 12));
         owers.add(new Participant("Bob", "bob@example.com", "bic", "iban", 12));
         double amount = 50;
-        Tag tag = new Tag("testTag", "HEXcolor");
-        Expense expense1 = new Expense("Dinner", amount, payer, owers, tag);
-        Expense expense2 = new Expense("Dinner", amount, payer, owers, tag);
+        Tag tag = new Tag("testTag","HEXcolor");
+        Expense expense1 = new Expense("Dinner", amount, new Date(), payer, owers, tag);
+        Expense expense2 = new Expense("Dinner", amount, new Date(), payer, owers, tag);
         List<Expense> expenses = new ArrayList<>();
         expenses.add(expense1);
         expenses.add(expense2);

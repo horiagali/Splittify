@@ -3,6 +3,7 @@ package commons;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,6 +36,7 @@ public class Expense {
     private Event event;
 
     private double amount;
+    private Date date;
     @ManyToOne
     private Tag tag;
 
@@ -50,13 +52,14 @@ public class Expense {
      * Constructs a new Expense object with the given title, amount, payer, and owers.
      * @param title The title of the expense.
      * @param amount The amount of the expense.
+     * @param date the date of the expense.
      * @param payer The participant who paid the expense.
      * @param owers The list of participants who owe money for the expense.
      * @param tag tag for expense
      * @throws IllegalArgumentException if the amount is negative.
      *
      */
-    public Expense(String title, double amount, 
+    public Expense(String title, double amount, Date date,
     Participant payer, List<Participant> owers, Tag tag) {
         this.title = title;
         this.owers = owers;
@@ -67,6 +70,7 @@ public class Expense {
             throw new IllegalArgumentException("Expense can not be negative.");
         }
         this.amount = amount;
+        this.date = date;
 
         payer.setBalance(payer.getBalance() + amount);
         //increase the balance of the person who paid
@@ -144,6 +148,22 @@ public class Expense {
             throw new IllegalArgumentException("Amount cannot be negative");
         }
         this.amount = amount;
+    }
+
+    /**
+     * Gets the date of the expense.
+     * @return the date of the expense.
+     */
+    public Date getDate() {
+        return date;
+    }
+
+    /**
+     * Sets the date of the expense.
+     * @param date the date of the expense.
+     */
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     /**
@@ -249,12 +269,14 @@ public class Expense {
     @Override
     public String toString() {
         String owersList = owers != null ? owers.toString() : null;
+        String payerName = payer != null ? payer.toString() : null;
 
         return "Expense{" +
                 " id=" + id + "\n" +
                 "  title=" + title + "\n" +
                 "  amount=" + amount + "\n" +
-                "  payer=" + payer + "\n" +
+                "  date=" + date + "\n" +
+                "  payer=" + payerName + "\n" +
                 "  owers=" + owersList + "\n" +
                 "  tag=" + tag + "\n" +
                 "]";

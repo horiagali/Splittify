@@ -5,10 +5,16 @@ import client.utils.Currency;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
+import commons.Tag;
+import javafx.animation.ScaleTransition;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,8 +24,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
@@ -27,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
@@ -57,6 +68,8 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private Label eventDate;
     @FXML
+    private Label eventDescription;
+    @FXML
     private Button backButton;
 
     @FXML
@@ -66,12 +79,28 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     private TextField eventLocationTextField;
+    @FXML 
+    private TextField eventDescriptionTextField;
     @FXML
     private ScrollPane participantsScrollPane;
     @FXML
     private VBox participantsVBox;
     @FXML
+    private Menu languageMenu;
+    @FXML
+    private ListView<Expense> expensesListView;
+    @FXML
     private ToggleGroup currencyGroup;
+
+    @FXML
+    private VBox expensesBox;
+    @FXML
+    private ComboBox<String> payer;
+    @FXML
+    private ComboBox<String> ower;
+    @FXML
+    private ComboBox<String> tag;
+
 
 
     /**
@@ -92,8 +121,13 @@ public class OverviewCtrl implements Initializable {
         eventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
         eventDate.setText("");
-        if(!(selectedEvent.getDate() == null))
-        eventDate.setText(selectedEvent.getDate().toString());
+        eventDescription.setText(selectedEvent.getDescription());
+        
+        if(!(selectedEvent.getDate() == null)){
+            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
+            String dateInString = ft.format(selectedEvent.getDate());
+            eventDate.setText(dateInString);
+        }
         setSelectedEvent(selectedEvent);
     }
 
@@ -106,7 +140,7 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     * @param name
+     * @param name name.
      */
 
     public void addName(String name) {
@@ -136,6 +170,7 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * Changes the language of the site
+     *
      * @param event
      */
     @FXML
@@ -144,15 +179,17 @@ public class OverviewCtrl implements Initializable {
         String language = selectedLanguageItem.getText().toLowerCase();
 
         // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
-        + language, new Locale(language));
-        
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
     }
+
 
 
     /**
@@ -185,6 +222,7 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * changes the currency to whatever is selected
+     *
      * @param event
      */
     @FXML
@@ -217,6 +255,16 @@ public class OverviewCtrl implements Initializable {
         refresh();
         loadParticipants();
         addKeyboardNavigationHandlers();
+        payer.setValue("anyone");
+        ower.setValue("anyone");
+        tag.setValue("any tag");
+        tag.setCellFactory(param -> createStringListCell());
+        tag.setButtonCell(createStringListCell());
+        ower.setCellFactory(param -> createStringListCell());
+        ower.setButtonCell(createStringListCell());
+        payer.setCellFactory(param -> createStringListCell());
+        payer.setButtonCell(createStringListCell());
+        
     }
 
     /**
@@ -226,17 +274,53 @@ public class OverviewCtrl implements Initializable {
         if (selectedEvent != null) {
             eventName.setText(selectedEvent.getTitle());
             eventLocation.setText(selectedEvent.getLocation());
-            eventDate.setText(selectedEvent.getDate().toString());
+            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
+            String dateInString = ft.format(selectedEvent.getDate());
+            eventDate.setText(dateInString);
+            eventDescription.setText(selectedEvent.getDescription());
+            
         }
-
-
-        myChoiceBox.getItems().addAll(names);
-        myChoiceBox.setOnAction(this::getName);
-//        hbox.setSpacing(5);    doesn't work, has to be fixed
+    
+        loadParticipants();
+        loadComboBoxes();
+        loadExpenses();
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
-//        hbox.getChildren().addAll(labels);
-        loadParticipants();
+    }
+
+    private void loadComboBoxes() {
+        if(selectedEvent == null) return;
+        List<String> participants = new ArrayList<>();
+        participants.add("anyone");
+        participants.addAll(server.getParticipants(selectedEvent.getId()).stream()
+        .map(x -> x.getNickname()).toList());
+        List<String> tags = new ArrayList<>();
+        tags.add("any tag");
+        tags.addAll(server.getTags(selectedEvent.getId()).stream()
+        .map(x -> x.getName()).filter(x -> !x.equals("gifting money")).toList());
+        
+        payer.setItems(FXCollections.observableArrayList(participants));
+        ower.setItems(FXCollections.observableArrayList(participants));
+        tag.setItems(FXCollections.observableArrayList(tags));
+    }
+
+    /**
+     * Creates a ListCell for the ComboBox to display participant nicknames.
+     *
+     * @return The created ListCell.
+     */
+    private ListCell<String> createStringListCell() {
+        return new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item);
+                }
+            }
+        };
     }
 
     /**
@@ -252,9 +336,19 @@ public class OverviewCtrl implements Initializable {
             for (Participant participant : participants) {
                 Label participantLabel = new Label(participant.getNickname());
                 participantLabel.setTextFill(Color.BLACK);
+                participantLabel.setFont(Font.font(20));
+                participantLabel.setMinWidth(150);
+                participantLabel.setMaxWidth(150);
+                participantLabel.setAlignment(Pos.CENTER);
+                participantLabel.setOnMouseEntered(event -> {
+                    participantLabel.setFont(Font.font(22));
+                });
+                addHoverAnimation(participantLabel, 1.1);
+
                 participantLabel.setOnMouseClicked(event -> {
-                    if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                        mainCtrl.goToEditParticipant(participant,selectedEvent);
+                    if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                        mainCtrl.goToEditParticipant(participant, selectedEvent);
+                        expensesBox.getChildren().clear();
                     }
                 });
                 participantsVBox.getChildren().add(participantLabel);
@@ -262,6 +356,130 @@ public class OverviewCtrl implements Initializable {
 
             participantsScrollPane.setContent(participantsVBox);
         }
+    }
+
+    /**
+     * resets comboboxes to 'anyone' state
+     */
+    public void resetComboBoxes() {
+        payer.setValue("anyone");
+        ower.setValue("anyone");
+        tag.setValue("any tag");
+    }
+
+    /**
+     * loads all expenses into event overview
+     */
+    public void loadExpenses() {
+        expensesBox.getChildren().clear();
+        if(selectedEvent == null) return;
+        List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId());
+        expenses = applyFilters(expenses);
+        if(expenses.size() == 0) {
+            expensesBox.getChildren()
+            .add(new Text("There are no expenses matching your filters."));
+            return;
+        }
+        for(Expense expense : expenses) {
+            VBox vbox = new VBox();
+            vbox.setMinWidth(300);
+            vbox.setMaxWidth(300);
+            vbox.setStyle("-fx-border-width: 2; -fx-border-radius: 5; -fx-border-color: black");
+            vbox.setAlignment(Pos.CENTER);
+            vbox.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
+                    goToEditExpense(expense);
+                }
+            });
+            setUpRow1(expense, vbox);
+            setUpRow2(expense, vbox);
+            addHoverAnimation(vbox, 1.05);
+            expensesBox.getChildren().add(vbox);
+        }
+    }
+
+    private List<Expense> applyFilters(List<Expense> expenses) {
+        String payerBox = payer.getValue();
+        String owerBox = ower.getValue();
+        String tagBox = tag.getValue();
+        if(payerBox != null && !payerBox.equals("anyone")) {
+            expenses = expenses.stream()
+            .filter(x -> x.getPayer().getNickname().equals(payerBox)).toList();
+        }
+        if(owerBox != null && !owerBox.equals("anyone")) {
+            Participant owerOfExpense = server
+            .getParticipantByNickname(selectedEvent.getId(), owerBox);
+            expenses = expenses.stream()
+        .filter(x -> x.getOwers().contains(owerOfExpense)).toList();
+        }
+        if(tagBox != null && !tagBox.equals("any tag")) {
+            Optional<Tag> selectedTag = server.getTags(selectedEvent.getId())
+            .stream().filter(x -> x.getName().equals(tagBox)).findFirst();
+            if(!selectedTag.isEmpty()) {
+                Tag actualTag = selectedTag.get();
+                expenses = expenses.stream().filter(x -> x.getTag().equals(actualTag))
+                .toList();
+            } else {
+                System.out.println("No tag with name " + tagBox + " was found!");
+            }
+            
+        }
+        return expenses;
+    }
+
+    private void setUpRow2(Expense expense, VBox vbox) {
+        HBox row2 = new HBox();
+        row2.setMinWidth(280);
+        row2.setMaxWidth(280);
+        row2.setSpacing(5);
+        row2.setAlignment(Pos.CENTER);
+        Label payer = new Label(expense.getPayer().getNickname());
+        Label text = new Label("payed " + expense.getAmount() + " for");
+        String owers = "";
+        if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
+        owers = "everyone";
+        else {
+            List<String> nameList = expense.getOwers().stream()
+            .map(x -> x.getNickname()).toList();
+            owers = nameList.get(0);
+            for(int i = 1; i < nameList.size(); i++) {
+                owers = owers + ", " + nameList.get(i);
+            }
+        }
+        Label owersNames = new Label(owers);
+        row2.getChildren().add(payer);
+        row2.getChildren().add(text);
+        vbox.getChildren().add(row2);
+        vbox.getChildren().add(owersNames);
+    }
+
+    private void setUpRow1(Expense expense, VBox vbox) {
+        HBox row1 = new HBox();
+        Label label = new Label(expense.getTitle());
+        label.setFont(Font.font(20));
+        label.setAlignment(Pos.CENTER);
+        label.setMaxWidth(150);
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
+        var dateInString = ft.format(expense.getDate());
+        Label date = new Label(dateInString);
+        
+        date.setMaxWidth(80);
+        Button tag = new Button(expense.getTag().getName());
+        
+        row1.setMinWidth(280);
+        row1.setMaxWidth(280);
+        row1.setSpacing(10);
+        row1.setAlignment(Pos.CENTER_LEFT);
+
+        
+        
+        
+        tag.setStyle("-fx-background-color: " + expense.getTag().getColor());
+        date.setAlignment(Pos.CENTER);
+        row1.getChildren().add(label);
+        row1.getChildren().add(date);
+        row1.getChildren().add(tag);
+        vbox.getChildren().add(row1);
     }
 
 
@@ -320,12 +538,12 @@ public class OverviewCtrl implements Initializable {
 
 
     /**
-     * 
+     *
      */
     public void showStatistics() {
         mainCtrl.goToStatistics(selectedEvent);
     }
-    
+
     /**
      * asks if you really want to delete
      *
@@ -405,7 +623,11 @@ public class OverviewCtrl implements Initializable {
 
     public void switchToDateLabel() {
         eventDatePicker.setVisible(false);
-        eventDate.setText(String.valueOf(eventDatePicker.getValue()));
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
+        String dateInString = eventDatePicker.getValue().getDayOfMonth() + "/" +
+        eventDatePicker.getValue().getMonthValue() + "/" +
+        eventDatePicker.getValue().getYear();
+        eventDate.setText(dateInString);
         eventDate.setVisible(true);
     }
 
@@ -421,7 +643,9 @@ public class OverviewCtrl implements Initializable {
             Date date = Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             selectedEvent.setDate(date);
             server.updateEvent(selectedEvent);
-            eventDate.setText(String.valueOf(newDate));
+            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
+            String dateInString = ft.format(selectedEvent.getDate());
+            eventDate.setText(dateInString);
             switchToDateLabel();
         } catch (DateTimeParseException e) {
             System.err.println("Error parsing date: " + e.getMessage());
@@ -443,11 +667,77 @@ public class OverviewCtrl implements Initializable {
      * @param event
      */
     public void updateEventLocation(ActionEvent event) {
-        String location = eventLocation.getText();
+        String location = eventLocationTextField.getText();
         selectedEvent.setLocation(location);
         switchToLocationLabel();
         server.updateEvent(selectedEvent);
 
+    }
+
+    /**
+     * switches to text field for description
+     */
+    public void switchToDescriptionTextField() {
+        eventDescriptionTextField.setVisible(true);
+        eventDescriptionTextField.requestFocus();
+        eventDescription.setVisible(false);
+    }
+
+    /**
+     * switchces back to label
+     */
+
+    public void switchToDescriptionLabel() {
+        eventDescriptionTextField.setVisible(false);
+        eventDescription.setVisible(true);
+    }
+
+    /**
+     * updated the description in the db
+     *
+     * @param event
+     */
+    public void updateEventDescription(ActionEvent event) {
+        String description = eventDescriptionTextField.getText();
+        selectedEvent.setDescription(description);
+        server.updateEvent(selectedEvent);
+
+        switchToDescriptionLabel();
+        refresh();
+
+    }
+
+    /**
+     * Deletes an expense.
+     */
+    public void deleteExpense() {
+        try {
+            Expense expense = expensesListView.getSelectionModel().getSelectedItem();
+            selectedEvent.getExpenses().remove(expense);
+            server.deleteExpense(selectedEvent.getId(), expense);
+            refresh();
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Delete expense");
+            alert.setHeaderText("Error deleting");
+            alert.setContentText("Please choose an expense!");
+            alert.showAndWait();
+        }
+    }
+
+    /**
+     * Goes to edit expense.
+     * @param selectedExpense the expense to edit
+     */
+    public void goToEditExpense(Expense selectedExpense){
+        if (selectedExpense == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Edit expense");
+            alert.setHeaderText("Error loading page");
+            alert.setContentText("Please choose an expense!");
+            alert.showAndWait();
+        } else
+            mainCtrl.goToEditExpense(selectedEvent, selectedExpense);
     }
 
     /**
@@ -464,5 +754,33 @@ public class OverviewCtrl implements Initializable {
      */
     public void goToBalance() {
         mainCtrl.goToBalances(selectedEvent);
+    }
+
+    private void addHoverAnimation(Node node, double factor) {
+        double startX = node.getScaleX();
+        double startY = node.getScaleY();
+        double startZ = node.getScaleZ();
+        node.setOnMouseEntered(event -> {
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.1), node);
+            scaleTransition.setFromX(startX);
+            scaleTransition.setFromY(startY);
+            scaleTransition.setFromZ(startZ);
+            scaleTransition.setToX(node.getScaleX()*factor);
+            scaleTransition.setToY(node.getScaleY()*factor);
+            scaleTransition.setToZ(node.getScaleZ()*factor);
+            scaleTransition.play();
+
+        });
+        node.setOnMouseExited(event -> {
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.1), node);
+            scaleTransition.setFromX(node.getScaleX());
+            scaleTransition.setFromY(node.getScaleY());
+            scaleTransition.setFromZ(node.getScaleZ());
+            scaleTransition.setToX(startX);
+            scaleTransition.setToY(startY);
+            scaleTransition.setToZ(startZ);
+            scaleTransition.play();
+
+        });
     }
 }

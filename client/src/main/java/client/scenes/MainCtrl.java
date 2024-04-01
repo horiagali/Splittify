@@ -55,6 +55,8 @@ public class MainCtrl {
 
     private AddExpensesCtrl addExpensesCtrl;
     private Scene addExpenses;
+    private EditExpenseCtrl editExpenseCtrl;
+    private Scene editExpense;
 
     private Scene contactDetails;
     private ContactDetailsCtrl contactDetailsCtrl;
@@ -89,12 +91,13 @@ public class MainCtrl {
 
 
     /**
-     * 
+     *
      * @param primaryStage
      * @param overview
      * @param add
      * @param page
      * @param addExpense
+     * @param editExpense
      * @param contactDetails
      * @param overviewApp
      * @param invite
@@ -104,7 +107,7 @@ public class MainCtrl {
      * @param addEvent
      * @param balances
      * @param editParticipant
-     * @param serverSetter2 
+     * @param serverSetter2
      * @param statistics
      * @param debtsCtrlParentPair
      * @param tagOverview
@@ -115,6 +118,7 @@ public class MainCtrl {
     public void initialize(Stage primaryStage, Pair<MainPageCtrl, Parent> overview,
                            Pair<AddQuoteCtrl, Parent> add, Pair<PageCtrl, Parent> page,
                            Pair<AddExpensesCtrl, Parent> addExpense,
+                           Pair<EditExpenseCtrl, Parent> editExpense,
                            Pair<ContactDetailsCtrl, Parent> contactDetails,
                            Pair<OverviewCtrl, Parent> overviewApp,
                            Pair<InviteCtrl, Parent> invite,
@@ -123,7 +127,7 @@ public class MainCtrl {
                            Pair<AddEventCtrl, Parent> addEvent,
                            Pair<BalancesCtrl, Parent> balances,
                            Pair<EditParticipantCtrl,Parent> editParticipant,
-                            Pair<ServerSetterCtrl, Parent> serverSetter2, String language,
+                           Pair<ServerSetterCtrl, Parent> serverSetter2, String language,
                            Pair<StatisticsCtrl, Parent> statistics,
                            Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair,
                            Pair<TagOverviewCtrl, Parent> tagOverview,
@@ -133,8 +137,8 @@ public class MainCtrl {
         this.main = main;
         primaryStage.setMaximized(true);
 
-        resourceBundle = ResourceBundle.getBundle("messages_" + 
-        language, new Locale(language));
+        resourceBundle = ResourceBundle.getBundle("messages_" +
+                language, new Locale(language));
 
         System.out.println("resourceBundle set to language " + language);
         overview.getKey().updateUIWithNewLanguage();
@@ -155,6 +159,9 @@ public class MainCtrl {
 
         this.addExpensesCtrl = addExpense.getKey();
         this.addExpenses = new Scene(addExpense.getValue());
+
+        this.editExpenseCtrl = editExpense.getKey();
+        this.editExpense = new Scene(editExpense.getValue());
 
         this.contactDetailsCtrl = contactDetails.getKey();
         this.contactDetails = new Scene(contactDetails.getValue());
@@ -200,12 +207,12 @@ public class MainCtrl {
      * initializes scene to set serverUrl of client
      * @param primaryStage
      * @param serverSetter
-     * @param main 
+     * @param main
      */
-    public void initializeServerSetter(Stage primaryStage, 
-    Pair<ServerSetterCtrl, Parent> serverSetter, Main main) {
-        resourceBundle = ResourceBundle.getBundle("messages_" + 
-        Main.config.getLanguage(), new Locale(Main.config.getLanguage()));
+    public void initializeServerSetter(Stage primaryStage,
+                                       Pair<ServerSetterCtrl, Parent> serverSetter, Main main) {
+        resourceBundle = ResourceBundle.getBundle("messages_" +
+                Main.config.getLanguage(), new Locale(Main.config.getLanguage()));
         serverSetter.getKey().updateUIWithNewLanguage();
         this.primaryStage = primaryStage;
         this.serverSetterCtrl = serverSetter.getKey();
@@ -219,24 +226,24 @@ public class MainCtrl {
     }
 
     /**
-     * 
+     *
      */
     public void showServerSetter() {
         initializeServerSetter(primaryStage, serverPair, main);
     }
 
     /**
-     * 
+     *
      * @return main
      */
     public Main getMain() {
         return main;
     }
 
-    
+
 
     /**
-     * 
+     *
      * @param main main
      */
     public void setMain(Main main) {
@@ -245,17 +252,17 @@ public class MainCtrl {
 
 
     /**
-     * 
+     *
      */
     public void showOverview() {
         primaryStage.setTitle("Events: Overview");
         primaryStage.setScene(overview);
-        
+
         overviewCtrl.refresh();
     }
 
     /**
-     * 
+     *
      * @param name name
      */
     public void addToOverview(String name) {
@@ -264,7 +271,7 @@ public class MainCtrl {
     }
 
     /**
-     * 
+     *
      */
     public void showAdd() {
         primaryStage.setTitle("Quotes: Adding Quote");
@@ -273,7 +280,7 @@ public class MainCtrl {
     }
 
     /**
-     * 
+     *
      */
     public void addEvent() {
         primaryStage.setTitle("Event: Adding Events");
@@ -302,16 +309,16 @@ public class MainCtrl {
 
 
     /**
-     * 
+     *
      */
     public void showPage() {
         primaryStage.setTitle("Iulia's Page");
         primaryStage.setScene(page);
-        
+
     }
 
     /**
-     * 
+     *
      */
     public void showAddExpenses() {
         primaryStage.setTitle("Expenses: Add Expense");
@@ -321,7 +328,7 @@ public class MainCtrl {
     }
 
     /**
-     * 
+     *
      */
     public void goToContact() {
         primaryStage.setTitle("Contact Details");
@@ -330,12 +337,14 @@ public class MainCtrl {
 
 
     /**
-     * 
+     *
      */
     public void goToOverview() {
         primaryStage.setTitle("Overview");
+        overviewAppCtrl.resetComboBoxes();
         primaryStage.setScene(overviewApp);
         overviewAppCtrl.refresh();
+        
 
     }
 
@@ -376,7 +385,9 @@ public class MainCtrl {
     public void showEventOverview(Event selectedEvent) {
         primaryStage.setTitle(selectedEvent.getTitle());
         primaryStage.setScene(overviewApp);
+        overviewAppCtrl.resetComboBoxes();
         overviewAppCtrl.displayEvent(selectedEvent);
+        
         overviewAppCtrl.refresh();
 
     }
@@ -421,7 +432,7 @@ public class MainCtrl {
         primaryStage.setScene(statistics);
         statisticsCtrl.refresh();
 
-    }    
+    }
 
     /**
      * set the title of primary stage, needed for translations
@@ -441,7 +452,19 @@ public class MainCtrl {
         debtsCtrl.setEvent(event);
         debtsCtrl.setExpenses(expenses);
         primaryStage.setScene(debts);
-        
+    }
+
+    /**
+     * Goes to edit expense.
+     * @param event the event of the expense.
+     * @param expense the expense to edit.
+     */
+    public void goToEditExpense(Event event, Expense expense) {
+        primaryStage.setTitle("Edit expense page");
+        EditExpenseCtrl.setEvent(event);
+        EditExpenseCtrl.setExpense(expense);
+        primaryStage.setScene(editExpense);
+        editExpenseCtrl.display();
     }
 
     /**

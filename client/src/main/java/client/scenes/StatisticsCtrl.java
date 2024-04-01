@@ -38,7 +38,7 @@ public class StatisticsCtrl {
     
     @FXML
     private Menu languageMenu;
-    
+
     @FXML
     private ToggleGroup currencyGroup;
     @FXML
@@ -119,7 +119,7 @@ public class StatisticsCtrl {
             data.setName(data.getName() + " - " + percentage + "%");
             remainingPercentage = remainingPercentage - percentage;
         }
-        //if percentage does not match due to rounding, 
+        //if percentage does not match due to rounding,
         //just add or substract the last 1 or 2 percent to the last tag
         if(remainingPercentage != 0 && pieChartData != null && pieChartData.size() > 0) {
             PieChart.Data dataToEdit = pieChartData.get(pieChartData.size()-1);
@@ -129,6 +129,10 @@ public class StatisticsCtrl {
             remainingPercentage = 0;
             
         }
+        pieChart.setData(pieChartData);
+        eventTotalAmount.setText("" + totalAmount);
+        updateUIWithNewLanguage();
+
     }
 
     /**

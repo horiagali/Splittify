@@ -5,6 +5,7 @@ import client.utils.Currency;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Expense;
 import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -156,16 +158,28 @@ public class EditParticipantCtrl implements Initializable {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Participant");
         alert.setHeaderText("Are you sure you want to delete this participant?");
-        alert.setContentText("This action cannot be undone.");
+        alert.setContentText("This action cannot be undone. If this participant is a payer" +
+        " in an expense, this expense will be removed. It will be removed as ower if it was one.");
 
         alert.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
                 // Delete the participant from the server
+                List<Expense> expensesWithParticipantAsPayer = 
+                server.getExpensesByEventId(event.getId()).stream()
+                .filter(x -> x.getPayer().equals(participant)).toList();
+                for(Expense expenseToDelete : expensesWithParticipantAsPayer) {
+                    server.deleteExpense(event.getId(), expenseToDelete);
+                }
+                List<Expense> expensesWithParticipantAsOwer = 
+                server.getExpensesByEventId(event.getId()).stream()
+                .filter(x -> x.getOwers().contains(participant)).toList();
+                for(Expense expenseToUpdate : expensesWithParticipantAsOwer) {
+                    expenseToUpdate.getOwers().remove(participant);
+                    server.updateExpense(event.getId(), expenseToUpdate);
+                }
+                
                 server.deleteParticipant(event.getId(), participant);
 
-                // Update UI to reflect deletion
-                // For simplicity, you can just go back to the overview scene
-                mainCtrl.goToOverview();
 
                 // Show confirmation message
                 Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
@@ -173,6 +187,8 @@ public class EditParticipantCtrl implements Initializable {
                 deleteConfirmation.setHeaderText(null);
                 deleteConfirmation.setContentText("Participant deleted successfully!");
                 deleteConfirmation.showAndWait();
+
+                mainCtrl.goToOverview();
             }
         });
     }
