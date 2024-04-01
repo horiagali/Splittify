@@ -11,10 +11,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -49,7 +48,7 @@ public class SettleDebtsCtrl implements Initializable {
      * back to the balances page
      */
     public void back(){
-        mainCtrl.goToBalances(event);
+        mainCtrl.showOverview();
     }
 
     /**
@@ -68,6 +67,30 @@ public class SettleDebtsCtrl implements Initializable {
                 new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gives " +
                         q.getValue().getAmount() + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
+        debtColumn.setCellFactory(column -> new TableCell<Expense, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    Expense expense = getTableView().getItems().get(getIndex());
+                    String bankInfo = "Bank information for payment:\n" +
+                            "Account holder: " + expense.getOwers().get(0).getNickname() + "\n"+
+                            "IBAN: " + expense.getOwers().get(0).getIban() + "\n" +
+                            "BIC: " + expense.getOwers().get(0).getBic();
+                    TitledPane titledPane = new TitledPane();
+                    titledPane.setText(item);
+                    Label bankInfoLabel = new Label(bankInfo);
+                    VBox contentBox = new VBox(bankInfoLabel);
+                    titledPane.setContent(contentBox);
+                    titledPane.setMaxWidth(Double.MAX_VALUE);
+                    setGraphic(titledPane);
+                }
+            }
+        });
         reminderColumn.setCellFactory(col -> new TableCell<Expense, Void>() {
             private final Button reminderButton = new Button("Remind");
 

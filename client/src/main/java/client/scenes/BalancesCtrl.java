@@ -143,6 +143,10 @@ public class BalancesCtrl implements Initializable {
             if (response == ButtonType.OK) {
                 back();
                 letsSettle();
+                event.setClosed(true);
+                server.updateEvent(event);
+                event.setExpenses(expenses);
+                server.updateEvent(event);
                 mainCtrl.goToSettleDebts(event, expenses);
             } else {
                 System.out.println("Settling of debts canceled.");

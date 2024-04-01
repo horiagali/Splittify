@@ -19,7 +19,7 @@ public class Event {
     private Date date;
     private String description;
     private String location;
-
+    private boolean closed;
     @OneToMany (mappedBy = "event", cascade = CascadeType.REMOVE)
     private List<Expense> expenses; // List of expenses associated with the event
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
@@ -43,6 +43,23 @@ public class Event {
         this.expenses = new ArrayList<>();
         this.participants = new ArrayList<>();
         this.tags = new ArrayList<>();
+        this.closed = false;
+    }
+
+    /**
+     * getter for closed
+     * @return true if closed false otherwise
+     */
+    public boolean isClosed() {
+        return closed;
+    }
+
+    /**
+     * setter for closed
+     * @param closed the status of the event
+     */
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 
     /**
@@ -65,13 +82,14 @@ public class Event {
         this.expenses = expenses;
         this.participants = participants;
         this.tags = tags;
+        this.closed = false;
     }
 
     /**
      * empty constructor
      */
     public Event() {
-
+        this.closed = false;
     }
 
     // Getters and setters

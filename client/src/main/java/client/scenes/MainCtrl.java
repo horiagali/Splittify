@@ -420,6 +420,7 @@ public class MainCtrl {
         primaryStage.setTitle("Balances page");
         balancesCtrl.setEvent(event);
         primaryStage.setScene(balances);
+        balancesCtrl.refresh();
     }
 
     /**
@@ -452,6 +453,7 @@ public class MainCtrl {
         debtsCtrl.setEvent(event);
         debtsCtrl.setExpenses(expenses);
         primaryStage.setScene(debts);
+        debtsCtrl.refresh();
     }
 
     /**

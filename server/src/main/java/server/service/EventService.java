@@ -125,6 +125,7 @@ public class EventService {
         toBeUpdated.setDescription(event.getDescription());
         toBeUpdated.setLocation(event.getLocation());
         toBeUpdated.setDate(event.getDate());
+        toBeUpdated.setClosed(event.isClosed());
         toBeUpdated.setParticipants(event.getParticipants());
         toBeUpdated.setTags(event.getTags());
         toBeUpdated.setExpenses(event.getExpenses());

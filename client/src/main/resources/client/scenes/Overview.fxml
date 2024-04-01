@@ -184,6 +184,7 @@
             </Text>
             <Text layoutX="559.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tag" />
             <ComboBox fx:id="tag" layoutX="594.0" layoutY="341.0" onAction="#loadExpenses" prefHeight="26.0" prefWidth="139.0" />
+            <Button layoutX="553.0" layoutY="537.0" mnemonicParsing="false" onAction="#goToBalances" text="Balances" />
       
          </children>
       </AnchorPane>
