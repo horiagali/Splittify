@@ -553,6 +553,7 @@ public class ServerUtils {
 	 * debt expenses
 	 * @param eventId the id
 	 * @param expense
+	 * @return expense
 	 */
 	public Expense addExpenseToEventDebt(Long eventId, Expense expense) {
 		String url = server + "api/events/" + eventId + "/expenses/debt";

@@ -255,7 +255,8 @@ public class MainPageCtrl implements Initializable {
                 if (!selectedEvent.isClosed())
                     mainCtrl.showEventOverview(selectedEvent);
                 else
-                    mainCtrl.goToSettleDebts(selectedEvent, server.getExpensesByEventId(selectedEvent.getId()));
+                    mainCtrl.goToSettleDebts(selectedEvent,
+                            server.getExpensesByEventId(selectedEvent.getId()));
             }
         }
     }
