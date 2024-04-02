@@ -1,5 +1,6 @@
 package client.scenes;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
@@ -21,9 +22,13 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
+
+import static client.Main.config;
 
 public class AddEventCtrl implements Initializable {
     private final ServerUtils server;
@@ -41,9 +46,17 @@ public class AddEventCtrl implements Initializable {
     @FXML
     private Button cancelButton;
     @FXML
-    private Menu languageMenu;
+    private ImageView languageFlagImageView;
+    @FXML
+    private Menu currencyMenu;
     @FXML
     private ToggleGroup currencyGroup;
+    @FXML
+    private javafx.scene.control.Label eventNameLabel;
+    @FXML
+    private javafx.scene.control.Label eventLocationLabel;
+    @FXML
+    private javafx.scene.control.Label eventDescriptionLabel;
 
     /**
      * Constructor for the controller
@@ -151,17 +164,46 @@ public class AddEventCtrl implements Initializable {
         MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
         + language, new Locale(language));
         
-        Main.config.setLanguage(language);
+        config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
     
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+
+        currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
+        eventNameLabel.setText(MainCtrl.resourceBundle.getString("Text.eventName"));
+        eventDescriptionLabel.setText(MainCtrl.resourceBundle.getString("Text.eventDescription"));
+        eventLocationLabel.setText(MainCtrl.resourceBundle.getString("Text.eventLocation"));
+        addEventButton.setText(MainCtrl.resourceBundle.getString("button.createEvent"));
+        cancelButton.setText(MainCtrl.resourceBundle.getString("button.cancel"));
     }
 
     /**

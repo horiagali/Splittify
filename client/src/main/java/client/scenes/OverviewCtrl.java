@@ -41,6 +41,13 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
+
+    private ArrayList<String> names;
+    private ArrayList<Label> labels;
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
+    private static Event selectedEvent;
+
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -54,12 +61,6 @@ public class OverviewCtrl implements Initializable {
     private HBox hbox;
     @FXML
     private ImageView languageFlagImageView;
-
-    private ArrayList<String> names;
-    private ArrayList<Label> labels;
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
-    private static Event selectedEvent;
 
     @FXML
     private Label eventName;
@@ -86,8 +87,6 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private VBox participantsVBox;
     @FXML
-    private Menu languageMenu;
-    @FXML
     private ListView<Expense> expensesListView;
     @FXML
     private ToggleGroup currencyGroup;
@@ -100,6 +99,37 @@ public class OverviewCtrl implements Initializable {
     private ComboBox<String> ower;
     @FXML
     private ComboBox<String> tag;
+    @FXML
+    private Button sendInvitesButton;
+    @FXML
+    private Menu currencyMenu;
+    @FXML
+    private Button tagButton;
+    @FXML
+    private Text expensesText;
+    @FXML
+    private Text participantsText;
+    @FXML
+    private Button addParticipantsButton;
+    @FXML
+    private Button goToBalances;
+    @FXML
+    private Button refreshButton;
+    @FXML
+    private Button addExpenseButton;
+    @FXML
+    private Button statisticsButton;
+    @FXML
+    private Text filtersText;
+    @FXML
+    private Text payerText;
+    @FXML
+    private Text owerText;
+    @FXML
+    private Text tagText;
+    @FXML
+    private Button deleteEventButton;
+
 
 
 
@@ -197,6 +227,21 @@ public class OverviewCtrl implements Initializable {
      */
     public void updateUIWithNewLanguage() {
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+        sendInvitesButton.setText(MainCtrl.resourceBundle.getString("button.sendInvites"));
+        tagButton.setText(MainCtrl.resourceBundle.getString("button.tag"));
+        expensesText.setText(MainCtrl.resourceBundle.getString("Text.expenses"));
+        participantsText.setText(MainCtrl.resourceBundle.getString("Text.participants"));
+        addParticipantsButton.setText(MainCtrl.resourceBundle.getString("button.add"));
+        goToBalances.setText(MainCtrl.resourceBundle.getString("button.balances"));
+        refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
+        addExpenseButton.setText(MainCtrl.resourceBundle.getString("button.addExpense"));
+        statisticsButton.setText(MainCtrl.resourceBundle.getString("button.seeStatistics"));
+        filtersText.setText(MainCtrl.resourceBundle.getString("Text.filters"));
+        payerText.setText(MainCtrl.resourceBundle.getString("Text.payer"));
+        owerText.setText(MainCtrl.resourceBundle.getString("Text.ower"));
+        tagText.setText(MainCtrl.resourceBundle.getString("Text.tag"));
+        deleteEventButton.setText(MainCtrl.resourceBundle.getString("button.deleteEvent"));
+
     }
 
     /**
