@@ -6,6 +6,9 @@ plugins {
 
 java {
 	sourceCompatibility = '21'
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(21))
+	}
 }
 
 dependencies {

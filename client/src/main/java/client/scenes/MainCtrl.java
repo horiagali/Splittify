@@ -185,6 +185,7 @@ public class MainCtrl {
         this.statistics = new Scene(statistics.getValue());
         this.debtsCtrl = debtsCtrlParentPair.getKey();
         this.debts = new Scene(debtsCtrlParentPair.getValue());
+        updateFlags(language);
 
         dimension = Toolkit. getDefaultToolkit(). getScreenSize();
         primaryStage.setWidth(dimension.getWidth()/1.4);

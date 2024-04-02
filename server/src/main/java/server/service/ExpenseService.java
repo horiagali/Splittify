@@ -77,6 +77,7 @@ public class ExpenseService {
         newExpense.setTitle(expense.getTitle());
         newExpense.setEvent(event);
         newExpense.setDate(expense.getDate());
+        newExpense.setPayer(expense.getPayer());
         newExpense.toString();
         Expense saved = balancing(expense, event, newExpense, expense.getAmount());
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)

@@ -23,7 +23,7 @@ public class EventService {
      * @param eventRepository an eventRepository
      * @param tagRepository
      */
-    protected EventService(EventRepository eventRepository, TagRepository tagRepository){
+    public EventService(EventRepository eventRepository, TagRepository tagRepository){
         this.eventRepository = eventRepository;
         this.tagRepository = tagRepository;
         tagService = new TagService(tagRepository, eventRepository);
