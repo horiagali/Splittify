@@ -81,7 +81,8 @@ public class BalancesCtrl implements Initializable {
 
         colBalance.setCellValueFactory(q -> {
             double balance = q.getValue().getBalance() * Currency.getRate();
-            return new SimpleStringProperty(String.valueOf(Currency.round(balance)) +  " " + Currency.getCurrencyUsed());
+            return new SimpleStringProperty(String.valueOf(Currency.round(balance)) +
+                    " " + Currency.getCurrencyUsed());
         });
 
         colSettles.setCellValueFactory(q ->
@@ -117,7 +118,8 @@ public class BalancesCtrl implements Initializable {
         // Update currency for balances
         colBalance.setCellValueFactory(q -> {
             double balance = q.getValue().getBalance() * Currency.getRate();
-            return new SimpleStringProperty(String.valueOf(Currency.round(balance)) + " " + Currency.getCurrencyUsed());
+            return new SimpleStringProperty(String.valueOf
+                    (Currency.round(balance)) + " " + Currency.getCurrencyUsed());
         });
     }
 

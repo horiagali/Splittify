@@ -17,7 +17,7 @@ public class Currency {
     /**
      * rounds up to 2 decimals
      * @param x
-     * @return
+     * @return returs the rounded number
      */
     public static double round(double x){
         return Math.round(x * 100.0) / 100.0;
