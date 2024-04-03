@@ -124,6 +124,7 @@ public class ServerSetterCtrl {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.serverSetter"));
         connectToServerButton.setText(MainCtrl.resourceBundle.getString("button.connectToServer"));
         invalidURL.setText("");
         enterUrl.setText(MainCtrl.resourceBundle.getString("Text.enterUrl"));

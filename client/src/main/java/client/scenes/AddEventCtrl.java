@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
 
-import client.Main;
 import client.utils.Currency;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -108,7 +107,7 @@ public class AddEventCtrl implements Initializable {
         if (nameField.getText().isEmpty() || nameField.getText().isBlank()) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Please enter a title");
+            alert.setContentText(MainCtrl.resourceBundle.getString("Text.enterTitle"));
             alert.showAndWait();
             return;
         }
@@ -198,6 +197,7 @@ public class AddEventCtrl implements Initializable {
      */
     public void updateUIWithNewLanguage() {
 
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.addEvent"));
         currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
         eventNameLabel.setText(MainCtrl.resourceBundle.getString("Text.eventName"));
         eventDescriptionLabel.setText(MainCtrl.resourceBundle.getString("Text.eventDescription"));

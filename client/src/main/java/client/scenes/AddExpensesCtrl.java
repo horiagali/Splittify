@@ -126,7 +126,7 @@ public class AddExpensesCtrl implements Initializable {
         }
         List<Participant> participants = server.getParticipants(selectedEvent.getId());
         if (participants == null || participants.isEmpty()) {
-            showErrorDialog("No participants found for the selected event.");
+            showErrorDialog(MainCtrl.resourceBundle.getString("Text.noParticipantsFound"));
             return;
         }
         allParticipants.addAll(participants);
@@ -270,7 +270,7 @@ public class AddExpensesCtrl implements Initializable {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println("Currency changed to: " + currency);
+        System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo")+ currency);
     }
 
     /**

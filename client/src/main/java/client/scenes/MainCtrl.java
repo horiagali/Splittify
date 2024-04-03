@@ -185,6 +185,7 @@ public class MainCtrl {
 
         this.statisticsCtrl = statistics.getKey();
         this.statistics = new Scene(statistics.getValue());
+
         this.debtsCtrl = debtsCtrlParentPair.getKey();
         this.debts = new Scene(debtsCtrlParentPair.getValue());
         updateFlags(language);
@@ -341,6 +342,7 @@ public class MainCtrl {
         primaryStage.setTitle("Contact Details");
         contactDetailsCtrl.loadInfo(participant);
         primaryStage.setScene(contactDetails);
+        contactDetailsCtrl.updateUIWithNewLanguage();
     }
 
 
@@ -493,6 +495,10 @@ public class MainCtrl {
         balancesCtrl.updateFlagImageURL(language);
         serverPair.getKey().updateFlagImageURL(language);
         addEventCtrl.updateFlagImageURL(language);
+        contactDetailsCtrl.updateFlagImageURL(language);
+        editExpenseCtrl.updateFlagImageURL(language);
+        balancesCtrl.updateFlagImageURL(language);
+        debtsCtrl.updateFlagImageURL(language);
     }
 
 
@@ -511,5 +517,10 @@ public class MainCtrl {
         serverPair.getKey().updateUIWithNewLanguage();
         addEventCtrl.updateUIWithNewLanguage();
         addExpensesCtrl.updateUIWithNewLanguage();
+        overviewCtrl.updateUIWithNewLanguage();
+        contactDetailsCtrl.updateUIWithNewLanguage();
+        editExpenseCtrl.updateUIWithNewLanguage();
+        balancesCtrl.updateUIWithNewLanguage();
+        debtsCtrl.updateUIWithNewLanguage();
     }
 }

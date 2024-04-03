@@ -608,7 +608,8 @@ public class OverviewCtrl implements Initializable {
     public void goToAreYouSure(ActionEvent actionEvent) {
         Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
         confirmationDialog.setTitle(MainCtrl.resourceBundle.getString("Text.confirmation"));
-        confirmationDialog.setHeaderText(MainCtrl.resourceBundle.getString("Text.areYouSureDeleteEvent"));
+        confirmationDialog.setHeaderText
+                (MainCtrl.resourceBundle.getString("Text.areYouSureDeleteEvent"));
         confirmationDialog.setContentText(MainCtrl.resourceBundle.getString("Text.noUndone"));
 
         confirmationDialog.showAndWait().ifPresent(response -> {

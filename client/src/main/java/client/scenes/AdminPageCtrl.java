@@ -60,6 +60,12 @@ public class AdminPageCtrl implements Initializable {
     private Button backButton;
     @FXML
     private ImageView languageFlagImageView;
+    @FXML
+    private Button downloadJsonButton;
+    @FXML
+    private Button importJsonButton;
+    @FXML
+    private Button refreshButton;
 
     /**
      * constructor
@@ -145,7 +151,14 @@ public class AdminPageCtrl implements Initializable {
      * updates UI
      */
     public void updateUIWithNewLanguage() {
+
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+        downloadJsonButton.setText(MainCtrl.resourceBundle.getString("button.downloadJson"));
+        importJsonButton.setText(MainCtrl.resourceBundle.getString("button.importJson"));
+        refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
+        colName.setText(MainCtrl.resourceBundle.getString("Text.eventName"));
+        colLocation.setText(MainCtrl.resourceBundle.getString("Text.eventLocation"));
+        colDate.setText(MainCtrl.resourceBundle.getString("Text.eventDate"));
     }
 
     /**

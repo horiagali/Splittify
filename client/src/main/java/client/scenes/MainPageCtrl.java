@@ -119,6 +119,7 @@ public class MainPageCtrl implements Initializable {
      */
     public void updateUIWithNewLanguage() {
 
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.mainPage"));
         disconnectButton.setText(MainCtrl.resourceBundle.getString("button.disconnect"));
         createEventButton.setText(MainCtrl.resourceBundle.getString("button.createEvent"));
         joinEventButton.setText(MainCtrl.resourceBundle.getString("button.joinEvent"));

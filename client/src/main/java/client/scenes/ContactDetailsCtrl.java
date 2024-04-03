@@ -9,14 +9,11 @@ import commons.Expense;
 import commons.Participant;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Menu;
-import javafx.scene.control.RadioMenuItem;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -46,7 +43,19 @@ public class ContactDetailsCtrl implements Initializable {
     @FXML
     private Menu languageMenu;
     @FXML
+    private ImageView languageFlagImageView;
+    @FXML
     private ToggleGroup currencyGroup;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Text nameLabel;
+    @FXML
+    private Text emailLabel;
+    @FXML
+    private Text ibanLabel;
+    @FXML
+    private Text bicLabel;
     @FXML
     Text title;
     @FXML
@@ -99,6 +108,7 @@ public class ContactDetailsCtrl implements Initializable {
      * @param participant
      */
     public void loadInfo(Participant participant) {
+        updateUIWithNewLanguage();
         eventId = OverviewCtrl.getSelectedEvent().getId();
         reset();
         if(participant == null){
@@ -144,6 +154,7 @@ public class ContactDetailsCtrl implements Initializable {
         + bicString + "  →");
         TextField newParticipantBic = (TextField) bic.getChildren().get(1);
         newParticipantBic.setPromptText("Enter new BIC");
+        updateUIWithNewLanguage();
     }
 
     /**
@@ -232,38 +243,41 @@ public class ContactDetailsCtrl implements Initializable {
      * resets to values of creating a participant
      */
     public void reset() {
-        title.setText("Add Participant");
+        title.setText(MainCtrl.resourceBundle.getString("Text.addExpense"));
         deleteButton.setOpacity(0);
-        deleteButton.disableProperty().set(true);;
+        deleteButton.disableProperty().set(true);
         updateButton.setOpacity(0);
         updateButton.disableProperty().set(true);
         addButton.setOpacity(1);
         addButton.disableProperty().set(false);
 
 
-        Text createName = (Text) name.getChildren().get(0);
-        createName.setText("Name: ");
+        nameLabel.setText(MainCtrl.resourceBundle.getString("Text.name") + ": ");
         TextField createNameTextField = (TextField) name.getChildren().get(1);
-        createNameTextField.setPromptText("Enter Name");
+        createNameTextField.setPromptText(MainCtrl.resourceBundle.getString
+                ("Text.enter") + " " + MainCtrl.resourceBundle.getString("Text.name"));
         createNameTextField.setText("");
 
         Text createEmail = (Text) email.getChildren().get(0);
         createEmail.setText("Email: ");
         TextField createEmailTextField = (TextField) email.getChildren().get(1);
-        createEmailTextField.setPromptText("Enter Email");
+        createEmailTextField.setPromptText
+                (MainCtrl.resourceBundle.getString("Text.enter") + " Email");
         createEmailTextField.setText("");
 
         Text createIBAN = (Text) iban.getChildren().get(0);
         createIBAN.setText("IBAN: ");
         TextField createIbanTextField = (TextField) iban.getChildren().get(1);
-        createIbanTextField.setPromptText("Enter IBAN");
+        createIbanTextField.setPromptText
+                (MainCtrl.resourceBundle.getString("Text.enter") + " IBAN");
         createIbanTextField.setText("");
 
         Text createBIC = (Text) bic.getChildren().get(0);
         createBIC.setText("BIC: ");
         TextField createBICTextField = (TextField) bic.getChildren().get(1);
-        createBICTextField.setPromptText("Enter BIC");
+        createBICTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.enter") + " BIC");
         createBICTextField.setText("");
+        updateUIWithNewLanguage();
     }
 
     /**
@@ -349,13 +363,49 @@ public class ContactDetailsCtrl implements Initializable {
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
     
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        title.setText(MainCtrl.resourceBundle.getString("Text.addParticipant"));
+        backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+        addButton.setText(MainCtrl.resourceBundle.getString("button.add"));
+        nameLabel.setText(MainCtrl.resourceBundle.getString("Text.name") + ": ");
+        emailLabel.setText("Email:");
+        ibanLabel.setText("IBAN:");
+        bicLabel.setText("BIC:");
+        nameField.setPromptText(MainCtrl.resourceBundle.getString("Text.enter")
+                + " " + MainCtrl.resourceBundle.getString("Text.name"));
+        emailField.setPromptText(MainCtrl.resourceBundle.getString("Text.enter") + " Email");
+        ibanField.setPromptText(MainCtrl.resourceBundle.getString("Text.enter") + " IBAN");
+        bicField.setPromptText(MainCtrl.resourceBundle.getString("Text.enter") + " BIC");
+        deleteButton.setText(MainCtrl.resourceBundle.getString("Text.delete"));
+        updateButton.setText(MainCtrl.resourceBundle.getString("button.update"));
     }
 
     /**
@@ -371,6 +421,6 @@ public class ContactDetailsCtrl implements Initializable {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println("Currency changed to: " + currency);
+        System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo") + currency);
     }
 }
