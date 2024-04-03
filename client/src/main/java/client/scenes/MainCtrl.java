@@ -85,6 +85,9 @@ public class MainCtrl {
     private Scene debts;
     private SettleDebtsCtrl debtsCtrl;
 
+    private Scene addPartial;
+    private AddPartialDebtCtrl addPartialDebtCtrl;
+
     private Dimension dimension;
 
 
@@ -108,7 +111,9 @@ public class MainCtrl {
      * @param statistics
      * @param debtsCtrlParentPair
      * @param tagOverview
+     * @param partialDebtCtrlParentPair
      * @param main
+     *
      */
 
     @SuppressWarnings({"ParameterNumber", "checkstyle:MethodLength"})
@@ -127,6 +132,7 @@ public class MainCtrl {
                            Pair<StatisticsCtrl, Parent> statistics,
                            Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair,
                            Pair<TagOverviewCtrl, Parent> tagOverview,
+                           Pair<AddPartialDebtCtrl, Parent> partialDebtCtrlParentPair,
                            Main main) {
 
         this.primaryStage = primaryStage;
@@ -185,6 +191,8 @@ public class MainCtrl {
         this.statistics = new Scene(statistics.getValue());
         this.debtsCtrl = debtsCtrlParentPair.getKey();
         this.debts = new Scene(debtsCtrlParentPair.getValue());
+        this.addPartial = new Scene(partialDebtCtrlParentPair.getValue());
+        this.addPartialDebtCtrl = partialDebtCtrlParentPair.getKey();
         updateFlags(language);
 
         dimension = Toolkit. getDefaultToolkit(). getScreenSize();
@@ -504,5 +512,14 @@ public class MainCtrl {
         inviteCtrl.updateUIWithNewLanguage();
         adminPageCtrl.updateUIWithNewLanguage();
         balancesCtrl.updateUIWithNewLanguage();
+    }
+
+    /**
+     * go to partial
+     */
+    public void goToPartial() {
+        primaryStage.setTitle("Add partial debt");
+        primaryStage.setScene(addPartial);
+        addPartialDebtCtrl.refreshParticipants();
     }
 }

@@ -302,4 +302,10 @@ public class BalancesCtrl implements Initializable {
         pause.play();
         refresh();}
 
+    /**
+     * add partial debt
+     */
+    public void addPartial(){
+        mainCtrl.goToPartial();
+    }
 }

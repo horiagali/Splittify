@@ -105,7 +105,7 @@
             </TableView>
             <Text layoutX="60.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Partial settles" textAlignment="CENTER" wrappingWidth="480.0" />
             <Button layoutX="250.0" layoutY="360.0" mnemonicParsing="false" onAction="#settleDebts" prefHeight="26.0" prefWidth="100.0" text="Settle Debts" />
-            <Button layoutX="343.0" layoutY="196.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="45.0" text="Add" />
+            <Button layoutX="343.0" layoutY="196.0" mnemonicParsing="false" onAction="#addPartial" prefHeight="17.0" prefWidth="45.0" text="Add" />
          </children>
       </AnchorPane>
    </children>
