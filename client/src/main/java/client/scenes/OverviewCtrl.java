@@ -18,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -504,7 +505,54 @@ public class OverviewCtrl implements Initializable {
                 ActionEvent dummyEvent = new ActionEvent();
                 goToAreYouSure(dummyEvent);
             }
+            handleAdditionalKeyEvents(event);
         });
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void handleAdditionalKeyEvents(KeyEvent event) {
+        if (event.isControlDown() && event.getCode() == KeyCode.L) {
+            languageMenu.show();
+        }
+        if (event.isControlDown() && event.getCode() == KeyCode.R) {
+            refresh();
+        }
+        if(event.isControlDown() && event.getCode() == KeyCode.P){
+            goToContact();
+        }
+        if(event.isAltDown() && event.getCode() == KeyCode.S){
+            showStatistics();
+        }
+        if(event.isAltDown() && event.getCode() == KeyCode.T){
+            goToTagOverview();
+        }
+        handleMoreAdditionalKeyEvents(event);
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void handleMoreAdditionalKeyEvents(KeyEvent event) {
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.P){
+            payer.show();
+        }
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.T){
+            ower.show();
+        }
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.O){
+            tag.show();
+        }
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.N){
+            switchToNameTextField();
+        }
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.D){
+            switchToDateTextField();
+        }
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.W){
+            switchToDescriptionTextField();
+        }
     }
 
     /**
