@@ -18,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -73,6 +74,8 @@ public class MainPageCtrl implements Initializable {
 
     @FXML
     private ToggleGroup currencyGroup;
+    @FXML
+    private Menu currencyMenu;
 
 
     /**
@@ -221,7 +224,27 @@ public class MainPageCtrl implements Initializable {
             if (event.getCode() == KeyCode.ENTER) {
                 handleTableItemKeyPress();
             }
+            handleAdditionalKeyEvents(event);
+
         });
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void handleAdditionalKeyEvents(KeyEvent event) {
+        if (event.isControlDown() && event.getCode() == KeyCode.D) {
+            disconnect();
+        }
+        if (event.isControlDown() && event.getCode() == KeyCode.L) {
+            languageMenu.show();
+        }
+        if (event.isControlDown() && event.getCode() == KeyCode.M) {
+            currencyMenu.show();
+        }
+        if (event.isControlDown() && event.getCode() == KeyCode.R) {
+            refresh();
+        }
     }
 
     /**
