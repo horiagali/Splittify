@@ -15,6 +15,14 @@ public class Currency {
     private static double EUR_TO_RON = 4.95;
 
     /**
+     * rounds up to 2 decimals
+     * @param x
+     * @return
+     */
+    public static double round(double x){
+        return Math.round(x * 100.0) / 100.0;
+
+    }    /**
      * Get the exchange rate from Euro to USD.
      *
      * @return The exchange rate from Euro to USD.

@@ -434,7 +434,7 @@ public class OverviewCtrl implements Initializable {
         row2.setSpacing(5);
         row2.setAlignment(Pos.CENTER);
         Label payer = new Label(expense.getPayer().getNickname());
-        Label text = new Label("payed " + expense.getAmount() + " for");
+        Label text = new Label("payed " +Currency.round(expense.getAmount()*Currency.getRate()) + " " + Currency.getCurrencyUsed() + " for");
         String owers = "";
         if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
         owers = "everyone";

@@ -106,8 +106,9 @@ public class StatisticsCtrl {
             continue;
             double amount = expenses.stream().filter(x -> x.getTag().equals(tag))
             .mapToDouble(x  -> (int) x.getAmount()).sum();
+            amount = Currency.round(amount*Currency.getRate());
             if(amount != 0)
-            pieChartData.add(new PieChart.Data(tag.getName() + ": " + amount, amount));
+            pieChartData.add(new PieChart.Data(tag.getName() + ": " + amount+ " " + Currency.getCurrencyUsed(), amount));
             totalAmount += amount;
         }
         //method to set the percentage per tag group
@@ -130,12 +131,12 @@ public class StatisticsCtrl {
             
         }
         pieChart.setData(pieChartData);
-        eventTotalAmount.setText("" + totalAmount);
+        eventTotalAmount.setText("" + totalAmount + " " + Currency.getCurrencyUsed());
         updateUIWithNewLanguage();
 
     }
 
-    /**
+    /*
      * Changes the language of the site
      * @param event
      */
@@ -184,7 +185,7 @@ public class StatisticsCtrl {
             pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString));
         }
         eventTotalAmount.setText(MainCtrl.resourceBundle.getString("Text.statisticsTotal") + 
-        totalAmount);
+        totalAmount +  " " + Currency.getCurrencyUsed());
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         refresh.setText(MainCtrl.resourceBundle.getString("button.refresh"));
         String stageTitleString = "title.statistics";
