@@ -218,6 +218,7 @@ public class OverviewCtrl implements Initializable {
         updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        refresh();
     }
 
 
@@ -241,7 +242,7 @@ public class OverviewCtrl implements Initializable {
         owerText.setText(MainCtrl.resourceBundle.getString("Text.ower"));
         tagText.setText(MainCtrl.resourceBundle.getString("Text.tag"));
         deleteEventButton.setText(MainCtrl.resourceBundle.getString("button.deleteEvent"));
-
+        currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
     }
 
     /**
@@ -279,7 +280,7 @@ public class OverviewCtrl implements Initializable {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println("Currency changed to: " + currency);
+        System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo") + currency);
     }
 
     /**
@@ -325,6 +326,12 @@ public class OverviewCtrl implements Initializable {
             eventDescription.setText(selectedEvent.getDescription());
             
         }
+
+        if (MainCtrl.resourceBundle != null) {
+            payer.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
+            ower.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
+            tag.setValue(MainCtrl.resourceBundle.getString("Text.anyTag"));
+        }
     
         loadParticipants();
         loadComboBoxes();
@@ -336,13 +343,13 @@ public class OverviewCtrl implements Initializable {
     private void loadComboBoxes() {
         if(selectedEvent == null) return;
         List<String> participants = new ArrayList<>();
-        participants.add("anyone");
+        participants.add(MainCtrl.resourceBundle.getString("Text.anyone"));
         participants.addAll(server.getParticipants(selectedEvent.getId()).stream()
-        .map(x -> x.getNickname()).toList());
+        .map(Participant::getNickname).toList());
         List<String> tags = new ArrayList<>();
-        tags.add("any tag");
+        tags.add(MainCtrl.resourceBundle.getString("Text.anyTag"));
         tags.addAll(server.getTags(selectedEvent.getId()).stream()
-        .map(x -> x.getName()).filter(x -> !x.equals("gifting money")).toList());
+        .map(Tag::getName).filter(x -> !x.equals("gifting money")).toList());
         
         payer.setItems(FXCollections.observableArrayList(participants));
         ower.setItems(FXCollections.observableArrayList(participants));
@@ -407,9 +414,9 @@ public class OverviewCtrl implements Initializable {
      * resets comboboxes to 'anyone' state
      */
     public void resetComboBoxes() {
-        payer.setValue("anyone");
-        ower.setValue("anyone");
-        tag.setValue("any tag");
+        payer.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
+        ower.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
+        tag.setValue(MainCtrl.resourceBundle.getString("Text.anyTag"));
     }
 
     /**
@@ -422,7 +429,7 @@ public class OverviewCtrl implements Initializable {
         expenses = applyFilters(expenses);
         if(expenses.size() == 0) {
             expensesBox.getChildren()
-            .add(new Text("There are no expenses matching your filters."));
+                    .add(new Text(MainCtrl.resourceBundle.getString("Text.noExpensesFiltered")));
             return;
         }
         for(Expense expense : expenses) {
@@ -447,17 +454,17 @@ public class OverviewCtrl implements Initializable {
         String payerBox = payer.getValue();
         String owerBox = ower.getValue();
         String tagBox = tag.getValue();
-        if(payerBox != null && !payerBox.equals("anyone")) {
+        if(payerBox != null && !payerBox.equals(MainCtrl.resourceBundle.getString("Text.anyone"))) {
             expenses = expenses.stream()
             .filter(x -> x.getPayer().getNickname().equals(payerBox)).toList();
         }
-        if(owerBox != null && !owerBox.equals("anyone")) {
+        if(owerBox != null && !owerBox.equals(MainCtrl.resourceBundle.getString("Text.anyone"))) {
             Participant owerOfExpense = server
             .getParticipantByNickname(selectedEvent.getId(), owerBox);
             expenses = expenses.stream()
         .filter(x -> x.getOwers().contains(owerOfExpense)).toList();
         }
-        if(tagBox != null && !tagBox.equals("any tag")) {
+        if(tagBox != null && !tagBox.equals(MainCtrl.resourceBundle.getString("Text.anyTag"))) {
             Optional<Tag> selectedTag = server.getTags(selectedEvent.getId())
             .stream().filter(x -> x.getName().equals(tagBox)).findFirst();
             if(!selectedTag.isEmpty()) {
@@ -465,7 +472,9 @@ public class OverviewCtrl implements Initializable {
                 expenses = expenses.stream().filter(x -> x.getTag().equals(actualTag))
                 .toList();
             } else {
-                System.out.println("No tag with name " + tagBox + " was found!");
+                String noTag = MainCtrl.resourceBundle.getString("Text.noTagWithName");
+                String wasFound = MainCtrl.resourceBundle.getString("Text.wasFound");
+                System.out.println(noTag + tagBox + wasFound);
             }
             
         }
@@ -479,14 +488,16 @@ public class OverviewCtrl implements Initializable {
         row2.setSpacing(5);
         row2.setAlignment(Pos.CENTER);
         Label payer = new Label(expense.getPayer().getNickname());
-        Label text = new Label("payed " + expense.getAmount() + " for");
+        String payed = MainCtrl.resourceBundle.getString("Text.payed");
+        String forString = MainCtrl.resourceBundle.getString("Text.for");
+        Label text = new Label(payed + expense.getAmount() + " " + forString);
         String owers = "";
         if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
-        owers = "everyone";
+            owers = MainCtrl.resourceBundle.getString("Text.everyone");
         else {
             List<String> nameList = expense.getOwers().stream()
-            .map(x -> x.getNickname()).toList();
-            owers = nameList.get(0);
+            .map(Participant::getNickname).toList();
+            owers = nameList.getFirst();
             for(int i = 1; i < nameList.size(); i++) {
                 owers = owers + ", " + nameList.get(i);
             }
@@ -596,16 +607,16 @@ public class OverviewCtrl implements Initializable {
      */
     public void goToAreYouSure(ActionEvent actionEvent) {
         Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationDialog.setTitle("Confirmation");
-        confirmationDialog.setHeaderText("Are you sure you want to delete the event?");
-        confirmationDialog.setContentText("This action cannot be undone.");
+        confirmationDialog.setTitle(MainCtrl.resourceBundle.getString("Text.confirmation"));
+        confirmationDialog.setHeaderText(MainCtrl.resourceBundle.getString("Text.areYouSureDeleteEvent"));
+        confirmationDialog.setContentText(MainCtrl.resourceBundle.getString("Text.noUndone"));
 
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 server.deleteEvent(selectedEvent);
                 back();
             } else {
-                System.out.println("Event deletion canceled.");
+                System.out.println(MainCtrl.resourceBundle.getString("Text.eventDeleteCanceled"));
             }
         });
     }

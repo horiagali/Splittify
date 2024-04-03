@@ -510,5 +510,6 @@ public class MainCtrl {
         balancesCtrl.updateUIWithNewLanguage();
         serverPair.getKey().updateUIWithNewLanguage();
         addEventCtrl.updateUIWithNewLanguage();
+        addExpensesCtrl.updateUIWithNewLanguage();
     }
 }
