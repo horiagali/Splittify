@@ -34,10 +34,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AdminPageCtrl implements Initializable {
     private final ServerUtils server;
@@ -100,6 +98,35 @@ public class AdminPageCtrl implements Initializable {
         addKeyboardNavigationHandlers();
 
         server.registerForUpdates(data::add);
+    }
+
+    private List<Event> reverse(List<Event> l) {
+        Stack<Event> eventStack = new Stack<>();
+        List<Event> sorted = new ArrayList<>();
+        for (Event event: l) {
+            eventStack.push(event);
+        }
+        for (int i = 0; i < l.size(); i++) {
+            sorted.add(i, eventStack.pop());
+        }
+        return sorted;
+    }
+    public List<Event> sortOldToNew(List<Event> l) {
+        return reverse(l);
+    }
+
+    public List<Event> sortAlphabetically(List<Event> l) {
+        List<Event> sorted = l.stream()
+                .sorted(Comparator.comparing(Event::getTitle))
+                .collect(Collectors.toList());
+        return sorted;
+    }
+
+    public List<Event> sortAlphabeticallyReverse(List<Event> l) {
+        List<Event> sorted = l.stream()
+                .sorted(Comparator.comparing(Event::getTitle))
+                .collect(Collectors.toList());
+        return reverse(sorted);
     }
 
     /**
