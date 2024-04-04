@@ -29,6 +29,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -63,6 +64,8 @@ public class TagOverviewCtrl {
 
     @FXML
     private VBox tagInfo;
+    @FXML
+    private VBox vbox;
 
     TextField name;
 
@@ -84,7 +87,7 @@ public class TagOverviewCtrl {
     public void refresh() {
         tagInfo.getChildren().clear();
         loadTags();
-
+        addKeyboardNavigationHandlers();
     }
 
     /**
@@ -472,6 +475,26 @@ public class TagOverviewCtrl {
 
         // Print confirmation message
         System.out.println("Currency changed to: " + currency);
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        vbox.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.R) {
+                refresh();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.P) {
+                createNewTag();
+            }
+        });
     }
 }
 

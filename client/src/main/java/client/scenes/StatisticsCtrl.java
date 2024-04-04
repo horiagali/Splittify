@@ -23,6 +23,8 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class StatisticsCtrl {
@@ -38,6 +40,8 @@ public class StatisticsCtrl {
     
     @FXML
     private Menu languageMenu;
+    @FXML
+    private Menu currencyMenu;
 
     @FXML
     private ToggleGroup currencyGroup;
@@ -52,6 +56,8 @@ public class StatisticsCtrl {
 
     @FXML
     private Button refresh;
+    @FXML
+    private VBox vbox;
 
     /**
      * @param server
@@ -91,6 +97,7 @@ public class StatisticsCtrl {
 
         //     data.getNode().setStyle("-fx-pie-color: " + tag.get().getColor());
         // }
+        addKeyboardNavigationHandlers();
 
     }
 
@@ -236,5 +243,25 @@ public class StatisticsCtrl {
         mainCtrl.goToOverview();
         else
             mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        vbox.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.R) {
+                refresh();
+            }
+        });
     }
 }
