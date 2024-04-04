@@ -35,7 +35,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AdminPageCtrl implements Initializable {
     private final ServerUtils server;
@@ -47,11 +46,13 @@ public class AdminPageCtrl implements Initializable {
     @FXML
     private TableView<Event> table;
     @FXML
+    TableColumn<Event, String> colId;
+    @FXML
     private TableColumn<Event, String> colName;
     @FXML
-    private TableColumn<Event, String> colLocation;
-    @FXML
     private TableColumn<Event, String> colDate;
+    @FXML
+    private ComboBox<String> sortingComboBox;
     @FXML
     private Menu languageMenu;
     @FXML
@@ -86,9 +87,16 @@ public class AdminPageCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getTitle()));
-        colLocation.setCellValueFactory(q ->
-                new SimpleStringProperty(q.getValue().getLocation()));
-        colDate.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
+        colId.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getId().toString()));
+        colDate.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getDate().toString()));
+
+        List<String> sortingOptions = new ArrayList<>();
+        sortingOptions.add("A-Z");
+        sortingOptions.add("Z-A");
+
+        sortingComboBox.setItems(FXCollections.observableList(sortingOptions));
 
         table.setOnMouseClicked(this::handleTableItemClick);
 
@@ -101,53 +109,31 @@ public class AdminPageCtrl implements Initializable {
     }
 
     /**
-     * Reverse a list of events
-     * @param l list of events
-     * @return list of events reversed
+     * Handles sorting
+     * @param e action event
      */
-    private List<Event> reverse(List<Event> l) {
-        Stack<Event> eventStack = new Stack<>();
-        List<Event> sorted = new ArrayList<>();
-        for (Event event: l) {
-            eventStack.push(event);
+    @FXML
+    private void handeSort(ActionEvent e) {
+        refresh();
+        switch (sortingComboBox.getValue()) {
+            case "A-Z" -> sortAlphabetically();
+            case "Z-A" -> sortAlphabeticallyReverse();
         }
-        for (int i = 0; i < l.size(); i++) {
-            sorted.add(i, eventStack.pop());
-        }
-        return sorted;
     }
 
-    /**
-     * Sorts a list form new to old, given that the provided list is sorted old to new
-     * @param l list that is sorted old to new
-     * @return list sorted new to old
-     */
-    public List<Event> sortNewToOld(List<Event> l) {
-        return reverse(l);
-    }
 
     /**
-     * Sorts a list of event alphabetically by title
-     * @param l list of events
-     * @return list sorted alphabetically by title
+     * Sorts a list of events alphabetically by title
      */
-    public List<Event> sortAlphabetically(List<Event> l) {
-        List<Event> sorted = l.stream()
-                .sorted(Comparator.comparing(Event::getTitle))
-                .collect(Collectors.toList());
-        return sorted;
+    public void sortAlphabetically() {
+        data.sort(Comparator.comparing(Event::getTitle));
     }
 
     /**
      * Sorts a list of events from Z-A by title
-     * @param l list of events
-     * @return sorted list of events by title Z-A
      */
-    public List<Event> sortAlphabeticallyReverse(List<Event> l) {
-        List<Event> sorted = l.stream()
-                .sorted(Comparator.comparing(Event::getTitle))
-                .collect(Collectors.toList());
-        return reverse(sorted);
+    public void sortAlphabeticallyReverse() {
+        data.sort(Comparator.comparing(Event::getTitle).reversed());
     }
 
     /**
