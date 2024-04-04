@@ -140,7 +140,7 @@ public class EditPartialDebtCtrl implements Initializable {
         }
 
         // Populate currency ComboBox
-        currencyComboBox.setItems(FXCollections.observableArrayList("USD", "EUR", "GBP", "JPY"));
+        currencyComboBox.setItems(FXCollections.observableArrayList("EUR", "CHF", "RON", "USD"));
         currencyComboBox.getSelectionModel().select("EUR");
 
         if (expense != null)
