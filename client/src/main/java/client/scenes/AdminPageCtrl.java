@@ -90,11 +90,13 @@ public class AdminPageCtrl implements Initializable {
         colId.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getId().toString()));
         colDate.setCellValueFactory(q ->
-                new SimpleStringProperty(q.getValue().getDate().toString()));
+                new SimpleStringProperty(q.getValue().getCreationDate().toString()));
 
         List<String> sortingOptions = new ArrayList<>();
         sortingOptions.add("A-Z");
         sortingOptions.add("Z-A");
+        sortingOptions.add("New-Old");
+        sortingOptions.add("Old-New");
 
         sortingComboBox.setItems(FXCollections.observableList(sortingOptions));
 
@@ -118,22 +120,39 @@ public class AdminPageCtrl implements Initializable {
         switch (sortingComboBox.getValue()) {
             case "A-Z" -> sortAlphabetically();
             case "Z-A" -> sortAlphabeticallyReverse();
+            case "New-Old" -> sortNewToOld();
+            case "Old-New" -> sortOldToNew();
         }
     }
 
 
     /**
-     * Sorts a list of events alphabetically by title
+     * Sort data from a to z
      */
     public void sortAlphabetically() {
-        data.sort(Comparator.comparing(Event::getTitle));
+        data.sort(Comparator.comparing(e -> e.getTitle().toLowerCase()));
     }
 
     /**
-     * Sorts a list of events from Z-A by title
+     * Sorts date from z to a
      */
-    public void sortAlphabeticallyReverse() {
-        data.sort(Comparator.comparing(Event::getTitle).reversed());
+    private void sortAlphabeticallyReverse() {
+        data.sort(Comparator.comparing(Event::getTitle,
+                Comparator.comparing(String::toLowerCase)).reversed());
+    }
+
+    /**
+     * Sort a date from new to old
+     */
+    private void sortNewToOld() {
+        data.sort(Comparator.comparing(Event::getCreationDate).reversed());
+    }
+
+    /**
+     * Sort data from old to new
+     */
+    private void sortOldToNew() {
+        data.sort(Comparator.comparing(Event::getCreationDate));
     }
 
     /**
