@@ -100,6 +100,11 @@ public class AdminPageCtrl implements Initializable {
         server.registerForUpdates(data::add);
     }
 
+    /**
+     * Reverse a list of events
+     * @param l list of events
+     * @return list of events reversed
+     */
     private List<Event> reverse(List<Event> l) {
         Stack<Event> eventStack = new Stack<>();
         List<Event> sorted = new ArrayList<>();
@@ -111,10 +116,21 @@ public class AdminPageCtrl implements Initializable {
         }
         return sorted;
     }
-    public List<Event> sortOldToNew(List<Event> l) {
+
+    /**
+     * Sorts a list form new to old, given that the provided list is sorted old to new
+     * @param l list that is sorted old to new
+     * @return list sorted new to old
+     */
+    public List<Event> sortNewToOld(List<Event> l) {
         return reverse(l);
     }
 
+    /**
+     * Sorts a list of event alphabetically by title
+     * @param l list of events
+     * @return list sorted alphabetically by title
+     */
     public List<Event> sortAlphabetically(List<Event> l) {
         List<Event> sorted = l.stream()
                 .sorted(Comparator.comparing(Event::getTitle))
@@ -122,6 +138,11 @@ public class AdminPageCtrl implements Initializable {
         return sorted;
     }
 
+    /**
+     * Sorts a list of events from Z-A by title
+     * @param l list of events
+     * @return sorted list of events by title Z-A
+     */
     public List<Event> sortAlphabeticallyReverse(List<Event> l) {
         List<Event> sorted = l.stream()
                 .sorted(Comparator.comparing(Event::getTitle))
