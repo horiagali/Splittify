@@ -231,6 +231,7 @@ public class MainPageCtrl implements Initializable {
 
     /**
      * Add keyboard navigation
+     * @param event to link to other method
      */
     private void handleAdditionalKeyEvents(KeyEvent event) {
         if (event.isControlDown() && event.getCode() == KeyCode.D) {

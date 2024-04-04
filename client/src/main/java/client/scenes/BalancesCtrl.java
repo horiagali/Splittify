@@ -146,6 +146,7 @@ public class BalancesCtrl implements Initializable {
     /**
      * Add keyboard navigation
      */
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity"})
     private void addKeyboardNavigationHandlers() {
         anchorPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
