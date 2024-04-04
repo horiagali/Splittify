@@ -46,10 +46,16 @@ public class SettleDebtsCtrl implements Initializable {
     }
 
     /**
-     * back to the balances page
+     * back to the overview page
      */
     public void back(){
         mainCtrl.showOverview();
+    }
+    /**
+     * back to the settles page
+     */
+    public void backSettle(){
+        mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
     }
 
     /**
@@ -64,6 +70,17 @@ public class SettleDebtsCtrl implements Initializable {
     @SuppressWarnings("checkstyle:MethodLength")
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        tableView.setRowFactory(tv -> {
+            TableRow<Expense> row = new TableRow<>();
+            row.itemProperty().addListener((obs, previousExpense, currentExpense) -> {
+                if (currentExpense != null && currentExpense.getTitle().equals("Received debt")) {
+                    row.setStyle("-fx-background-color: grey;");
+                } else {
+                    row.setStyle(""); // Reset to default style
+                }
+            });
+            return row;
+        });
         debtColumn.setCellValueFactory(q -> {
             double amount =q.getValue().getAmount() * Currency.getRate() ;
             return new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gives " +
@@ -91,6 +108,10 @@ public class SettleDebtsCtrl implements Initializable {
                     VBox contentBox = new VBox(bankInfoLabel);
                     titledPane.setContent(contentBox);
                     titledPane.setMaxWidth(Double.MAX_VALUE);
+                    titledPane.setExpanded(false);
+                    if (expense.getTitle().equals("Received debt")) {
+                        titledPane.setStyle("--body-background-color: grey;");
+                    }
                     setGraphic(titledPane);
                 }
             }
@@ -123,6 +144,10 @@ public class SettleDebtsCtrl implements Initializable {
                         boolean emailIsNull = participant.getEmail() == null ||
                                 participant.getEmail().isEmpty();
                         reminderButton.setDisable(emailIsNull);
+                        if (expense.getTitle().equals("Received debt")) {
+                            reminderButton.setDisable(true);
+                            reminderButton.setStyle("-fx-background-color: grey;");
+                        }
                         if(emailIsNull) {
                             reminderButton.setStyle("-fx-background-color: grey;");
                         } else {
@@ -150,9 +175,11 @@ public class SettleDebtsCtrl implements Initializable {
 
                     confirmationDialog.showAndWait().ifPresent(response -> {
                         if (response == ButtonType.OK) {
-                            back();
+                            backSettle();
                             Expense currentExpense = getTableView().getItems().get(getIndex());
                             server.deleteExpenseDebt(event.getId(), currentExpense);
+                            currentExpense.setTitle("Received debt");
+                            server.addExpenseToEventDebt(event.getId(), currentExpense);
                             refresh();
                         } else {
                             System.out.println("Settling of debts canceled.");
@@ -165,8 +192,16 @@ public class SettleDebtsCtrl implements Initializable {
                 super.updateItem(item, empty);
                 if (empty) {
                     setGraphic(null);
-                } else {
+                } if(getIndex() >= 0 && getIndex() < getTableView().getItems().size()) {
+                    Expense expense = getTableView().getItems().get(getIndex());
+                    if (expense.getTitle().equals("Received debt")) {
+                        actionButton.setDisable(true);
+                        actionButton.setText("Recieved");
+                        actionButton.setStyle("-fx-background-color: grey;");
+                    }
                     setGraphic(actionButton);
+                }else {
+                    setGraphic(null);
                 }
             }
         });
@@ -182,7 +217,8 @@ public class SettleDebtsCtrl implements Initializable {
     public void refresh() {
         // Refresh the data
         List<Expense> expenses2 = server.getExpensesByEventId(event.getId())
-                .stream().filter(x -> x.getTag().getName().equals("debt")).toList();
+                .stream().filter(x -> x.getTag().getName().equals("debt") ||
+                        x.getTag().getName().equals("Received debt")).toList();
         data = FXCollections.observableList(expenses2);
         tableView.setItems(data);
         String mata = Currency.getCurrencyUsed();
