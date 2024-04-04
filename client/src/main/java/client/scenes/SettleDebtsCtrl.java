@@ -106,7 +106,7 @@ public class SettleDebtsCtrl implements Initializable {
                     double amount = getTableView().getItems().get(getIndex()).getAmount();
                     Mail mail = new Mail(participant.getEmail(), "Payment reminder " +
                             "for event " + event.getId().toString(), "You owe " +
-                            owed.getNickname() + " " + String.valueOf(amount) + " for event "
+                            owed.getNickname() + " " + String.valueOf(amount / 100) + " for event "
                             + event.getTitle() + " on " + server.getServer());
                     server.sendEmail(mail);
                 });
