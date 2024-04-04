@@ -85,6 +85,12 @@ public class MainCtrl {
     private Scene debts;
     private SettleDebtsCtrl debtsCtrl;
 
+    private Scene addPartial;
+    private AddPartialDebtCtrl addPartialDebtCtrl;
+
+    private Scene editPartialDebt;
+    private EditPartialDebtCtrl editPartialDebtCtrl;
+
     private Dimension dimension;
 
 
@@ -108,7 +114,10 @@ public class MainCtrl {
      * @param statistics
      * @param debtsCtrlParentPair
      * @param tagOverview
+     * @param partialDebtCtrlParentPair
+     * @param editPartialDebtCtrlParentPair
      * @param main
+     *
      */
 
     @SuppressWarnings({"ParameterNumber", "checkstyle:MethodLength"})
@@ -127,6 +136,8 @@ public class MainCtrl {
                            Pair<StatisticsCtrl, Parent> statistics,
                            Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair,
                            Pair<TagOverviewCtrl, Parent> tagOverview,
+                           Pair<AddPartialDebtCtrl, Parent> partialDebtCtrlParentPair,
+                           Pair<EditPartialDebtCtrl, Parent> editPartialDebtCtrlParentPair,
                            Main main) {
 
         this.primaryStage = primaryStage;
@@ -185,6 +196,10 @@ public class MainCtrl {
         this.statistics = new Scene(statistics.getValue());
         this.debtsCtrl = debtsCtrlParentPair.getKey();
         this.debts = new Scene(debtsCtrlParentPair.getValue());
+        this.addPartial = new Scene(partialDebtCtrlParentPair.getValue());
+        this.addPartialDebtCtrl = partialDebtCtrlParentPair.getKey();
+        this.editPartialDebt = new Scene(editPartialDebtCtrlParentPair.getValue());
+        this.editPartialDebtCtrl = editPartialDebtCtrlParentPair.getKey();
         updateFlags(language);
 
         dimension = Toolkit. getDefaultToolkit(). getScreenSize();
@@ -446,6 +461,7 @@ public class MainCtrl {
         debtsCtrl.setExpenses(debtExpense);
         primaryStage.setScene(debts);
         debtsCtrl.refresh();
+
     }
 
     /**
@@ -503,5 +519,28 @@ public class MainCtrl {
         inviteCtrl.updateUIWithNewLanguage();
         adminPageCtrl.updateUIWithNewLanguage();
         balancesCtrl.updateUIWithNewLanguage();
+    }
+
+    /**
+     * go to partial
+     */
+    public void goToPartial() {
+        primaryStage.setTitle("Add partial debt");
+        primaryStage.setScene(addPartial);
+        addPartialDebtCtrl.refreshParticipants();
+    }
+
+    /**
+     * go to edit partial debt
+     * @param event
+     * @param expense
+     */
+
+    public void goToEditPartialDebt(Event event, Expense expense) {
+        primaryStage.setTitle("Edit partial debt page");
+        editPartialDebtCtrl.setEvent(event);
+        editPartialDebtCtrl.setExpense(expense);
+        primaryStage.setScene(editPartialDebt);
+        editPartialDebtCtrl.display();
     }
 }
