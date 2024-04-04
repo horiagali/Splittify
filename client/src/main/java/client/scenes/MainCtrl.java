@@ -446,6 +446,7 @@ public class MainCtrl {
         debtsCtrl.setExpenses(debtExpense);
         primaryStage.setScene(debts);
         debtsCtrl.refresh();
+
     }
 
     /**

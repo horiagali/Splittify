@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.Currency;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -63,10 +64,13 @@ public class SettleDebtsCtrl implements Initializable {
     @SuppressWarnings("checkstyle:MethodLength")
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        debtColumn.setCellValueFactory(q ->
-                new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gives " +
-                        q.getValue().getAmount() + " to " +
-                        q.getValue().getOwers().get(0).getNickname()));
+        debtColumn.setCellValueFactory(q -> {
+            double amount =q.getValue().getAmount() * Currency.getRate() ;
+            return new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gives " +
+                    Currency.round(amount) + " " + Currency.getCurrencyUsed() + " to " +
+                    q.getValue().getOwers().get(0).getNickname());
+        });
+
         debtColumn.setCellFactory(column -> new TableCell<Expense, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -157,12 +161,27 @@ public class SettleDebtsCtrl implements Initializable {
     /**
      * refresh function
      */
+    /**
+     * refresh function
+     */
     public void refresh() {
+        // Refresh the data
         List<Expense> expenses2 = server.getExpensesByEventId(event.getId())
-                .stream().filter(x->x.getTag().getName().equals("debt")).toList();
+                .stream().filter(x -> x.getTag().getName().equals("debt")).toList();
         data = FXCollections.observableList(expenses2);
         tableView.setItems(data);
+        String mata = Currency.getCurrencyUsed();
+        System.out.println(mata);
+        // Update the currency-related information in the table columns
+        debtColumn.setCellValueFactory(q -> {
+            double amount = q.getValue().getAmount() * Currency.getRate();
+            return new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gives " +
+                    Currency.round(amount) + " " + Currency.getCurrencyUsed() + " to " +
+                    q.getValue().getOwers().get(0).getNickname());
+        });
     }
+
+
 
     /**
      * setter
