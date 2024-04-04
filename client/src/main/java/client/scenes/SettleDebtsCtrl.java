@@ -117,7 +117,22 @@ public class SettleDebtsCtrl implements Initializable {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    setGraphic(reminderButton);
+                    if(getIndex() >= 0 && getIndex() < getTableView().getItems().size()) {
+                        Expense expense = getTableView().getItems().get(getIndex());
+                        Participant participant = expense.getPayer();
+
+                        boolean emailIsNull = participant.getEmail() == null || participant.getEmail().isEmpty();
+                        reminderButton.setDisable(emailIsNull);
+                        if(emailIsNull) {
+                            reminderButton.setStyle("-fx-background-color: grey;");
+                        } else {
+                            reminderButton.setStyle("");
+                        }
+
+                        setGraphic(reminderButton);
+                    } else {
+                        setGraphic(null);
+                    }
                 }
             }
 
