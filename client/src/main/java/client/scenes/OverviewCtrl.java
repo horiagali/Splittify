@@ -515,6 +515,7 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * Add keyboard navigation
+     * @param event link to other method
      */
     @SuppressWarnings({"checkstyle:CyclomaticComplexity"})
     private void handleAdditionalKeyEvents(KeyEvent event) {
@@ -540,7 +541,7 @@ public class OverviewCtrl implements Initializable {
      * Add keyboard navigation
      * @param event The KeyEvent triggering the navigation
      */
-    @SuppressWarnings({"checkstyle:JavadocMethod", "checkstyle:CyclomaticComplexity"})
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity"})
     private void handleMoreAdditionalKeyEvents(KeyEvent event) {
         if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.P){
             payer.show();
