@@ -67,7 +67,7 @@ public class SettleDebtsCtrl implements Initializable {
         debtColumn.setCellValueFactory(q -> {
             double amount =q.getValue().getAmount() * Currency.getRate() ;
             return new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gives " +
-                    Currency.round(amount) + " " + Currency.getCurrencyUsed() + " to " +
+                    Currency.round(amount)  + " " + Currency.getCurrencyUsed() + " to " +
                     q.getValue().getOwers().get(0).getNickname());
         });
 
@@ -120,8 +120,8 @@ public class SettleDebtsCtrl implements Initializable {
                     if(getIndex() >= 0 && getIndex() < getTableView().getItems().size()) {
                         Expense expense = getTableView().getItems().get(getIndex());
                         Participant participant = expense.getPayer();
-
-                        boolean emailIsNull = participant.getEmail() == null || participant.getEmail().isEmpty();
+                        boolean emailIsNull = participant.getEmail() == null ||
+                                participant.getEmail().isEmpty();
                         reminderButton.setDisable(emailIsNull);
                         if(emailIsNull) {
                             reminderButton.setStyle("-fx-background-color: grey;");

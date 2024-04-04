@@ -75,7 +75,7 @@ public class BalancesCtrl implements Initializable {
                 new SimpleStringProperty(q.getValue().getNickname()));
 
         colBalance.setCellValueFactory(q -> {
-            double balance = q.getValue().getBalance() * Currency.getRate();
+            double balance = q.getValue().getBalance() * Currency.getRate() / 100;
             return new SimpleStringProperty(String.valueOf(Currency.round(balance)) +
                     " " + Currency.getCurrencyUsed());
         });
@@ -225,7 +225,7 @@ public class BalancesCtrl implements Initializable {
                 expense.setPayer(deptor);
                 List<Participant> owed = new ArrayList<>();
                 owed.add(inDepted);expense.setOwers(owed);
-                expense.setAmount(-deptor.getBalance());
+                expense.setAmount(-deptor.getBalance() / 100.0);
                 expense.setDate(event.getDate());
                 expense.setEvent(event);
                 expense.setTitle("debts");
@@ -241,7 +241,7 @@ public class BalancesCtrl implements Initializable {
                         .setPayer(deptor);
                 List<Participant> owed = new ArrayList<>();
                 owed.add(inDepted);expense.setOwers(owed);
-                expense.setAmount(inDepted.getBalance());
+                expense.setAmount(inDepted.getBalance() / 100.0);
                 expense.setDate(event.getDate());
                 expense.setEvent(event);
                 expense.setTag(debt);
