@@ -85,7 +85,7 @@ public class BalancesCtrl implements Initializable {
         colName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getNickname()));
         colBalance.setCellValueFactory(q ->
-                new SimpleStringProperty(String.valueOf(q.getValue().getBalance())));
+                new SimpleStringProperty(String.valueOf(q.getValue().getBalance() / 100)));
         colSettles.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gave " +
                         q.getValue().getAmount() + " to " +

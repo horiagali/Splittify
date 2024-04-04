@@ -104,14 +104,36 @@ public class ExpenseService {
         eventRepository.save(event);
         participants.addAll(event.getParticipants());
         participants.remove(payer);
-        payer.setBalance(payer.getBalance() + (amount));
+        double cents = amount * 100;
+        payer.setBalance(payer.getBalance() + cents);
         participantRepository.save(payer);
         participants.add(payer);
+        int avg_amount = (int) (cents / newExpense.getOwers().size());
+        int rest = (int) (cents - avg_amount * newExpense.getOwers().size());
+        double avg_double = (double) avg_amount;
+        double avg_double2 = avg_double;
+        avg_double += 1;
+        if (cents < 0) {
+            cents = -cents;
+            avg_amount = (int) (cents / newExpense.getOwers().size());
+            rest = (int) (cents - avg_amount * newExpense.getOwers().size());
+            avg_double = (double) avg_amount;
+            avg_double2 = avg_double;
+            //avg_double2 /= 100.0;
+            avg_double *= -1.0;
+            avg_double2 *= -1.0;
+            //avg_double /= 100.0;
+        }
         List<Participant> newOwers = new ArrayList<>();
         for (Participant pp : newExpense.getOwers()) {
             Participant p = participantRepository.findById(pp.getParticipantID()).orElse(null);
             participants.remove(p);
-            p.setBalance(p.getBalance() - amount / (newExpense.getOwers().size()));
+            if (rest == 0) {
+                avg_double = avg_double2;
+            }
+            p.setBalance(p.getBalance() - avg_double);
+            p.setBalance(Math.round(p.getBalance()));
+            rest--;
             participantRepository.save(p);
             participants.add(p);
             newOwers.add(p);

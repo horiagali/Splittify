@@ -137,7 +137,7 @@ public class SettleDebtsCtrl implements Initializable {
                             MainCtrl.resourceBundle.getString("Text.reminderText")
                             + event.getId().toString(),
                             MainCtrl.resourceBundle.getString("Text.youOwe") +
-                            owed.getNickname() + " " + amount + " " +
+                            owed.getNickname() + " " + String.valueOf(amount / 100) + " " +
                                     MainCtrl.resourceBundle.getString("Text.forEvent") + " "
                             + event.getTitle() + " " +
                                     MainCtrl.resourceBundle.getString("Text.on")
