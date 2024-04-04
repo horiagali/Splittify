@@ -7,15 +7,14 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.layout.StackPane?>
 <VBox alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BalancesCtrl">
    <children>
       <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
@@ -99,13 +98,14 @@
             </TableView>
             <Button layoutX="458.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
             <Button layoutX="530.0" layoutY="360.0" mnemonicParsing="false" onAction="#back" text="Back" />
-            <TableView fx:id="settles" layoutX="60.0" layoutY="217.0" prefHeight="137.0" prefWidth="480.0">
+            <TableView fx:id="settles" layoutX="60.0" layoutY="222.0" prefHeight="137.0" prefWidth="480.0">
               <columns>
                 <TableColumn fx:id="colSettles" prefWidth="479.0" />
               </columns>
             </TableView>
             <Text layoutX="60.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Partial settles" textAlignment="CENTER" wrappingWidth="480.0" />
             <Button layoutX="250.0" layoutY="360.0" mnemonicParsing="false" onAction="#settleDebts" prefHeight="26.0" prefWidth="100.0" text="Settle Debts" />
+            <Button layoutX="343.0" layoutY="196.0" mnemonicParsing="false" onAction="#addPartial" prefHeight="17.0" prefWidth="45.0" text="Add" />
          </children>
       </AnchorPane>
    </children>

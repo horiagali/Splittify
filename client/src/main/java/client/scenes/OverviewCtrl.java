@@ -373,7 +373,9 @@ public class OverviewCtrl implements Initializable {
     public void loadExpenses() {
         expensesBox.getChildren().clear();
         if(selectedEvent == null) return;
-        List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId());
+        List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId())
+                .stream().filter(x ->
+                        !"gifting money".equalsIgnoreCase(x.getTag().getName())).toList();
         expenses = applyFilters(expenses);
         if(expenses.size() == 0) {
             expensesBox.getChildren()
