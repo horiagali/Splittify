@@ -88,6 +88,9 @@ public class MainCtrl {
     private Scene addPartial;
     private AddPartialDebtCtrl addPartialDebtCtrl;
 
+    private Scene editPartialDebt;
+    private EditPartialDebtCtrl editPartialDebtCtrl;
+
     private Dimension dimension;
 
 
@@ -112,6 +115,7 @@ public class MainCtrl {
      * @param debtsCtrlParentPair
      * @param tagOverview
      * @param partialDebtCtrlParentPair
+     * @param editPartialDebtCtrlParentPair
      * @param main
      *
      */
@@ -133,6 +137,7 @@ public class MainCtrl {
                            Pair<SettleDebtsCtrl, Parent> debtsCtrlParentPair,
                            Pair<TagOverviewCtrl, Parent> tagOverview,
                            Pair<AddPartialDebtCtrl, Parent> partialDebtCtrlParentPair,
+                           Pair<EditPartialDebtCtrl, Parent> editPartialDebtCtrlParentPair,
                            Main main) {
 
         this.primaryStage = primaryStage;
@@ -193,6 +198,8 @@ public class MainCtrl {
         this.debts = new Scene(debtsCtrlParentPair.getValue());
         this.addPartial = new Scene(partialDebtCtrlParentPair.getValue());
         this.addPartialDebtCtrl = partialDebtCtrlParentPair.getKey();
+        this.editPartialDebt = new Scene(editPartialDebtCtrlParentPair.getValue());
+        this.editPartialDebtCtrl = editPartialDebtCtrlParentPair.getKey();
         updateFlags(language);
 
         dimension = Toolkit. getDefaultToolkit(). getScreenSize();
@@ -521,5 +528,19 @@ public class MainCtrl {
         primaryStage.setTitle("Add partial debt");
         primaryStage.setScene(addPartial);
         addPartialDebtCtrl.refreshParticipants();
+    }
+
+    /**
+     * go to edit partial debt
+     * @param event
+     * @param expense
+     */
+
+    public void goToEditPartialDebt(Event event, Expense expense) {
+        primaryStage.setTitle("Edit partial debt page");
+        editPartialDebtCtrl.setEvent(event);
+        editPartialDebtCtrl.setExpense(expense);
+        primaryStage.setScene(editPartialDebt);
+        editPartialDebtCtrl.display();
     }
 }

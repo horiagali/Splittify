@@ -132,9 +132,12 @@ public class Main extends Application {
         var tagOverview = FXML.load(TagOverviewCtrl.class, "client", "scenes", "TagOverview.fxml");
         var partial = FXML.load(AddPartialDebtCtrl.class, "client", "scenes",
                 "AddPartialDebt.fxml");
+        var editPartial = FXML.load(EditPartialDebtCtrl.class, "client", "scenes",
+                "EditPartialDebt.fxml");
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, editExpense,
         contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, balances, 
-        serverSetter, config.getLanguage(),  statistics, debts, tagOverview, partial,this);
+        serverSetter, config.getLanguage(),  statistics, debts, tagOverview, partial,
+                editPartial, this);
 
         primaryStage.setOnCloseRequest(e -> {
             adminPage.getKey().stop();

@@ -15,16 +15,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Menu;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
@@ -90,14 +85,36 @@ public class BalancesCtrl implements Initializable {
                         q.getValue().getAmount() + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
 
+        colSettles.setCellFactory(tc -> {
+            TableCell<Expense, String> cell = new TableCell<>() {
+                @Override
+                protected void updateItem(String item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        setText(item);
+                    }
+                }
+            };
+
+            cell.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                if (!cell.isEmpty() && event.getClickCount() == 2) {
+                    Expense expense = cell.getTableView().getItems().get(cell.getIndex());
+                    handleExpenseClick(expense);
+                }
+            });
+
+            return cell;
+        });
         addKeyboardNavigationHandlers();
 
     }
 
-
-    /**
-     * refresh function
-     */
+    private void handleExpenseClick(Expense expense) {
+        mainCtrl.goToEditPartialDebt(event, expense);
+    }
     /**
      * refresh function
      */
