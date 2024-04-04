@@ -8,6 +8,7 @@ import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import commons.Tag;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +26,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -74,32 +76,53 @@ public class BalancesCtrl implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //refresh();
         colName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getNickname()));
-        colBalance.setCellValueFactory(q ->
-                new SimpleStringProperty(String.valueOf(q.getValue().getBalance() / 100)));
+
+        colBalance.setCellValueFactory(q -> {
+            double balance = q.getValue().getBalance() * Currency.getRate();
+            return new SimpleStringProperty(String.valueOf(Currency.round(balance)) +
+                    " " + Currency.getCurrencyUsed());
+        });
+
         colSettles.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gave " +
                         q.getValue().getAmount() + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
+
         addKeyboardNavigationHandlers();
+
     }
+
 
     /**
      * refresh function
      */
+    /**
+     * refresh function
+     */
     public void refresh() {
+        // Refresh the data for participants
         var participants = server.getParticipantsByEventId(event.getId());
         data = FXCollections.observableList(participants);
         table.setItems(data);
+
+        // Refresh the data for settles
         var expenses = server.getExpensesByEventId(event.getId());
         var filteredExpenses = expenses.stream()
                 .filter(x -> x.getTag().getName().equals("gifting money"))
                 .toList();
         data2 = FXCollections.observableList(filteredExpenses);
         settles.setItems(data2);
+
+        // Update currency for balances
+        colBalance.setCellValueFactory(q -> {
+            double balance = q.getValue().getBalance() * Currency.getRate();
+            return new SimpleStringProperty(String.valueOf
+                    (Currency.round(balance)) + " " + Currency.getCurrencyUsed());
+        });
     }
+
 
     /**
      * Add keyboard navigation
@@ -274,6 +297,9 @@ public class BalancesCtrl implements Initializable {
 
         // Print confirmation message
         System.out.println("Currency changed to: " + currency);
-    }
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.1));
+        pause.setOnFinished(e -> refresh());
+        pause.play();
+        refresh();}
 
 }
