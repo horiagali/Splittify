@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UndoManager;
 import client.utils.Currency;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -31,10 +32,11 @@ public class EditExpenseCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private static Event event;
-    private static Expense expense;
+    public static Expense expense;
     private List<CheckBox> participantCheckboxes = new ArrayList<>();
     private List<Participant> selectedParticipants = new ArrayList<>();
     private List<Participant> allParticipants = new ArrayList<>();
+    private UndoManager undoManager = UndoManager.getInstance();
     @FXML
     private TextField purposeTextField;
     @FXML
@@ -433,11 +435,18 @@ public class EditExpenseCtrl implements Initializable {
             showErrorDialog("Please select a valid date!");
             return;
         }
-
-        System.out.println(expense);
         setExpense(title, amount, date, payer, selectedParticipants, selectedTag);
-        System.out.println(expense);
         saveExpense();
+
+        // Capture the state of each field
+        undoManager.captureState(expense, "title", expense.getTitle());
+        undoManager.captureState(expense, "amount", expense.getAmount());
+        undoManager.captureState(expense, "payer", expense.getPayer());
+        undoManager.captureState(expense, "tag", expense.getTag());
+        undoManager.captureState(expense, "owers", expense.getOwers());
+        undoManager.captureState(expense, "date", expense.getDate());
+        System.out.println(expense);
+
         clearFieldsAndShowOverview(event);
     }
 
@@ -537,5 +546,31 @@ public class EditExpenseCtrl implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(errorMessage);
         alert.showAndWait();
+    }
+
+    @FXML
+    public void undoAmount(){
+        System.out.println(expense);
+        // Get the instance of UndoManager
+        UndoManager undoManager = UndoManager.getInstance();
+
+        // Undo the last change for the "amount" field
+        Object oldValue = undoManager.undo(expense, "amount");
+
+        // Check if there is a valid old value to restore
+        if (oldValue != null) {
+            // Convert the old value to a double
+            double oldAmount = (double) oldValue;
+
+            // Update the amount of the selected expense with the old value
+            expense.setAmount(oldAmount);
+            amountTextField.setText(oldValue.toString());
+
+            // Optionally, you can print a message indicating the undo operation
+            System.out.println("Undo amount change for expense: " + expense.getAmount());
+        } else {
+            // Handle the case where there are no changes to undo (oldValue is null)
+            System.out.println("No changes to undo for amount field.");
+        }
     }
 }
