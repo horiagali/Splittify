@@ -20,6 +20,7 @@ public class Event {
     private String description;
     private String location;
     private boolean closed;
+    private final Date creationDate = new Date();
     @OneToMany (mappedBy = "event", cascade = CascadeType.REMOVE)
     private List<Expense> expenses; // List of expenses associated with the event
     @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
@@ -94,6 +95,14 @@ public class Event {
     }
 
     // Getters and setters
+
+    /**
+     * getter for creationDate
+     * @return creationDate of type Date
+     */
+    public Date getCreationDate() {
+        return creationDate;
+    }
 
     /**
      * getter for the id

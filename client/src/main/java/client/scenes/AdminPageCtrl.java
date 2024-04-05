@@ -34,10 +34,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AdminPageCtrl implements Initializable {
     private final ServerUtils server;
@@ -49,11 +46,13 @@ public class AdminPageCtrl implements Initializable {
     @FXML
     private TableView<Event> table;
     @FXML
+    TableColumn<Event, String> colId;
+    @FXML
     private TableColumn<Event, String> colName;
     @FXML
-    private TableColumn<Event, String> colLocation;
-    @FXML
     private TableColumn<Event, String> colDate;
+    @FXML
+    private ComboBox<String> sortingComboBox;
     @FXML
     private Menu languageMenu;
     @FXML
@@ -88,9 +87,18 @@ public class AdminPageCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getTitle()));
-        colLocation.setCellValueFactory(q ->
-                new SimpleStringProperty(q.getValue().getLocation()));
-        colDate.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
+        colId.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getId().toString()));
+        colDate.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getCreationDate().toString()));
+
+        List<String> sortingOptions = new ArrayList<>();
+        sortingOptions.add("A-Z");
+        sortingOptions.add("Z-A");
+        sortingOptions.add("New-Old");
+        sortingOptions.add("Old-New");
+
+        sortingComboBox.setItems(FXCollections.observableList(sortingOptions));
 
         table.setOnMouseClicked(this::handleTableItemClick);
 
@@ -100,6 +108,51 @@ public class AdminPageCtrl implements Initializable {
         addKeyboardNavigationHandlers();
 
         server.registerForUpdates(data::add);
+    }
+
+    /**
+     * Handles sorting
+     * @param e action event
+     */
+    @FXML
+    private void handeSort(ActionEvent e) {
+        refresh();
+        switch (sortingComboBox.getValue()) {
+            case "A-Z" -> sortAlphabetically();
+            case "Z-A" -> sortAlphabeticallyReverse();
+            case "New-Old" -> sortNewToOld();
+            case "Old-New" -> sortOldToNew();
+        }
+    }
+
+
+    /**
+     * Sort data from a to z
+     */
+    public void sortAlphabetically() {
+        data.sort(Comparator.comparing(e -> e.getTitle().toLowerCase()));
+    }
+
+    /**
+     * Sorts date from z to a
+     */
+    private void sortAlphabeticallyReverse() {
+        data.sort(Comparator.comparing(Event::getTitle,
+                Comparator.comparing(String::toLowerCase)).reversed());
+    }
+
+    /**
+     * Sort a date from new to old
+     */
+    private void sortNewToOld() {
+        data.sort(Comparator.comparing(Event::getCreationDate).reversed());
+    }
+
+    /**
+     * Sort data from old to new
+     */
+    private void sortOldToNew() {
+        data.sort(Comparator.comparing(Event::getCreationDate));
     }
 
     /**
