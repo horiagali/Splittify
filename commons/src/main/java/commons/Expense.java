@@ -3,6 +3,7 @@ package commons;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -46,6 +47,7 @@ public class Expense {
     public Expense() {
         // Default constructor for JPA
     }
+
     // creates an expense and modifies everyone's balance accordingly
 
     /**
@@ -281,6 +283,7 @@ public class Expense {
                 "  tag=" + tag + "\n" +
                 "]";
     }
+
 
 
 }

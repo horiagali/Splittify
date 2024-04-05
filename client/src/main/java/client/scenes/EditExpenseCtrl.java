@@ -554,23 +554,48 @@ public class EditExpenseCtrl implements Initializable {
         // Get the instance of UndoManager
         UndoManager undoManager = UndoManager.getInstance();
 
+        Object current = expense.getAmount();
+
         // Undo the last change for the "amount" field
-        Object oldValue = undoManager.undo(expense, "amount");
+        Object oldValue = undoManager.peek(expense, "amount");
+        if(current.equals(oldValue)){
+            undoManager.undo(expense, "amount");
+            oldValue = undoManager.peek(expense, "amount");
+        }
 
         // Check if there is a valid old value to restore
         if (oldValue != null) {
-            // Convert the old value to a double
-            double oldAmount = (double) oldValue;
+            Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationDialog.setTitle("Confirm Undo Amount Change");
+            confirmationDialog.setHeaderText("Are you sure you want to undo this amount change?");
+            confirmationDialog.setContentText("This action cannot be undone.");
 
-            // Update the amount of the selected expense with the old value
-            expense.setAmount(oldAmount);
-            amountTextField.setText(oldValue.toString());
+            Object finalOldValue = oldValue;
+            confirmationDialog.showAndWait().ifPresent(result -> {
+                if (result == ButtonType.OK) {
+                    // User confirmed the undo operation
+                    undoManager.undo(expense, "amount");
 
-            // Optionally, you can print a message indicating the undo operation
-            System.out.println("Undo amount change for expense: " + expense.getAmount());
+                    // Convert the old value to a double
+                    double oldAmount = (double) finalOldValue;
+
+                    // Update the amount of the selected expense with the old value
+                    expense.setAmount(oldAmount);
+                    amountTextField.setText(String.valueOf(oldAmount));
+
+                    // Optionally, you can print a message indicating the undo operation
+                    System.out.println("Undo amount change. Amount restored to: " + oldAmount);
+                } else {
+                    // User canceled the undo operation or closed the dialog
+                    System.out.println("Undo operation canceled.");
+                }
+            });
         } else {
-            // Handle the case where there are no changes to undo (oldValue is null)
-            System.out.println("No changes to undo for amount field.");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Previous Amount");
+            alert.setHeaderText(null);
+            alert.setContentText("There are no previous amounts saved for this expense.");
+            alert.showAndWait();
         }
     }
 }
