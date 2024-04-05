@@ -126,6 +126,11 @@
             <Button layoutX="291.0" layoutY="333.0" mnemonicParsing="false" onAction="#editExpense" prefHeight="25.0" prefWidth="82.0" text="Edit" />  <!-- TODO add actual functionality -->
             <Button layoutX="203.0" layoutY="333.0" mnemonicParsing="false" onAction="#back" prefHeight="25.0" prefWidth="82.0" text="Cancel" />
             <Button layoutX="390.0" layoutY="200.0" mnemonicParsing="false" onAction="#undoAmount" prefHeight="25.0" prefWidth="82.0" text="Undo" />
+            <Button layoutX="390.0" layoutY="230.0" mnemonicParsing="false" onAction="#undoDate" prefHeight="25.0" prefWidth="82.0" text="Undo" />
+            <Button layoutX="390.0" layoutY="280.0" mnemonicParsing="false" onAction="#undoOwers" prefHeight="25.0" prefWidth="82.0" text="Undo" />
+            <Button layoutX="390.0" layoutY="160.0" mnemonicParsing="false" onAction="#undoTag" prefHeight="25.0" prefWidth="82.0" text="Undo" />
+            <Button layoutX="390.0" layoutY="125.0" mnemonicParsing="false" onAction="#undoTitle" prefHeight="25.0" prefWidth="82.0" text="Undo" />
+            <Button layoutX="390.0" layoutY="70.0" mnemonicParsing="false" onAction="#undoPayer" prefHeight="25.0" prefWidth="82.0" text="Undo" />
 
             <ComboBox fx:id="currencyComboBox" layoutX="306.0" layoutY="198.0" prefHeight="25.0" prefWidth="68.0" VBox.vgrow="NEVER" />
             <!--        <Label fx:id="selectedCurrencyLabel" layoutX="370.0" layoutY="216.0" />-->

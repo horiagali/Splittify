@@ -549,53 +549,156 @@ public class EditExpenseCtrl implements Initializable {
     }
 
     @FXML
-    public void undoAmount(){
-        System.out.println(expense);
+    public void undoAmount() {
+        undoField("amount");
+    }
+
+    @FXML
+    public void undoTitle() {
+        undoField("title");
+    }
+
+    @FXML
+    public void undoPayer() {
+        undoField("payer");
+    }
+
+    @FXML
+    public void undoTag() {
+        undoField("tag");
+    }
+
+    @FXML
+    public void undoOwers() {
+        undoField("owers");
+    }
+
+    @FXML
+    public void undoDate() {
+        undoField("date");
+    }
+
+    private void undoField(String field) {
         // Get the instance of UndoManager
         UndoManager undoManager = UndoManager.getInstance();
 
-        Object current = expense.getAmount();
+        // Undo the last change for the specified field
+        Object oldValue = undoManager.peek(expense, field);
 
-        // Undo the last change for the "amount" field
-        Object oldValue = undoManager.peek(expense, "amount");
-        if(current.equals(oldValue)){
-            undoManager.undo(expense, "amount");
-            oldValue = undoManager.peek(expense, "amount");
-        }
+        Object current = getCurrentValue(expense, field);
 
-        // Check if there is a valid old value to restore
         if (oldValue != null) {
+            if(oldValue.equals(current)){
+                undoManager.undo(expense, field);
+                oldValue = undoManager.peek(expense, field);
+            }
+
             Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmationDialog.setTitle("Confirm Undo Amount Change");
-            confirmationDialog.setHeaderText("Are you sure you want to undo this amount change?");
+            confirmationDialog.setTitle("Confirm Undo " + field + " Change");
+            confirmationDialog.setHeaderText("Are you sure you want to undo this " + field + " change?");
             confirmationDialog.setContentText("This action cannot be undone.");
 
             Object finalOldValue = oldValue;
             confirmationDialog.showAndWait().ifPresent(result -> {
                 if (result == ButtonType.OK) {
                     // User confirmed the undo operation
-                    undoManager.undo(expense, "amount");
+                    undoManager.undo(expense, field);
 
-                    // Convert the old value to a double
-                    double oldAmount = (double) finalOldValue;
-
-                    // Update the amount of the selected expense with the old value
-                    expense.setAmount(oldAmount);
-                    amountTextField.setText(String.valueOf(oldAmount));
+                    // Update the corresponding UI element with the old value
+                    updateUI(field, finalOldValue);
 
                     // Optionally, you can print a message indicating the undo operation
-                    System.out.println("Undo amount change. Amount restored to: " + oldAmount);
+                    System.out.println("Undo " + field + " change. Value restored to: " + finalOldValue);
                 } else {
                     // User canceled the undo operation or closed the dialog
-                    System.out.println("Undo operation canceled.");
+                    System.out.println("Undo operation canceled for " + field);
                 }
             });
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("No Previous Amount");
+            alert.setTitle("No Previous " + field);
             alert.setHeaderText(null);
-            alert.setContentText("There are no previous amounts saved for this expense.");
+            alert.setContentText("There are no previous values saved for " + field + " in this expense.");
             alert.showAndWait();
         }
+    }
+
+    private Object getCurrentValue(Expense expense, String field) {
+        switch (field) {
+            case "amount":
+                return expense.getAmount();
+            case "title":
+                return expense.getTitle();
+            case "payer":
+                return expense.getPayer();
+            case "tag":
+                return expense.getTag();
+            case "owers":
+                return expense.getOwers();
+            case "date":
+                return expense.getDate();
+            default:
+                return null;
+        }
+    }
+
+    private void updateUI(String field, Object value) {
+        // Update the corresponding UI element based on the field
+        switch (field) {
+            case "amount":
+                amountTextField.setText(String.valueOf(value));
+                break;
+            case "title":
+                purposeTextField.setText(String.valueOf(value));
+                break;
+            case "payer":
+                String payerName = String.valueOf(value);
+                // Find the index of the payer name in the ComboBox items
+                int selectedIndex = -1;
+                ObservableList<Participant> items = payerComboBox.getItems();
+                for (int i = 0; i < items.size(); i++) {
+                    if (items.get(i).getNickname().equals(payerName)) {
+                        selectedIndex = i;
+                        break;
+                    }
+                }
+                payerComboBox.getSelectionModel().select(selectedIndex);
+                break;
+            case "owers":
+                // Assuming value is a List<String> containing selected participant names
+                List<Participant> selectedParticipants = (List<Participant>) value;
+                // Iterate over the checkboxes and update their states
+                for (CheckBox checkBox : participantCheckboxes) {
+                    String participantName = checkBox.getText();
+                    // Check if the participant name is in the list of selected participants
+                    for(Participant p : selectedParticipants) {
+                        if (p.getNickname().contains(participantName)) {
+                            checkBox.setSelected(true);
+                        } else {
+                            checkBox.setSelected(false);
+                        }
+                    }
+                }
+                break;
+            case "date":
+                Date dateDate = (Date) value;
+                SimpleDateFormat ft = new SimpleDateFormat("yyyy.MM.dd");
+                String dateInString = ft.format(dateDate);
+                LocalDate date = LocalDate.of(Integer.parseInt(dateInString.substring(0, 4)),  Integer.parseInt(dateInString.substring(5, 7)),
+                        Integer.parseInt(dateInString.substring(8, 10)));
+                datePicker.setValue(date);
+                break;
+            case "tag":
+                if (value instanceof Tag) {
+                    Tag tagValue = (Tag) value;
+                    selectTagInComboBox(tagValue);
+                }
+                break;
+        }
+    }
+
+    private void selectTagInComboBox(Tag tag) {
+        // Assuming tagComboBox is a ComboBox<Tag> representing available tags
+        tagComboBox.getSelectionModel().select(tag);
     }
 }
