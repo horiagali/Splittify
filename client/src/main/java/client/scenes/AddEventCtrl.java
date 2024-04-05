@@ -27,8 +27,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 
-import static client.Main.config;
-
 public class AddEventCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
@@ -163,7 +161,7 @@ public class AddEventCtrl implements Initializable {
         MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
         + language, new Locale(language));
         
-        config.setLanguage(language);
+        mainCtrl.updateLanguage(language);
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
@@ -219,6 +217,6 @@ public class AddEventCtrl implements Initializable {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println("Currency changed to: " + currency);
+        System.out.println(MainCtrl.resourceBundle.getString("Text.changedCurrencyTo") + currency);
     }
 }

@@ -238,14 +238,6 @@ public class InviteCtrl implements Initializable {
     public void updateUIWithNewLanguage() {
         currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
-        invitePeopleText.setText(MainCtrl.resourceBundle.getString("Text.invitePeopleText"));
-        inviteByMailText.setText(MainCtrl.resourceBundle.getString("Text.inviteByMailText"));
-        eventCodeText.setText(MainCtrl.resourceBundle.getString("Text.eventCodeText"));
-        addButton.setText(MainCtrl.resourceBundle.getString("button.add"));
-        copyButton.setText(MainCtrl.resourceBundle.getString("button.copy"));
-        sendButton.setText(MainCtrl.resourceBundle.getString("button.send"));
-        inviteCodeTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.inviteCode"));
-        emailTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.email"));
     }
 
     /**

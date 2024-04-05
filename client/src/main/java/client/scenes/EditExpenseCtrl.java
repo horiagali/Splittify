@@ -129,18 +129,18 @@ public class EditExpenseCtrl implements Initializable {
         Date dateDate = expense.getDate();
         SimpleDateFormat ft = new SimpleDateFormat("yyyy.MM.dd");
         String dateInString = ft.format(dateDate);
-        LocalDate date = LocalDate.of(Integer.parseInt(dateInString.substring(0, 4)), 
-        Integer.parseInt(dateInString.substring(5, 7)), 
-        Integer.parseInt(dateInString.substring(8, 10)));
+        LocalDate date = LocalDate.of(Integer.parseInt(dateInString.substring(0, 4)),
+                Integer.parseInt(dateInString.substring(5, 7)),
+                Integer.parseInt(dateInString.substring(8, 10)));
         datePicker.setValue(date);
         equallyCheckbox.setSelected(expense.getOwers().equals(event.getParticipants()));
-        for(CheckBox checkBox : participantCheckboxes) {
-            if(expense.getOwers().stream()
-            .map(Participant::getNickname).toList().contains(checkBox.getText())) {
+        for (CheckBox checkBox : participantCheckboxes) {
+            if (expense.getOwers().stream()
+                    .map(Participant::getNickname).toList().contains(checkBox.getText())) {
                 checkBox.setSelected(true);
                 Participant part = server
-                .getParticipantByNickname(event.getId(), checkBox.getText());
-                if(!selectedParticipants.contains(part))
+                        .getParticipantByNickname(event.getId(), checkBox.getText());
+                if (!selectedParticipants.contains(part))
                     selectedParticipants.add(part);
                 System.out.println("participant " + checkBox.getText() + " added");
             }

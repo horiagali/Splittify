@@ -11,7 +11,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Menu;
+import javafx.scene.control.RadioMenuItem;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -151,7 +155,6 @@ public class ContactDetailsCtrl implements Initializable {
                 + bicString + "  →");
         TextField newParticipantBic = (TextField) bic.getChildren().get(1);
         newParticipantBic.setPromptText("Enter new BIC");
-        updateUIWithNewLanguage();
     }
 
     /**
@@ -164,7 +167,7 @@ public class ContactDetailsCtrl implements Initializable {
                     .map(x -> x.getNickname()).toList();
             if (nicknames.contains(newNickname) && !participant.getNickname().equals(newNickname)) {
                 showAlert(AlertType.ERROR, "Error", "There is already" +
-                        " a participant with this name in this event",
+                                " a participant with this name in this event",
                         "Please enter another name.");
                 return;
             }
@@ -249,7 +252,8 @@ public class ContactDetailsCtrl implements Initializable {
         addButton.disableProperty().set(false);
 
 
-        nameLabel.setText(MainCtrl.resourceBundle.getString("Text.name") + ": ");
+        Text createName = (Text) name.getChildren().get(0);
+        createName.setText("Name: ");
         TextField createNameTextField = (TextField) name.getChildren().get(1);
         createNameTextField.setPromptText(MainCtrl.resourceBundle.getString
                 ("Text.enter") + " " + MainCtrl.resourceBundle.getString("Text.name"));

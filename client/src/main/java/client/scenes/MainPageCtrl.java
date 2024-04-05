@@ -51,7 +51,8 @@ public class MainPageCtrl implements Initializable {
     private TableColumn<Event, String> colDate;
     @FXML
     private ToggleGroup languageGroup;
-    @FXML Menu currencyMenu;
+    @FXML
+    private Menu currencyMenu;
     @FXML
     private Button createEventButton;
     @FXML
