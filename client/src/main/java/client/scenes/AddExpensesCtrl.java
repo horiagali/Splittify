@@ -22,6 +22,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.time.ZoneId;
@@ -62,6 +63,21 @@ public class AddExpensesCtrl implements Initializable {
     private ToggleGroup currencyGroup;
     @FXML
     private DatePicker datePicker;
+    @FXML
+    private Text addExpenseText;
+    @FXML
+    private Text whoPaidText;
+    @FXML
+    private Text whatForText;
+    @FXML
+    private Text howMuchText;
+    @FXML
+    private Text howToSplitText;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Button addButton;
+
 
 
     /**
@@ -113,7 +129,7 @@ public class AddExpensesCtrl implements Initializable {
         }
         List<Participant> participants = server.getParticipants(selectedEvent.getId());
         if (participants == null || participants.isEmpty()) {
-            showErrorDialog("No participants found for the selected event.");
+            showErrorDialog(MainCtrl.resourceBundle.getString("Text.noParticipantsFound"));
             return;
         }
         allParticipants.addAll(participants);
@@ -257,7 +273,7 @@ public class AddExpensesCtrl implements Initializable {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println("Currency changed to: " + currency);
+        System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo")+ currency);
     }
 
     /**
@@ -532,7 +548,20 @@ public class AddExpensesCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        back.setText(MainCtrl.resourceBundle.getString("button.back"));
+
+        addExpenseText.setText(MainCtrl.resourceBundle.getString("Text.addExpense"));
+        whoPaidText.setText(MainCtrl.resourceBundle.getString("Text.whoPaid"));
+        whatForText.setText(MainCtrl.resourceBundle.getString("Text.whatFor"));
+        howMuchText.setText(MainCtrl.resourceBundle.getString("Text.howMuch"));
+        howToSplitText.setText(MainCtrl.resourceBundle.getString("Text.howToSplit"));
+        payerComboBox.setPromptText(MainCtrl.resourceBundle.getString("Text.selectName"));
+        purposeTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.purpose"));
+        tagComboBox.setPromptText(MainCtrl.resourceBundle.getString("Text.selectTag"));
+        datePicker.setPromptText(MainCtrl.resourceBundle.getString("Text.selectDate"));
+        amountTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.enterAmount"));
+        cancelButton.setText(MainCtrl.resourceBundle.getString("button.cancel"));
+        addButton.setText(MainCtrl.resourceBundle.getString("button.add"));
+        equallyCheckbox.setText(MainCtrl.resourceBundle.getString("button.equally"));
     }
 
     /**

@@ -35,7 +35,7 @@ public class StatisticsCtrl {
 
     @FXML
     private Text eventTotalAmount;
-    
+
     @FXML
     private Menu languageMenu;
 
@@ -52,6 +52,8 @@ public class StatisticsCtrl {
 
     @FXML
     private Button refresh;
+    @FXML
+    private Menu currencyMenu;
 
     /**
      * @param server
@@ -70,8 +72,8 @@ public class StatisticsCtrl {
      */
     public void refresh() {
         totalAmount = 0; //reset total amount every refresh (else it becomes more and mroe)
-        if(!(this.pieChartData == null))
-        pieChartData.clear();
+        if (!(this.pieChartData == null))
+            pieChartData.clear();
         var expenses = server.getExpensesByEventId(event.getId());
         var tags = server.getTags(event.getId());
         pieChartData = FXCollections.observableArrayList();
@@ -96,40 +98,41 @@ public class StatisticsCtrl {
 
     /**
      * creates the data to put in the piechart
+     *
      * @param expenses list of expenses of this event.
-     * @param tags list of tags of this event.
+     * @param tags     list of tags of this event.
      */
     private void createData(List<Expense> expenses, List<Tag> tags) {
         //method to group all expenses on tag and get their total amount
         for(Tag tag : tags) {
             if(tag.getName().equals("gifting money") || tag.getName().equals("debt"))
-            continue;
+                continue;
             double amount = expenses.stream().filter(x -> x.getTag().equals(tag))
-            .mapToDouble(x  -> (int) x.getAmount()).sum();
-            amount = Currency.round(amount*Currency.getRate());
-            if(amount != 0)
-            pieChartData.add(new PieChart.Data(tag.getName()
-                    + ": " + amount+ " " + Currency.getCurrencyUsed(), amount));
+                    .mapToDouble(x -> (int) x.getAmount()).sum();
+            amount = Currency.round(amount * Currency.getRate());
+            if (amount != 0)
+                pieChartData.add(new PieChart.Data(tag.getName()
+                        + ": " + amount + " " + Currency.getCurrencyUsed(), amount));
             totalAmount += amount;
         }
         //method to set the percentage per tag group
         long remainingPercentage = 100;
         String lastName = "";
-        for(PieChart.Data data : pieChartData) {
-            long percentage = Math.round((data.getPieValue() / totalAmount)*100);
+        for (PieChart.Data data : pieChartData) {
+            long percentage = Math.round((data.getPieValue() / totalAmount) * 100);
             lastName = data.getName();
             data.setName(data.getName() + " - " + percentage + "%");
             remainingPercentage = remainingPercentage - percentage;
         }
         //if percentage does not match due to rounding,
         //just add or substract the last 1 or 2 percent to the last tag
-        if(remainingPercentage != 0 && pieChartData != null && pieChartData.size() > 0) {
-            PieChart.Data dataToEdit = pieChartData.get(pieChartData.size()-1);
-            long percentage = Math.round((dataToEdit.getPieValue() / totalAmount)*100);
+        if (remainingPercentage != 0 && pieChartData != null && pieChartData.size() > 0) {
+            PieChart.Data dataToEdit = pieChartData.get(pieChartData.size() - 1);
+            long percentage = Math.round((dataToEdit.getPieValue() / totalAmount) * 100);
             remainingPercentage = remainingPercentage + percentage;
             dataToEdit.setName(lastName + " - " + remainingPercentage + "%");
             remainingPercentage = 0;
-            
+
         }
         pieChart.setData(pieChartData);
         eventTotalAmount.setText("" + totalAmount + " " + Currency.getCurrencyUsed());
@@ -139,6 +142,7 @@ public class StatisticsCtrl {
 
     /**
      * Changes the language of the site
+     *
      * @param event
      */
     @FXML
@@ -147,9 +151,9 @@ public class StatisticsCtrl {
         String language = selectedLanguageItem.getText().toLowerCase();
 
         // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
-        + language, new Locale(language));
-        
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
@@ -160,6 +164,7 @@ public class StatisticsCtrl {
 
     /**
      * changes the currency to whatever is selected
+     *
      * @param event
      */
     @FXML
@@ -171,7 +176,7 @@ public class StatisticsCtrl {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println("Currency changed to: " + currency);
+        System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo") + currency);
     }
 
     /**
@@ -179,22 +184,21 @@ public class StatisticsCtrl {
      */
     public void updateUIWithNewLanguage() {
         String piechartString = "Text.statisticsTitle";
-        if(event !=null){
+        if (event != null) {
             pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString) + event.getTitle());
-        }
-        else {
+        } else {
             pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString));
         }
-        eventTotalAmount.setText(MainCtrl.resourceBundle.getString("Text.statisticsTotal") + 
-        totalAmount +  " " + Currency.getCurrencyUsed());
+        eventTotalAmount.setText(MainCtrl.resourceBundle.getString("Text.statisticsTotal") +
+                totalAmount + " " + Currency.getCurrencyUsed());
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         refresh.setText(MainCtrl.resourceBundle.getString("button.refresh"));
         String stageTitleString = "title.statistics";
-        if(event !=null){
+
+        if(event != null) {
             mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString)
-                    +  event.getTitle());
-        }
-        else{
+                    + event.getTitle());
+        } else {
             mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));
         }
     }
@@ -222,6 +226,7 @@ public class StatisticsCtrl {
 
     /**
      * set the selected event to see statistics from.
+     *
      * @param selectedEvent
      */
     public static void setEvent(Event selectedEvent) {
@@ -231,9 +236,9 @@ public class StatisticsCtrl {
     /**
      * back button
      */
-    public void back(){
+    public void back() {
         if (!event.isClosed())
-        mainCtrl.goToOverview();
+            mainCtrl.goToOverview();
         else
             mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
     }

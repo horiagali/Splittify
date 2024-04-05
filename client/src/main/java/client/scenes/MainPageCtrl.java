@@ -52,9 +52,13 @@ public class MainPageCtrl implements Initializable {
     @FXML
     private ToggleGroup languageGroup;
     @FXML
+    private Menu currencyMenu;
+    @FXML
     private Button createEventButton;
     @FXML
     private ImageView languageFlagImageView;
+    @FXML
+    private Button disconnectButton;
 
     @FXML
     private Button joinEventButton;
@@ -115,6 +119,9 @@ public class MainPageCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.mainPage"));
+        disconnectButton.setText(MainCtrl.resourceBundle.getString("button.disconnect"));
         createEventButton.setText(MainCtrl.resourceBundle.getString("button.createEvent"));
         joinEventButton.setText(MainCtrl.resourceBundle.getString("button.joinEvent"));
         refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
@@ -123,6 +130,7 @@ public class MainPageCtrl implements Initializable {
         colDate.setText(MainCtrl.resourceBundle.getString("TableColumn.colDate"));
         colName.setText(MainCtrl.resourceBundle.getString("TableColumn.colName"));
         colLocation.setText(MainCtrl.resourceBundle.getString("TableColumn.colLocation"));
+        currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
     }
 
     /**
