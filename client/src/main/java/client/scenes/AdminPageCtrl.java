@@ -92,6 +92,8 @@ public class AdminPageCtrl implements Initializable {
         colDate.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getCreationDate().toString()));
 
+        refresh();
+
         List<String> sortingOptions = new ArrayList<>();
         sortingOptions.add("A-Z");
         sortingOptions.add("Z-A");
@@ -106,14 +108,20 @@ public class AdminPageCtrl implements Initializable {
         addContextMenu();
 
         addKeyboardNavigationHandlers();
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                handleSort();
-            }
-        }, 0, 1000);
-        //server.registerForUpdates(data::add);
+
+        server.registerForUpdates(this::addData);
     }
+
+    /**
+     * Handles data from long polling
+     * @param e event
+     */
+    private void addData(Event e) {
+        this.data.add(e);
+        table.setItems(data);
+        handleSort();
+    }
+
 
     /**
      * Handles sorting, ae for javafx
@@ -128,7 +136,6 @@ public class AdminPageCtrl implements Initializable {
      * Handles sorting, not for javafx
      */
     private void handleSort() {
-        refresh();
         switch (sortingComboBox.getValue()) {
             case "A-Z" -> sortAlphabetically();
             case "Z-A" -> sortAlphabeticallyReverse();
