@@ -29,6 +29,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.HashSet;
@@ -54,7 +55,7 @@ public class InviteCtrl implements Initializable {
     @FXML
     private FlowPane emailFlowPane;
     @FXML
-    private Menu languageMenu;
+    private Menu currencyMenu;
     @FXML
     private Button backButton;
     @FXML
@@ -70,11 +71,15 @@ public class InviteCtrl implements Initializable {
     @FXML
     private ToggleGroup languageGroup;
     @FXML
-    private RadioMenuItem englishMenuItem;
+    private Text invitePeopleText;
     @FXML
-    private RadioMenuItem romanianMenuItem;
+    private Label eventCodeText;
     @FXML
-    private RadioMenuItem dutchMenuItem;
+    private Label inviteByMailText;
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button copyButton;
 
 
     /**
@@ -231,7 +236,7 @@ public class InviteCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        //languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
     }
 
@@ -370,6 +375,6 @@ public class InviteCtrl implements Initializable {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println("Currency changed to: " + currency);
+        System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo") + currency);
     }
 }

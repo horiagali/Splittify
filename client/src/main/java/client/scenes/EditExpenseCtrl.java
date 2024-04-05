@@ -14,10 +14,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -57,6 +60,25 @@ public class EditExpenseCtrl implements Initializable {
     private ToggleGroup currencyGroup;
     @FXML
     private DatePicker datePicker;
+    @FXML
+    private ImageView languageFlagImageView;
+    @FXML
+    private Text editExpenseText;
+    @FXML
+    private Text whoPaidText;
+    @FXML
+    private Text whatForText;
+    @FXML
+    private Text howMuchText;
+    @FXML
+    private Text howToSplitText;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button cancelButton;
+    @FXML
+    private Button deleteButton;
+
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -107,19 +129,19 @@ public class EditExpenseCtrl implements Initializable {
         Date dateDate = expense.getDate();
         SimpleDateFormat ft = new SimpleDateFormat("yyyy.MM.dd");
         String dateInString = ft.format(dateDate);
-        LocalDate date = LocalDate.of(Integer.parseInt(dateInString.substring(0, 4)), 
-        Integer.parseInt(dateInString.substring(5, 7)), 
-        Integer.parseInt(dateInString.substring(8, 10)));
+        LocalDate date = LocalDate.of(Integer.parseInt(dateInString.substring(0, 4)),
+                Integer.parseInt(dateInString.substring(5, 7)),
+                Integer.parseInt(dateInString.substring(8, 10)));
         datePicker.setValue(date);
         equallyCheckbox.setSelected(expense.getOwers().equals(event.getParticipants()));
-        for(CheckBox checkBox : participantCheckboxes) {
-            if(expense.getOwers().stream()
-            .map(Participant::getNickname).toList().contains(checkBox.getText())) {
+        for (CheckBox checkBox : participantCheckboxes) {
+            if (expense.getOwers().stream()
+                    .map(Participant::getNickname).toList().contains(checkBox.getText())) {
                 checkBox.setSelected(true);
                 Participant part = server
-                .getParticipantByNickname(event.getId(), checkBox.getText());
-                if(!selectedParticipants.contains(part))
-                selectedParticipants.add(part);
+                        .getParticipantByNickname(event.getId(), checkBox.getText());
+                if (!selectedParticipants.contains(part))
+                    selectedParticipants.add(part);
                 System.out.println("participant " + checkBox.getText() + " added");
             }
         }
@@ -288,13 +310,48 @@ public class EditExpenseCtrl implements Initializable {
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
+    }
+
+    /**
+     * Updates the flag.
+     * @param language the language of the flag.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        editExpenseText.setText(MainCtrl.resourceBundle.getString("Text.editExpense"));
+        whoPaidText.setText(MainCtrl.resourceBundle.getString("Text.whoPaid"));
+        whatForText.setText(MainCtrl.resourceBundle.getString("Text.whatFor"));
+        howMuchText.setText(MainCtrl.resourceBundle.getString("Text.howMuch"));
+        howToSplitText.setText(MainCtrl.resourceBundle.getString("Text.howToSplit"));
+        payerComboBox.setPromptText(MainCtrl.resourceBundle.getString("Text.selectName"));
+        purposeTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.purpose"));
+        tagComboBox.setPromptText(MainCtrl.resourceBundle.getString("Text.selectTag"));
+        datePicker.setPromptText(MainCtrl.resourceBundle.getString("Text.selectDate"));
+        amountTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.enterAmount"));
+        cancelButton.setText(MainCtrl.resourceBundle.getString("button.cancel"));
+        editButton.setText(MainCtrl.resourceBundle.getString("button.add"));
+        equallyCheckbox.setText(MainCtrl.resourceBundle.getString("button.equally"));
+        deleteButton.setText(MainCtrl.resourceBundle.getString("Text.delete"));
     }
 
     /**

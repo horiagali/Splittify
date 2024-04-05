@@ -21,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.net.URL;
@@ -56,10 +57,25 @@ public class BalancesCtrl implements Initializable {
     private ToggleGroup currencyGroup;
     @FXML
     private ImageView languageFlagImageView;
+    @FXML
+    private Text openDebtsText;
+    @FXML
+    private Text partialSettlersText;
+    @FXML
+    private Button settleDebtsButton;
+    @FXML
+    private Button refreshButton;
+    @FXML
+    private Button backButton;
+    @FXML
+    private Menu currencyMenu;
+    @FXML
+    private Button addPartialButton;
 
 
     /**
      * constructor for the BalancesCtrl
+     *
      * @param server
      * @param mainCtrl
      */
@@ -115,6 +131,7 @@ public class BalancesCtrl implements Initializable {
     private void handleExpenseClick(Expense expense) {
         mainCtrl.goToEditPartialDebt(event, expense);
     }
+
     /**
      * refresh function
      */
@@ -157,6 +174,7 @@ public class BalancesCtrl implements Initializable {
 
     /**
      * setter for the event
+     *
      * @param event an Event
      */
     public void setEvent(Event event) {
@@ -166,7 +184,7 @@ public class BalancesCtrl implements Initializable {
     /**
      * back button
      */
-    public void back(){
+    public void back() {
         mainCtrl.goToOverview();
     }
 
@@ -174,11 +192,13 @@ public class BalancesCtrl implements Initializable {
     /**
      * go to the settle debts page
      */
-    public void settleDebts(){
+    public void settleDebts() {
         Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationDialog.setTitle("Confirmation");
-        confirmationDialog.setHeaderText("Are you sure you want to settle the debts of the event?");
-        confirmationDialog.setContentText("This action cannot be undone and will close the event");
+        confirmationDialog.setTitle(MainCtrl.resourceBundle.getString("Text.confirmation"));
+        confirmationDialog.setHeaderText
+                (MainCtrl.resourceBundle.getString("Text.areYouSureSettleDebts"));
+        confirmationDialog.setContentText
+                (MainCtrl.resourceBundle.getString("Text.warningSettleDebts"));
 
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
@@ -188,7 +208,7 @@ public class BalancesCtrl implements Initializable {
                 letsSettle();
                 mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
             } else {
-                System.out.println("Settling of debts canceled.");
+                System.out.println(MainCtrl.resourceBundle.getString("Text.settleDebtsCancel"));
             }
         });
     }
@@ -214,8 +234,9 @@ public class BalancesCtrl implements Initializable {
                 .sorted((a, b) ->
                         (int) (a.getBalance()
                                 - b.getBalance()))
-                .toList();int i = 0, j = 0;
-        while(i < owe.size() && j < is_owed.size()) {
+                .toList();
+        int i = 0, j = 0;
+        while (i < owe.size() && j < is_owed.size()) {
             Participant inDepted = owe.get(i);
             Participant deptor = is_owed.get(j);
             if (inDepted.getBalance() >= -deptor.getBalance()) {
@@ -224,23 +245,27 @@ public class BalancesCtrl implements Initializable {
                 Expense expense = new Expense();
                 expense.setPayer(deptor);
                 List<Participant> owed = new ArrayList<>();
-                owed.add(inDepted);expense.setOwers(owed);
+                owed.add(inDepted);
+                expense.setOwers(owed);
                 expense.setAmount(-deptor.getBalance() / 100.0);
                 expense.setDate(event.getDate());
                 expense.setEvent(event);
                 expense.setTitle("debts");
                 expense.setTag(debt);
                 server.addExpenseToEvent(event.getId(), expense);
-                expenses.add(expense);j++;
+                expenses.add(expense);
+                j++;
                 if (inDepted.getBalance() == 0)
                     i++;
             } else {
                 deptor.setBalance(deptor.getBalance()
                         + inDepted.getBalance());
-                Expense expense = new Expense();expense
+                Expense expense = new Expense();
+                expense
                         .setPayer(deptor);
                 List<Participant> owed = new ArrayList<>();
-                owed.add(inDepted);expense.setOwers(owed);
+                owed.add(inDepted);
+                expense.setOwers(owed);
                 expense.setAmount(inDepted.getBalance() / 100.0);
                 expense.setDate(event.getDate());
                 expense.setEvent(event);
@@ -248,13 +273,15 @@ public class BalancesCtrl implements Initializable {
                 expense.setTitle("debts");
                 System.out.println(expense);
                 server.addExpenseToEventDebt(event.getId(), expense);
-                expenses.add(expense);i++;
+                expenses.add(expense);
+                i++;
             }
         }
     }
 
     /**
      * Changes the language of the site
+     *
      * @param event
      */
     @FXML
@@ -263,20 +290,30 @@ public class BalancesCtrl implements Initializable {
         String language = selectedLanguageItem.getText().toLowerCase();
 
         // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
-        + language, new Locale(language));
-        
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
     }
-    
+
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+        openDebtsText.setText(MainCtrl.resourceBundle.getString("Text.openDebts"));
+        colName.setText(MainCtrl.resourceBundle.getString("Text.participant"));
+        colBalance.setText(MainCtrl.resourceBundle.getString("Text.balance"));
+        partialSettlersText.setText(MainCtrl.resourceBundle.getString("Text.partialSettlers"));
+        settleDebtsButton.setText(MainCtrl.resourceBundle.getString("button.settleDebts"));
+        refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
+        backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+        currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
+        addPartialButton.setText(MainCtrl.resourceBundle.getString("button.add"));
     }
 
     /**
@@ -302,6 +339,7 @@ public class BalancesCtrl implements Initializable {
 
     /**
      * changes the currency to whatever is selected
+     *
      * @param event
      */
     @FXML
@@ -313,16 +351,20 @@ public class BalancesCtrl implements Initializable {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println("Currency changed to: " + currency);
+
+        System.out.println(MainCtrl.resourceBundle.getString
+                ("Text.currencyChangedTo") + ": " + currency);
         PauseTransition pause = new PauseTransition(Duration.seconds(0.1));
         pause.setOnFinished(e -> refresh());
         pause.play();
-        refresh();}
+        refresh();
+    }
+
 
     /**
      * add partial debt
      */
-    public void addPartial(){
+    public void addPartial() {
         mainCtrl.goToPartial();
     }
 }

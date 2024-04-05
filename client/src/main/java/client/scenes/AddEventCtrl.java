@@ -1,5 +1,6 @@
 package client.scenes;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.Date;
 import java.util.Locale;
@@ -7,7 +8,6 @@ import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
 
-import client.Main;
 import client.utils.Currency;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -21,6 +21,8 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -41,9 +43,17 @@ public class AddEventCtrl implements Initializable {
     @FXML
     private Button cancelButton;
     @FXML
-    private Menu languageMenu;
+    private ImageView languageFlagImageView;
+    @FXML
+    private Menu currencyMenu;
     @FXML
     private ToggleGroup currencyGroup;
+    @FXML
+    private javafx.scene.control.Label eventNameLabel;
+    @FXML
+    private javafx.scene.control.Label eventLocationLabel;
+    @FXML
+    private javafx.scene.control.Label eventDescriptionLabel;
 
     /**
      * Constructor for the controller
@@ -95,7 +105,7 @@ public class AddEventCtrl implements Initializable {
         if (nameField.getText().isEmpty() || nameField.getText().isBlank()) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("Please enter a title");
+            alert.setContentText(MainCtrl.resourceBundle.getString("Text.enterTitle"));
             alert.showAndWait();
             return;
         }
@@ -151,17 +161,47 @@ public class AddEventCtrl implements Initializable {
         MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
         + language, new Locale(language));
         
-        Main.config.setLanguage(language);
+        mainCtrl.updateLanguage(language);
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
+        mainCtrl.updateLanguage(language);
+        updateFlagImageURL(language);
+    }
+
+    /**
+     * Updates the flag image URL based on the selected language.
+     *
+     * @param language The selected language.
+     */
+    public void updateFlagImageURL(String language) {
+        String flagImageUrl = ""; // Initialize with the default image URL
+        switch (language) {
+            case "english":
+                flagImageUrl = "/client/scenes/images/BritishFlag.png";
+                break;
+            case "romana":
+                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
+                break;
+            case "nederlands":
+                flagImageUrl = "/client/scenes/images/DutchFlag.png";
+                break;
+        }
+        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
     
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
+
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.addEvent"));
+        currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
+        eventNameLabel.setText(MainCtrl.resourceBundle.getString("Text.eventName"));
+        eventDescriptionLabel.setText(MainCtrl.resourceBundle.getString("Text.eventDescription"));
+        eventLocationLabel.setText(MainCtrl.resourceBundle.getString("Text.eventLocation"));
+        addEventButton.setText(MainCtrl.resourceBundle.getString("button.createEvent"));
+        cancelButton.setText(MainCtrl.resourceBundle.getString("button.cancel"));
     }
 
     /**
@@ -177,6 +217,6 @@ public class AddEventCtrl implements Initializable {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println("Currency changed to: " + currency);
+        System.out.println(MainCtrl.resourceBundle.getString("Text.changedCurrencyTo") + currency);
     }
 }
