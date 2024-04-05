@@ -425,7 +425,9 @@ public class OverviewCtrl implements Initializable {
     public void loadExpenses() {
         expensesBox.getChildren().clear();
         if(selectedEvent == null) return;
-        List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId());
+        List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId())
+                .stream().filter(x ->
+                        !"gifting money".equalsIgnoreCase(x.getTag().getName())).toList();
         expenses = applyFilters(expenses);
         if(expenses.size() == 0) {
             expensesBox.getChildren()
@@ -490,7 +492,10 @@ public class OverviewCtrl implements Initializable {
         Label payer = new Label(expense.getPayer().getNickname());
         String payed = MainCtrl.resourceBundle.getString("Text.payed");
         String forString = MainCtrl.resourceBundle.getString("Text.for");
-        Label text = new Label(payed + expense.getAmount() + " " + forString);
+        Label text = new Label(
+                payed +
+                Currency.round(expense.getAmount()*Currency.getRate())
+                + " " + Currency.getCurrencyUsed() + " " + forString);
         String owers = "";
         if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
             owers = MainCtrl.resourceBundle.getString("Text.everyone");

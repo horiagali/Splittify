@@ -78,7 +78,6 @@ public class ContactDetailsCtrl implements Initializable {
     private Participant participant;
 
     /**
-     *
      * @param server
      * @param mainCtrl
      */
@@ -89,14 +88,10 @@ public class ContactDetailsCtrl implements Initializable {
     }
 
     /**
-     *
-     * @param url
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resourceBundle
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param url            The location used to resolve relative paths for the root object, or
+     *                       {@code null} if the location is not known.
+     * @param resourceBundle The resources used to localize the root object, or {@code null} if
+     *                       the root object was not localized.
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -105,53 +100,55 @@ public class ContactDetailsCtrl implements Initializable {
 
     /**
      * loads the info of the participant, if part = null the you create, if not null you update
+     *
      * @param participant
      */
     public void loadInfo(Participant participant) {
         updateUIWithNewLanguage();
         eventId = OverviewCtrl.getSelectedEvent().getId();
         reset();
-        if(participant == null){
+        if (participant == null) {
             return;
         }
         this.participant = participant;
         title.setText("Edit Participant");
         deleteButton.setOpacity(1);
-        deleteButton.disableProperty().set(false);;
+        deleteButton.disableProperty().set(false);
+        ;
         updateButton.setOpacity(1);
         updateButton.disableProperty().set(false);
         addButton.setOpacity(0);
         addButton.disableProperty().set(true);
         Text participantName = (Text) name.getChildren().get(0);
-        participantName.setText(participantName.getText() + " " 
-        + participant.getNickname() + "  →");
+        participantName.setText(participantName.getText() + " "
+                + participant.getNickname() + "  →");
         TextField newParticipantName = (TextField) name.getChildren().get(1);
         newParticipantName.setPromptText("Enter new Name");
 
         Text participantEmail = (Text) email.getChildren().get(0);
         String emailstring = participant.getEmail();
-        if(emailstring.equals(""))
-        emailstring = "-";
-        participantEmail.setText(participantEmail.getText() + " " 
-        + emailstring + "  →");
+        if (emailstring.equals(""))
+            emailstring = "-";
+        participantEmail.setText(participantEmail.getText() + " "
+                + emailstring + "  →");
         TextField newParticipantEmail = (TextField) email.getChildren().get(1);
         newParticipantEmail.setPromptText("Enter new Email");
 
         Text participantIban = (Text) iban.getChildren().get(0);
         String ibanString = participant.getIban();
-        if(ibanString.equals(""))
-        ibanString = "-";
-        participantIban.setText(participantIban.getText() + " " 
-        + ibanString + "  →");
+        if (ibanString.equals(""))
+            ibanString = "-";
+        participantIban.setText(participantIban.getText() + " "
+                + ibanString + "  →");
         TextField newParticipantIban = (TextField) iban.getChildren().get(1);
         newParticipantIban.setPromptText("Enter new IBAN");
 
         Text participantBIC = (Text) bic.getChildren().get(0);
         String bicString = participant.getBic();
-        if(bicString.equals(""))
-        bicString = "-";
-        participantBIC.setText(participantBIC.getText() + " " 
-        + bicString + "  →");
+        if (bicString.equals(""))
+            bicString = "-";
+        participantBIC.setText(participantBIC.getText() + " "
+                + bicString + "  →");
         TextField newParticipantBic = (TextField) bic.getChildren().get(1);
         newParticipantBic.setPromptText("Enter new BIC");
         updateUIWithNewLanguage();
@@ -162,35 +159,34 @@ public class ContactDetailsCtrl implements Initializable {
      */
     public void updateParticipant() {
         String newNickname = nameField.getText();
-        if(!newNickname.equals("")) {
+        if (!newNickname.equals("")) {
             List<String> nicknames = server.getParticipants(eventId).stream()
-            .map(x -> x.getNickname()).toList();
-            if(nicknames.contains(newNickname) && !participant.getNickname().equals(newNickname)) {
+                    .map(x -> x.getNickname()).toList();
+            if (nicknames.contains(newNickname) && !participant.getNickname().equals(newNickname)) {
                 showAlert(AlertType.ERROR, "Error", "There is already" +
-                " a participant with this name in this event", "Please enter another name.");
+                        " a participant with this name in this event",
+                        "Please enter another name.");
                 return;
             }
             participant.setNickname(newNickname);
         }
-        
-        
-        
+
 
         String newEmail = emailField.getText();
-        if(!newEmail.equals(""))
-        participant.setEmail(newEmail);
+        if (!newEmail.equals(""))
+            participant.setEmail(newEmail);
 
         String newBic = bicField.getText();
-        if(!newBic.equals(""))
-        participant.setBic(newBic);
+        if (!newBic.equals(""))
+            participant.setBic(newBic);
 
         String newIban = ibanField.getText();
-        if(!newIban.equals(""))
-        participant.setIban(newIban);
+        if (!newIban.equals(""))
+            participant.setIban(newIban);
 
-            server.updateParticipant(eventId, participant);
-            System.out.println("updated participant to " + participant);
-            mainCtrl.goToOverview();
+        server.updateParticipant(eventId, participant);
+        System.out.println("updated participant to " + participant);
+        mainCtrl.goToOverview();
     }
 
     /**
@@ -201,29 +197,30 @@ public class ContactDetailsCtrl implements Initializable {
         alert.setTitle("Delete Participant");
         alert.setHeaderText("Are you sure you want to delete this participant?");
         alert.setContentText("This action cannot be undone. If this participant is a payer" +
-        " in an expense, this expense will be removed. It will be removed as ower if it was one.");
+                " in an expense, this expense will be removed. " +
+                "It will be removed as ower if it was one.");
 
         alert.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
                 // Delete the participant from the server
-                List<Expense> expensesWithParticipantAsPayer = 
-                server.getExpensesByEventId(eventId).stream()
-                .filter(x -> x.getPayer().equals(participant)).toList();
-                for(Expense expenseToDelete : expensesWithParticipantAsPayer) {
+                List<Expense> expensesWithParticipantAsPayer =
+                        server.getExpensesByEventId(eventId).stream()
+                                .filter(x -> x.getPayer().equals(participant)).toList();
+                for (Expense expenseToDelete : expensesWithParticipantAsPayer) {
                     server.deleteExpense(eventId, expenseToDelete);
                 }
-                List<Expense> expensesWithParticipantAsOwer = 
-                server.getExpensesByEventId(eventId).stream()
-                .filter(x -> x.getOwers().contains(participant)).toList();
-                for(Expense expenseToUpdate : expensesWithParticipantAsOwer) {
+                List<Expense> expensesWithParticipantAsOwer =
+                        server.getExpensesByEventId(eventId).stream()
+                                .filter(x -> x.getOwers().contains(participant)).toList();
+                for (Expense expenseToUpdate : expensesWithParticipantAsOwer) {
                     expenseToUpdate.getOwers().remove(participant);
-                    if(expenseToUpdate.getOwers().size() == 0) {
+                    if (expenseToUpdate.getOwers().size() == 0) {
                         server.deleteExpense(eventId, expenseToUpdate);
-                    } else{
+                    } else {
                         server.updateExpense(eventId, expenseToUpdate);
                     }
                 }
-                
+
                 server.deleteParticipant(eventId, participant);
 
 
@@ -300,10 +297,10 @@ public class ContactDetailsCtrl implements Initializable {
 
     public void ok() {
         String name = nameField.getText();
-        if(server.getParticipants(eventId).stream()
-        .map(x -> x.getNickname()).toList().contains(name)) {
+        if (server.getParticipants(eventId).stream()
+                .map(x -> x.getNickname()).toList().contains(name)) {
             showAlert(AlertType.ERROR, "Error", "There is already" +
-            " a participant with this name in this event", "Please enter another name.");
+                    " a participant with this name in this event", "Please enter another name.");
             return;
         }
         String email = emailField.getText();
@@ -312,7 +309,7 @@ public class ContactDetailsCtrl implements Initializable {
 
         if (!name.isEmpty()) {
             Participant participant = new Participant(name, email, bic, iban, 0.0);
-            server.addParticipant(OverviewCtrl.getSelectedEvent().getId(),participant);
+            server.addParticipant(OverviewCtrl.getSelectedEvent().getId(), participant);
 
             clearFields();
             mainCtrl.goToOverview();
@@ -337,7 +334,6 @@ public class ContactDetailsCtrl implements Initializable {
     }
 
 
-
     private void showAlert(AlertType alertType, String title, String header, String content) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -348,6 +344,7 @@ public class ContactDetailsCtrl implements Initializable {
 
     /**
      * Changes the language of the site
+     *
      * @param event
      */
     @FXML
@@ -356,9 +353,9 @@ public class ContactDetailsCtrl implements Initializable {
         String language = selectedLanguageItem.getText().toLowerCase();
 
         // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
-        + language, new Locale(language));
-        
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
@@ -387,7 +384,7 @@ public class ContactDetailsCtrl implements Initializable {
         }
         languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
-    
+
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
@@ -410,6 +407,7 @@ public class ContactDetailsCtrl implements Initializable {
 
     /**
      * changes the currency to whatever is selected
+     *
      * @param event
      */
     @FXML

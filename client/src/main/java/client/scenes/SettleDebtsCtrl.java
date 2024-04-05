@@ -1,6 +1,6 @@
 package client.scenes;
 
-import client.Main;
+import client.Main; //remove?
 import client.utils.Currency;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -81,22 +81,41 @@ public class SettleDebtsCtrl implements Initializable {
         this.event = event;
     }
 
+    @SuppressWarnings("checkstyle:MethodLength")
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        display();
-    }
-
-    /**
-     * Logic for SettleDebts;
-     */
-    @SuppressWarnings("checkstyle:MethodLength")
-    public void display() {
-        debtColumn.setCellValueFactory(q ->
-                new SimpleStringProperty(q.getValue().getPayer().getNickname() + " " +
-                        MainCtrl.resourceBundle.getString("Text.gives") + " " +
-                        q.getValue().getAmount() + " "
-                        + MainCtrl.resourceBundle.getString("Text.to") + " " +
-                        q.getValue().getOwers().get(0).getNickname()));
+//<<<<<<< HEAD
+//        display();
+//    }
+//
+//    /**
+//     * Logic for SettleDebts;
+//     */
+//    @SuppressWarnings("checkstyle:MethodLength")
+//    public void display() {
+//        debtColumn.setCellValueFactory(q ->
+//                new SimpleStringProperty(q.getValue().getPayer().getNickname() + " " +
+//                        MainCtrl.resourceBundle.getString("Text.gives") + " " +
+//                        q.getValue().getAmount() + " "
+//                        + MainCtrl.resourceBundle.getString("Text.to") + " " +
+//                        q.getValue().getOwers().get(0).getNickname()));
+//=======
+        String gives = "gives";
+        String to = "to";
+        try {
+            gives = MainCtrl.resourceBundle.getString("Text.gives");
+            to = MainCtrl.resourceBundle.getString("Text.to");
+        } catch (Exception ignore) {}
+        String finalGives = gives;
+        String finalTo = to;
+        debtColumn.setCellValueFactory(q -> {
+            double amount =q.getValue().getAmount() * Currency.getRate() ;
+            return new SimpleStringProperty(q.getValue().getPayer().getNickname()
+                    + " " + finalGives + " " +
+                    Currency.round(amount) + " " + Currency.getCurrencyUsed() + " "
+                    + finalTo + " " +
+                    q.getValue().getOwers().get(0).getNickname());
+        });
         debtColumn.setCellFactory(column -> new TableCell<Expense, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
@@ -137,11 +156,11 @@ public class SettleDebtsCtrl implements Initializable {
                             MainCtrl.resourceBundle.getString("Text.reminderText")
                             + event.getId().toString(),
                             MainCtrl.resourceBundle.getString("Text.youOwe") +
-                            owed.getNickname() + " " + amount + " " +
+                            owed.getNickname() + " " + String.valueOf(amount / 100) + " " +
                                     MainCtrl.resourceBundle.getString("Text.forEvent") + " "
                             + event.getTitle() + " " +
                                     MainCtrl.resourceBundle.getString("Text.on")
-                                    + " " + server.getServer());
+                                    + " " + ServerUtils.getServer());
                     server.sendEmail(mail);
                 });
             }
@@ -165,10 +184,11 @@ public class SettleDebtsCtrl implements Initializable {
             {
                 actionButton.setOnAction(myevent -> {
                     Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
-                    confirmationDialog.setTitle("Confirmation");
-                    confirmationDialog.setHeaderText("Are you sure you want" +
-                            " to mark this payment as received?");
-                    confirmationDialog.setContentText("This action cannot be undone");
+                    confirmationDialog.setTitle(MainCtrl.resourceBundle.getString
+                            ("Text.confirmation"));
+                    confirmationDialog.setHeaderText(
+                            MainCtrl.resourceBundle.getString("Text.areYouSureMarkPayment"));
+                    confirmationDialog.setContentText(MainCtrl.resourceBundle.getString("Text.noUndone"));
 
                     confirmationDialog.showAndWait().ifPresent(response -> {
                         if (response == ButtonType.OK) {
@@ -200,12 +220,29 @@ public class SettleDebtsCtrl implements Initializable {
     /**
      * refresh function
      */
+    /**
+     * refresh function
+     */
     public void refresh() {
+        // Refresh the data
         List<Expense> expenses2 = server.getExpensesByEventId(event.getId())
                 .stream().filter(x -> x.getTag().getName().equals("debt")).toList();
         data = FXCollections.observableList(expenses2);
         tableView.setItems(data);
+        String mata = Currency.getCurrencyUsed();
+        System.out.println(mata);
+        // Update the currency-related information in the table columns
+        debtColumn.setCellValueFactory(q -> {
+            double amount = q.getValue().getAmount() * Currency.getRate();
+            String gives = MainCtrl.resourceBundle.getString("Text.gives");
+            String to = MainCtrl.resourceBundle.getString("Text.to");
+            return new SimpleStringProperty(q.getValue().getPayer().getNickname() + " " +gives + " " +
+                    Currency.round(amount) + " " + Currency.getCurrencyUsed() + " " + to +" " +
+                    q.getValue().getOwers().get(0).getNickname());
+        });
     }
+
+
 
     /**
      * setter
@@ -242,7 +279,7 @@ public class SettleDebtsCtrl implements Initializable {
         updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
-        display();
+        //display();
     }
 
     /**
