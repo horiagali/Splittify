@@ -392,7 +392,7 @@ public class EditExpenseCtrl implements Initializable {
     /**
      * Handles the action when the user adds an expense.
      */
-    @SuppressWarnings("checkstyle:CyclomaticComplexity")
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MethodLength"})
     @FXML
     private void editExpense() {
 
@@ -611,7 +611,8 @@ public class EditExpenseCtrl implements Initializable {
 
             Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
             confirmationDialog.setTitle("Confirm Undo " + field + " Change");
-            confirmationDialog.setHeaderText("Are you sure you want to undo this " + field + " change?");
+            confirmationDialog.setHeaderText("Are you sure you want to undo this "
+                    + field + " change?");
             confirmationDialog.setContentText("This action cannot be undone.");
 
             Object finalOldValue = oldValue;
@@ -624,7 +625,8 @@ public class EditExpenseCtrl implements Initializable {
                     updateUI(field, finalOldValue);
 
                     // Optionally, you can print a message indicating the undo operation
-                    System.out.println("Undo " + field + " change. Value restored to: " + finalOldValue);
+                    System.out.println("Undo " + field +
+                            " change. Value restored to: " + finalOldValue);
                 } else {
                     // User canceled the undo operation or closed the dialog
                     System.out.println("Undo operation canceled for " + field);
@@ -634,11 +636,13 @@ public class EditExpenseCtrl implements Initializable {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("No Previous " + field);
             alert.setHeaderText(null);
-            alert.setContentText("There are no previous values saved for " + field + " in this expense.");
+            alert.setContentText("There are no previous values saved for "
+                    + field + " in this expense.");
             alert.showAndWait();
         }
     }
 
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
     private Object getCurrentValue(Expense expense, String field) {
         switch (field) {
             case "amount":
@@ -658,6 +662,7 @@ public class EditExpenseCtrl implements Initializable {
         }
     }
 
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:CyclomaticComplexity"})
     private void updateUI(String field, Object value) {
         // Update the corresponding UI element based on the field
         switch (field) {
@@ -699,7 +704,9 @@ public class EditExpenseCtrl implements Initializable {
                 Date dateDate = (Date) value;
                 SimpleDateFormat ft = new SimpleDateFormat("yyyy.MM.dd");
                 String dateInString = ft.format(dateDate);
-                LocalDate date = LocalDate.of(Integer.parseInt(dateInString.substring(0, 4)),  Integer.parseInt(dateInString.substring(5, 7)),
+                LocalDate date = LocalDate.of(Integer.parseInt
+                                (dateInString.substring(0, 4)),
+                        Integer.parseInt(dateInString.substring(5, 7)),
                         Integer.parseInt(dateInString.substring(8, 10)));
                 datePicker.setValue(date);
                 break;

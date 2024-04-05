@@ -11,24 +11,46 @@ public class UndoManager {
     private UndoManager() {
     }
 
+    /**
+     * Returns the singleton instance of UndoManager.
+     *
+     * @return the UndoManager instance
+     */
     public static UndoManager getInstance() {
         return instance;
     }
 
+    /**
+     * Captures the state of a specific field in an Expense for potential undo operations.
+     *
+     * @param expense the Expense object to capture the state from
+     * @param field the name of the field whose state is being captured
+     * @param value the value representing the current state of the field
+     */
     public void captureState(Expense expense, String field, Object value) {
         // Retrieve the expense ID
         Long expenseId = expense.getId();
 
         // Retrieve or create the undo history map for the expense ID
-        Map<String, Stack<Object>> expenseUndoHistory = undoHistories.computeIfAbsent(expenseId, k -> new HashMap<>());
+        Map<String, Stack<Object>> expenseUndoHistory =
+                undoHistories.computeIfAbsent(expenseId, k -> new HashMap<>());
 
         // Retrieve or create the stack for the specified field
-        Stack<Object> fieldUndoHistory = expenseUndoHistory.computeIfAbsent(field, k -> new Stack<>());
+        Stack<Object> fieldUndoHistory =
+                expenseUndoHistory.computeIfAbsent(field, k -> new Stack<>());
 
         // Push the new value onto the undo history stack for this field
         fieldUndoHistory.push(value);
     }
 
+    /**
+     * Undoes the last change made to a specific field of an Expense.
+     *
+     * @param expense the Expense object to undo the change on
+     * @param field the name of the field to undo changes on
+     * @return the previous state of the field before the undo operation,
+     * or null if no previous state exists
+     */
     public Object undo(Expense expense, String field) {
         // Retrieve the expense ID
         Long expenseId = expense.getId();
@@ -42,7 +64,8 @@ public class UndoManager {
             if (fieldUndoHistory != null && !fieldUndoHistory.isEmpty()) {
                 // Pop the previous state from the undo history stack for this field and return it
                 Object previousState = fieldUndoHistory.pop();
-                System.out.println("Previous state popped for field " + field + ": " + previousState);
+                System.out.println("Previous state popped for field "
+                        + field + ": " + previousState);
 
                 return previousState;
             } else {
@@ -54,6 +77,14 @@ public class UndoManager {
         return null;
     }
 
+    /**
+     * Peeks at the last state of a specific
+     * field of an Expense without removing it from the undo history.
+     *
+     * @param expense the Expense object to peek the field state from
+     * @param field the name of the field to peek the state from
+     * @return the last state of the field, or null if no state is available
+     */
     public Object peek(Expense expense, String field) {
         // Retrieve the expense ID
         Long expenseId = expense.getId();
@@ -65,9 +96,11 @@ public class UndoManager {
             Stack<Object> fieldUndoHistory = expenseUndoHistory.get(field);
 
             if (fieldUndoHistory != null && !fieldUndoHistory.isEmpty()) {
-                // Peek at the previous state from the undo history stack for this field and return it
+                // Peek at the previous state from the undo
+                // history stack for this field and return it
                 Object previousState = fieldUndoHistory.peek();
-                System.out.println("Previous state peeked for field " + field + ": " + previousState);
+                System.out.println("Previous state peeked for field "
+                        + field + ": " + previousState);
 
                 return previousState;
             } else {
