@@ -141,6 +141,7 @@ public class Main extends Application {
 
         primaryStage.setOnCloseRequest(e -> {
             adminPage.getKey().stop();
+            System.exit(0);
         });
     }
 

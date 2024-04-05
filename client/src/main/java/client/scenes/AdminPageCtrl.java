@@ -99,23 +99,35 @@ public class AdminPageCtrl implements Initializable {
         sortingOptions.add("Old-New");
 
         sortingComboBox.setItems(FXCollections.observableList(sortingOptions));
+        sortingComboBox.setValue("Old-New");
 
         table.setOnMouseClicked(this::handleTableItemClick);
 
         addContextMenu();
 
-        refresh();
         addKeyboardNavigationHandlers();
-
-        server.registerForUpdates(data::add);
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                handleSort();
+            }
+        }, 0, 1000);
+        //server.registerForUpdates(data::add);
     }
 
     /**
-     * Handles sorting
-     * @param e action event
+     * Handles sorting, ae for javafx
+     * @param e Action event
      */
     @FXML
-    private void handeSort(ActionEvent e) {
+    private void handleSort(ActionEvent e) {
+        handleSort();
+    }
+
+    /**
+     * Handles sorting, not for javafx
+     */
+    private void handleSort() {
         refresh();
         switch (sortingComboBox.getValue()) {
             case "A-Z" -> sortAlphabetically();
