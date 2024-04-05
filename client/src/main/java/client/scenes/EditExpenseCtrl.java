@@ -549,33 +549,49 @@ public class EditExpenseCtrl implements Initializable {
     }
 
     @FXML
-    public void undoAmount() {
-        undoField("amount");
-    }
+    private void undoSelection() {
+        // Create a list of choices for undo options
+        List<String> choices = List.of("Title", "Amount", "Payer", "Tag", "Owers", "Date");
 
-    @FXML
-    public void undoTitle() {
-        undoField("title");
-    }
+        // Create a choice dialog to prompt the user for selection
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(null, choices);
+        dialog.setTitle("Undo Selection");
+        dialog.setHeaderText("Select an item to undo:");
+        dialog.setContentText("Choose an item:");
 
-    @FXML
-    public void undoPayer() {
-        undoField("payer");
-    }
+        // Show the dialog and wait for the user's choice
+        Optional<String> result = dialog.showAndWait();
 
-    @FXML
-    public void undoTag() {
-        undoField("tag");
-    }
-
-    @FXML
-    public void undoOwers() {
-        undoField("owers");
-    }
-
-    @FXML
-    public void undoDate() {
-        undoField("date");
+        // Process the user's choice
+        result.ifPresent(choice -> {
+            // Call your undo method based on the selected choice
+            switch (choice) {
+                case "Title":
+                    undoField("title");
+                    break;
+                case "Amount":
+                    undoField("amount");
+                    break;
+                case "Payer":
+                    undoField("payer");
+                    break;
+                case "Tag":
+                    undoField("tag");
+                    break;
+                case "Owers":
+                    undoField("owers");
+                    break;
+                case "Date":
+                    undoField("date");
+                    break;
+                default:
+                    // Handle unexpected choices
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setContentText("Invalid selection");
+                    alert.showAndWait();
+            }
+        });
     }
 
     private void undoField(String field) {
@@ -665,7 +681,6 @@ public class EditExpenseCtrl implements Initializable {
                 payerComboBox.getSelectionModel().select(selectedIndex);
                 break;
             case "owers":
-                // Assuming value is a List<String> containing selected participant names
                 List<Participant> selectedParticipants = (List<Participant>) value;
                 // Iterate over the checkboxes and update their states
                 for (CheckBox checkBox : participantCheckboxes) {
@@ -698,7 +713,6 @@ public class EditExpenseCtrl implements Initializable {
     }
 
     private void selectTagInComboBox(Tag tag) {
-        // Assuming tagComboBox is a ComboBox<Tag> representing available tags
         tagComboBox.getSelectionModel().select(tag);
     }
 }
