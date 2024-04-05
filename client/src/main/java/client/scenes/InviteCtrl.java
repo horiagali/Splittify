@@ -29,7 +29,6 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.HashSet;
@@ -55,7 +54,7 @@ public class InviteCtrl implements Initializable {
     @FXML
     private FlowPane emailFlowPane;
     @FXML
-    private Menu currencyMenu;
+    private Menu languageMenu;
     @FXML
     private Button backButton;
     @FXML
@@ -71,15 +70,11 @@ public class InviteCtrl implements Initializable {
     @FXML
     private ToggleGroup languageGroup;
     @FXML
-    private Text invitePeopleText;
+    private RadioMenuItem englishMenuItem;
     @FXML
-    private Label eventCodeText;
+    private RadioMenuItem romanianMenuItem;
     @FXML
-    private Label inviteByMailText;
-    @FXML
-    private Button addButton;
-    @FXML
-    private Button copyButton;
+    private RadioMenuItem dutchMenuItem;
 
 
     /**
@@ -236,16 +231,8 @@ public class InviteCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
+        //languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
-        invitePeopleText.setText(MainCtrl.resourceBundle.getString("Text.invitePeopleText"));
-        inviteByMailText.setText(MainCtrl.resourceBundle.getString("Text.inviteByMailText"));
-        eventCodeText.setText(MainCtrl.resourceBundle.getString("Text.eventCodeText"));
-        addButton.setText(MainCtrl.resourceBundle.getString("button.add"));
-        copyButton.setText(MainCtrl.resourceBundle.getString("button.copy"));
-        sendButton.setText(MainCtrl.resourceBundle.getString("button.send"));
-        inviteCodeTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.inviteCode"));
-        emailTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.email"));
     }
 
     /**
@@ -383,6 +370,6 @@ public class InviteCtrl implements Initializable {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo") + currency);
+        System.out.println("Currency changed to: " + currency);
     }
 }

@@ -16,8 +16,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -37,12 +35,9 @@ public class ServerSetterCtrl {
     private Menu languageMenu;
     @FXML
     private ToggleGroup currencyGroup;
-    @FXML
-    private ImageView languageFlagImageView;
+
     @FXML 
     public Stage primaryStage;
-    @FXML
-    public Menu currencyMenu;
 
     @FXML 
     public Label invalidURL;
@@ -74,15 +69,13 @@ public class ServerSetterCtrl {
         String language = selectedLanguageItem.getText().toLowerCase();
 
         // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
-                + language, new Locale(language));
-
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
+        + language, new Locale(language));
+        
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
-        mainCtrl.updateLanguage(language);
-        updateFlagImageURL(language);
     }
 
     /**
@@ -124,32 +117,10 @@ public class ServerSetterCtrl {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.serverSetter"));
         connectToServerButton.setText(MainCtrl.resourceBundle.getString("button.connectToServer"));
         invalidURL.setText("");
         enterUrl.setText(MainCtrl.resourceBundle.getString("Text.enterUrl"));
-        currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
-    }
-
-    /**
-     * Updates the flag image URL based on the selected language.
-     *
-     * @param language The selected language.
-     */
-    public void updateFlagImageURL(String language) {
-        String flagImageUrl = ""; // Initialize with the default image URL
-        switch (language) {
-            case "english":
-                flagImageUrl = "/client/scenes/images/BritishFlag.png";
-                break;
-            case "romana":
-                flagImageUrl = "/client/scenes/images/RomanianFlag.png";
-                break;
-            case "nederlands":
-                flagImageUrl = "/client/scenes/images/DutchFlag.png";
-                break;
-        }
-        languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
+        languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
     }
 
     /**

@@ -10,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.security.SecureRandom;
@@ -36,8 +35,6 @@ public class AdminPassCtrl implements Initializable {
     private Button enterButton;
     @FXML
     private ImageView languageFlagImageView;
-    @FXML
-    private Text adminTitle;
 
 
     /**
@@ -126,7 +123,6 @@ public class AdminPassCtrl implements Initializable {
     public void updateUIWithNewLanguage() {
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
         enterButton.setText(MainCtrl.resourceBundle.getString("button.enterPassword"));
-        adminTitle.setText(MainCtrl.resourceBundle.getString("Text.adminPassPage"));
     }
 
     /**

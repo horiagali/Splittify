@@ -64,8 +64,8 @@ public class Currency {
      */
     public static double getRate() {
         switch (currencyUsed) {
-            case "EUR","EURO":
-                return 1.00;
+            case "EUR":
+                return 1;
             case "USD":
                 return EUR_TO_USD;
             case "CHF":

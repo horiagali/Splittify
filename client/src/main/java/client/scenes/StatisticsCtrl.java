@@ -52,8 +52,6 @@ public class StatisticsCtrl {
 
     @FXML
     private Button refresh;
-    @FXML
-    private Menu currencyMenu;
 
     /**
      * @param server
@@ -73,7 +71,7 @@ public class StatisticsCtrl {
     public void refresh() {
         totalAmount = 0; //reset total amount every refresh (else it becomes more and mroe)
         if(!(this.pieChartData == null))
-            pieChartData.clear();
+        pieChartData.clear();
         var expenses = server.getExpensesByEventId(event.getId());
         var tags = server.getTags(event.getId());
         pieChartData = FXCollections.observableArrayList();
@@ -105,12 +103,12 @@ public class StatisticsCtrl {
         //method to group all expenses on tag and get their total amount
         for(Tag tag : tags) {
             if(tag.getName().equals("gifting money") || tag.getName().equals("debt"))
-                continue;
+            continue;
             double amount = expenses.stream().filter(x -> x.getTag().equals(tag))
             .mapToDouble(x  -> (int) x.getAmount()).sum();
             amount = Currency.round(amount*Currency.getRate());
             if(amount != 0)
-                pieChartData.add(new PieChart.Data(tag.getName()
+            pieChartData.add(new PieChart.Data(tag.getName()
                     + ": " + amount+ " " + Currency.getCurrencyUsed(), amount));
             totalAmount += amount;
         }
@@ -173,7 +171,7 @@ public class StatisticsCtrl {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo") + currency);
+        System.out.println("Currency changed to: " + currency);
     }
 
     /**
@@ -187,16 +185,14 @@ public class StatisticsCtrl {
         else {
             pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString));
         }
-        currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
         eventTotalAmount.setText(MainCtrl.resourceBundle.getString("Text.statisticsTotal") + 
         totalAmount +  " " + Currency.getCurrencyUsed());
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         refresh.setText(MainCtrl.resourceBundle.getString("button.refresh"));
         String stageTitleString = "title.statistics";
-
-        if(event != null) {
+        if(event !=null){
             mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString)
-                    +  " " + event.getTitle());
+                    +  event.getTitle());
         }
         else{
             mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));

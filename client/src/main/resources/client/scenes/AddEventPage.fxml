@@ -7,58 +7,24 @@
 <?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+
 
 <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddEventCtrl">
    <children>
       <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
          <menus>
-            <Menu fx:id="languageMenu" mnemonicParsing="false">
+            <Menu fx:id="languageMenu" mnemonicParsing="false" text="Language">
                <items>
                   <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
                      <toggleGroup>
                         <ToggleGroup fx:id="languageGroup" />
                      </toggleGroup>
-                     <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="30.0">
-                           <image>
-                              <Image url="@/client/scenes/images/BritishFlag.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
                   </RadioMenuItem>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup">
-                     <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="30.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@/client/scenes/images/RomanianFlag.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></RadioMenuItem>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup">
-                     <graphic>
-                        <ImageView fitHeight="25.0" fitWidth="30.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@/client/scenes/images/DutchFlag.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></RadioMenuItem>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana" toggleGroup="$languageGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands" toggleGroup="$languageGroup" />
                </items>
-               <graphic>
-                  <StackPane alignment="CENTER_LEFT">
-                     <children>
-                        <ImageView fx:id="languageFlagImageView" fitHeight="25" fitWidth="30">
-                           <image>
-                              <Image fx:id="languageFlagImage" url="@/client/scenes/images/BritishFlag.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </StackPane>
-               </graphic>
             </Menu>
             <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
                <items>
@@ -79,9 +45,9 @@
             <TextField fx:id="nameField" layoutX="226.0" layoutY="87.0" />
             <TextField fx:id="descriptionField" layoutX="228.0" layoutY="167.0" />
             <TextField fx:id="locationField" layoutX="228.0" layoutY="252.0" />
-            <Label fx:id="eventNameLabel" layoutX="106.0" layoutY="91.0" text="Event name" />
-            <Label fx:id="eventDescriptionLabel" layoutX="95.0" layoutY="171.0" text="Event description" />
-            <Label fx:id="eventLocationLabel" layoutX="103.0" layoutY="256.0" text="Event location" />
+            <Label layoutX="114.0" layoutY="91.0" text="Event name" />
+            <Label layoutX="100.0" layoutY="171.0" text="Event description" />
+            <Label layoutX="108.0" layoutY="256.0" text="Event location" />
             <Button fx:id="addEventButton" layoutX="228.0" layoutY="307.0" mnemonicParsing="false" onAction="#addEvent" text="Create event" />
             <Button fx:id="cancelButton" layoutX="352.0" layoutY="307.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
          </children>
