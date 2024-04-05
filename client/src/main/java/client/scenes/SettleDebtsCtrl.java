@@ -188,7 +188,8 @@ public class SettleDebtsCtrl implements Initializable {
                             ("Text.confirmation"));
                     confirmationDialog.setHeaderText(
                             MainCtrl.resourceBundle.getString("Text.areYouSureMarkPayment"));
-                    confirmationDialog.setContentText(MainCtrl.resourceBundle.getString("Text.noUndone"));
+                    confirmationDialog.setContentText
+                            (MainCtrl.resourceBundle.getString("Text.noUndone"));
 
                     confirmationDialog.showAndWait().ifPresent(response -> {
                         if (response == ButtonType.OK) {
@@ -236,7 +237,8 @@ public class SettleDebtsCtrl implements Initializable {
             double amount = q.getValue().getAmount() * Currency.getRate();
             String gives = MainCtrl.resourceBundle.getString("Text.gives");
             String to = MainCtrl.resourceBundle.getString("Text.to");
-            return new SimpleStringProperty(q.getValue().getPayer().getNickname() + " " +gives + " " +
+            return new SimpleStringProperty(q.getValue().getPayer().getNickname()
+                    + " " +gives + " " +
                     Currency.round(amount) + " " + Currency.getCurrencyUsed() + " " + to +" " +
                     q.getValue().getOwers().get(0).getNickname());
         });
