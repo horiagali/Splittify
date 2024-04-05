@@ -68,6 +68,7 @@ public class AdminPageCtrl implements Initializable {
 
     /**
      * constructor
+     *
      * @param server
      * @param mainCtrl
      */
@@ -86,6 +87,7 @@ public class AdminPageCtrl implements Initializable {
 
     /**
      * initialises
+     *
      * @param location
      * @param resources
      */
@@ -118,16 +120,36 @@ public class AdminPageCtrl implements Initializable {
 
     /**
      * Handles sorting
+     *
      * @param e action event
      */
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
     @FXML
     private void handeSort(ActionEvent e) {
         refresh();
-        switch (sortingComboBox.getValue()) {
-            case "A-Z" -> sortAlphabetically();
-            case "Z-A" -> sortAlphabeticallyReverse();
-            case "New-Old" -> sortNewToOld();
-            case "Old-New" -> sortOldToNew();
+        if (MainCtrl.resourceBundle == null) {
+            switch (sortingComboBox.getValue()) {
+                case "A-Z" -> sortAlphabetically();
+                case "Z-A" -> sortAlphabeticallyReverse();
+                case "New-Old" -> sortNewToOld();
+                case "Old-New" -> sortOldToNew();
+            }
+        } else {
+            String newString = MainCtrl.resourceBundle.getString("Text.new");
+            String oldString = MainCtrl.resourceBundle.getString("Text.old");
+            String oldToNew = oldString + "-" + newString;
+            String newToOld = newString + "-" + oldString;
+            String value = sortingComboBox.getValue();
+            if (value == null)
+                return;
+            if (value.equals("A-Z"))
+                sortAlphabetically();
+            if (value.equals("Z-A"))
+                sortAlphabeticallyReverse();
+            if (value.equals(oldToNew))
+                sortOldToNew();
+            if (value.equals(newToOld))
+                sortNewToOld();
         }
     }
 
@@ -184,6 +206,7 @@ public class AdminPageCtrl implements Initializable {
 
     /**
      * changes language to whatever s selected
+     *
      * @param event
      */
     @FXML
@@ -210,12 +233,26 @@ public class AdminPageCtrl implements Initializable {
         importJsonButton.setText(MainCtrl.resourceBundle.getString("button.importJson"));
         refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
         colName.setText(MainCtrl.resourceBundle.getString("Text.eventName"));
-        colLocation.setText(MainCtrl.resourceBundle.getString("Text.eventLocation"));
+        colId.setText(MainCtrl.resourceBundle.getString("Text.eventLocation"));
         colDate.setText(MainCtrl.resourceBundle.getString("Text.eventDate"));
+
+        int num = sortingComboBox.getSelectionModel().getSelectedIndex();
+        List<String> sortingOptions = new ArrayList<>();
+        String newString = MainCtrl.resourceBundle.getString("Text.new");
+        String oldString = MainCtrl.resourceBundle.getString("Text.old");
+        sortingOptions.add("A-Z");
+        sortingOptions.add("Z-A");
+        sortingOptions.add(newString + "-" + oldString);
+        sortingOptions.add(oldString + "-" + newString);
+
+        sortingComboBox.setItems(FXCollections.observableList(sortingOptions));
+        sortingComboBox.setPromptText(MainCtrl.resourceBundle.getString("Text.sortBy"));
+        sortingComboBox.getSelectionModel().select(num);
     }
 
     /**
      * updates the flag
+     *
      * @param language
      */
     public void updateFlagImageURL(String language) {
@@ -233,6 +270,7 @@ public class AdminPageCtrl implements Initializable {
         }
         languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
+
     @FXML
     private void importJson(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -257,9 +295,9 @@ public class AdminPageCtrl implements Initializable {
                 );
                 Event addedEvent = new Event();
                 try {
-                         server.sendEvent("/app/events", newEvent);
-                         List<Event> events = server.getEvents();
-                         addedEvent = events.getLast();
+                    server.sendEvent("/app/events", newEvent);
+                    List<Event> events = server.getEvents();
+                    addedEvent = events.getLast();
                 } catch (WebApplicationException e) {
                     var alert = new Alert(Alert.AlertType.ERROR);
                     alert.initModality(Modality.APPLICATION_MODAL);
@@ -332,9 +370,9 @@ public class AdminPageCtrl implements Initializable {
 
     private void addContextMenu() {
         String delete = "Delete";
-        try {
-            delete = MainCtrl.resourceBundle.getString("Text.delete");
-        } catch (Exception ignored) {};
+//        try {
+//            delete = MainCtrl.resourceBundle.getString("Text.delete");
+//        } catch (Exception ignored) {};
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteMenuItem = new MenuItem(delete);
         deleteMenuItem.setOnAction(event -> deleteSelectedEvent());
