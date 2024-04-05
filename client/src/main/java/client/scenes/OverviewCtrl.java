@@ -41,13 +41,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OverviewCtrl implements Initializable {
-
-    private ArrayList<String> names;
-    private ArrayList<Label> labels;
-    private final ServerUtils server;
-    private final MainCtrl mainCtrl;
-    private static Event selectedEvent;
-
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -61,6 +54,12 @@ public class OverviewCtrl implements Initializable {
     private HBox hbox;
     @FXML
     private ImageView languageFlagImageView;
+
+    private ArrayList<String> names;
+    private ArrayList<Label> labels;
+    private final ServerUtils server;
+    private final MainCtrl mainCtrl;
+    private static Event selectedEvent;
 
     @FXML
     private Label eventName;
@@ -87,6 +86,8 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private VBox participantsVBox;
     @FXML
+    private Menu languageMenu;
+    @FXML
     private ListView<Expense> expensesListView;
     @FXML
     private ToggleGroup currencyGroup;
@@ -99,37 +100,6 @@ public class OverviewCtrl implements Initializable {
     private ComboBox<String> ower;
     @FXML
     private ComboBox<String> tag;
-    @FXML
-    private Button sendInvitesButton;
-    @FXML
-    private Menu currencyMenu;
-    @FXML
-    private Button tagButton;
-    @FXML
-    private Text expensesText;
-    @FXML
-    private Text participantsText;
-    @FXML
-    private Button addParticipantsButton;
-    @FXML
-    private Button goToBalances;
-    @FXML
-    private Button refreshButton;
-    @FXML
-    private Button addExpenseButton;
-    @FXML
-    private Button statisticsButton;
-    @FXML
-    private Text filtersText;
-    @FXML
-    private Text payerText;
-    @FXML
-    private Text owerText;
-    @FXML
-    private Text tagText;
-    @FXML
-    private Button deleteEventButton;
-
 
 
 
@@ -218,7 +188,6 @@ public class OverviewCtrl implements Initializable {
         updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
-        refresh();
     }
 
 
@@ -228,21 +197,6 @@ public class OverviewCtrl implements Initializable {
      */
     public void updateUIWithNewLanguage() {
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
-        sendInvitesButton.setText(MainCtrl.resourceBundle.getString("button.sendInvites"));
-        tagButton.setText(MainCtrl.resourceBundle.getString("button.tag"));
-        expensesText.setText(MainCtrl.resourceBundle.getString("Text.expenses"));
-        participantsText.setText(MainCtrl.resourceBundle.getString("Text.participants"));
-        addParticipantsButton.setText(MainCtrl.resourceBundle.getString("button.add"));
-        goToBalances.setText(MainCtrl.resourceBundle.getString("button.balances"));
-        refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
-        addExpenseButton.setText(MainCtrl.resourceBundle.getString("button.addExpense"));
-        statisticsButton.setText(MainCtrl.resourceBundle.getString("button.seeStatistics"));
-        filtersText.setText(MainCtrl.resourceBundle.getString("Text.filters"));
-        payerText.setText(MainCtrl.resourceBundle.getString("Text.payer"));
-        owerText.setText(MainCtrl.resourceBundle.getString("Text.ower"));
-        tagText.setText(MainCtrl.resourceBundle.getString("Text.tag"));
-        deleteEventButton.setText(MainCtrl.resourceBundle.getString("button.deleteEvent"));
-        currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
     }
 
     /**
@@ -280,7 +234,7 @@ public class OverviewCtrl implements Initializable {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo") + currency);
+        System.out.println("Currency changed to: " + currency);
     }
 
     /**
@@ -326,12 +280,6 @@ public class OverviewCtrl implements Initializable {
             eventDescription.setText(selectedEvent.getDescription());
             
         }
-
-        if (MainCtrl.resourceBundle != null) {
-            payer.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
-            ower.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
-            tag.setValue(MainCtrl.resourceBundle.getString("Text.anyTag"));
-        }
     
         loadParticipants();
         loadComboBoxes();
@@ -343,13 +291,13 @@ public class OverviewCtrl implements Initializable {
     private void loadComboBoxes() {
         if(selectedEvent == null) return;
         List<String> participants = new ArrayList<>();
-        participants.add(MainCtrl.resourceBundle.getString("Text.anyone"));
+        participants.add("anyone");
         participants.addAll(server.getParticipants(selectedEvent.getId()).stream()
-        .map(Participant::getNickname).toList());
+        .map(x -> x.getNickname()).toList());
         List<String> tags = new ArrayList<>();
-        tags.add(MainCtrl.resourceBundle.getString("Text.anyTag"));
+        tags.add("any tag");
         tags.addAll(server.getTags(selectedEvent.getId()).stream()
-        .map(Tag::getName).filter(x -> !x.equals("gifting money")).toList());
+        .map(x -> x.getName()).filter(x -> !x.equals("gifting money")).toList());
         
         payer.setItems(FXCollections.observableArrayList(participants));
         ower.setItems(FXCollections.observableArrayList(participants));
@@ -414,9 +362,9 @@ public class OverviewCtrl implements Initializable {
      * resets comboboxes to 'anyone' state
      */
     public void resetComboBoxes() {
-        payer.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
-        ower.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
-        tag.setValue(MainCtrl.resourceBundle.getString("Text.anyTag"));
+        payer.setValue("anyone");
+        ower.setValue("anyone");
+        tag.setValue("any tag");
     }
 
     /**
@@ -431,7 +379,7 @@ public class OverviewCtrl implements Initializable {
         expenses = applyFilters(expenses);
         if(expenses.size() == 0) {
             expensesBox.getChildren()
-                    .add(new Text(MainCtrl.resourceBundle.getString("Text.noExpensesFiltered")));
+            .add(new Text("There are no expenses matching your filters."));
             return;
         }
         for(Expense expense : expenses) {
@@ -456,17 +404,17 @@ public class OverviewCtrl implements Initializable {
         String payerBox = payer.getValue();
         String owerBox = ower.getValue();
         String tagBox = tag.getValue();
-        if(payerBox != null && !payerBox.equals(MainCtrl.resourceBundle.getString("Text.anyone"))) {
+        if(payerBox != null && !payerBox.equals("anyone")) {
             expenses = expenses.stream()
             .filter(x -> x.getPayer().getNickname().equals(payerBox)).toList();
         }
-        if(owerBox != null && !owerBox.equals(MainCtrl.resourceBundle.getString("Text.anyone"))) {
+        if(owerBox != null && !owerBox.equals("anyone")) {
             Participant owerOfExpense = server
             .getParticipantByNickname(selectedEvent.getId(), owerBox);
             expenses = expenses.stream()
         .filter(x -> x.getOwers().contains(owerOfExpense)).toList();
         }
-        if(tagBox != null && !tagBox.equals(MainCtrl.resourceBundle.getString("Text.anyTag"))) {
+        if(tagBox != null && !tagBox.equals("any tag")) {
             Optional<Tag> selectedTag = server.getTags(selectedEvent.getId())
             .stream().filter(x -> x.getName().equals(tagBox)).findFirst();
             if(!selectedTag.isEmpty()) {
@@ -474,9 +422,7 @@ public class OverviewCtrl implements Initializable {
                 expenses = expenses.stream().filter(x -> x.getTag().equals(actualTag))
                 .toList();
             } else {
-                String noTag = MainCtrl.resourceBundle.getString("Text.noTagWithName");
-                String wasFound = MainCtrl.resourceBundle.getString("Text.wasFound");
-                System.out.println(noTag + tagBox + wasFound);
+                System.out.println("No tag with name " + tagBox + " was found!");
             }
             
         }
@@ -490,19 +436,16 @@ public class OverviewCtrl implements Initializable {
         row2.setSpacing(5);
         row2.setAlignment(Pos.CENTER);
         Label payer = new Label(expense.getPayer().getNickname());
-        String payed = MainCtrl.resourceBundle.getString("Text.payed");
-        String forString = MainCtrl.resourceBundle.getString("Text.for");
-        Label text = new Label(
-                payed +
+        Label text = new Label("payed " +
                 Currency.round(expense.getAmount()*Currency.getRate())
-                + " " + Currency.getCurrencyUsed() + " " + forString);
+                + " " + Currency.getCurrencyUsed() + " for");
         String owers = "";
         if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
-            owers = MainCtrl.resourceBundle.getString("Text.everyone");
+        owers = "everyone";
         else {
             List<String> nameList = expense.getOwers().stream()
-            .map(Participant::getNickname).toList();
-            owers = nameList.getFirst();
+            .map(x -> x.getNickname()).toList();
+            owers = nameList.get(0);
             for(int i = 1; i < nameList.size(); i++) {
                 owers = owers + ", " + nameList.get(i);
             }
@@ -612,17 +555,16 @@ public class OverviewCtrl implements Initializable {
      */
     public void goToAreYouSure(ActionEvent actionEvent) {
         Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationDialog.setTitle(MainCtrl.resourceBundle.getString("Text.confirmation"));
-        confirmationDialog.setHeaderText
-                (MainCtrl.resourceBundle.getString("Text.areYouSureDeleteEvent"));
-        confirmationDialog.setContentText(MainCtrl.resourceBundle.getString("Text.noUndone"));
+        confirmationDialog.setTitle("Confirmation");
+        confirmationDialog.setHeaderText("Are you sure you want to delete the event?");
+        confirmationDialog.setContentText("This action cannot be undone.");
 
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 server.deleteEvent(selectedEvent);
                 back();
             } else {
-                System.out.println(MainCtrl.resourceBundle.getString("Text.eventDeleteCanceled"));
+                System.out.println("Event deletion canceled.");
             }
         });
     }

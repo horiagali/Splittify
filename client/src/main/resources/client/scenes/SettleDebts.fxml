@@ -1,108 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettleDebtsCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.SettleDebtsCtrl">
    <children>
-      <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0">
-         <menus>
-            <Menu fx:id="languageMenu" mnemonicParsing="false">
-               <graphic>
-                  <StackPane alignment="CENTER_LEFT">
-                     <children>
-                        <ImageView fx:id="languageFlagImageView" fitHeight="25" fitWidth="30">
-                           <image>
-                              <Image fx:id="languageFlagImage" url="@/client/scenes/images/BritishFlag.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </StackPane>
-               </graphic>
-               <items>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="English">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="languageGroup" />
-                     </toggleGroup>
-                     <graphic>
-                        <ImageView fitHeight="25" fitWidth="30">
-                           <image>
-                              <Image url="@/client/scenes/images/BritishFlag.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </RadioMenuItem>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Romana">
-                     <toggleGroup>
-                        <fx:reference source="languageGroup" />
-                     </toggleGroup>
-                     <graphic>
-                        <ImageView fitHeight="25" fitWidth="30">
-                           <image>
-                              <Image url="@/client/scenes/images/RomanianFlag.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </RadioMenuItem>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeLanguage" text="Nederlands">
-                     <toggleGroup>
-                        <fx:reference source="languageGroup" />
-                     </toggleGroup>
-                     <graphic>
-                        <ImageView fitHeight="25" fitWidth="30">
-                           <image>
-                              <Image url="@/client/scenes/images/DutchFlag.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </RadioMenuItem>
-               </items>
-            </Menu>
-            <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
-               <items>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="currencyGroup" />
-                     </toggleGroup>
-                  </RadioMenuItem>
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
-                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="400.0" prefWidth="640.0">
-         <children>
-            <Button fx:id="backButton" layoutX="525.0" layoutY="353.0" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="65.0" text="Back" />
-            <TableView fx:id="tableView" layoutX="48.0" layoutY="59.0" prefHeight="283.0" prefWidth="545.0">
-              <columns>
-                <TableColumn fx:id="debtColumn" prefWidth="318.0" text="Debt" />
-                  <TableColumn fx:id="reminderColumn" maxWidth="130.0" prefWidth="119.0" />
-                <TableColumn fx:id="actionColumn" prefWidth="107.0" text="Status" />
-              </columns>
-            </TableView>
-            <Text fx:id="openDebtsText" layoutX="48.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts" textAlignment="CENTER" wrappingWidth="545.0">
-               <font>
-                  <Font size="21.0" />
-               </font>
-            </Text>
-            <Button fx:id="refreshButton" layoutX="273.0" layoutY="354.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-            <Button fx:id="statisticsButton" layoutX="51.0" layoutY="354.0" mnemonicParsing="false" onAction="#goToStatistics" text="Statistics" />
-         </children>
-      </AnchorPane>
+      <Button layoutX="520.0" layoutY="353.0" mnemonicParsing="false" onAction="#back" prefHeight="26.0" prefWidth="65.0" text="Back" />
+      <TableView fx:id="tableView" layoutX="28.0" layoutY="59.0" prefHeight="283.0" prefWidth="545.0">
+        <columns>
+          <TableColumn fx:id="debtColumn" prefWidth="318.0" text="Debt" />
+            <TableColumn fx:id="reminderColumn" maxWidth="130.0" prefWidth="119.0" />
+          <TableColumn fx:id="actionColumn" prefWidth="107.0" text="Status" />
+        </columns>
+      </TableView>
+      <Text layoutX="244.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts" wrappingWidth="111.21630859375">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Text>
+      <Button layoutX="449.0" layoutY="354.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+      <Button layoutX="370.0" layoutY="354.0" mnemonicParsing="false" onAction="#goToStatistics" text="Statistics" />
    </children>
-</VBox>
+</AnchorPane>
