@@ -75,14 +75,14 @@ public class BalancesCtrl implements Initializable {
                 new SimpleStringProperty(q.getValue().getNickname()));
 
         colBalance.setCellValueFactory(q -> {
-            double balance = q.getValue().getBalance() * Currency.getRate() / 100;
+            double balance = q.getValue().getBalance() * Currency.getRate() / 100.0;
             return new SimpleStringProperty(String.valueOf(Currency.round(balance)) +
                     " " + Currency.getCurrencyUsed());
         });
 
         colSettles.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gave " +
-                        q.getValue().getAmount() + " to " +
+                        q.getValue().getAmount() / 100 + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
 
         colSettles.setCellFactory(tc -> {
@@ -134,7 +134,7 @@ public class BalancesCtrl implements Initializable {
 
         // Update currency for balances
         colBalance.setCellValueFactory(q -> {
-            double balance = q.getValue().getBalance() * Currency.getRate();
+            double balance = q.getValue().getBalance() * Currency.getRate() / 100;
             return new SimpleStringProperty(String.valueOf
                     (Currency.round(balance)) + " " + Currency.getCurrencyUsed());
         });
