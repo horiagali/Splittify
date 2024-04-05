@@ -31,6 +31,8 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import static client.Main.config;
+
 public class MainCtrl {
     Main main;
 
@@ -194,6 +196,7 @@ public class MainCtrl {
 
         this.statisticsCtrl = statistics.getKey();
         this.statistics = new Scene(statistics.getValue());
+
         this.debtsCtrl = debtsCtrlParentPair.getKey();
         this.debts = new Scene(debtsCtrlParentPair.getValue());
         this.addPartial = new Scene(partialDebtCtrlParentPair.getValue());
@@ -210,6 +213,7 @@ public class MainCtrl {
 
         showOverview();
         primaryStage.show();
+        updateLanguage(config.getLanguage());
     }
 
     /**
@@ -221,11 +225,11 @@ public class MainCtrl {
     public void initializeServerSetter(Stage primaryStage,
                                        Pair<ServerSetterCtrl, Parent> serverSetter, Main main) {
         resourceBundle = ResourceBundle.getBundle("messages_" +
-                Main.config.getLanguage(), new Locale(Main.config.getLanguage()));
+                config.getLanguage(), new Locale(config.getLanguage()));
         serverSetter.getKey().updateUIWithNewLanguage();
         this.primaryStage = primaryStage;
         this.serverSetterCtrl = serverSetter.getKey();
-        serverSetter.getKey().serverURL.setText(Main.config.getServerUrl());
+        serverSetter.getKey().serverURL.setText(config.getServerUrl());
         primaryStage.setMaximized(true);
         this.serverSetter = new Scene(serverSetter.getValue());
         primaryStage.setTitle("Choose your server");
@@ -353,6 +357,7 @@ public class MainCtrl {
         primaryStage.setTitle("Contact Details");
         contactDetailsCtrl.loadInfo(participant);
         primaryStage.setScene(contactDetails);
+        contactDetailsCtrl.updateUIWithNewLanguage();
     }
 
 
@@ -504,6 +509,12 @@ public class MainCtrl {
         addExpensesCtrl.updateFlagImageURL(language);
         overviewCtrl.updateFlagImageURL(language);
         balancesCtrl.updateFlagImageURL(language);
+        serverPair.getKey().updateFlagImageURL(language);
+        addEventCtrl.updateFlagImageURL(language);
+        contactDetailsCtrl.updateFlagImageURL(language);
+        editExpenseCtrl.updateFlagImageURL(language);
+        balancesCtrl.updateFlagImageURL(language);
+        debtsCtrl.updateFlagImageURL(language);
     }
 
 
@@ -519,6 +530,14 @@ public class MainCtrl {
         inviteCtrl.updateUIWithNewLanguage();
         adminPageCtrl.updateUIWithNewLanguage();
         balancesCtrl.updateUIWithNewLanguage();
+        serverPair.getKey().updateUIWithNewLanguage();
+        addEventCtrl.updateUIWithNewLanguage();
+        addExpensesCtrl.updateUIWithNewLanguage();
+        overviewCtrl.updateUIWithNewLanguage();
+        contactDetailsCtrl.updateUIWithNewLanguage();
+        editExpenseCtrl.updateUIWithNewLanguage();
+        balancesCtrl.updateUIWithNewLanguage();
+        debtsCtrl.updateUIWithNewLanguage();
     }
 
     /**

@@ -85,7 +85,7 @@
       </MenuBar>
       <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
          <children>
-            <Text layoutX="225.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts" textAlignment="CENTER" wrappingWidth="149.21630859375">
+            <Text fx:id="openDebtsText" layoutX="60.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts" textAlignment="CENTER" wrappingWidth="480.0">
                <font>
                   <Font size="22.0" />
                </font>
@@ -96,16 +96,16 @@
                 <TableColumn fx:id="colBalance" prefWidth="239.0" text="Balance" />
               </columns>
             </TableView>
-            <Button layoutX="458.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-            <Button layoutX="530.0" layoutY="360.0" mnemonicParsing="false" onAction="#back" text="Back" />
-            <TableView fx:id="settles" layoutX="60.0" layoutY="222.0" prefHeight="137.0" prefWidth="480.0">
+            <Button fx:id="refreshButton" layoutX="458.0" layoutY="360.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+            <Button fx:id="backButton" layoutX="530.0" layoutY="360.0" mnemonicParsing="false" onAction="#back" text="Back" />
+            <TableView fx:id="settles" layoutX="60.0" layoutY="217.0" prefHeight="137.0" prefWidth="480.0">
               <columns>
                 <TableColumn fx:id="colSettles" prefWidth="479.0" />
               </columns>
             </TableView>
-            <Text layoutX="60.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Partial settles" textAlignment="CENTER" wrappingWidth="480.0" />
-            <Button layoutX="250.0" layoutY="360.0" mnemonicParsing="false" onAction="#settleDebts" prefHeight="26.0" prefWidth="100.0" text="Settle Debts" />
-            <Button layoutX="343.0" layoutY="196.0" mnemonicParsing="false" onAction="#addPartial" prefHeight="17.0" prefWidth="45.0" text="Add" />
+            <Text fx:id="partialSettlersText" layoutX="60.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Partial settles" textAlignment="CENTER" wrappingWidth="480.0" />
+            <Button fx:id="settleDebtsButton" layoutX="250.0" layoutY="360.0" mnemonicParsing="false" onAction="#settleDebts" prefHeight="26.0" prefWidth="100.0" text="Settle Debts" />
+            <Button fx:id="addPartialButton" layoutX="343.0" layoutY="196.0" mnemonicParsing="false" onAction="#addPartial" prefHeight="17.0" prefWidth="45.0" text="Add" />
          </children>
       </AnchorPane>
    </children>

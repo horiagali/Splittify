@@ -59,6 +59,12 @@ public class AdminPageCtrl implements Initializable {
     private Button backButton;
     @FXML
     private ImageView languageFlagImageView;
+    @FXML
+    private Button downloadJsonButton;
+    @FXML
+    private Button importJsonButton;
+    @FXML
+    private Button refreshButton;
 
     /**
      * constructor
@@ -198,7 +204,14 @@ public class AdminPageCtrl implements Initializable {
      * updates UI
      */
     public void updateUIWithNewLanguage() {
+
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+        downloadJsonButton.setText(MainCtrl.resourceBundle.getString("button.downloadJson"));
+        importJsonButton.setText(MainCtrl.resourceBundle.getString("button.importJson"));
+        refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
+        colName.setText(MainCtrl.resourceBundle.getString("Text.eventName"));
+        colLocation.setText(MainCtrl.resourceBundle.getString("Text.eventLocation"));
+        colDate.setText(MainCtrl.resourceBundle.getString("Text.eventDate"));
     }
 
     /**
@@ -293,9 +306,9 @@ public class AdminPageCtrl implements Initializable {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
+            alert.setTitle(MainCtrl.resourceBundle.getString("Text.warning"));
             alert.setHeaderText(null);
-            alert.setContentText("Please select an event to download JSON.");
+            alert.setContentText(MainCtrl.resourceBundle.getString("Text.eventDownloadError"));
             alert.showAndWait();
         }
     }
@@ -318,8 +331,12 @@ public class AdminPageCtrl implements Initializable {
     }
 
     private void addContextMenu() {
+        String delete = "Delete";
+        try {
+            delete = MainCtrl.resourceBundle.getString("Text.delete");
+        } catch (Exception ignored) {};
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem deleteMenuItem = new MenuItem("Delete");
+        MenuItem deleteMenuItem = new MenuItem(delete);
         deleteMenuItem.setOnAction(event -> deleteSelectedEvent());
         contextMenu.getItems().add(deleteMenuItem);
         table.setContextMenu(contextMenu);
@@ -328,16 +345,17 @@ public class AdminPageCtrl implements Initializable {
     private void deleteSelectedEvent() {
         Event selectedEvent = table.getSelectionModel().getSelectedItem();
         Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationDialog.setTitle("Confirmation");
-        confirmationDialog.setHeaderText("Are you sure you want to delete the event?");
-        confirmationDialog.setContentText("This action cannot be undone.");
+        confirmationDialog.setTitle(MainCtrl.resourceBundle.getString("Text.confirmation"));
+        confirmationDialog.setHeaderText
+                (MainCtrl.resourceBundle.getString("Text.areYouSureDeleteEvent"));
+        confirmationDialog.setContentText(MainCtrl.resourceBundle.getString("Text.noUndone"));
 
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 server.deleteEvent(selectedEvent);
                 refresh();
             } else {
-                System.out.println("Event deletion canceled.");
+                System.out.println(MainCtrl.resourceBundle.getString("Text.eventDeleteCanceled"));
             }
         });
     }
