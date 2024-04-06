@@ -40,6 +40,9 @@ public class OverviewCtrl implements Initializable {
 
     private ArrayList<String> names;
     private ArrayList<Label> labels;
+    private List<Participant> participants;
+    private List<Expense> expenses;
+    private List<Tag> tags;
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private static Event selectedEvent;
@@ -296,6 +299,8 @@ public class OverviewCtrl implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+
         refresh();
         loadParticipants();
         addKeyboardNavigationHandlers();
@@ -312,17 +317,57 @@ public class OverviewCtrl implements Initializable {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if (selectedEvent != null) {
-                    Platform.runLater(() -> {
-                        loadParticipants();
-                        loadExpenses();
-                        loadComboBoxes();
-                        loadUpdatedEventInfo();
-                    });
-                }
+
+                Platform.runLater(() -> {
+                    handleDataPropagation();
+
+                });
+
             }
         }, 0, 1000);
         
+    }
+
+    private void handleDataPropagation() {
+        if ((participants == null ||
+                expenses == null ||
+                tags == null) &&
+                selectedEvent != null) {
+
+            List<Participant> newParticipants = server.getParticipants(selectedEvent.getId());
+            List<Expense> newExpenses = server.getExpensesByEventId(selectedEvent.getId());
+            List<Tag> newTags = server.getTags(selectedEvent.getId());
+
+            participants = newParticipants;
+            expenses = newExpenses;
+            tags = newTags;
+
+        }
+        if (selectedEvent != null) {
+            List<Participant> newParticipants = server.getParticipants(selectedEvent.getId());
+            List<Expense> newExpenses = server.getExpensesByEventId(selectedEvent.getId());
+            List<Tag> newTags = server.getTags(selectedEvent.getId());
+            Event newSelectedEvent = server.getEvent(selectedEvent.getId());
+
+            if (!participants.equals(newParticipants)
+                    || !expenses.equals(newExpenses)
+                    || !tags.equals(newTags)
+                    || !selectedEvent.equals(newSelectedEvent)){
+
+                System.out.println("Data is not matching. Updating UI...");
+
+                participants = newParticipants;
+                expenses = newExpenses;
+                tags = newTags;
+                selectedEvent = newSelectedEvent;
+
+                loadParticipants();
+                loadExpenses();
+                loadComboBoxes();
+                loadUpdatedEventInfo();
+            }
+
+        }
     }
 
     /**
