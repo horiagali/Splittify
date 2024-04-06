@@ -228,6 +228,13 @@ public class OverviewCtrl implements Initializable {
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
         refresh();
+
+        int payerIndex = Math.max(payer.getSelectionModel().getSelectedIndex(), 0);
+        int owerIndex = Math.max(ower.getSelectionModel().getSelectedIndex(), 0);
+        int tagIndex = Math.max(tag.getSelectionModel().getSelectedIndex(), 0);
+        payer.getSelectionModel().select(payerIndex);
+        ower.getSelectionModel().select(owerIndex);
+        tag.getSelectionModel().select(tagIndex);
     }
 
 
@@ -332,8 +339,11 @@ public class OverviewCtrl implements Initializable {
             String dateInString = ft.format(selectedEvent.getDate());
             eventDate.setText(dateInString);
             eventDescription.setText(selectedEvent.getDescription());
-
         }
+
+        int payerIndex = Math.max(payer.getSelectionModel().getSelectedIndex(), 0);
+        int owerIndex = Math.max(ower.getSelectionModel().getSelectedIndex(), 0);
+        int tagIndex = Math.max(tag.getSelectionModel().getSelectedIndex(), 0);
 
         if (MainCtrl.resourceBundle != null) {
             payer.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
@@ -346,6 +356,10 @@ public class OverviewCtrl implements Initializable {
         loadExpenses();
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
+
+        payer.getSelectionModel().select(payerIndex);
+        ower.getSelectionModel().select(owerIndex);
+        tag.getSelectionModel().select(tagIndex);
     }
 
     private void loadComboBoxes() {
@@ -464,18 +478,17 @@ public class OverviewCtrl implements Initializable {
         String payerBox = payer.getValue();
         String owerBox = ower.getValue();
         String tagBox = tag.getValue();
-        if (payerBox != null && !payerBox.equals
-                (MainCtrl.resourceBundle.getString("Text.anyone"))) {
+        if (payerBox != null && payer.getSelectionModel().getSelectedIndex() > 0) {
             expenses = expenses.stream()
                     .filter(x -> x.getPayer().getNickname().equals(payerBox)).toList();
         }
-        if (owerBox != null && !owerBox.equals(MainCtrl.resourceBundle.getString("Text.anyone"))) {
+        if (owerBox != null && ower.getSelectionModel().getSelectedIndex() > 0) {
             Participant owerOfExpense = server
                     .getParticipantByNickname(selectedEvent.getId(), owerBox);
             expenses = expenses.stream()
                     .filter(x -> x.getOwers().contains(owerOfExpense)).toList();
         }
-        if (tagBox != null && !tagBox.equals(MainCtrl.resourceBundle.getString("Text.anyTag"))) {
+        if (tagBox != null && tag.getSelectionModel().getSelectedIndex() > 0) {
             Optional<Tag> selectedTag = server.getTags(selectedEvent.getId())
                     .stream().filter(x -> x.getName().equals(tagBox)).findFirst();
             if (!selectedTag.isEmpty()) {
