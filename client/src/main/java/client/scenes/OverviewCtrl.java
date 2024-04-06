@@ -9,6 +9,7 @@ import commons.Expense;
 import commons.Participant;
 import commons.Tag;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,12 +34,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class OverviewCtrl implements Initializable {
 
@@ -166,6 +162,7 @@ public class OverviewCtrl implements Initializable {
      */
 
     public void back() {
+        setSelectedEvent(null);
         mainCtrl.showOverview();
     }
 
@@ -310,6 +307,20 @@ public class OverviewCtrl implements Initializable {
         ower.setButtonCell(createStringListCell());
         payer.setCellFactory(param -> createStringListCell());
         payer.setButtonCell(createStringListCell());
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (selectedEvent != null) {
+                    Platform.runLater(() -> {
+                        loadParticipants();
+                        loadExpenses();
+                        loadUpdatedEventInfo();
+                        System.out.println("Refresh from OverviewCtrl"+selectedEvent);
+                    });
+                }
+            }
+        }, 0, 1000);
         
     }
 
@@ -318,12 +329,7 @@ public class OverviewCtrl implements Initializable {
      */
     public void refresh() {
         if (selectedEvent != null) {
-            eventName.setText(selectedEvent.getTitle());
-            eventLocation.setText(selectedEvent.getLocation());
-            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
-            String dateInString = ft.format(selectedEvent.getDate());
-            eventDate.setText(dateInString);
-            eventDescription.setText(selectedEvent.getDescription());
+            loadEventInfo();
             
         }
 
@@ -338,6 +344,20 @@ public class OverviewCtrl implements Initializable {
         loadExpenses();
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
+    }
+
+    private void loadUpdatedEventInfo() {
+        selectedEvent = server.getEvent(selectedEvent.getId());
+        loadEventInfo();
+    }
+
+    private void loadEventInfo() {
+        eventName.setText(selectedEvent.getTitle());
+        eventLocation.setText(selectedEvent.getLocation());
+        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
+        String dateInString = ft.format(selectedEvent.getDate());
+        eventDate.setText(dateInString);
+        eventDescription.setText(selectedEvent.getDescription());
     }
 
     private void loadComboBoxes() {
