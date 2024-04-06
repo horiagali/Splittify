@@ -438,7 +438,7 @@ public class MainPageCtrl implements Initializable {
      * test the default email
      */
     public void testEmail(){
-        Mail mail = new Mail("ooppteam56@gmail.com","Test Email", "This is a default email.");
+        Mail mail = new Mail(EmailUtils.getUsername(),"Test Email", "This is a default email.");
         EmailUtils.sendEmail(mail);
     }
 }
