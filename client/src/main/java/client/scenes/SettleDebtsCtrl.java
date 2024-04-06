@@ -95,6 +95,16 @@ public class SettleDebtsCtrl implements Initializable {
         return matcher.matches();
     }
 
+    /**
+     * good credentials
+     * @return true if good, false otherwise
+     */
+    private boolean goodCredentials(){
+        if (EmailUtils.getHost() == null || EmailUtils.getPort() == null ||
+                EmailUtils.getPassword() == null || EmailUtils.getUsername() == null)
+            return false;
+        return isValidEmail(EmailUtils.getUsername());
+    }
     @SuppressWarnings("checkstyle:MethodLength")
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -180,7 +190,7 @@ public class SettleDebtsCtrl implements Initializable {
                         boolean emailIsNull = participant.getEmail() == null ||
                                 participant.getEmail().isEmpty();
                         reminderButton.setDisable(emailIsNull);
-                        if (expense.getTitle().equals("Received debt")) {
+                        if (expense.getTitle().equals("Received debt") || !goodCredentials()) {
                             reminderButton.setDisable(true);
                             reminderButton.setStyle("-fx-background-color: grey;");
                         }

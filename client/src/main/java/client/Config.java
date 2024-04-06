@@ -18,11 +18,11 @@ public class Config {
     private String serverUrl = "http://localhost:8080/";
     private String language = "english";
 
-    private String username = "ooppteam56@gmail.com";
+    private String username;
 
-    private String password = "cgcfhfqpssctwcos";
-    private String host = "smtp.gmail.com";
-    private Integer port = 587;
+    private String password;
+    private String host;
+    private Integer port;
 
     /**
      * getter for host

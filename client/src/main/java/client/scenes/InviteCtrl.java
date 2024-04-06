@@ -110,6 +110,20 @@ public class InviteCtrl implements Initializable {
         generateInviteCode();
         addKeyboardNavigationHandlers();
         executor = Executors.newVirtualThreadPerTaskExecutor();
+        if (!goodCredentials()) {
+            sendButton.setDisable(true);
+            sendButton.setStyle("--body-background-color: grey;");
+        }
+    }
+    /**
+     * good credentials
+     * @return true if good, false otherwise
+     */
+    private boolean goodCredentials(){
+        if (EmailUtils.getHost() == null || EmailUtils.getPort() == null ||
+                EmailUtils.getPassword() == null || EmailUtils.getUsername() == null)
+            return false;
+        return isValidEmail(EmailUtils.getUsername());
     }
 
 

@@ -15,6 +15,40 @@ public class EmailUtils {
     private static String username;
 
     private static String password;
+
+    /**
+     * getter for host
+     * @return host
+     */
+
+    public static String getHost() {
+        return host;
+    }
+
+    /**
+     * getter for port
+     * @return port
+     */
+    public static Integer getPort() {
+        return port;
+    }
+
+    /**
+     * getter for username
+     * @return username
+     */
+    public static String getUsername() {
+        return username;
+    }
+
+    /**
+     * getter for password
+     * @return password
+     */
+    public static String getPassword() {
+        return password;
+    }
+
     /**
      * setter for username
      * @param username a String
