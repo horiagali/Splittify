@@ -219,16 +219,17 @@ public class AdminPageCtrl implements Initializable {
                 getBundle("messages_" + language, new Locale(language));
         Main.config.setLanguage(language);
 
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
      * updates UI
      */
     public void updateUIWithNewLanguage() {
-
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.adminPage"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
         downloadJsonButton.setText(MainCtrl.resourceBundle.getString("button.downloadJson"));
         importJsonButton.setText(MainCtrl.resourceBundle.getString("button.importJson"));

@@ -227,15 +227,17 @@ public class InviteCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.sendInvites"));
         currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
     }

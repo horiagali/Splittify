@@ -530,16 +530,17 @@ public class AddExpensesCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.addExpense"));
         addExpenseText.setText(MainCtrl.resourceBundle.getString("Text.addExpense"));
         whoPaidText.setText(MainCtrl.resourceBundle.getString("Text.whoPaid"));
         whatForText.setText(MainCtrl.resourceBundle.getString("Text.whatFor"));

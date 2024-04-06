@@ -157,9 +157,10 @@ public class StatisticsCtrl {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
@@ -183,6 +184,7 @@ public class StatisticsCtrl {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.statistics"));
         String piechartString = "Text.statisticsTitle";
         if (event != null) {
             pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString) + event.getTitle());

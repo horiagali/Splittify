@@ -292,9 +292,9 @@ public class SettleDebtsCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
         //display();
     }
 
@@ -302,6 +302,7 @@ public class SettleDebtsCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.settleDebts"));
         openDebtsText.setText(MainCtrl.resourceBundle.getString("Text.openDebts"));
         currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
         statisticsButton.setText(MainCtrl.resourceBundle.getString("button.seeStatistics"));

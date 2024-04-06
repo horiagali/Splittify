@@ -296,15 +296,18 @@ public class BalancesCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.balances"));
         openDebtsText.setText(MainCtrl.resourceBundle.getString("Text.openDebts"));
         colName.setText(MainCtrl.resourceBundle.getString("Text.participant"));
         colBalance.setText(MainCtrl.resourceBundle.getString("Text.balance"));

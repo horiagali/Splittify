@@ -224,9 +224,9 @@ public class OverviewCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
         refresh();
 
         int payerIndex = Math.max(payer.getSelectionModel().getSelectedIndex(), 0);
@@ -242,6 +242,8 @@ public class OverviewCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.overview"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
         sendInvitesButton.setText(MainCtrl.resourceBundle.getString("button.sendInvites"));
         tagButton.setText(MainCtrl.resourceBundle.getString("button.tag"));
