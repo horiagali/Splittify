@@ -47,7 +47,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import client.Main;
 import commons.Event;
 import commons.Expense;
-import commons.Mail;
 import commons.Participant;
 import commons.Quote;
 import commons.Tag;
@@ -459,20 +458,6 @@ public class ServerUtils {
 				.request(APPLICATION_JSON)
 				.accept(APPLICATION_JSON)
 				.get(new GenericType<List<Participant>>() {});
-	}
-
-
-	/**
-	 * sends a mail
-	 * @param mail the mail
-	 * @return the sent mail
-	 */
-	public Mail sendEmail(Mail mail) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/mail")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(mail, APPLICATION_JSON), Mail.class);
 	}
 
 	/**

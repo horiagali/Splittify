@@ -30,6 +30,7 @@ import java.net.URL;
 
 import client.scenes.*;
 import client.utils.Currency;
+import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 import jakarta.ws.rs.BadRequestException;
 
@@ -87,6 +88,11 @@ public class Main extends Application {
             stream = new FileInputStream(file);
             config = mapper.readValue(stream, Config.class);
             ServerUtils.setServer(config.getServerUrl());
+            EmailUtils.setHost(config.getHost());
+            EmailUtils.setPort(config.getPort());
+            EmailUtils.setUsername(config.getUsername());
+            EmailUtils.setPassword(config.getPassword());
+            System.out.println("USERNAAAME:" + config.getUsername());
             System.out.println(config.getLanguage());
             System.out.println(config.getServerUrl());
         } catch (FileNotFoundException e) {
