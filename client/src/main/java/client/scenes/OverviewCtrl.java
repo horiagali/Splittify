@@ -47,6 +47,7 @@ public class OverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private static Event selectedEvent;
+    private static boolean isAdmin;
 
     @FXML
     private AnchorPane anchorPane;
@@ -80,7 +81,7 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     private TextField eventLocationTextField;
-    @FXML 
+    @FXML
     private TextField eventDescriptionTextField;
     @FXML
     private ScrollPane participantsScrollPane;
@@ -131,8 +132,6 @@ public class OverviewCtrl implements Initializable {
     private Button deleteEventButton;
 
 
-
-
     /**
      * @param server
      * @param mainCtrl
@@ -152,8 +151,8 @@ public class OverviewCtrl implements Initializable {
         eventLocation.setText(selectedEvent.getLocation());
         eventDate.setText("");
         eventDescription.setText(selectedEvent.getDescription());
-        
-        if(!(selectedEvent.getDate() == null)){
+
+        if (!(selectedEvent.getDate() == null)) {
             SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
             String dateInString = ft.format(selectedEvent.getDate());
             eventDate.setText(dateInString);
@@ -162,17 +161,27 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
+     * Setter for isAdmin;
+     * @param value boolean value.
+     */
+    public static void setIsAdmin(boolean value) {
+        isAdmin = value;
+    }
+
+    /**
      *
      */
-
     public void back() {
-        mainCtrl.showOverview();
+        if (isAdmin) {
+            mainCtrl.goToAdminPage();
+        }
+        else
+            mainCtrl.showOverview();
     }
 
     /**
      * @param name name.
      */
-
     public void addName(String name) {
         names.add(name);
     }
@@ -220,7 +229,6 @@ public class OverviewCtrl implements Initializable {
         updateFlagImageURL(language);
         refresh();
     }
-
 
 
     /**
@@ -310,7 +318,7 @@ public class OverviewCtrl implements Initializable {
         ower.setButtonCell(createStringListCell());
         payer.setCellFactory(param -> createStringListCell());
         payer.setButtonCell(createStringListCell());
-        
+        isAdmin = false;
     }
 
     /**
@@ -324,7 +332,7 @@ public class OverviewCtrl implements Initializable {
             String dateInString = ft.format(selectedEvent.getDate());
             eventDate.setText(dateInString);
             eventDescription.setText(selectedEvent.getDescription());
-            
+
         }
 
         if (MainCtrl.resourceBundle != null) {
@@ -332,7 +340,7 @@ public class OverviewCtrl implements Initializable {
             ower.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
             tag.setValue(MainCtrl.resourceBundle.getString("Text.anyTag"));
         }
-    
+
         loadParticipants();
         loadComboBoxes();
         loadExpenses();
@@ -341,16 +349,16 @@ public class OverviewCtrl implements Initializable {
     }
 
     private void loadComboBoxes() {
-        if(selectedEvent == null) return;
+        if (selectedEvent == null) return;
         List<String> participants = new ArrayList<>();
         participants.add(MainCtrl.resourceBundle.getString("Text.anyone"));
         participants.addAll(server.getParticipants(selectedEvent.getId()).stream()
-        .map(Participant::getNickname).toList());
+                .map(Participant::getNickname).toList());
         List<String> tags = new ArrayList<>();
         tags.add(MainCtrl.resourceBundle.getString("Text.anyTag"));
         tags.addAll(server.getTags(selectedEvent.getId()).stream()
-        .map(Tag::getName).filter(x -> !x.equals("gifting money")).toList());
-        
+                .map(Tag::getName).filter(x -> !x.equals("gifting money")).toList());
+
         payer.setItems(FXCollections.observableArrayList(participants));
         ower.setItems(FXCollections.observableArrayList(participants));
         tag.setItems(FXCollections.observableArrayList(tags));
@@ -424,17 +432,17 @@ public class OverviewCtrl implements Initializable {
      */
     public void loadExpenses() {
         expensesBox.getChildren().clear();
-        if(selectedEvent == null) return;
+        if (selectedEvent == null) return;
         List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId())
                 .stream().filter(x ->
                         !"gifting money".equalsIgnoreCase(x.getTag().getName())).toList();
         expenses = applyFilters(expenses);
-        if(expenses.size() == 0) {
+        if (expenses.size() == 0) {
             expensesBox.getChildren()
                     .add(new Text(MainCtrl.resourceBundle.getString("Text.noExpensesFiltered")));
             return;
         }
-        for(Expense expense : expenses) {
+        for (Expense expense : expenses) {
             VBox vbox = new VBox();
             vbox.setMinWidth(300);
             vbox.setMaxWidth(300);
@@ -456,29 +464,30 @@ public class OverviewCtrl implements Initializable {
         String payerBox = payer.getValue();
         String owerBox = ower.getValue();
         String tagBox = tag.getValue();
-        if(payerBox != null && !payerBox.equals(MainCtrl.resourceBundle.getString("Text.anyone"))) {
+        if (payerBox != null && !payerBox.equals
+                (MainCtrl.resourceBundle.getString("Text.anyone"))) {
             expenses = expenses.stream()
-            .filter(x -> x.getPayer().getNickname().equals(payerBox)).toList();
+                    .filter(x -> x.getPayer().getNickname().equals(payerBox)).toList();
         }
-        if(owerBox != null && !owerBox.equals(MainCtrl.resourceBundle.getString("Text.anyone"))) {
+        if (owerBox != null && !owerBox.equals(MainCtrl.resourceBundle.getString("Text.anyone"))) {
             Participant owerOfExpense = server
-            .getParticipantByNickname(selectedEvent.getId(), owerBox);
+                    .getParticipantByNickname(selectedEvent.getId(), owerBox);
             expenses = expenses.stream()
-        .filter(x -> x.getOwers().contains(owerOfExpense)).toList();
+                    .filter(x -> x.getOwers().contains(owerOfExpense)).toList();
         }
-        if(tagBox != null && !tagBox.equals(MainCtrl.resourceBundle.getString("Text.anyTag"))) {
+        if (tagBox != null && !tagBox.equals(MainCtrl.resourceBundle.getString("Text.anyTag"))) {
             Optional<Tag> selectedTag = server.getTags(selectedEvent.getId())
-            .stream().filter(x -> x.getName().equals(tagBox)).findFirst();
-            if(!selectedTag.isEmpty()) {
+                    .stream().filter(x -> x.getName().equals(tagBox)).findFirst();
+            if (!selectedTag.isEmpty()) {
                 Tag actualTag = selectedTag.get();
                 expenses = expenses.stream().filter(x -> x.getTag().equals(actualTag))
-                .toList();
+                        .toList();
             } else {
                 String noTag = MainCtrl.resourceBundle.getString("Text.noTagWithName");
                 String wasFound = MainCtrl.resourceBundle.getString("Text.wasFound");
                 System.out.println(noTag + tagBox + wasFound);
             }
-            
+
         }
         return expenses;
     }
@@ -494,16 +503,16 @@ public class OverviewCtrl implements Initializable {
         String forString = MainCtrl.resourceBundle.getString("Text.for");
         Label text = new Label(
                 payed +
-                Currency.round(expense.getAmount()*Currency.getRate())
-                + " " + Currency.getCurrencyUsed() + " " + forString);
+                        Currency.round(expense.getAmount() * Currency.getRate())
+                        + " " + Currency.getCurrencyUsed() + " " + forString);
         String owers = "";
-        if(expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
+        if (expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
             owers = MainCtrl.resourceBundle.getString("Text.everyone");
         else {
             List<String> nameList = expense.getOwers().stream()
-            .map(Participant::getNickname).toList();
+                    .map(Participant::getNickname).toList();
             owers = nameList.getFirst();
-            for(int i = 1; i < nameList.size(); i++) {
+            for (int i = 1; i < nameList.size(); i++) {
                 owers = owers + ", " + nameList.get(i);
             }
         }
@@ -523,18 +532,16 @@ public class OverviewCtrl implements Initializable {
         SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
         var dateInString = ft.format(expense.getDate());
         Label date = new Label(dateInString);
-        
+
         date.setMaxWidth(80);
         Button tag = new Button(expense.getTag().getName());
-        
+
         row1.setMinWidth(280);
         row1.setMaxWidth(280);
         row1.setSpacing(10);
         row1.setAlignment(Pos.CENTER_LEFT);
 
-        
-        
-        
+
         tag.setStyle("-fx-background-color: " + expense.getTag().getColor());
         date.setAlignment(Pos.CENTER);
         row1.getChildren().add(label);
@@ -687,8 +694,8 @@ public class OverviewCtrl implements Initializable {
         eventDatePicker.setVisible(false);
         SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
         String dateInString = eventDatePicker.getValue().getDayOfMonth() + "/" +
-        eventDatePicker.getValue().getMonthValue() + "/" +
-        eventDatePicker.getValue().getYear();
+                eventDatePicker.getValue().getMonthValue() + "/" +
+                eventDatePicker.getValue().getYear();
         eventDate.setText(dateInString);
         eventDate.setVisible(true);
     }
@@ -789,9 +796,10 @@ public class OverviewCtrl implements Initializable {
 
     /**
      * Goes to edit expense.
+     *
      * @param selectedExpense the expense to edit
      */
-    public void goToEditExpense(Expense selectedExpense){
+    public void goToEditExpense(Expense selectedExpense) {
         if (selectedExpense == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Edit expense");
@@ -827,9 +835,9 @@ public class OverviewCtrl implements Initializable {
             scaleTransition.setFromX(startX);
             scaleTransition.setFromY(startY);
             scaleTransition.setFromZ(startZ);
-            scaleTransition.setToX(node.getScaleX()*factor);
-            scaleTransition.setToY(node.getScaleY()*factor);
-            scaleTransition.setToZ(node.getScaleZ()*factor);
+            scaleTransition.setToX(node.getScaleX() * factor);
+            scaleTransition.setToY(node.getScaleY() * factor);
+            scaleTransition.setToZ(node.getScaleZ() * factor);
             scaleTransition.play();
 
         });

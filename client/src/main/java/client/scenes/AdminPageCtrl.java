@@ -82,7 +82,8 @@ public class AdminPageCtrl implements Initializable {
      * goes to overview
      */
     public void goBack() {
-        mainCtrl.showOverview();
+        mainCtrl.goToAdminPass();
+        OverviewCtrl.setIsAdmin(false);
     }
 
     /**

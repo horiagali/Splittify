@@ -85,6 +85,7 @@ public class AdminPassCtrl implements Initializable {
         String enteredPassword = passwordField.getText();
         if (enteredPassword.equals(password)) {
             mainCtrl.goToAdminPage();
+            passwordField.clear();
         } else {
             Alert alert = new Alert(
                     Alert.AlertType.ERROR, "Incorrect password! >:(",

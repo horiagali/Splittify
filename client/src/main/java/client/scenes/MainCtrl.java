@@ -415,6 +415,7 @@ public class MainCtrl {
         primaryStage.setTitle("Admin page");
         primaryStage.setScene(adminPage);
         adminPageCtrl.refresh();
+        OverviewCtrl.setIsAdmin(true);
     }
 
     /**
