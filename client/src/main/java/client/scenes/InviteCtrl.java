@@ -37,6 +37,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,6 +82,7 @@ public class InviteCtrl implements Initializable {
     private Button addButton;
     @FXML
     private Button copyButton;
+    private Executor executor;
 
 
     /**
@@ -105,6 +108,7 @@ public class InviteCtrl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         generateInviteCode();
         addKeyboardNavigationHandlers();
+        executor = Executors.newVirtualThreadPerTaskExecutor();
     }
 
 
@@ -309,7 +313,7 @@ public class InviteCtrl implements Initializable {
                 Mail mail = new Mail(email,event.getTitle(), "The invite code is: " +
                         event.getId().toString());
                 server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
-                server.sendEmail(mail);
+                executor.execute(() -> server.sendEmail(mail));
             }
             emailList.clear();
             uniqueEmails.clear();
