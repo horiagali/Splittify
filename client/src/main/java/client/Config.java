@@ -18,6 +18,44 @@ public class Config {
     private String serverUrl = "http://localhost:8080/";
     private String language = "english";
 
+    private String username = "ooppteam56@gmail.com";
+
+    private String password = "cgcfhfqpssctwcos";
+    private String host = "smtp.gmail.com";
+    private Integer port = 587;
+
+    /**
+     * getter for host
+     * @return host
+     */
+    public String getHost() {
+        return host;
+    }
+
+    /**
+     * setter for host
+     * @param host
+     */
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    /**
+     * getter for port
+     * @return port
+     */
+    public Integer getPort() {
+        return port;
+    }
+
+    /**
+     * setter for port
+     * @param port
+     */
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
     /**
      * getter for language
      * @return language
@@ -51,6 +89,38 @@ public class Config {
         ServerUtils.setServer(serverUrl);
         this.serverUrl = serverUrl;
         saveConfig(this, serverUrl);
+    }
+
+    /**
+     * getter for email
+     * @return the email
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * setter for email
+     * @param email
+     */
+    public void setUsername(String email) {
+        this.username = email;
+    }
+
+    /**
+     * getter for password
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * setter for password
+     * @param password
+     */
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     private static void saveConfig(Config config, String serverUrl) {

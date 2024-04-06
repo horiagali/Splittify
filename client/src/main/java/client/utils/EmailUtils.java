@@ -10,18 +10,56 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 public class EmailUtils {
+    private static String host;
+    private static Integer port;
+    private static String username;
+
+    private static String password;
     /**
-     * horrible
+     * setter for username
+     * @param username a String
+     */
+    public static void setUsername(String username) {
+        EmailUtils.username = username;
+    }
+
+    /**
+     * setter for password
+     * @param password
+     */
+    public static void setPassword(String password) {
+        EmailUtils.password = password;
+    }
+
+
+    /**
+     * setter for host
+     * @param host
+     */
+    public static void setHost(String host) {
+        EmailUtils.host = host;
+    }
+
+    /**
+     * setter for port
+     * @param port
+     */
+    public static void setPort(Integer port) {
+        EmailUtils.port = port;
+    }
+
+    /**
+     * mail sender...
      * @return wow
      */
     @Bean
     public static JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
+        mailSender.setHost(host);
+        mailSender.setPort(port);
 
-        mailSender.setUsername("ooppteam56@gmail.com");
-        mailSender.setPassword("cgcfhfqpssctwcos");
+        mailSender.setUsername(username);
+        mailSender.setPassword(password);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
@@ -40,8 +78,8 @@ public class EmailUtils {
     public static ResponseEntity<Mail> sendEmail(Mail mail) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail.getToEmail());
-        message.setFrom("ooppteam56@gmail.com");
-        message.setCc("ooppteam56@gmail.com");
+        message.setFrom(username);
+        message.setCc(username);
         message.setText(mail.getText());
         message.setSubject(mail.getSubject());
         getJavaMailSender().send(message);
