@@ -1,9 +1,8 @@
 package client.scenes;
 
 import java.awt.ScrollPane;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.net.URL;
+import java.util.*;
 
 
 import com.google.inject.Inject;
@@ -16,8 +15,10 @@ import commons.Event;
 import commons.Expense;
 import commons.Tag;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -37,7 +38,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class TagOverviewCtrl {
+public class TagOverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -482,6 +483,19 @@ public class TagOverviewCtrl {
         // Print confirmation message
         System.out.println(MainCtrl.resourceBundle.getString
                 ("Text.currencyChangedTo") + ": " + currency);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    loadTags();
+                });
+
+            }
+        }, 0, 1000);
     }
 }
 

@@ -93,7 +93,7 @@
                <TableColumn fx:id="colDate" prefWidth="200.0" text="Date" />
            </columns>
          </TableView>
-         <ComboBox fx:id="sortingComboBox" layoutX="30.0" layoutY="21.0" onAction="#handeSort" prefWidth="150.0" promptText="Sort by" />
+         <ComboBox fx:id="sortingComboBox" layoutX="30.0" layoutY="21.0" onAction="#handleSort" prefWidth="150.0" promptText="Sort by" />
         </AnchorPane>
     </children>
 </VBox>
