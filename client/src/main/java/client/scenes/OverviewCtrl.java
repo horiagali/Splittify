@@ -192,6 +192,7 @@ public class OverviewCtrl implements Initializable {
      * go to tag overview of specific event
      */
     public void goToTagOverview() {
+        TagOverviewCtrl.setIsActive(true);
         mainCtrl.goToTagOverview(selectedEvent);
     }
 

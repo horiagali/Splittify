@@ -43,7 +43,7 @@ public class TagOverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private static Event event;
-
+    private static boolean isActive;
 
     @FXML
     private Menu languageMenu;
@@ -78,6 +78,14 @@ public class TagOverviewCtrl implements Initializable {
         this.server = server;
         this.mainCtrl = mainCtrl;
 
+    }
+
+    /**
+     * sets if scene is active or not
+     * @param bool true if active, false otherwise
+     */
+    public static void setIsActive(boolean bool) {
+        isActive = bool;
     }
 
     /**
@@ -462,6 +470,7 @@ public class TagOverviewCtrl implements Initializable {
      * back button
      */
     public void back() {
+        setIsActive(false);
         tagInfo.getChildren().clear();
         mainCtrl.goToOverview();
     }
@@ -491,7 +500,10 @@ public class TagOverviewCtrl implements Initializable {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    loadTags();
+                    if (isActive) {
+                        loadTags();
+                    }
+
                 });
 
             }
