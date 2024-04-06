@@ -315,6 +315,7 @@ public class OverviewCtrl implements Initializable {
                     Platform.runLater(() -> {
                         loadParticipants();
                         loadExpenses();
+                        loadComboBoxes();
                         loadUpdatedEventInfo();
                     });
                 }
