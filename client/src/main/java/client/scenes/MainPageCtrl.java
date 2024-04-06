@@ -2,10 +2,12 @@ package client.scenes;
 
 import client.Main;
 import client.utils.Currency;
+import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 
 import com.google.inject.Inject;
 import commons.Event;
+import commons.Mail;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -401,5 +403,13 @@ public class MainPageCtrl implements Initializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * test the default email
+     */
+    public void testEmail(){
+        Mail mail = new Mail("ooppteam56@gmail.com","Test Email", "This is a default email.");
+        EmailUtils.sendEmail(mail);
     }
 }
