@@ -41,6 +41,7 @@ public class EmailUtils {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(mail.getToEmail());
         message.setFrom("ooppteam56@gmail.com");
+        message.setCc("ooppteam56@gmail.com");
         message.setText(mail.getText());
         message.setSubject(mail.getSubject());
         getJavaMailSender().send(message);

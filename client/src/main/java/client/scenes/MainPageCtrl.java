@@ -6,7 +6,6 @@ import client.utils.ServerUtils;
 
 import com.google.inject.Inject;
 import commons.Event;
-import commons.Mail;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

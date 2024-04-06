@@ -47,7 +47,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import client.Main;
 import commons.Event;
 import commons.Expense;
-import commons.Mail;
 import commons.Participant;
 import commons.Quote;
 import commons.Tag;
