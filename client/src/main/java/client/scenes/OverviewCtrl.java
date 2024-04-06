@@ -354,8 +354,6 @@ public class OverviewCtrl implements Initializable {
                     || !tags.equals(newTags)
                     || !selectedEvent.equals(newSelectedEvent)){
 
-                System.out.println("Data is not matching. Updating UI...");
-
                 participants = newParticipants;
                 expenses = newExpenses;
                 tags = newTags;

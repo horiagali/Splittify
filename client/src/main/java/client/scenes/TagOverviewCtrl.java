@@ -44,6 +44,7 @@ public class TagOverviewCtrl implements Initializable {
 
     private static Event event;
     private static boolean isActive;
+    private List<Tag> tags;
 
     @FXML
     private Menu languageMenu;
@@ -501,6 +502,19 @@ public class TagOverviewCtrl implements Initializable {
             public void run() {
                 Platform.runLater(() -> {
                     if (isActive) {
+                        if (event != null && tags == null) {
+                            tags = server.getTags(OverviewCtrl.getSelectedEvent().getId());
+                        }
+
+                        if (event != null) {
+                            List<Tag> newTags = server.getTags(OverviewCtrl.getSelectedEvent().getId());
+
+                            if (!tags.equals(newTags)) {
+                                tags = newTags;
+                                loadTags();
+                            }
+
+                        }
                         loadTags();
                     }
 
