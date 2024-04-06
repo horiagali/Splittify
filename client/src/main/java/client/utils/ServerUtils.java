@@ -461,20 +461,6 @@ public class ServerUtils {
 				.get(new GenericType<List<Participant>>() {});
 	}
 
-
-	/**
-	 * sends a mail
-	 * @param mail the mail
-	 * @return the sent mail
-	 */
-	public Mail sendEmail(Mail mail) {
-		return ClientBuilder.newClient(new ClientConfig())
-				.target(server).path("api/mail")
-				.request(APPLICATION_JSON)
-				.accept(APPLICATION_JSON)
-				.post(Entity.entity(mail, APPLICATION_JSON), Mail.class);
-	}
-
 	/**
 	 * get expense by eventId
 	 * @param eventId the eventId

@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.Main;
 import client.utils.Currency;
+import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -313,7 +314,7 @@ public class InviteCtrl implements Initializable {
                 Mail mail = new Mail(email,event.getTitle(), "The invite code is: " +
                         event.getId().toString());
                 server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
-                executor.execute(() -> server.sendEmail(mail));
+                executor.execute(() -> EmailUtils.sendEmail(mail));
             }
             emailList.clear();
             uniqueEmails.clear();

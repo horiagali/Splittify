@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.Main;
 import client.utils.Currency;
+import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -151,7 +152,7 @@ public class SettleDebtsCtrl implements Initializable {
                             + event.getTitle() + " " +
                                     MainCtrl.resourceBundle.getString("Text.on")
                                     + " " + ServerUtils.getServer());
-                    server.sendEmail(mail);
+                    EmailUtils.sendEmail(mail);
                 });
             }
             @Override
