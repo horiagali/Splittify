@@ -316,7 +316,6 @@ public class OverviewCtrl implements Initializable {
                         loadParticipants();
                         loadExpenses();
                         loadUpdatedEventInfo();
-                        System.out.println("Refresh from OverviewCtrl"+selectedEvent);
                     });
                 }
             }
