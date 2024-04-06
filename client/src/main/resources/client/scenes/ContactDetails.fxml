@@ -84,31 +84,31 @@
                   </Text>
                   <HBox fx:id="name" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
+                        <Text fx:id="nameLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
                         <TextField fx:id="nameField" promptText="Enter Name" />
                      </children>
                   </HBox>
                   <HBox fx:id="email" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" />
+                        <Text fx:id="emailLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" />
                         <TextField fx:id="emailField" promptText="Enter Email" />
                      </children>
                   </HBox>
                   <HBox fx:id="iban" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="IBAN:" />
+                        <Text fx:id="ibanLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="IBAN:" />
                         <TextField fx:id="ibanField" promptText="Enter IBAN" />
                      </children>
                   </HBox>
                   <HBox fx:id="bic" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="BIC:" />
+                        <Text fx:id="bicLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="BIC:" />
                         <TextField fx:id="bicField" promptText="Enter BIC" />
                      </children>
                   </HBox>
                </children>
             </VBox>
-            <Button layoutX="500.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToEventOverview" text="Back" />
+            <Button fx:id="backButton" layoutX="500.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToEventOverview" text="Back" />
             <Button fx:id="addButton" layoutX="288.0" layoutY="325.0" mnemonicParsing="false" onAction="#ok" text="Add" />
             <Button fx:id="updateButton" disable="true" layoutX="351.0" layoutY="325.0" mnemonicParsing="false" onAction="#updateParticipant" opacity="0.0" text="Update" />
             <Button fx:id="deleteButton" disable="true" layoutX="252.0" layoutY="325.0" mnemonicParsing="false" onAction="#deleteParticipant" opacity="0.0" text="Delete" />

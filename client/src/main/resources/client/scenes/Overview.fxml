@@ -77,35 +77,47 @@
                   </RadioMenuItem>
                </items>
             </Menu>
+            <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
+               <items>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="currencyGroup" />
+                     </toggleGroup>
+                  </RadioMenuItem>
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="CHF" toggleGroup="$currencyGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="RON" toggleGroup="$currencyGroup" />
+                  <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="USD" toggleGroup="$currencyGroup" />
+               </items>
+            </Menu>
          </menus>
       </MenuBar>
       <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="748.0">
          <children>
       
-            <Button layoutX="405.0" layoutY="15.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites" />
-            <Text layoutX="70.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
+            <Button fx:id="sendInvitesButton" layoutX="405.0" layoutY="15.0" mnemonicParsing="false" onAction="#sendInvites" text="Send Invites" />
+            <Text fx:id="participantsText" layoutX="70.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Participants">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
-            <Button layoutX="612.0" layoutY="536.0" mnemonicParsing="false" onAction="#goToAreYouSure" prefHeight="28.0" prefWidth="90.0" text="Delete Event" />
+            <Button fx:id="deleteEventButton" layoutX="594.0" layoutY="536.0" mnemonicParsing="false" onAction="#goToAreYouSure" prefHeight="28.0" prefWidth="139.0" text="Delete Event" />
       
             <Button fx:id="backButton" layoutX="657.0" layoutY="13.0" mnemonicParsing="false" onAction="#back" prefHeight="28.0" prefWidth="54.0" text="Back" />
-            <Text layoutX="335.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" wrappingWidth="68.07281494140625">
+            <Text fx:id="expensesText" layoutX="335.0" layoutY="187.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenses" wrappingWidth="68.07281494140625">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
-            <Button layoutX="327.0" layoutY="196.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
+            <Button fx:id="addExpenseButton" layoutX="327.0" layoutY="196.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
             <ScrollPane fx:id="participantsScrollPane" hbarPolicy="NEVER" layoutX="32.0" layoutY="235.0" prefHeight="330.0" prefWidth="158.0">
                <content>
                   <VBox fx:id="participantsVBox" alignment="TOP_CENTER" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="326.0" prefWidth="158.0" spacing="5" style="-fx-background-color: white;" />
                </content>
             </ScrollPane>
-            <Button layoutX="32.0" layoutY="195.0" mnemonicParsing="false" onAction="#goToContact" prefHeight="17.0" prefWidth="60.0" text="Add" />
+            <Button fx:id="addParticipantsButton" layoutX="32.0" layoutY="195.0" mnemonicParsing="false" onAction="#goToContact" prefHeight="17.0" prefWidth="60.0" text="Add" />
       
             <Button fx:id="goToBalances" layoutX="112.0" layoutY="195.0" mnemonicParsing="false" onAction="#goToBalances" prefHeight="26.0" prefWidth="79.0" text="Balances" />
-            <Button layoutX="452.0" layoutY="195.0" mnemonicParsing="false" onAction="#showStatistics" text="See Statistics" />
+            <Button fx:id="statisticsButton" layoutX="452.0" layoutY="195.0" mnemonicParsing="false" onAction="#showStatistics" text="See Statistics" />
             <Button fx:id="tagButton" layoutX="264.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToTagOverview" prefHeight="26.0" prefWidth="129.0" text="Manage tags" />
             <ScrollPane hbarPolicy="NEVER" layoutX="203.0" layoutY="234.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="330.0" prefWidth="334.0">
                <content>
@@ -115,7 +127,7 @@
                      </padding></VBox>
                </content>
             </ScrollPane>
-            <Text layoutX="554.0" layoutY="290.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Payer" />
+            <Text fx:id="payerText" layoutX="546.0" layoutY="290.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Payer" />
             <VBox alignment="CENTER" layoutX="200.0" layoutY="44.0" prefHeight="127.0" prefWidth="334.0">
                <children>
                   <AnchorPane prefHeight="32.0" prefWidth="338.0">
@@ -172,17 +184,17 @@
                   </AnchorPane>
                </children>
             </VBox>
-            <Text layoutX="554.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ower" />
+            <Text fx:id="owerText" layoutX="545.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ower" />
             <HBox layoutY="44.0" prefHeight="100.0" prefWidth="200.0" />
             <ComboBox fx:id="payer" layoutX="594.0" layoutY="273.0" onAction="#loadExpenses" prefHeight="26.0" prefWidth="139.0" />
             <ComboBox fx:id="ower" layoutX="594.0" layoutY="307.0" onAction="#loadExpenses" prefHeight="26.0" prefWidth="139.0" />
-            <Button layoutX="203.0" layoutY="196.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-            <Text layoutX="629.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filters">
+            <Button fx:id="refreshButton" layoutX="203.0" layoutY="196.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+            <Text fx:id="filtersText" layoutX="629.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filters">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
-            <Text layoutX="559.0" layoutY="359.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tag" />
+            <Text fx:id="tagText" layoutX="545.0" layoutY="358.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tag" />
             <ComboBox fx:id="tag" layoutX="594.0" layoutY="341.0" onAction="#loadExpenses" prefHeight="26.0" prefWidth="139.0" />
       
          </children>
