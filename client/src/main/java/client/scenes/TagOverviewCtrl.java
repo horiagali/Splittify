@@ -507,7 +507,8 @@ public class TagOverviewCtrl implements Initializable {
                         }
 
                         if (event != null) {
-                            List<Tag> newTags = server.getTags(OverviewCtrl.getSelectedEvent().getId());
+                            List<Tag> newTags = server.
+                                    getTags(OverviewCtrl.getSelectedEvent().getId());
 
                             if (!tags.equals(newTags)) {
                                 tags = newTags;
