@@ -113,13 +113,13 @@ public class EditPartialDebtCtrl implements Initializable {
                 Integer.parseInt(dateInString.substring(5, 7)),
                 Integer.parseInt(dateInString.substring(8, 10)));
         datePicker.setValue(date);
-        for(CheckBox checkBox : participantCheckboxes) {
-            if(expense.getOwers().stream()
+        for (CheckBox checkBox : participantCheckboxes) {
+            if (expense.getOwers().stream()
                     .map(Participant::getNickname).toList().contains(checkBox.getText())) {
                 checkBox.setSelected(true);
                 Participant part = server
                         .getParticipantByNickname(event.getId(), checkBox.getText());
-                if(!selectedParticipants.contains(part))
+                if (!selectedParticipants.contains(part))
                     selectedParticipants.add(part);
                 System.out.println("participant " + checkBox.getText() + " added");
             }
@@ -165,8 +165,6 @@ public class EditPartialDebtCtrl implements Initializable {
     }
 
 
-
-
     /**
      * Configures the payer ComboBox with the provided list of participants.
      *
@@ -177,6 +175,7 @@ public class EditPartialDebtCtrl implements Initializable {
         payerComboBox.setButtonCell(createParticipantListCell());
         payerComboBox.setItems(FXCollections.observableArrayList(participants));
     }
+
     /**
      * Configures the payer ComboBox with the provided list of participants.
      *

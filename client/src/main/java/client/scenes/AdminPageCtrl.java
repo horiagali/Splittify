@@ -34,10 +34,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AdminPageCtrl implements Initializable {
     private final ServerUtils server;
@@ -49,20 +46,29 @@ public class AdminPageCtrl implements Initializable {
     @FXML
     private TableView<Event> table;
     @FXML
+    TableColumn<Event, String> colId;
+    @FXML
     private TableColumn<Event, String> colName;
     @FXML
-    private TableColumn<Event, String> colLocation;
-    @FXML
     private TableColumn<Event, String> colDate;
+    @FXML
+    private ComboBox<String> sortingComboBox;
     @FXML
     private Menu languageMenu;
     @FXML
     private Button backButton;
     @FXML
     private ImageView languageFlagImageView;
+    @FXML
+    private Button downloadJsonButton;
+    @FXML
+    private Button importJsonButton;
+    @FXML
+    private Button refreshButton;
 
     /**
      * constructor
+     *
      * @param server
      * @param mainCtrl
      */
@@ -81,6 +87,7 @@ public class AdminPageCtrl implements Initializable {
 
     /**
      * initialises
+     *
      * @param location
      * @param resources
      */
@@ -88,18 +95,118 @@ public class AdminPageCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getTitle()));
-        colLocation.setCellValueFactory(q ->
-                new SimpleStringProperty(q.getValue().getLocation()));
-        colDate.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
+        colId.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getId().toString()));
+        colDate.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getCreationDate().toString()));
+
+        refresh();
+
+        List<String> sortingOptions = new ArrayList<>();
+        sortingOptions.add("A-Z");
+        sortingOptions.add("Z-A");
+        sortingOptions.add("New-Old");
+        sortingOptions.add("Old-New");
+
+        sortingComboBox.setItems(FXCollections.observableList(sortingOptions));
+        sortingComboBox.setValue("Old-New");
 
         table.setOnMouseClicked(this::handleTableItemClick);
 
         addContextMenu();
 
-        refresh();
         addKeyboardNavigationHandlers();
 
-        server.registerForUpdates(data::add);
+        server.registerForUpdates(this::addData);
+    }
+
+    /**
+     * Handles data from long polling
+     * @param e event
+     */
+    private void addData(Event e) {
+        this.data.add(e);
+        table.setItems(data);
+        handleSort();
+    }
+
+
+    /**
+     * Handles sorting, ae for javafx
+     * @param e Action event
+     */
+    
+    @FXML
+    private void handleSort(ActionEvent e) {
+        handleSort();
+    }
+
+    /**
+     * Handles sorting, not for javafx
+     */
+    private void handleSort() {
+        refresh();
+        if (MainCtrl.resourceBundle != null) {
+            getTranslations();
+        }
+
+        switch (sortingComboBox.getValue()) {
+            case "A-Z" -> sortAlphabetically();
+            case "Z-A" -> sortAlphabeticallyReverse();
+            case "New-Old" -> sortNewToOld();
+            case "Old-New" -> sortOldToNew();
+        }
+
+
+    }
+
+    private void getTranslations() {
+        String newString = MainCtrl.resourceBundle.getString("Text.new");
+        String oldString = MainCtrl.resourceBundle.getString("Text.old");
+        String oldToNew = oldString + "-" + newString;
+        String newToOld = newString + "-" + oldString;
+        String value = sortingComboBox.getValue();
+
+        if (value == null)
+            return;
+        if (value.equals("A-Z"))
+            sortAlphabetically();
+        if (value.equals("Z-A"))
+            sortAlphabeticallyReverse();
+        if (value.equals(oldToNew))
+            sortOldToNew();
+        if (value.equals(newToOld))
+            sortNewToOld();
+    }
+
+
+    /**
+     * Sort data from a to z
+     */
+    public void sortAlphabetically() {
+        data.sort(Comparator.comparing(e -> e.getTitle().toLowerCase()));
+    }
+
+    /**
+     * Sorts date from z to a
+     */
+    private void sortAlphabeticallyReverse() {
+        data.sort(Comparator.comparing(Event::getTitle,
+                Comparator.comparing(String::toLowerCase)).reversed());
+    }
+
+    /**
+     * Sort a date from new to old
+     */
+    private void sortNewToOld() {
+        data.sort(Comparator.comparing(Event::getCreationDate).reversed());
+    }
+
+    /**
+     * Sort data from old to new
+     */
+    private void sortOldToNew() {
+        data.sort(Comparator.comparing(Event::getCreationDate));
     }
 
     /**
@@ -125,6 +232,7 @@ public class AdminPageCtrl implements Initializable {
 
     /**
      * changes language to whatever s selected
+     *
      * @param event
      */
     @FXML
@@ -145,11 +253,32 @@ public class AdminPageCtrl implements Initializable {
      * updates UI
      */
     public void updateUIWithNewLanguage() {
+
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+        downloadJsonButton.setText(MainCtrl.resourceBundle.getString("button.downloadJson"));
+        importJsonButton.setText(MainCtrl.resourceBundle.getString("button.importJson"));
+        refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
+        colName.setText(MainCtrl.resourceBundle.getString("Text.eventName"));
+        colId.setText(MainCtrl.resourceBundle.getString("Text.eventLocation"));
+        colDate.setText(MainCtrl.resourceBundle.getString("Text.eventDate"));
+
+        int num = sortingComboBox.getSelectionModel().getSelectedIndex();
+        List<String> sortingOptions = new ArrayList<>();
+        String newString = MainCtrl.resourceBundle.getString("Text.new");
+        String oldString = MainCtrl.resourceBundle.getString("Text.old");
+        sortingOptions.add("A-Z");
+        sortingOptions.add("Z-A");
+        sortingOptions.add(newString + "-" + oldString);
+        sortingOptions.add(oldString + "-" + newString);
+
+        sortingComboBox.setItems(FXCollections.observableList(sortingOptions));
+        sortingComboBox.setPromptText(MainCtrl.resourceBundle.getString("Text.sortBy"));
+        sortingComboBox.getSelectionModel().select(num);
     }
 
     /**
      * updates the flag
+     *
      * @param language
      */
     public void updateFlagImageURL(String language) {
@@ -167,6 +296,7 @@ public class AdminPageCtrl implements Initializable {
         }
         languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
+
     @FXML
     private void importJson(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -191,9 +321,9 @@ public class AdminPageCtrl implements Initializable {
                 );
                 Event addedEvent = new Event();
                 try {
-                         server.sendEvent("/app/events", newEvent);
-                         List<Event> events = server.getEvents();
-                         addedEvent = events.getLast();
+                    server.sendEvent("/app/events", newEvent);
+                    List<Event> events = server.getEvents();
+                    addedEvent = events.getLast();
                 } catch (WebApplicationException e) {
                     var alert = new Alert(Alert.AlertType.ERROR);
                     alert.initModality(Modality.APPLICATION_MODAL);
@@ -240,9 +370,9 @@ public class AdminPageCtrl implements Initializable {
             }
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
+            alert.setTitle(MainCtrl.resourceBundle.getString("Text.warning"));
             alert.setHeaderText(null);
-            alert.setContentText("Please select an event to download JSON.");
+            alert.setContentText(MainCtrl.resourceBundle.getString("Text.eventDownloadError"));
             alert.showAndWait();
         }
     }
@@ -265,8 +395,9 @@ public class AdminPageCtrl implements Initializable {
     }
 
     private void addContextMenu() {
+        String delete = "Delete";
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem deleteMenuItem = new MenuItem("Delete");
+        MenuItem deleteMenuItem = new MenuItem(delete);
         deleteMenuItem.setOnAction(event -> deleteSelectedEvent());
         contextMenu.getItems().add(deleteMenuItem);
         table.setContextMenu(contextMenu);
@@ -275,16 +406,17 @@ public class AdminPageCtrl implements Initializable {
     private void deleteSelectedEvent() {
         Event selectedEvent = table.getSelectionModel().getSelectedItem();
         Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
-        confirmationDialog.setTitle("Confirmation");
-        confirmationDialog.setHeaderText("Are you sure you want to delete the event?");
-        confirmationDialog.setContentText("This action cannot be undone.");
+        confirmationDialog.setTitle(MainCtrl.resourceBundle.getString("Text.confirmation"));
+        confirmationDialog.setHeaderText
+                (MainCtrl.resourceBundle.getString("Text.areYouSureDeleteEvent"));
+        confirmationDialog.setContentText(MainCtrl.resourceBundle.getString("Text.noUndone"));
 
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 server.deleteEvent(selectedEvent);
                 refresh();
             } else {
-                System.out.println("Event deletion canceled.");
+                System.out.println(MainCtrl.resourceBundle.getString("Text.eventDeleteCanceled"));
             }
         });
     }

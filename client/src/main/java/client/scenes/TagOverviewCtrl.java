@@ -1,9 +1,8 @@
 package client.scenes;
 
 import java.awt.ScrollPane;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.net.URL;
+import java.util.*;
 
 
 import com.google.inject.Inject;
@@ -16,8 +15,10 @@ import commons.Event;
 import commons.Expense;
 import commons.Tag;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -38,13 +39,14 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class TagOverviewCtrl {
+public class TagOverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     private static Event event;
+    private static boolean isActive;
+    private List<Tag> tags;
 
-    
     @FXML
     private Menu languageMenu;
 
@@ -68,6 +70,8 @@ public class TagOverviewCtrl {
     private VBox vbox;
 
     TextField name;
+    @FXML
+    private Text tagsText;
 
     /**
      * @param server
@@ -78,6 +82,14 @@ public class TagOverviewCtrl {
         this.server = server;
         this.mainCtrl = mainCtrl;
 
+    }
+
+    /**
+     * sets if scene is active or not
+     * @param bool true if active, false otherwise
+     */
+    public static void setIsActive(boolean bool) {
+        isActive = bool;
     }
 
     /**
@@ -92,6 +104,7 @@ public class TagOverviewCtrl {
 
     /**
      * Changes the language of the site
+     *
      * @param event
      */
     @FXML
@@ -100,15 +113,16 @@ public class TagOverviewCtrl {
         String language = selectedLanguageItem.getText().toLowerCase();
 
         // Load the appropriate resource bundle based on the selected language
-        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_" 
-        + language, new Locale(language));
-        
+        MainCtrl.resourceBundle = ResourceBundle.getBundle("messages_"
+                + language, new Locale(language));
+
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
         updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        refresh();
     }
 
     /**
@@ -117,11 +131,12 @@ public class TagOverviewCtrl {
     public void updateUIWithNewLanguage() {
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         String stageTitleString = "title.statistics";
-        if(event !=null){
+        if (event != null)
             mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString)
-                    +event.getTitle());
-        }
-        else{mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));}
+                    + event.getTitle());
+        else
+            mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));
+        tagsText.setText(MainCtrl.resourceBundle.getString("Text.tagText"));
         
     }
 
@@ -162,15 +177,15 @@ public class TagOverviewCtrl {
             }
             Button newTagButton = new Button("+");
             String style = "-fx-background-color: #d9dbd9;" +
-            "-fx-font-size: " + 20 + ";" +
-            "-fx-border-radius: " + 10 + ";";
+                    "-fx-font-size: " + 20 + ";" +
+                    "-fx-border-radius: " + 10 + ";";
             newTagButton.setStyle(style);
             addHoverAnimation(newTagButton);
             newTagButton.setOnMouseClicked(event -> {
                 if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
                     createNewTag();
                 }
-                });
+            });
             flowPane.getChildren().add(newTagButton);
         }
     }
@@ -186,8 +201,8 @@ public class TagOverviewCtrl {
         Button button = new Button("new tag");
         button.setTextFill(Color.BLACK);
         String style = "-fx-background-color: " + "#d9dbd9" + ";" +
-        "-fx-font-size: " + 20 + ";" +
-        "-fx-border-radius: " + 10 + ";";
+                "-fx-font-size: " + 20 + ";" +
+                "-fx-border-radius: " + 10 + ";";
         button.setStyle(style);
         tagInfo.getChildren().add(button);
         ColorPicker colorPicker = new ColorPicker();
@@ -199,22 +214,22 @@ public class TagOverviewCtrl {
         name.setOnAction(event -> {
             newTag.setName(name.getText());
             button.setText(name.getText());
-            });
+        });
         name.setOnMouseExited(event -> {
             newTag.setName(name.getText());
             button.setText(name.getText());
-            });
+        });
         tagInfo.getChildren().add(name);
-        Button createButton = new Button("create tag");
+        Button createButton = new Button(MainCtrl.resourceBundle.getString("button.createTag"));
         createButton.setOnAction(event -> {
-            if(!server.getTags(this.event.getId())
-            .stream()
-            .map(x -> x.getName()).toList().contains(name.getText())) {
+            if(!server.getTags(TagOverviewCtrl.event.getId())
+                    .stream()
+                    .map(Tag::getName).toList().contains(name.getText())) {
                 newTag.setName(name.getText());
-                server.addTag(this.event.getId(), newTag);
+                server.addTag(TagOverviewCtrl.event.getId(), newTag);
                 refresh();
             } else {
-                Text text = new Text("A tag with this name already exists!");
+                Text text = new Text(MainCtrl.resourceBundle.getString("Text.tagAlreadyExists"));
                 text.setFill(Color.RED);
                 tagInfo.getChildren().add(text);
             }
@@ -234,50 +249,52 @@ public class TagOverviewCtrl {
         newTag.setColor("#d9dbd9");
         colorPicker.setOnAction(event -> {
             String hex = String.format("#%02X%02X%02X",
-                (int)(colorPicker.getValue().getRed() * 255),
-                (int)(colorPicker.getValue().getGreen() * 255),
-                (int)(colorPicker.getValue().getBlue() * 255));
+                    (int) (colorPicker.getValue().getRed() * 255),
+                    (int) (colorPicker.getValue().getGreen() * 255),
+                    (int) (colorPicker.getValue().getBlue() * 255));
             button.setStyle("-fx-background-color: " + hex + ";" +
-            "-fx-font-size: " + 20 + ";" +
-            "-fx-border-radius: " + 10 + ";");
+                    "-fx-font-size: " + 20 + ";" +
+                    "-fx-border-radius: " + 10 + ";");
             newTag.setColor(hex);
-            });
+        });
     }
 
     @FXML
     private void deleteTag(Tag tag) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Tag");
-        alert.setHeaderText("Are you sure you want to delete this tag?");
-        alert.setContentText("This action cannot be undone. All expenses associated " +
-        "with this tag, will get the tag 'no tag'");
+        alert.setTitle(MainCtrl.resourceBundle.getString("Text.delete")
+                + " " + MainCtrl.resourceBundle.getString("Text.tag"));
+        alert.setHeaderText(MainCtrl.resourceBundle.getString("Text.areYouSureTag"));
+        alert.setContentText(MainCtrl.resourceBundle.getString("Text.warningDeleteTag"));
 
         alert.showAndWait().ifPresent(response -> {
             if (response == javafx.scene.control.ButtonType.OK) {
                 // Delete the tag from the server
                 List<Expense> list = server.getExpensesByEventId(this.event.getId()).stream()
-                .filter(x -> x.getTag().getName().equals(tag.getName())).toList();
+                        .filter(x -> x.getTag().getName().equals(tag.getName())).toList();
                 System.out.println(list);
-                for(Expense expense : list) {
-                expense.setTag(server.getTags(this.event.getId()).get(0));
-                server.updateExpense(this.event.getId(), expense);
-                
+                for (Expense expense : list) {
+                    expense.setTag(server.getTags(this.event.getId()).get(0));
+                    server.updateExpense(this.event.getId(), expense);
+
                 }
                 server.deleteTag(event.getId(), tag.getId());
                 refresh();
 
                 // Show confirmation message
                 Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
-                deleteConfirmation.setTitle("Tag Deleted");
+                deleteConfirmation.setTitle(MainCtrl.resourceBundle.getString("Text.tagDeleted"));
                 deleteConfirmation.setHeaderText(null);
-                deleteConfirmation.setContentText("Tag deleted successfully!");
+                deleteConfirmation.setContentText
+                        (MainCtrl.resourceBundle.getString("Text.tagDeleted") + " "
+                                + MainCtrl.resourceBundle.getString("Text.successfully"));
                 deleteConfirmation.showAndWait();
             }
         });
     }
 
 
-    /**d
+    /**
      * sets the style of the button to 
      * @param tag
      * @return button of tag
@@ -287,13 +304,13 @@ public class TagOverviewCtrl {
         button.setTextFill(Color.BLACK);
         // if(tag.getColor() != null)
         String style = "-fx-background-color: " + tag.getColor() + ";" +
-        "-fx-font-size: " + 20 + ";" +
-        "-fx-border-radius: " + 10 + ";";
+                "-fx-font-size: " + 20 + ";" +
+                "-fx-border-radius: " + 10 + ";";
         button.setStyle(style);
         addHoverAnimation(button);
         button.setOnMouseClicked(event -> {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 1) {
-            tag.setEvent(this.event);
+            tag.setEvent(TagOverviewCtrl.event);
             showTagInfo(new Tag(tag.getName(), tag.getColor()), tag);
         }
         });
@@ -301,15 +318,15 @@ public class TagOverviewCtrl {
     }
 
 
-
     /**
      * shows info of tag to edit or remove it
+     *
      * @param oldTag the old version of this tag
      * @param newTag the new version of this tag
      */
     private void showTagInfo(Tag oldTag, Tag newTag) {
         tagInfo.getChildren().clear();
-        if(oldTag.getName().equals("no tag")) {
+        if (oldTag.getName().equals("no tag")) {
             noTagSelected(oldTag, newTag);
             return;
         }
@@ -318,10 +335,10 @@ public class TagOverviewCtrl {
         Button newTagButton = new Button(newTag.getName());
         newTagButton.setTextFill(Color.BLACK);
         newTagButton.setStyle("-fx-background-color: " + newTag.getColor() + ";" +
-        "-fx-font-size: " + 20 + ";" +
-        "-fx-border-radius: " + 10 + ";");
+                "-fx-font-size: " + 20 + ";" +
+                "-fx-border-radius: " + 10 + ";");
         originalTag.setStyle("-fx-background-color: " + oldTag.getColor() + ";" +
-        "-fx-font-size: " + 20 + ";" + "-fx-border-radius: " + 10 + ";");
+                "-fx-font-size: " + 20 + ";" + "-fx-border-radius: " + 10 + ";");
         Text text = new Text("↓");
         text.setStyle("-fx-font-size: 20");
         tagInfo.getChildren().add(originalTag);
@@ -337,7 +354,7 @@ public class TagOverviewCtrl {
         name.setOnMouseExited(event -> {
             newTag.setName(name.getText());
             showTagInfo(oldTag, newTag);
-            });
+        });
         tagInfo.getChildren().add(name);
         HBox hbox = deleteUpdateButtons(newTag, oldTag);
         tagInfo.getChildren().add(hbox);
@@ -346,6 +363,7 @@ public class TagOverviewCtrl {
 
     /**
      * if the tag 'no tag' is selected. Is different because name cannot be changed.
+     *
      * @param oldTag
      * @param newTag
      */
@@ -353,19 +371,19 @@ public class TagOverviewCtrl {
         Button originalTag = new Button(oldTag.getName());
         originalTag.setTextFill(Color.BLACK);
         originalTag.setStyle("-fx-background-color: " + newTag.getColor() + ";" +
-        "-fx-font-size: " + 20 + ";" +
-        "-fx-border-radius: " + 10 + ";");
+                "-fx-font-size: " + 20 + ";" +
+                "-fx-border-radius: " + 10 + ";");
         ColorPicker colorPicker = new ColorPicker();
         colorPickerLogic(oldTag, oldTag, colorPicker);
         tagInfo.getChildren().add(originalTag);
         tagInfo.getChildren().add(colorPicker);
-        Button update = new Button("update tag");
+        Button update = new Button(MainCtrl.resourceBundle.getString("button.updateTag"));
         update.setOnAction(event -> {
             oldTag.setEvent(this.event);
             oldTag.setId(server.getTags(this.event.getId()).get(0).getId());
             server.updateTag(oldTag, this.event.getId());
             refresh();
-            });
+        });
         tagInfo.getChildren().add(update);
     }
 
@@ -374,26 +392,26 @@ public class TagOverviewCtrl {
         double red = Integer.decode(colorString.substring(0, 3));
         double green = Integer.decode("#" + colorString.substring(3, 5));
         double blue = Integer.decode("#" + colorString.substring(5, colorString.length()));
-        Color color = new Color(red/255, green/255, blue/255, 1);
+        Color color = new Color(red / 255, green / 255, blue / 255, 1);
         colorPicker.setValue(color);
         colorPicker.setOnAction(event -> {
             String hex = String.format("#%02X%02X%02X",
-            (int)(colorPicker.getValue().getRed() * 255),
-            (int)(colorPicker.getValue().getGreen() * 255),
-            (int)(colorPicker.getValue().getBlue() * 255));
+                    (int) (colorPicker.getValue().getRed() * 255),
+                    (int) (colorPicker.getValue().getGreen() * 255),
+                    (int) (colorPicker.getValue().getBlue() * 255));
             newTag.setColor(hex);
             showTagInfo(oldTag, newTag);
-            });
+        });
     }
 
     private HBox deleteUpdateButtons(Tag newTag, Tag oldTag) {
         HBox hbox = new HBox(10);
         hbox.setAlignment(Pos.CENTER);
-        Button delete = new Button("delete tag");
+        Button delete = new Button(MainCtrl.resourceBundle.getString("button.deleteTag"));
         delete.setOnAction(event -> {
             deleteTag(newTag);
         });
-        Button update = new Button("update tag");
+        Button update = new Button(MainCtrl.resourceBundle.getString("button.updateTag"));
         update.setOnAction(event -> { 
             if(oldTag.getName().equals(name.getText()) ||
                 !server.getTags(this.event.getId()).stream()
@@ -403,7 +421,7 @@ public class TagOverviewCtrl {
                 server.updateTag(newTag, this.event.getId());
                 refresh();
             } else {
-                Text text = new Text("A tag with this name already exists!");
+                Text text = new Text(MainCtrl.resourceBundle.getString("Text.tagNameExists"));
                 text.setFill(Color.RED);
                 tagInfo.getChildren().add(text);
             }
@@ -422,9 +440,9 @@ public class TagOverviewCtrl {
             scaleTransition.setFromX(startX);
             scaleTransition.setFromY(startY);
             scaleTransition.setFromZ(startZ);
-            scaleTransition.setToX(node.getScaleX()*1.1);
-            scaleTransition.setToY(node.getScaleY()*1.1);
-            scaleTransition.setToZ(node.getScaleZ()*1.1);
+            scaleTransition.setToX(node.getScaleX() * 1.1);
+            scaleTransition.setToY(node.getScaleY() * 1.1);
+            scaleTransition.setToZ(node.getScaleZ() * 1.1);
             scaleTransition.play();
 
         });
@@ -444,6 +462,7 @@ public class TagOverviewCtrl {
 
     /**
      * set the selected event to see statistics from.
+     *
      * @param selectedEvent
      */
     public static void setEvent(Event selectedEvent) {
@@ -454,15 +473,16 @@ public class TagOverviewCtrl {
     /**
      * back button
      */
-    public void back(){
+    public void back() {
+        setIsActive(false);
         tagInfo.getChildren().clear();
         mainCtrl.goToOverview();
     }
 
-    
 
     /**
      * changes the currency to whatever is selected
+     *
      * @param event
      */
     @FXML
@@ -474,7 +494,38 @@ public class TagOverviewCtrl {
         Currency.setCurrencyUsed(currency.toUpperCase());
 
         // Print confirmation message
-        System.out.println("Currency changed to: " + currency);
+        System.out.println(MainCtrl.resourceBundle.getString
+                ("Text.currencyChangedTo") + ": " + currency);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    if (isActive) {
+                        if (event != null && tags == null) {
+                            tags = server.getTags(OverviewCtrl.getSelectedEvent().getId());
+                        }
+
+                        if (event != null) {
+                            List<Tag> newTags = server.
+                                    getTags(OverviewCtrl.getSelectedEvent().getId());
+
+                            if (!tags.equals(newTags)) {
+                                tags = newTags;
+                                loadTags();
+                            }
+
+                        }
+                        loadTags();
+                    }
+
+                });
+
+            }
+        }, 0, 1000);
     }
 
     /**

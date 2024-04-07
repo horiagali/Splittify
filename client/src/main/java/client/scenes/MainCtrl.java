@@ -504,6 +504,12 @@ public class MainCtrl {
         addExpensesCtrl.updateFlagImageURL(language);
         overviewCtrl.updateFlagImageURL(language);
         balancesCtrl.updateFlagImageURL(language);
+        serverPair.getKey().updateFlagImageURL(language);
+        addEventCtrl.updateFlagImageURL(language);
+        contactDetailsCtrl.updateFlagImageURL(language);
+        editExpenseCtrl.updateFlagImageURL(language);
+        balancesCtrl.updateFlagImageURL(language);
+        debtsCtrl.updateFlagImageURL(language);
     }
 
 
@@ -519,6 +525,14 @@ public class MainCtrl {
         inviteCtrl.updateUIWithNewLanguage();
         adminPageCtrl.updateUIWithNewLanguage();
         balancesCtrl.updateUIWithNewLanguage();
+        serverPair.getKey().updateUIWithNewLanguage();
+        addEventCtrl.updateUIWithNewLanguage();
+        addExpensesCtrl.updateUIWithNewLanguage();
+        overviewCtrl.updateUIWithNewLanguage();
+        contactDetailsCtrl.updateUIWithNewLanguage();
+        editExpenseCtrl.updateUIWithNewLanguage();
+        balancesCtrl.updateUIWithNewLanguage();
+        debtsCtrl.updateUIWithNewLanguage();
     }
 
     /**

@@ -70,6 +70,7 @@ public class Participant {
         // Default constructor required by JPA
     }
 
+
     // Getters and setters
 
     /**
