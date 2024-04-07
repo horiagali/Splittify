@@ -1,8 +1,7 @@
 package client.scenes;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.net.URL;
+import java.util.*;
 
 import com.google.inject.Inject;
 
@@ -12,10 +11,12 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Expense;
 import commons.Tag;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
@@ -25,12 +26,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
-public class StatisticsCtrl {
+public class StatisticsCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     private static Event event;
     ObservableList<PieChart.Data> pieChartData;
+    List<Expense> expenses;
+    List<Tag> tags;
+    private static boolean isActive;
     double totalAmount;
 
     @FXML
@@ -237,9 +241,56 @@ public class StatisticsCtrl {
      * back button
      */
     public void back() {
+        setIsActive(false);
         if (!event.isClosed())
             mainCtrl.goToOverview();
         else
             mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    handlePropagation();
+                });
+
+            }
+        }, 0, 1000);
+    }
+
+    private void handlePropagation() {
+        if (isActive) {
+            System.out.println("StatisticCtrl is active");
+            if (event != null && (tags == null || expenses == null)) {
+                tags = server.getTags(OverviewCtrl.getSelectedEvent().getId());
+                expenses = server.getExpensesByEventId(OverviewCtrl.getSelectedEvent().getId());
+            }
+
+            if (event != null) {
+                List<Tag> newTags = server.
+                        getTags(OverviewCtrl.getSelectedEvent().getId());
+                List<Expense> newExpenses = server.
+                        getExpensesByEventId(OverviewCtrl.getSelectedEvent().getId());
+
+                if (!tags.equals(newTags) ||
+                        !expenses.equals(newExpenses)) {
+                    tags = newTags;
+                    expenses = newExpenses;
+                    refresh();
+                }
+
+            }
+        }
+    }
+
+    /**
+     * Sets the page to active, so propagation can begin
+     * @param bool true if page is being viewed, false otherwise
+     */
+    public static void setIsActive(boolean bool) {
+        isActive = bool;
     }
 }

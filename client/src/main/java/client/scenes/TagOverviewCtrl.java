@@ -501,29 +501,33 @@ public class TagOverviewCtrl implements Initializable {
             @Override
             public void run() {
                 Platform.runLater(() -> {
-                    if (isActive) {
-                        if (event != null && tags == null) {
-                            tags = server.getTags(OverviewCtrl.getSelectedEvent().getId());
-                        }
-
-                        if (event != null) {
-                            List<Tag> newTags = server.
-                                    getTags(OverviewCtrl.getSelectedEvent().getId());
-
-                            if (!tags.equals(newTags)) {
-                                tags = newTags;
-                                loadTags();
-                            }
-
-                        }
-                        loadTags();
-                    }
+                    handlePropagation();
 
                 });
 
             }
         }, 0, 1000);
     }
+
+    private void handlePropagation() {
+        if (isActive) {
+            if (event != null && tags == null) {
+                tags = server.getTags(OverviewCtrl.getSelectedEvent().getId());
+            }
+
+            if (event != null) {
+                List<Tag> newTags = server.
+                        getTags(OverviewCtrl.getSelectedEvent().getId());
+
+                if (!tags.equals(newTags)) {
+                    tags = newTags;
+                    loadTags();
+                }
+
+            }
+        }
+    }
+
 }
 
 

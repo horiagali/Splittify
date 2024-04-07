@@ -669,6 +669,7 @@ public class OverviewCtrl implements Initializable {
      *
      */
     public void showStatistics() {
+        StatisticsCtrl.setIsActive(true);
         mainCtrl.goToStatistics(selectedEvent);
     }
 
