@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UndoManager;
 import client.utils.Currency;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
@@ -18,8 +19,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -34,6 +35,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OverviewCtrl implements Initializable {
 
@@ -42,6 +44,7 @@ public class OverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private static Event selectedEvent;
+    private UndoManager undoManager = UndoManager.getInstance();
 
     @FXML
     private AnchorPane anchorPane;
@@ -839,5 +842,70 @@ public class OverviewCtrl implements Initializable {
             scaleTransition.play();
 
         });
+    }
+
+    /**
+     * Handles the undo action to restore the previous state of an expense.
+     * This method attempts to restore the expense from
+     * the undo stack and update the server.
+     * Displays appropriate alert messages based on the outcome.
+     */
+    @FXML
+    public void undoAction() {
+        UndoManager.ExpenseSnapshot previousExpenseState = undoManager.undo();
+
+        if (previousExpenseState != null) {
+            try {
+                Long expenseIdToRestore = previousExpenseState.getExpenseId();
+                List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId())
+                        .stream()
+                        .filter(expense -> !"gifting money".
+                                equalsIgnoreCase(expense.getTag().getName()))
+                        .collect(Collectors.toList());
+
+                Expense toUndo = expenses.stream()
+                        .filter(expense -> Objects.equals(expense.getId(), expenseIdToRestore))
+                        .findFirst()
+                        .orElse(null);
+
+                previousExpenseState.restore(toUndo);
+
+
+                if (toUndo != null) {
+                    server.updateExpense(selectedEvent.getId(), toUndo);
+                    loadExpenses();
+                    showAlert(Alert.AlertType.INFORMATION, "Expense Undo Successful",
+                            "Restored Expense: " + toUndo);
+                } else {
+                    showAlert(Alert.AlertType.WARNING, "Expense Not Found",
+                            "Unable to find Expense with ID: "
+                                    + expenseIdToRestore
+                                    + " in the expenses list for the selected event.");
+                }
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, "Error",
+                        "Error while performing undo operation: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            showAlert(Alert.AlertType.WARNING, "Undo Failed",
+                    "Undo operation failed. " +
+                            "No previous expense state found in the undo stack.");
+        }
+    }
+
+    /**
+     * Helper method to display an alert dialog with the specified type, title, and message.
+     *
+     * @param alertType The type of the alert (INFORMATION, WARNING, ERROR, etc.).
+     * @param title     The title of the alert dialog.
+     * @param message   The message content of the alert dialog.
+     */
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

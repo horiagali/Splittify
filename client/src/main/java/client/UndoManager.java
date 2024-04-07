@@ -1,12 +1,17 @@
 package client;
 
 import commons.Expense;
+import commons.Participant;
+import commons.Tag;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Stack;
 
-public class UndoManager {
-    private static final UndoManager instance = new UndoManager();
-    private Map<Long, Map<String, Stack<Object>>> undoHistories = new HashMap<>();
+public class UndoManager<T> {
+    private static final UndoManager<Expense> instance = new UndoManager<>();
+    private Stack<ExpenseSnapshot> undoStack = new Stack<>();
 
     private UndoManager() {
     }
@@ -16,99 +21,89 @@ public class UndoManager {
      *
      * @return the UndoManager instance
      */
-    public static UndoManager getInstance() {
+    public static UndoManager<Expense> getInstance() {
         return instance;
     }
 
     /**
-     * Captures the state of a specific field in an Expense for potential undo operations.
+     * Captures the current state of an Expense object for potential undo operations.
      *
      * @param expense the Expense object to capture the state from
-     * @param field the name of the field whose state is being captured
-     * @param value the value representing the current state of the field
      */
-    public void captureState(Expense expense, String field, Object value) {
-        // Retrieve the expense ID
-        Long expenseId = expense.getId();
-
-        // Retrieve or create the undo history map for the expense ID
-        Map<String, Stack<Object>> expenseUndoHistory =
-                undoHistories.computeIfAbsent(expenseId, k -> new HashMap<>());
-
-        // Retrieve or create the stack for the specified field
-        Stack<Object> fieldUndoHistory =
-                expenseUndoHistory.computeIfAbsent(field, k -> new Stack<>());
-
-        // Push the new value onto the undo history stack for this field
-        fieldUndoHistory.push(value);
+    public void captureState(Expense expense) {
+        // Create a snapshot of the expense and push it onto the undo stack
+        ExpenseSnapshot snapshot = new ExpenseSnapshot(expense);
+        undoStack.push(snapshot);
     }
 
     /**
-     * Undoes the last change made to a specific field of an Expense.
+     * Undoes the last operation by restoring the previous state of the Expense object.
      *
-     * @param expense the Expense object to undo the change on
-     * @param field the name of the field to undo changes on
-     * @return the previous state of the field before the undo operation,
-     * or null if no previous state exists
+     * @return the Expense object representing the state before the last operation,
+     * or null if the undo stack is empty
      */
-    public Object undo(Expense expense, String field) {
-        // Retrieve the expense ID
-        Long expenseId = expense.getId();
-
-        // Retrieve the undo history for the specified expense ID and field
-        Map<String, Stack<Object>> expenseUndoHistory = undoHistories.get(expenseId);
-
-        if (expenseUndoHistory != null) {
-            Stack<Object> fieldUndoHistory = expenseUndoHistory.get(field);
-
-            if (fieldUndoHistory != null && !fieldUndoHistory.isEmpty()) {
-                // Pop the previous state from the undo history stack for this field and return it
-                Object previousState = fieldUndoHistory.pop();
-                System.out.println("Previous state popped for field "
-                        + field + ": " + previousState);
-
-                return previousState;
-            } else {
-                System.out.println("No undo history available for field: " + field);
-            }
+    public ExpenseSnapshot undo() {
+        if (!undoStack.isEmpty()) {
+            // Pop the last snapshot from the undo stack and restore the state
+            ExpenseSnapshot snapshot = undoStack.pop();
+            return snapshot;
         } else {
-            System.out.println("No undo history available for expense ID: " + expenseId);
+            System.out.println("Undo stack is empty.");
+            return null;
         }
-        return null;
     }
 
     /**
-     * Peeks at the last state of a specific
-     * field of an Expense without removing it from the undo history.
-     *
-     * @param expense the Expense object to peek the field state from
-     * @param field the name of the field to peek the state from
-     * @return the last state of the field, or null if no state is available
+     * Inner class to represent a snapshot of an Expense object.
      */
-    public Object peek(Expense expense, String field) {
-        // Retrieve the expense ID
-        Long expenseId = expense.getId();
+    public static class ExpenseSnapshot {
+        private final String title;
+        private final double amount;
+        private final Participant payer;
+        private final List<Participant> owers;
+        private final Date date;
+        private final Tag tag;
+        private Long id;
 
-        // Retrieve the undo history for the specified expense ID and field
-        Map<String, Stack<Object>> expenseUndoHistory = undoHistories.get(expenseId);
-
-        if (expenseUndoHistory != null) {
-            Stack<Object> fieldUndoHistory = expenseUndoHistory.get(field);
-
-            if (fieldUndoHistory != null && !fieldUndoHistory.isEmpty()) {
-                // Peek at the previous state from the undo
-                // history stack for this field and return it
-                Object previousState = fieldUndoHistory.peek();
-                System.out.println("Previous state peeked for field "
-                        + field + ": " + previousState);
-
-                return previousState;
-            } else {
-                System.out.println("No undo history available for field: " + field);
-            }
-        } else {
-            System.out.println("No undo history available for expense ID: " + expenseId);
+        /**
+         * Constructs an ExpenseSnapshot from an Expense object.
+         *
+         * @param expense the Expense object to create a snapshot from
+         */
+        public ExpenseSnapshot(Expense expense) {
+            this.title = expense.getTitle();
+            this.amount = expense.getAmount();
+            this.payer = expense.getPayer();
+            this.owers = new ArrayList<>(expense.getOwers());
+            this.date = new Date(expense.getDate().getTime());
+            this.tag = expense.getTag();
+            this.id = expense.getId();
         }
-        return null;
+
+
+        /**
+         * Restores the state of an Expense object from this snapshot.
+         *
+         * @param restoredExpense the Expense object to restore the state to
+         * @return the restored Expense object
+         */
+        public Expense restore(Expense restoredExpense) {
+            restoredExpense.setTitle(this.title);
+            restoredExpense.setAmount(this.amount);
+            restoredExpense.setPayer(this.payer);
+            restoredExpense.setOwers(new ArrayList<>(this.owers));
+            restoredExpense.setDate(new Date(this.date.getTime()));
+            restoredExpense.setTag(this.tag);
+            return restoredExpense;
+        }
+
+        /**
+         * Retrieves the ID of the Expense associated with this snapshot.
+         *
+         * @return the ID of the Expense
+         */
+        public Long getExpenseId() {
+            return this.id;
+        }
     }
 }

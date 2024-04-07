@@ -492,13 +492,6 @@ public class AddExpensesCtrl implements Initializable {
      */
     private void saveExpense(Event selectedEvent, Expense expense) {
         System.out.println(expense);
-        server.addExpenseToEvent(selectedEvent.getId(), expense);
-        undoManager.captureState(expense, "title", expense.getTitle());
-        undoManager.captureState(expense, "amount", expense.getAmount());
-        undoManager.captureState(expense, "date", expense.getDate());
-        undoManager.captureState(expense, "payer", expense.getPayer());
-        undoManager.captureState(expense, "owers", expense.getOwers());
-        undoManager.captureState(expense, "selectedTag", expense.getTag());
         selectedParticipants.clear();
     }
 
