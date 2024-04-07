@@ -378,6 +378,15 @@ public class OverviewCtrl implements Initializable {
         payer.setItems(FXCollections.observableArrayList(participants));
         ower.setItems(FXCollections.observableArrayList(participants));
         tag.setItems(FXCollections.observableArrayList(tags));
+
+        if (MainCtrl.resourceBundle != null) {
+            if (payer.getSelectionModel().getSelectedIndex() < 1)
+                payer.getSelectionModel().select(0);
+            if (ower.getSelectionModel().getSelectedIndex() < 1)
+                ower.getSelectionModel().select(0);
+            if (tag.getSelectionModel().getSelectedIndex() < 1)
+                tag.getSelectionModel().select(0);
+        }
     }
 
     /**
