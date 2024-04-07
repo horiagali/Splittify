@@ -528,7 +528,7 @@ public class OverviewCtrl implements Initializable {
                 .stream().filter(x ->
                         !"gifting money".equalsIgnoreCase(x.getTag().getName())).toList();
         expenses = applyFilters(expenses);
-        if (expenses.size() == 0) {
+        if (expenses.isEmpty()) {
             expensesBox.getChildren()
                     .add(new Text(MainCtrl.resourceBundle.getString("Text.noExpensesFiltered")));
             return;
