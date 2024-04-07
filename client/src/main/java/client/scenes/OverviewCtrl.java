@@ -634,40 +634,82 @@ public class OverviewCtrl implements Initializable {
                 ActionEvent dummyEvent = new ActionEvent();
                 goToAreYouSure(dummyEvent);
             }
-            if (event.isControlDown() && event.getCode() == KeyCode.G){
+            if (event.isAltDown() && event.getCode() == KeyCode.E){
                 promptForItemIndex();
+            }
+            if (event.isAltDown() && event.getCode() == KeyCode.P){
+                promptForParticipantIndex();
             }
             handleAdditionalKeyEvents(event);
         });
     }
 
     /**
-     * Add keyboard navigation to select an item
+     * Add keyboard navigation to select an expense
      */
     private void promptForItemIndex() {
         TextInputDialog dialog = new TextInputDialog();
         dialog.setTitle("Select Item");
-        dialog.setHeaderText("Enter the index of the item to select:");
+        dialog.setHeaderText("Enter number of the expense you want to select");
         dialog.setContentText("Index:");
 
         // Show the dialog and wait for user input
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(indexStr -> {
             try {
-                int index = Integer.parseInt(indexStr);
+                int index = Integer.parseInt(indexStr)-1;
                 if (index >= 0 && index < expenses.size()) {
                     goToEditExpense(expenses.get(index));
                 } else {
-                    // Index out of range
-                    // Show an error message or handle appropriately
-                    System.out.println("Invalid index");
+                    showErrorDialog("Invalid Index",
+                            "Index must be between 1 and " +
+                            expenses.size());
                 }
             } catch (NumberFormatException e) {
-                // Invalid input format
-                // Show an error message or handle appropriately
-                System.out.println("Invalid input");
+                showErrorDialog("Invalid Input",
+                        "Please enter a valid number.");
             }
         });
+    }
+
+    /**
+     * Add keyboard navigation to select a participant
+     */
+    private void promptForParticipantIndex() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Select Participant");
+        dialog.setHeaderText("Enter the number of the participant you want to select:");
+        dialog.setContentText("Index:");
+
+        // Show the dialog and wait for user input
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(indexStr -> {
+            try {
+                int index = Integer.parseInt(indexStr) - 1;
+                if (index >= 0 && index < participants.size()) {
+                    mainCtrl.goToContact(participants.get(index));
+                } else {
+                    showErrorDialog("Invalid Index",
+                            "Index must be between 1 and " + participants.size());
+                }
+            } catch (NumberFormatException e) {
+                showErrorDialog("Invalid Input",
+                        "Please enter a valid number.");
+            }
+        });
+    }
+
+    /**
+     * Shows error dialog
+     * @param title title of pop up
+     * @param message content
+     */
+    private void showErrorDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
