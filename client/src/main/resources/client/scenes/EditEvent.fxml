@@ -84,20 +84,20 @@
                   </Text>
                   <HBox fx:id="name" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Text fx:id="nameLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Title:" />
+                        <Text fx:id="titleLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Title:" />
                         <TextField fx:id="titleField" promptText="Enter new Title" />
                      </children>
                   </HBox>
                   <HBox fx:id="iban" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Text fx:id="ibanLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" />
-                        <TextField fx:id="ibanField" alignment="CENTER" prefHeight="67.0" prefWidth="150.0" promptText="Enter new Description" />
+                        <Text fx:id="descriptionLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" />
+                        <TextField fx:id="descriptionField" alignment="CENTER" prefHeight="67.0" prefWidth="150.0" promptText="Enter new Description" />
                      </children>
                   </HBox>
                   <HBox fx:id="email" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
-                        <Text fx:id="emailLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Location:" />
-                        <TextField fx:id="emailField" promptText="Enter new Location" />
+                        <Text fx:id="locationLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Location:" />
+                        <TextField fx:id="locationField" promptText="Enter new Location" />
                      </children>
                   </HBox>
                </children>

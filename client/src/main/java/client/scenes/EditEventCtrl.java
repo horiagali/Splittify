@@ -85,6 +85,7 @@ public class EditEventCtrl implements Initializable {
      * @param event
      */
     public void loadInfo(Event event){
+        
 
     }
 
