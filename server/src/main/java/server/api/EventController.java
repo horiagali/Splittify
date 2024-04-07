@@ -102,9 +102,9 @@ public class EventController {
     @SendTo("/topic/events")
     public Event addEvent(Event e) {
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Websocket reached");
-
-        listeners.forEach((k, l) -> l.accept(e));
-        return createEvent(e).getBody();
+        Event createdEvent = createEvent(e).getBody();
+        listeners.forEach((k, l) -> l.accept(createdEvent));
+        return createdEvent;
     }
 
 

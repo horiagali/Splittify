@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.Main;
 import client.utils.Currency;
+import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -37,6 +38,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,6 +83,7 @@ public class InviteCtrl implements Initializable {
     private Button addButton;
     @FXML
     private Button copyButton;
+    private Executor executor;
 
 
     /**
@@ -105,6 +109,21 @@ public class InviteCtrl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         generateInviteCode();
         addKeyboardNavigationHandlers();
+        executor = Executors.newVirtualThreadPerTaskExecutor();
+        if (!goodCredentials()) {
+            sendButton.setDisable(true);
+            sendButton.setStyle("--body-background-color: grey;");
+        }
+    }
+    /**
+     * good credentials
+     * @return true if good, false otherwise
+     */
+    private boolean goodCredentials(){
+        if (EmailUtils.getHost() == null || EmailUtils.getPort() == null ||
+                EmailUtils.getPassword() == null || EmailUtils.getUsername() == null)
+            return false;
+        return isValidEmail(EmailUtils.getUsername());
     }
 
 
@@ -319,7 +338,7 @@ public class InviteCtrl implements Initializable {
                 Mail mail = new Mail(email,event.getTitle(), "The invite code is: " +
                         event.getId().toString());
                 server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
-                server.sendEmail(mail);
+                executor.execute(() -> EmailUtils.sendEmail(mail));
             }
             emailList.clear();
             uniqueEmails.clear();

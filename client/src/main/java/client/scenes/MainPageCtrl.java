@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.Main;
 import client.utils.Currency;
+import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 
 import com.google.inject.Inject;
@@ -31,6 +32,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class MainPageCtrl implements Initializable {
@@ -41,6 +44,8 @@ public class MainPageCtrl implements Initializable {
 
     @FXML
     private VBox vbox;
+    @FXML
+    private Button testEmailButton;
     @FXML
     private TableView<Event> table;
     @FXML
@@ -87,10 +92,6 @@ public class MainPageCtrl implements Initializable {
     public MainPageCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        Mail mail = new Mail("ooppteam56@gmail.com","Testing the credentials", "The provided" +
-                "email works as expected!");
-        server.sendEmail(mail);
-
     }
 
     /**
@@ -155,7 +156,28 @@ public class MainPageCtrl implements Initializable {
         languageFlagImageView.setImage(new Image(getClass().getResourceAsStream(flagImageUrl)));
     }
 
-
+    /**
+     * good credentials
+     * @return true if good, false otherwise
+     */
+    private boolean goodCredentials(){
+        if (EmailUtils.getHost() == null || EmailUtils.getPort() == null ||
+                EmailUtils.getPassword() == null || EmailUtils.getUsername() == null)
+            return false;
+        return isValidEmail(EmailUtils.getUsername());
+    }
+    /**
+     * Checks whether email is valid
+     * @param email email to check
+     * @return true iff valid
+     */
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*" +
+                "@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
     /**
      * adds an event to the table
      */
@@ -198,6 +220,10 @@ public class MainPageCtrl implements Initializable {
     @Override
 
     public void initialize(URL location, ResourceBundle resources) {
+        if (!goodCredentials()){
+            testEmailButton.setDisable(true);
+            testEmailButton.setStyle("-fx-background-color: grey;");
+        }
         colName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getTitle()));
         colLocation.setCellValueFactory(q ->
@@ -407,5 +433,13 @@ public class MainPageCtrl implements Initializable {
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * test the default email
+     */
+    public void testEmail(){
+        Mail mail = new Mail(EmailUtils.getUsername(),"Test Email", "This is a default email.");
+        EmailUtils.sendEmail(mail);
     }
 }
