@@ -279,6 +279,7 @@ public class EditPartialDebtCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.editPartialDebt"));
         languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
     }
 

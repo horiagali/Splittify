@@ -363,9 +363,10 @@ public class ContactDetailsCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
@@ -393,6 +394,8 @@ public class ContactDetailsCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.contactDetails"));
         title.setText(MainCtrl.resourceBundle.getString("Text.addParticipant"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
         addButton.setText(MainCtrl.resourceBundle.getString("button.add"));

@@ -45,9 +45,6 @@ public class MainCtrl {
     private PageCtrl pageCtrl;
     private Scene page;
     private Scene adminPage;
-
-
-
     private AdminPageCtrl adminPageCtrl;
 
     private Scene adminPass;
@@ -95,29 +92,27 @@ public class MainCtrl {
 
 
     /**
-     *
-     * @param primaryStage
-     * @param overview
-     * @param add
-     * @param page
-     * @param addExpense
-     * @param editExpense
-     * @param contactDetails
-     * @param overviewApp
-     * @param invite
-     * @param adminPage
-     * @param adminPass
-     * @param language
-     * @param addEvent
-     * @param balances
-     * @param serverSetter2
-     * @param statistics
-     * @param debtsCtrlParentPair
-     * @param tagOverview
-     * @param partialDebtCtrlParentPair
-     * @param editPartialDebtCtrlParentPair
-     * @param main
-     *
+     * @param primaryStage .
+     * @param overview .
+     * @param add .
+     * @param page .
+     * @param addExpense .
+     * @param editExpense .
+     * @param contactDetails .
+     * @param overviewApp .
+     * @param invite .
+     * @param adminPage .
+     * @param adminPass .
+     * @param language .
+     * @param addEvent .
+     * @param balances .
+     * @param serverSetter2 .
+     * @param statistics .
+     * @param debtsCtrlParentPair .
+     * @param tagOverview .
+     * @param partialDebtCtrlParentPair .
+     * @param editPartialDebtCtrlParentPair .
+     * @param main .
      */
 
     @SuppressWarnings({"ParameterNumber", "checkstyle:MethodLength"})
@@ -202,9 +197,9 @@ public class MainCtrl {
         this.editPartialDebtCtrl = editPartialDebtCtrlParentPair.getKey();
         updateFlags(language);
 
-        dimension = Toolkit. getDefaultToolkit(). getScreenSize();
-        primaryStage.setWidth(dimension.getWidth()/1.4);
-        primaryStage.setHeight(dimension.getHeight()/1.4);
+        dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        primaryStage.setWidth(dimension.getWidth() / 1.4);
+        primaryStage.setHeight(dimension.getHeight() / 1.4);
         primaryStage.setMaximized(false);
         primaryStage.setMaximized(true);
 
@@ -214,6 +209,7 @@ public class MainCtrl {
 
     /**
      * initializes scene to set serverUrl of client
+     *
      * @param primaryStage
      * @param serverSetter
      * @param main
@@ -228,7 +224,7 @@ public class MainCtrl {
         serverSetter.getKey().serverURL.setText(Main.config.getServerUrl());
         primaryStage.setMaximized(true);
         this.serverSetter = new Scene(serverSetter.getValue());
-        primaryStage.setTitle("Choose your server");
+        primaryStage.setTitle(resourceBundle.getString("title.serverSetter"));
         primaryStage.setScene(this.serverSetter);
         primaryStage.show();
         setMain(main);
@@ -242,7 +238,6 @@ public class MainCtrl {
     }
 
     /**
-     *
      * @return main
      */
     public Main getMain() {
@@ -250,9 +245,7 @@ public class MainCtrl {
     }
 
 
-
     /**
-     *
      * @param main main
      */
     public void setMain(Main main) {
@@ -264,15 +257,14 @@ public class MainCtrl {
      *
      */
     public void showOverview() {
-        primaryStage.setTitle("Events: Overview");
+        primaryStage.setTitle(resourceBundle.getString("title.mainPage"));
         primaryStage.setScene(overview);
-
         overviewCtrl.refresh();
     }
 
     /**
-     *
      * @param name name
+     *             What does this do? - Mihnea
      */
     public void addToOverview(String name) {
         overviewAppCtrl.addName(name);
@@ -301,16 +293,17 @@ public class MainCtrl {
      * Show add event page
      */
     public void showAddEvent() {
-        primaryStage.setTitle("Create an event");
+        primaryStage.setTitle(resourceBundle.getString("title.addEvent"));
         primaryStage.setScene(addEvent);
     }
 
     /**
      * Show tag overview page
+     *
      * @param event the event the tags belong to
      */
     public void goToTagOverview(Event event) {
-        primaryStage.setTitle("Tag Manager");
+        primaryStage.setTitle(resourceBundle.getString("title.tagManager"));
         TagOverviewCtrl.setEvent(event);
         primaryStage.setScene(tagOverview);
         tagOverviewCtrl.refresh();
@@ -330,7 +323,7 @@ public class MainCtrl {
      *
      */
     public void showAddExpenses() {
-        primaryStage.setTitle("Expenses: Add Expense");
+        primaryStage.setTitle(resourceBundle.getString("title.addExpense"));
         primaryStage.setScene(addExpenses);
         addExpensesCtrl.refreshParticipants();
         // Additional setup for the Add Expense page, if needed
@@ -345,12 +338,13 @@ public class MainCtrl {
         primaryStage.setScene(contactDetails);
     }
 
-     /**
+    /**
      * go to Contact details but instead get the update view
+     *
      * @param participant
      */
     public void goToContact(Participant participant) {
-        primaryStage.setTitle("Contact Details");
+        primaryStage.setTitle(resourceBundle.getString("title.contactDetails"));
         contactDetailsCtrl.loadInfo(participant);
         primaryStage.setScene(contactDetails);
     }
@@ -360,21 +354,22 @@ public class MainCtrl {
      *
      */
     public void goToOverview() {
-        primaryStage.setTitle("Overview");
+        primaryStage.setTitle(resourceBundle.getString("title.overview"));
         overviewAppCtrl.resetComboBoxes();
         primaryStage.setScene(overviewApp);
         overviewAppCtrl.refresh();
-        
+
 
     }
 
     /**
      * send invites
+     *
      * @param eventName eventname
-     * @param event event
+     * @param event     event
      */
     public void sendInvites(Label eventName, Event event) {
-        primaryStage.setTitle("Send Invites");
+        primaryStage.setTitle(resourceBundle.getString("title.sendInvites"));
         inviteCtrl.setEvent(event);
 
         //inviteCtrl.setName(eventName);
@@ -382,26 +377,25 @@ public class MainCtrl {
         inviteCtrl.refresh();
 
     }
+
     /**
-     *
-     * @param selectedEvent
-     * goes to event overview, showing the event passed as a parameter
+     * @param selectedEvent goes to event overview, showing the event passed as a parameter
      */
     public void showEventOverview(Event selectedEvent) {
         primaryStage.setTitle(selectedEvent.getTitle());
         primaryStage.setScene(overviewApp);
         overviewAppCtrl.resetComboBoxes();
         overviewAppCtrl.displayEvent(selectedEvent);
-        
+
         overviewAppCtrl.refresh();
 
     }
 
     /**
-     *  goes to admin password page
+     * goes to admin password page
      */
     public void goToAdminPass() {
-        primaryStage.setTitle("Admin password");
+        primaryStage.setTitle(resourceBundle.getString("title.adminPassword"));
         primaryStage.setScene(adminPass);
         String pass = AdminPassCtrl.generatePassword();
         System.out.println("The password is " + pass);
@@ -409,20 +403,22 @@ public class MainCtrl {
     }
 
     /**
-     *   goes to admin page
+     * goes to admin page
      */
-    public void goToAdminPage(){
-        primaryStage.setTitle("Admin page");
+    public void goToAdminPage() {
+        primaryStage.setTitle(resourceBundle.getString("title.adminPage"));
         primaryStage.setScene(adminPage);
         adminPageCtrl.refresh();
+        OverviewCtrl.setIsAdmin(true);
     }
 
     /**
      * goes to balances page
+     *
      * @param event event
      */
     public void goToBalances(Event event) {
-        primaryStage.setTitle("Balances page");
+        primaryStage.setTitle(resourceBundle.getString("title.balances"));
         balancesCtrl.setEvent(event);
         primaryStage.setScene(balances);
         balancesCtrl.refresh();
@@ -430,10 +426,12 @@ public class MainCtrl {
 
     /**
      * goes to statistics page
+     *
      * @param event event to see statistics from
      */
     public void goToStatistics(Event event) {
-        primaryStage.setTitle("Statistics of " + event.getTitle());
+        primaryStage.setTitle(resourceBundle.getString
+                ("title.statisticsOf") + " " + event.getTitle());
         StatisticsCtrl.setEvent(event);
         primaryStage.setScene(statistics);
         statisticsCtrl.refresh();
@@ -442,6 +440,7 @@ public class MainCtrl {
 
     /**
      * set the title of primary stage, needed for translations
+     *
      * @param title title
      */
     public void setStageTitle(String title) {
@@ -450,14 +449,15 @@ public class MainCtrl {
 
     /**
      * goes to settle debts
-     * @param event event
+     *
+     * @param event    event
      * @param expenses expenses
      */
     public void goToSettleDebts(Event event, List<Expense> expenses) {
-        primaryStage.setTitle("Open Debts page");
+        primaryStage.setTitle(resourceBundle.getString("title.openDebts"));
         debtsCtrl.setEvent(event);
         List<Expense> debtExpense = expenses.stream()
-                        .filter(x->x.getTag().getName().equals("debt")).toList();
+                .filter(x -> x.getTag().getName().equals("debt")).toList();
         debtsCtrl.setExpenses(debtExpense);
         primaryStage.setScene(debts);
         debtsCtrl.refresh();
@@ -466,11 +466,12 @@ public class MainCtrl {
 
     /**
      * Goes to edit expense.
-     * @param event the event of the expense.
+     *
+     * @param event   the event of the expense.
      * @param expense the expense to edit.
      */
     public void goToEditExpense(Event event, Expense expense) {
-        primaryStage.setTitle("Edit expense page");
+        primaryStage.setTitle(resourceBundle.getString("title.editExpense"));
         EditExpenseCtrl.setEvent(event);
         EditExpenseCtrl.setExpense(expense);
         primaryStage.setScene(editExpense);
@@ -479,6 +480,7 @@ public class MainCtrl {
 
     /**
      * method to update language
+     *
      * @param language lanuage from button
      */
     public void updateLanguage(String language) {
@@ -492,6 +494,7 @@ public class MainCtrl {
 
     /**
      * updates flags
+     *
      * @param language chosen language
      */
     private void updateFlags(String language) {
@@ -539,21 +542,22 @@ public class MainCtrl {
      * go to partial
      */
     public void goToPartial() {
-        primaryStage.setTitle("Add partial debt");
+        primaryStage.setTitle(resourceBundle.getString("title.addPartialDebt"));
         primaryStage.setScene(addPartial);
         addPartialDebtCtrl.refreshParticipants();
     }
 
     /**
      * go to edit partial debt
+     *
      * @param event
      * @param expense
      */
 
     public void goToEditPartialDebt(Event event, Expense expense) {
-        primaryStage.setTitle("Edit partial debt page");
-        editPartialDebtCtrl.setEvent(event);
-        editPartialDebtCtrl.setExpense(expense);
+        primaryStage.setTitle(resourceBundle.getString("title.editPartialDebt"));
+        EditPartialDebtCtrl.setEvent(event);
+        EditPartialDebtCtrl.setExpense(expense);
         primaryStage.setScene(editPartialDebt);
         editPartialDebtCtrl.display();
     }
