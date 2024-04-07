@@ -100,6 +100,8 @@ public class AdminPageCtrl implements Initializable {
         colDate.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getCreationDate().toString()));
 
+        refresh();
+
         List<String> sortingOptions = new ArrayList<>();
         sortingOptions.add("A-Z");
         sortingOptions.add("Z-A");
@@ -107,50 +109,74 @@ public class AdminPageCtrl implements Initializable {
         sortingOptions.add("Old-New");
 
         sortingComboBox.setItems(FXCollections.observableList(sortingOptions));
+        sortingComboBox.setValue("Old-New");
 
         table.setOnMouseClicked(this::handleTableItemClick);
 
         addContextMenu();
 
-        refresh();
         addKeyboardNavigationHandlers();
 
-        server.registerForUpdates(data::add);
+        server.registerForUpdates(this::addData);
     }
 
     /**
-     * Handles sorting
-     *
-     * @param e action event
+     * Handles data from long polling
+     * @param e event
      */
-    @SuppressWarnings("checkstyle:CyclomaticComplexity")
+    private void addData(Event e) {
+        this.data.add(e);
+        table.setItems(data);
+        handleSort();
+    }
+
+
+    /**
+     * Handles sorting, ae for javafx
+     * @param e Action event
+     */
+    
     @FXML
-    private void handeSort(ActionEvent e) {
+    private void handleSort(ActionEvent e) {
+        handleSort();
+    }
+
+    /**
+     * Handles sorting, not for javafx
+     */
+    private void handleSort() {
         refresh();
-        if (MainCtrl.resourceBundle == null) {
-            switch (sortingComboBox.getValue()) {
-                case "A-Z" -> sortAlphabetically();
-                case "Z-A" -> sortAlphabeticallyReverse();
-                case "New-Old" -> sortNewToOld();
-                case "Old-New" -> sortOldToNew();
-            }
-        } else {
-            String newString = MainCtrl.resourceBundle.getString("Text.new");
-            String oldString = MainCtrl.resourceBundle.getString("Text.old");
-            String oldToNew = oldString + "-" + newString;
-            String newToOld = newString + "-" + oldString;
-            String value = sortingComboBox.getValue();
-            if (value == null)
-                return;
-            if (value.equals("A-Z"))
-                sortAlphabetically();
-            if (value.equals("Z-A"))
-                sortAlphabeticallyReverse();
-            if (value.equals(oldToNew))
-                sortOldToNew();
-            if (value.equals(newToOld))
-                sortNewToOld();
+        if (MainCtrl.resourceBundle != null) {
+            getTranslations();
         }
+
+        switch (sortingComboBox.getValue()) {
+            case "A-Z" -> sortAlphabetically();
+            case "Z-A" -> sortAlphabeticallyReverse();
+            case "New-Old" -> sortNewToOld();
+            case "Old-New" -> sortOldToNew();
+        }
+
+
+    }
+
+    private void getTranslations() {
+        String newString = MainCtrl.resourceBundle.getString("Text.new");
+        String oldString = MainCtrl.resourceBundle.getString("Text.old");
+        String oldToNew = oldString + "-" + newString;
+        String newToOld = newString + "-" + oldString;
+        String value = sortingComboBox.getValue();
+
+        if (value == null)
+            return;
+        if (value.equals("A-Z"))
+            sortAlphabetically();
+        if (value.equals("Z-A"))
+            sortAlphabeticallyReverse();
+        if (value.equals(oldToNew))
+            sortOldToNew();
+        if (value.equals(newToOld))
+            sortNewToOld();
     }
 
 
@@ -370,9 +396,6 @@ public class AdminPageCtrl implements Initializable {
 
     private void addContextMenu() {
         String delete = "Delete";
-//        try {
-//            delete = MainCtrl.resourceBundle.getString("Text.delete");
-//        } catch (Exception ignored) {};
         ContextMenu contextMenu = new ContextMenu();
         MenuItem deleteMenuItem = new MenuItem(delete);
         deleteMenuItem.setOnAction(event -> deleteSelectedEvent());
