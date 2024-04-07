@@ -492,6 +492,7 @@ public class AddExpensesCtrl implements Initializable {
      */
     private void saveExpense(Event selectedEvent, Expense expense) {
         System.out.println(expense);
+        server.addExpenseToEvent(selectedEvent.getId(), expense);
         selectedParticipants.clear();
     }
 
