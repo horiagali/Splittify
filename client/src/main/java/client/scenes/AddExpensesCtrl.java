@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UndoManager;
 import client.utils.Currency;
 
 import client.utils.ServerUtils;
@@ -32,6 +33,7 @@ public class AddExpensesCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+    private final UndoManager undoManager;
     private List<CheckBox> participantCheckboxes = new ArrayList<>();
     private List<Participant> selectedParticipants = new ArrayList<>();
     private List<Participant> allParticipants = new ArrayList<>();
@@ -88,6 +90,7 @@ public class AddExpensesCtrl implements Initializable {
     public AddExpensesCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.undoManager = UndoManager.getInstance();
     }
 
     /**
@@ -519,7 +522,7 @@ public class AddExpensesCtrl implements Initializable {
      * @param event
      */
     @FXML
-    public void changeLanguage(javafx.event.ActionEvent event) {
+    public void changeLanguage(ActionEvent event) {
         RadioMenuItem selectedLanguageItem = (RadioMenuItem) event.getSource();
         String language = selectedLanguageItem.getText().toLowerCase();
 

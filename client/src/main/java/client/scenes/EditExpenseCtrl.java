@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UndoManager;
 import client.utils.Currency;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -34,10 +35,11 @@ public class EditExpenseCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private static Event event;
-    private static Expense expense;
+    public static Expense expense;
     private List<CheckBox> participantCheckboxes = new ArrayList<>();
     private List<Participant> selectedParticipants = new ArrayList<>();
     private List<Participant> allParticipants = new ArrayList<>();
+    private UndoManager undoManager = UndoManager.getInstance();
     @FXML
     private TextField purposeTextField;
     @FXML
@@ -142,7 +144,6 @@ public class EditExpenseCtrl implements Initializable {
                         .getParticipantByNickname(event.getId(), checkBox.getText());
                 if (!selectedParticipants.contains(part))
                     selectedParticipants.add(part);
-                System.out.println("participant " + checkBox.getText() + " added");
             }
         }
     }
@@ -450,9 +451,10 @@ public class EditExpenseCtrl implements Initializable {
     /**
      * Handles the action when the user adds an expense.
      */
-    @SuppressWarnings("checkstyle:CyclomaticComplexity")
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MethodLength"})
     @FXML
     private void editExpense() {
+        undoManager.captureState(expense);
 
         String title = purposeTextField.getText();
         if (title.isEmpty()) {
@@ -493,11 +495,10 @@ public class EditExpenseCtrl implements Initializable {
             showErrorDialog("Please select a valid date!");
             return;
         }
-
-        System.out.println(expense);
         setExpense(title, amount, date, payer, selectedParticipants, selectedTag);
-        System.out.println(expense);
         saveExpense();
+
+        // Capture the state of each field
         clearFieldsAndShowOverview(event);
     }
 
@@ -598,4 +599,5 @@ public class EditExpenseCtrl implements Initializable {
         alert.setContentText(errorMessage);
         alert.showAndWait();
     }
+
 }
