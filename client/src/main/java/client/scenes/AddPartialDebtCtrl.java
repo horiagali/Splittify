@@ -506,15 +506,17 @@ public class AddPartialDebtCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.addPartialDebt"));
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
     }
 

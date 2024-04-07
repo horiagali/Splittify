@@ -85,6 +85,7 @@ public class AdminPassCtrl implements Initializable {
         String enteredPassword = passwordField.getText();
         if (enteredPassword.equals(password)) {
             mainCtrl.goToAdminPage();
+            passwordField.clear();
         } else {
             Alert alert = new Alert(
                     Alert.AlertType.ERROR, "Incorrect password! >:(",
@@ -115,15 +116,17 @@ public class AdminPassCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.adminPassword"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
         enterButton.setText(MainCtrl.resourceBundle.getString("button.enterPassword"));
         adminTitle.setText(MainCtrl.resourceBundle.getString("Text.adminPassPage"));
