@@ -239,9 +239,6 @@ public class StatisticsCtrl {
      * back button
      */
     public void back() {
-        if (!event.isClosed())
-            mainCtrl.goToOverview();
-        else
-            mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
+            mainCtrl.showEventOverview(event);
     }
 }
