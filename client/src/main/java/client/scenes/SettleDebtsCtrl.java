@@ -155,10 +155,6 @@ public class SettleDebtsCtrl implements Initializable {
                 }
             }
         });
-        ///TO DO. nu e expendable meniul daca nu ai bank account configured.
-        ///daca apesi pe Send Reminder butonul e gri si iti da o alerta ca nu ai credentials
-        ///doar ca poti sa le adaugi la participant si daca apesi ok sa il editezi
-        ///daca apesi pe expand la bank account si nu ai atunci la fel
         reminderColumn.setCellFactory(col -> new TableCell<Expense, Void>() {
             private final Button reminderButton = new Button
                     (MainCtrl.resourceBundle.getString("button.remind"));
