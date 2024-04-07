@@ -207,7 +207,6 @@ public class SettleDebtsCtrl implements Initializable {
             }
 
         });
-        tableView.getColumns().add(reminderColumn);
         actionColumn.setCellFactory(col -> new TableCell<Expense, Void>() {
             private final Button actionButton = new Button
                     (MainCtrl.resourceBundle.getString("button.markReceived"));
@@ -254,8 +253,6 @@ public class SettleDebtsCtrl implements Initializable {
                 }
             }
         });
-        tableView.getColumns().add(actionColumn);
-
     }
 
     /**
