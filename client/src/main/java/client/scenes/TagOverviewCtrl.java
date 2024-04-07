@@ -206,6 +206,7 @@ public class TagOverviewCtrl implements Initializable {
         button.setStyle(style);
         tagInfo.getChildren().add(button);
         ColorPicker colorPicker = new ColorPicker();
+        colorPicker.setId("colorpickerCreate");
         colorPickerCreateTag(newTag, button, colorPicker);
         tagInfo.getChildren().add(colorPicker);
         name = new TextField("new tag");
@@ -542,7 +543,7 @@ public class TagOverviewCtrl implements Initializable {
             if (event.isControlDown() && event.getCode() == KeyCode.R) {
                 refresh();
             }
-            if (event.isControlDown() && event.getCode() == KeyCode.P) {
+            if (event.isControlDown() && event.getCode() == KeyCode.N) {
                 createNewTag();
             }
         });

@@ -92,8 +92,6 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private VBox participantsVBox;
     @FXML
-    private ListView<Expense> expensesListView;
-    @FXML
     private ToggleGroup currencyGroup;
 
     @FXML
@@ -617,6 +615,7 @@ public class OverviewCtrl implements Initializable {
     /**
      * Add keyboard navigation
      */
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity"})
     private void addKeyboardNavigationHandlers() {
         anchorPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -635,7 +634,39 @@ public class OverviewCtrl implements Initializable {
                 ActionEvent dummyEvent = new ActionEvent();
                 goToAreYouSure(dummyEvent);
             }
+            if (event.isControlDown() && event.getCode() == KeyCode.G){
+                promptForItemIndex();
+            }
             handleAdditionalKeyEvents(event);
+        });
+    }
+
+    /**
+     * Add keyboard navigation to select an item
+     */
+    private void promptForItemIndex() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Select Item");
+        dialog.setHeaderText("Enter the index of the item to select:");
+        dialog.setContentText("Index:");
+
+        // Show the dialog and wait for user input
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(indexStr -> {
+            try {
+                int index = Integer.parseInt(indexStr);
+                if (index >= 0 && index < expenses.size()) {
+                    goToEditExpense(expenses.get(index));
+                } else {
+                    // Index out of range
+                    // Show an error message or handle appropriately
+                    System.out.println("Invalid index");
+                }
+            } catch (NumberFormatException e) {
+                // Invalid input format
+                // Show an error message or handle appropriately
+                System.out.println("Invalid input");
+            }
         });
     }
 
@@ -888,24 +919,6 @@ public class OverviewCtrl implements Initializable {
         switchToDescriptionLabel();
         refresh();
 
-    }
-
-    /**
-     * Deletes an expense.
-     */
-    public void deleteExpense() {
-        try {
-            Expense expense = expensesListView.getSelectionModel().getSelectedItem();
-            selectedEvent.getExpenses().remove(expense);
-            server.deleteExpense(selectedEvent.getId(), expense);
-            refresh();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Delete expense");
-            alert.setHeaderText("Error deleting");
-            alert.setContentText("Please choose an expense!");
-            alert.showAndWait();
-        }
     }
 
     /**
