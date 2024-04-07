@@ -97,6 +97,14 @@ public class EditEventCtrl implements Initializable {
     }
 
     /**
+     * setter for event
+     * @param event
+     */
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    /**
      * Add keyboard navigation
      */
     private void addKeyboardNavigationHandlers() {
@@ -115,6 +123,13 @@ public class EditEventCtrl implements Initializable {
      */
     public void editEvent() {
 
+    }
+
+    /**
+     * goes back to overview
+     */
+    public void back() {
+        mainCtrl.showOverview();
     }
 
     /**

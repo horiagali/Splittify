@@ -27,7 +27,7 @@ import commons.Participant;
 import commons.Expense;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -52,6 +52,9 @@ public class MainCtrl {
 
     private Scene adminPass;
     private AdminPassCtrl adminPassCtrl;
+
+    private Scene editEvent;
+    private EditEventCtrl editEventCtrl;
 
     private AddExpensesCtrl addExpensesCtrl;
     private Scene addExpenses;
@@ -116,6 +119,7 @@ public class MainCtrl {
      * @param tagOverview
      * @param partialDebtCtrlParentPair
      * @param editPartialDebtCtrlParentPair
+     * @param editEvent 
      * @param main
      *
      */
@@ -138,7 +142,7 @@ public class MainCtrl {
                            Pair<TagOverviewCtrl, Parent> tagOverview,
                            Pair<AddPartialDebtCtrl, Parent> partialDebtCtrlParentPair,
                            Pair<EditPartialDebtCtrl, Parent> editPartialDebtCtrlParentPair,
-                           Main main) {
+                           Pair<EditEventCtrl, Parent> editEvent, Main main) {
 
         this.primaryStage = primaryStage;
         this.main = main;
@@ -160,6 +164,9 @@ public class MainCtrl {
 
         this.pageCtrl = page.getKey();
         this.page = new Scene(page.getValue());
+
+        this.editEventCtrl = editEvent.getKey();
+        this.editEvent = new Scene(editEvent.getValue());
 
         this.addEventCtrl = addEvent.getKey();
         this.addEvent = new Scene(addEvent.getValue());
@@ -316,6 +323,16 @@ public class MainCtrl {
         tagOverviewCtrl.refresh();
     }
 
+    /**
+     * show edit event page
+     * @param event
+     */
+    public void showEditEvent(Event event) {
+        primaryStage.setTitle("Edit Event");
+        editEventCtrl.setEvent(event);
+        primaryStage.setScene(editEvent);
+    }
+
 
     /**
      *
@@ -373,7 +390,7 @@ public class MainCtrl {
      * @param eventName eventname
      * @param event event
      */
-    public void sendInvites(Label eventName, Event event) {
+    public void sendInvites(Text eventName, Event event) {
         primaryStage.setTitle("Send Invites");
         inviteCtrl.setEvent(event);
 

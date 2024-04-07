@@ -104,7 +104,6 @@
             </VBox>
             <Button fx:id="backButton" layoutX="500.0" layoutY="14.0" mnemonicParsing="false" onAction="#goToEventOverview" text="Back" />
             <Button fx:id="editButton" layoutX="288.0" layoutY="325.0" mnemonicParsing="false" onAction="#editEvent" text="Edit" />
-            <Button fx:id="deleteButton" disable="true" layoutX="252.0" layoutY="325.0" mnemonicParsing="false" onAction="#deleteParticipant" opacity="0.0" text="Delete" />
          </children>
          <effect>
             <Blend />
