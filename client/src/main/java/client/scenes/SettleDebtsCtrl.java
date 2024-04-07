@@ -72,7 +72,7 @@ public class SettleDebtsCtrl implements Initializable {
      * back to the overview page
      */
     public void back() {
-        mainCtrl.showOverview();
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -130,7 +130,6 @@ public class SettleDebtsCtrl implements Initializable {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setGraphic(null);
                     setText(null);
@@ -208,7 +207,6 @@ public class SettleDebtsCtrl implements Initializable {
             }
 
         });
-        tableView.getColumns().add(reminderColumn);
         actionColumn.setCellFactory(col -> new TableCell<Expense, Void>() {
             private final Button actionButton = new Button
                     (MainCtrl.resourceBundle.getString("button.markReceived"));
@@ -255,8 +253,6 @@ public class SettleDebtsCtrl implements Initializable {
                 }
             }
         });
-        tableView.getColumns().add(actionColumn);
-
     }
 
     /**
