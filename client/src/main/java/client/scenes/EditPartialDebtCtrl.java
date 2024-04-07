@@ -421,6 +421,11 @@ public class EditPartialDebtCtrl implements Initializable {
         setExpense("Gifting Money", amount, date, payer, selectedParticipants, selectedTag);
         System.out.println(expense);
         saveExpense();
+
+        //Update last activiy date of event
+        event.setDate(new Date());
+        server.updateEvent(event);
+
         clearFieldsAndShowOverview(event);
     }
 
@@ -458,6 +463,10 @@ public class EditPartialDebtCtrl implements Initializable {
             if (response == javafx.scene.control.ButtonType.OK) {
                 // Delete the expense from the server
                 server.deleteExpense(event.getId(), expense);
+
+                //Update last activiy date of event
+                event.setDate(new Date());
+                server.updateEvent(event);
 
                 // Show confirmation message
                 Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);

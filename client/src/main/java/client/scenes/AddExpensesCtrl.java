@@ -396,6 +396,10 @@ public class AddExpensesCtrl implements Initializable {
 
         saveExpense(selectedEvent, expense);
         clearFieldsAndShowOverview(selectedEvent);
+
+        //Updates most recent change
+        selectedEvent.setDate(new Date());
+        OverviewCtrl.setSelectedEvent(selectedEvent);
     }
 
     /**
@@ -493,6 +497,9 @@ public class AddExpensesCtrl implements Initializable {
     private void saveExpense(Event selectedEvent, Expense expense) {
         System.out.println(expense);
         server.addExpenseToEvent(selectedEvent.getId(), expense);
+        selectedEvent.setDate(new Date());
+        server.updateEvent(selectedEvent);
+        System.out.println(server.getEvent(selectedEvent.getId()).getDate());
         selectedParticipants.clear();
     }
 

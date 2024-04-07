@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -230,6 +231,11 @@ public class SettleDebtsCtrl implements Initializable {
                             server.deleteExpenseDebt(event.getId(), currentExpense);
                             currentExpense.setTitle("Received debt");
                             server.addExpenseToEventDebt(event.getId(), currentExpense);
+
+                            //Update last activiy date of event
+                            event.setDate(new Date());
+                            server.updateEvent(event);
+
                             refresh();
                         } else {
                             System.out.println("Settling of debts canceled.");

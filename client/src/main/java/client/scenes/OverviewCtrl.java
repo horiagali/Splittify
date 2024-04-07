@@ -970,12 +970,16 @@ public class OverviewCtrl implements Initializable {
 
                 previousExpenseState.restore(toUndo);
 
-
                 if (toUndo != null) {
                     server.updateExpense(selectedEvent.getId(), toUndo);
                     loadExpenses();
                     showAlert(Alert.AlertType.INFORMATION, "Expense Undo Successful",
                             "Restored Expense: " + toUndo);
+
+                    // Update last change date
+                    selectedEvent.setDate(new Date());
+                    server.updateEvent(selectedEvent);
+
                 } else {
                     showAlert(Alert.AlertType.WARNING, "Expense Not Found",
                             "Unable to find Expense with ID: "

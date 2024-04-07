@@ -33,11 +33,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
@@ -340,6 +336,12 @@ public class InviteCtrl implements Initializable {
                 server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
                 executor.execute(() -> EmailUtils.sendEmail(mail));
             }
+
+            // Update last change date
+            Event event = OverviewCtrl.getSelectedEvent();
+            event.setDate(new Date());
+            server.updateEvent(event);
+
             emailList.clear();
             uniqueEmails.clear();
             updateEmailListUI();

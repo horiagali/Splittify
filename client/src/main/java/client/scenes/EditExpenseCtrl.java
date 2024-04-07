@@ -500,7 +500,9 @@ public class EditExpenseCtrl implements Initializable {
 
         // Capture the state of each field
         clearFieldsAndShowOverview(event);
-    }
+
+        //Updates most recent change in event
+        event.setDate(new Date());}
 
 
     /**
@@ -555,6 +557,9 @@ public class EditExpenseCtrl implements Initializable {
         server.updateExpense(event.getId(), expense);
         refreshParticipants();
         refreshUI();
+
+        event.setDate(new Date());
+        server.updateEvent(event);
     }
 
     /**

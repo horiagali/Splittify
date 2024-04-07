@@ -349,6 +349,11 @@ public class AddPartialDebtCtrl implements Initializable {
                 date, payer, selectedParticipants, selectedTag);
 
         saveExpense(selectedEvent, expense);
+
+        //Update last activiy date of event
+        selectedEvent.setDate(new Date());
+        server.updateEvent(selectedEvent);
+
         clearFieldsAndShowOverview(selectedEvent);
     }
 
