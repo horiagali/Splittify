@@ -25,10 +25,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class BalancesCtrl implements Initializable {
     private final ServerUtils server;
@@ -98,7 +95,7 @@ public class BalancesCtrl implements Initializable {
 
         colSettles.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gave " +
-                        q.getValue().getAmount() / 100 + " to " +
+                        q.getValue().getAmount() + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
 
         colSettles.setCellFactory(tc -> {
@@ -204,6 +201,7 @@ public class BalancesCtrl implements Initializable {
             if (response == ButtonType.OK) {
                 back();
                 event.setClosed(true);
+                event.setDate(new Date());
                 server.updateEvent(event);
                 letsSettle();
                 mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
@@ -254,6 +252,11 @@ public class BalancesCtrl implements Initializable {
                 expense.setTag(debt);
                 server.addExpenseToEvent(event.getId(), expense);
                 expenses.add(expense);
+
+                //Update last activiy date of event
+                event.setDate(new Date());
+                server.updateEvent(event);
+
                 j++;
                 if (inDepted.getBalance() == 0)
                     i++;
@@ -274,6 +277,11 @@ public class BalancesCtrl implements Initializable {
                 System.out.println(expense);
                 server.addExpenseToEventDebt(event.getId(), expense);
                 expenses.add(expense);
+
+                //Update last activiy date of event
+                event.setDate(new Date());
+                server.updateEvent(event);
+
                 i++;
             }
         }
@@ -296,15 +304,18 @@ public class BalancesCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.balances"));
         openDebtsText.setText(MainCtrl.resourceBundle.getString("Text.openDebts"));
         colName.setText(MainCtrl.resourceBundle.getString("Text.participant"));
         colBalance.setText(MainCtrl.resourceBundle.getString("Text.balance"));

@@ -1,9 +1,8 @@
 package client.scenes;
 
 import java.awt.ScrollPane;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.net.URL;
+import java.util.*;
 
 
 import com.google.inject.Inject;
@@ -16,8 +15,10 @@ import commons.Event;
 import commons.Expense;
 import commons.Tag;
 import javafx.animation.ScaleTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -37,12 +38,13 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class TagOverviewCtrl {
+public class TagOverviewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     private static Event event;
-
+    private static boolean isActive;
+    private List<Tag> tags;
 
     @FXML
     private Menu languageMenu;
@@ -80,6 +82,14 @@ public class TagOverviewCtrl {
     }
 
     /**
+     * sets if scene is active or not
+     * @param bool true if active, false otherwise
+     */
+    public static void setIsActive(boolean bool) {
+        isActive = bool;
+    }
+
+    /**
      * refreshes the data
      * uses rounding to ensure percentages round to 100%
      */
@@ -106,9 +116,10 @@ public class TagOverviewCtrl {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
         refresh();
     }
 
@@ -116,6 +127,7 @@ public class TagOverviewCtrl {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.tagManager"));
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         String stageTitleString = "title.statistics";
         if (event != null)
@@ -214,6 +226,11 @@ public class TagOverviewCtrl {
                     .map(Tag::getName).toList().contains(name.getText())) {
                 newTag.setName(name.getText());
                 server.addTag(TagOverviewCtrl.event.getId(), newTag);
+
+                // Update last change date
+                TagOverviewCtrl.event.setDate(new Date());
+                server.updateEvent(TagOverviewCtrl.event);
+
                 refresh();
             } else {
                 Text text = new Text(MainCtrl.resourceBundle.getString("Text.tagAlreadyExists"));
@@ -222,7 +239,6 @@ public class TagOverviewCtrl {
             }
         });
         tagInfo.getChildren().add(createButton);
-
 
     }
 
@@ -263,9 +279,14 @@ public class TagOverviewCtrl {
                 for (Expense expense : list) {
                     expense.setTag(server.getTags(this.event.getId()).get(0));
                     server.updateExpense(this.event.getId(), expense);
-
                 }
+
                 server.deleteTag(event.getId(), tag.getId());
+
+                // Update last change date
+                event.setDate(new Date());
+                server.updateEvent(event);
+
                 refresh();
 
                 // Show confirmation message
@@ -406,6 +427,11 @@ public class TagOverviewCtrl {
             {
                 newTag.setName(name.getText());
                 server.updateTag(newTag, this.event.getId());
+
+                // Update last change date
+                TagOverviewCtrl.event.setDate(new Date());
+                server.updateEvent(TagOverviewCtrl.event);
+
                 refresh();
             } else {
                 Text text = new Text(MainCtrl.resourceBundle.getString("Text.tagNameExists"));
@@ -461,6 +487,7 @@ public class TagOverviewCtrl {
      * back button
      */
     public void back() {
+        setIsActive(false);
         tagInfo.getChildren().clear();
         mainCtrl.goToOverview();
     }
@@ -482,6 +509,33 @@ public class TagOverviewCtrl {
         // Print confirmation message
         System.out.println(MainCtrl.resourceBundle.getString
                 ("Text.currencyChangedTo") + ": " + currency);
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    if (isActive) {
+                        if (event != null && tags == null) {
+                            tags = server.getTags(OverviewCtrl.getSelectedEvent().getId());
+                        }
+
+                        if (event != null) {
+                            List<Tag> newTags = server.
+                                    getTags(OverviewCtrl.getSelectedEvent().getId());
+
+                            if (!tags.equals(newTags)) {
+                                tags = newTags;
+                                loadTags();
+                            }
+                        }
+                        loadTags();
+                    }
+                });
+            }
+        }, 0, 1000);
     }
 }
 

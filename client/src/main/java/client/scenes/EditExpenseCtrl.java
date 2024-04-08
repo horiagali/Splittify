@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.Main;
+import client.UndoManager;
 import client.utils.Currency;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -34,10 +35,11 @@ public class EditExpenseCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private static Event event;
-    private static Expense expense;
+    public static Expense expense;
     private List<CheckBox> participantCheckboxes = new ArrayList<>();
     private List<Participant> selectedParticipants = new ArrayList<>();
     private List<Participant> allParticipants = new ArrayList<>();
+    private UndoManager undoManager = UndoManager.getInstance();
     @FXML
     private TextField purposeTextField;
     @FXML
@@ -142,7 +144,6 @@ public class EditExpenseCtrl implements Initializable {
                         .getParticipantByNickname(event.getId(), checkBox.getText());
                 if (!selectedParticipants.contains(part))
                     selectedParticipants.add(part);
-                System.out.println("participant " + checkBox.getText() + " added");
             }
         }
     }
@@ -151,6 +152,8 @@ public class EditExpenseCtrl implements Initializable {
      * Updates the page.
      */
     protected void display() {
+        participantCheckboxes.clear();
+        participantsVBox.getChildren().clear();
         addKeyboardNavigationHandlers();
         currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
         datePicker.setValue(null);
@@ -180,9 +183,12 @@ public class EditExpenseCtrl implements Initializable {
         allParticipants.addAll(participants);
         populateParticipantCheckboxes(participants);
         configurePayerComboBox(participants);
-        for (CheckBox checkBox : participantCheckboxes)
+        for (CheckBox checkBox : participantCheckboxes) {
             checkBox.setSelected(expense.getOwers().stream().map
                     (Participant::getNickname).toList().contains(checkBox.getText()));
+            System.out.println(checkBox.focusedProperty());
+        }
+        System.out.println();
     }
 
     /**
@@ -309,9 +315,10 @@ public class EditExpenseCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
@@ -338,6 +345,8 @@ public class EditExpenseCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.editExpense"));
         editExpenseText.setText(MainCtrl.resourceBundle.getString("Text.editExpense"));
         whoPaidText.setText(MainCtrl.resourceBundle.getString("Text.whoPaid"));
         whatForText.setText(MainCtrl.resourceBundle.getString("Text.whatFor"));
@@ -447,9 +456,10 @@ public class EditExpenseCtrl implements Initializable {
     /**
      * Handles the action when the user adds an expense.
      */
-    @SuppressWarnings("checkstyle:CyclomaticComplexity")
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MethodLength"})
     @FXML
     private void editExpense() {
+        undoManager.captureState(expense);
 
         String title = purposeTextField.getText();
         if (title.isEmpty()) {
@@ -490,13 +500,14 @@ public class EditExpenseCtrl implements Initializable {
             showErrorDialog("Please select a valid date!");
             return;
         }
-
-        System.out.println(expense);
         setExpense(title, amount, date, payer, selectedParticipants, selectedTag);
-        System.out.println(expense);
         saveExpense();
+
+        // Capture the state of each field
         clearFieldsAndShowOverview(event);
-    }
+
+        //Updates most recent change in event
+        event.setDate(new Date());}
 
 
     /**
@@ -533,6 +544,9 @@ public class EditExpenseCtrl implements Initializable {
                 // Delete the expense from the server
                 server.deleteExpense(event.getId(), expense);
 
+                event.setDate(new Date());
+                server.updateEvent(event);
+
                 // Show confirmation message
                 Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
                 deleteConfirmation.setTitle("Expense Deleted");
@@ -551,6 +565,9 @@ public class EditExpenseCtrl implements Initializable {
         server.updateExpense(event.getId(), expense);
         refreshParticipants();
         refreshUI();
+
+        event.setDate(new Date());
+        server.updateEvent(event);
     }
 
     /**
@@ -567,7 +584,8 @@ public class EditExpenseCtrl implements Initializable {
      * Refreshes the UI after adding an expense.
      */
     private void refreshUI() {
-        loadParticipants();
+        participantCheckboxes.clear();
+        participantsVBox.getChildren().clear();
         purposeTextField.clear();
         amountTextField.clear();
         equallyCheckbox.setSelected(false);
@@ -595,4 +613,5 @@ public class EditExpenseCtrl implements Initializable {
         alert.setContentText(errorMessage);
         alert.showAndWait();
     }
+
 }

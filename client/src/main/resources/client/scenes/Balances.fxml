@@ -85,12 +85,12 @@
       </MenuBar>
       <AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
          <children>
-            <Text fx:id="openDebtsText" layoutX="60.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts" textAlignment="CENTER" wrappingWidth="480.0">
+            <Text fx:id="openDebtsText" layoutX="60.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Open Debts" textAlignment="CENTER" wrappingWidth="480.0">
                <font>
                   <Font size="22.0" />
                </font>
             </Text>
-            <TableView fx:id="table" layoutX="60.0" layoutY="56.0" prefHeight="137.0" prefWidth="480.0">
+            <TableView fx:id="table" layoutX="60.0" layoutY="45.0" prefHeight="137.0" prefWidth="480.0">
               <columns>
                 <TableColumn fx:id="colName" prefWidth="240.0" text="Participant" />
                 <TableColumn fx:id="colBalance" prefWidth="239.0" text="Balance" />
@@ -103,9 +103,9 @@
                 <TableColumn fx:id="colSettles" prefWidth="479.0" />
               </columns>
             </TableView>
-            <Text fx:id="partialSettlersText" layoutX="60.0" layoutY="213.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Partial settles" textAlignment="CENTER" wrappingWidth="480.0" />
+            <Text fx:id="partialSettlersText" layoutX="60.0" layoutY="205.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gifting Money" textAlignment="CENTER" wrappingWidth="480.0" />
             <Button fx:id="settleDebtsButton" layoutX="250.0" layoutY="360.0" mnemonicParsing="false" onAction="#settleDebts" prefHeight="26.0" prefWidth="100.0" text="Settle Debts" />
-            <Button fx:id="addPartialButton" layoutX="343.0" layoutY="196.0" mnemonicParsing="false" onAction="#addPartial" prefHeight="17.0" prefWidth="45.0" text="Add" />
+            <Button fx:id="addPartialButton" layoutX="343.0" layoutY="188.0" mnemonicParsing="false" onAction="#addPartial" prefHeight="15.0" prefWidth="45.0" text="Add" />
          </children>
       </AnchorPane>
    </children>

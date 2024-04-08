@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.Main;
 import client.utils.Currency;
+import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -21,9 +22,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SettleDebtsCtrl implements Initializable {
     private final ServerUtils server;
@@ -69,7 +73,7 @@ public class SettleDebtsCtrl implements Initializable {
      * back to the overview page
      */
     public void back() {
-        mainCtrl.showOverview();
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -79,8 +83,29 @@ public class SettleDebtsCtrl implements Initializable {
     public void setEvent(Event event) {
         this.event = event;
     }
+    /**
+     * Checks whether email is valid
+     * @param email email to check
+     * @return true iff valid
+     */
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*" +
+                "@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
-
+    /**
+     * good credentials
+     * @return true if good, false otherwise
+     */
+    private boolean goodCredentials(){
+        if (EmailUtils.getHost() == null || EmailUtils.getPort() == null ||
+                EmailUtils.getPassword() == null || EmailUtils.getUsername() == null)
+            return false;
+        return isValidEmail(EmailUtils.getUsername());
+    }
     @SuppressWarnings("checkstyle:MethodLength")
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -106,7 +131,6 @@ public class SettleDebtsCtrl implements Initializable {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setGraphic(null);
                     setText(null);
@@ -151,7 +175,7 @@ public class SettleDebtsCtrl implements Initializable {
                             + event.getTitle() + " " +
                                     MainCtrl.resourceBundle.getString("Text.on")
                                     + " " + ServerUtils.getServer());
-                    server.sendEmail(mail);
+                    EmailUtils.sendEmail(mail);
                 });
             }
             @Override
@@ -166,11 +190,11 @@ public class SettleDebtsCtrl implements Initializable {
                         boolean emailIsNull = participant.getEmail() == null ||
                                 participant.getEmail().isEmpty();
                         reminderButton.setDisable(emailIsNull);
-                        if (expense.getTitle().equals("Received debt")) {
+                        if (expense.getTitle().equals("Received debt") || !goodCredentials()) {
                             reminderButton.setDisable(true);
                             reminderButton.setStyle("-fx-background-color: grey;");
                         }
-                        if(emailIsNull) {
+                        if(emailIsNull || !isValidEmail(participant.getEmail())) {
                             reminderButton.setStyle("-fx-background-color: grey;");
                         } else {
                             reminderButton.setStyle("");
@@ -184,7 +208,6 @@ public class SettleDebtsCtrl implements Initializable {
             }
 
         });
-        tableView.getColumns().add(reminderColumn);
         actionColumn.setCellFactory(col -> new TableCell<Expense, Void>() {
             private final Button actionButton = new Button
                     (MainCtrl.resourceBundle.getString("button.markReceived"));
@@ -206,6 +229,11 @@ public class SettleDebtsCtrl implements Initializable {
                             server.deleteExpenseDebt(event.getId(), currentExpense);
                             currentExpense.setTitle("Received debt");
                             server.addExpenseToEventDebt(event.getId(), currentExpense);
+
+                            //Update last activiy date of event
+                            event.setDate(new Date());
+                            server.updateEvent(event);
+
                             refresh();
                         } else {
                             System.out.println("Settling of debts canceled.");
@@ -231,8 +259,6 @@ public class SettleDebtsCtrl implements Initializable {
                 }
             }
         });
-        tableView.getColumns().add(actionColumn);
-
     }
 
     /**
@@ -292,9 +318,9 @@ public class SettleDebtsCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
         //display();
     }
 
@@ -302,6 +328,7 @@ public class SettleDebtsCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.settleDebts"));
         openDebtsText.setText(MainCtrl.resourceBundle.getString("Text.openDebts"));
         currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
         statisticsButton.setText(MainCtrl.resourceBundle.getString("button.seeStatistics"));

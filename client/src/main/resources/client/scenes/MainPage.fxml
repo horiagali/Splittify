@@ -126,6 +126,7 @@
             <Text fx:id="yourEventsText" layoutX="283.0" layoutY="250.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your events:" />
          <Button fx:id="disconnectButton" alignment="CENTER" layoutX="494.0" layoutY="17.0" mnemonicParsing="false" onAction="#disconnect" text="Disconnect" />
              <Button fx:id="refreshButton" layoutX="497.0" layoutY="239.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+         <Button fx:id="testEmailButton" layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#testEmail" prefHeight="26.0" prefWidth="79.0" text="Test Email" />
 
 
         </children>

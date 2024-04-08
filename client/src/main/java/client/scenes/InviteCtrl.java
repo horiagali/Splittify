@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.Main;
 import client.utils.Currency;
+import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Event;
@@ -32,11 +33,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,6 +79,7 @@ public class InviteCtrl implements Initializable {
     private Button addButton;
     @FXML
     private Button copyButton;
+    private Executor executor;
 
 
     /**
@@ -105,6 +105,21 @@ public class InviteCtrl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         generateInviteCode();
         addKeyboardNavigationHandlers();
+        executor = Executors.newVirtualThreadPerTaskExecutor();
+        if (!goodCredentials()) {
+            sendButton.setDisable(true);
+            sendButton.setStyle("--body-background-color: grey;");
+        }
+    }
+    /**
+     * good credentials
+     * @return true if good, false otherwise
+     */
+    private boolean goodCredentials(){
+        if (EmailUtils.getHost() == null || EmailUtils.getPort() == null ||
+                EmailUtils.getPassword() == null || EmailUtils.getUsername() == null)
+            return false;
+        return isValidEmail(EmailUtils.getUsername());
     }
 
 
@@ -227,17 +242,27 @@ public class InviteCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.sendInvites"));
         currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
+        invitePeopleText.setText(MainCtrl.resourceBundle.getString("Text.invitePeopleText"));
+        eventCodeText.setText(MainCtrl.resourceBundle.getString("Text.eventCodeText"));
+        inviteCodeTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.inviteCode"));
+        invitePeopleText.setText(MainCtrl.resourceBundle.getString("Text.inviteByMailText"));
+        emailTextField.setPromptText(MainCtrl.resourceBundle.getString("Text.email"));
+        copyButton.setText(MainCtrl.resourceBundle.getString("button.copy"));
+        addButton.setText(MainCtrl.resourceBundle.getString("button.add"));
+        sendButton.setText(MainCtrl.resourceBundle.getString("button.send"));
     }
 
     /**
@@ -309,8 +334,14 @@ public class InviteCtrl implements Initializable {
                 Mail mail = new Mail(email,event.getTitle(), "The invite code is: " +
                         event.getId().toString());
                 server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
-                server.sendEmail(mail);
+                executor.execute(() -> EmailUtils.sendEmail(mail));
             }
+
+            // Update last change date
+            Event event = OverviewCtrl.getSelectedEvent();
+            event.setDate(new Date());
+            server.updateEvent(event);
+
             emailList.clear();
             uniqueEmails.clear();
             updateEmailListUI();

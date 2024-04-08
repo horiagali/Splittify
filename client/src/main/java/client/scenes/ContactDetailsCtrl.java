@@ -5,6 +5,7 @@ import client.utils.Currency;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 
+import commons.Event;
 import commons.Expense;
 import commons.Participant;
 import javafx.event.ActionEvent;
@@ -24,6 +25,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -189,6 +191,12 @@ public class ContactDetailsCtrl implements Initializable {
 
         server.updateParticipant(eventId, participant);
         System.out.println("updated participant to " + participant);
+
+        // Update last change date
+        Event event = OverviewCtrl.getSelectedEvent();
+        event.setDate(new Date());
+        server.updateEvent(event);
+
         mainCtrl.goToOverview();
     }
 
@@ -225,6 +233,11 @@ public class ContactDetailsCtrl implements Initializable {
                 }
 
                 server.deleteParticipant(eventId, participant);
+
+                // Update last change date
+                Event event = OverviewCtrl.getSelectedEvent();
+                event.setDate(new Date());
+                server.updateEvent(event);
 
 
                 // Show confirmation message
@@ -315,6 +328,11 @@ public class ContactDetailsCtrl implements Initializable {
             Participant participant = new Participant(name, email, bic, iban, 0.0);
             server.addParticipant(OverviewCtrl.getSelectedEvent().getId(), participant);
 
+            // Update last change date
+            Event event = OverviewCtrl.getSelectedEvent();
+            event.setDate(new Date());
+            server.updateEvent(event);
+
             clearFields();
             mainCtrl.goToOverview();
         } else {
@@ -363,9 +381,10 @@ public class ContactDetailsCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
@@ -393,6 +412,8 @@ public class ContactDetailsCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.contactDetails"));
         title.setText(MainCtrl.resourceBundle.getString("Text.addParticipant"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
         addButton.setText(MainCtrl.resourceBundle.getString("button.add"));

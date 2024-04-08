@@ -46,6 +46,7 @@ public class Expense {
     public Expense() {
         // Default constructor for JPA
     }
+
     // creates an expense and modifies everyone's balance accordingly
 
     /**
@@ -281,6 +282,7 @@ public class Expense {
                 "  tag=" + tag + "\n" +
                 "]";
     }
+
 
 
 }
