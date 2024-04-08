@@ -323,9 +323,8 @@ public class AdminPageCtrl implements Initializable {
                 );
                 Event addedEvent = new Event();
                 try {
-                    server.sendEvent("/app/events", newEvent);
-                    List<Event> events = server.getEvents();
-                    addedEvent = events.getLast();
+                    addedEvent = server.addEvent(newEvent);
+
                 } catch (WebApplicationException e) {
                     var alert = new Alert(Alert.AlertType.ERROR);
                     alert.initModality(Modality.APPLICATION_MODAL);
@@ -336,10 +335,16 @@ public class AdminPageCtrl implements Initializable {
                     server.addTag(addedEvent.getId(), tag);
                 }
                 for (Participant participant : participants) {
-                    server.addParticipant(addedEvent.getId(), participant);
+                    Participant p = new Participant(participant.getNickname(),
+                            participant.getEmail(),participant.getBic(),
+                            participant.getIban(),participant.getBalance());
+                    server.addParticipant(addedEvent.getId(), p);
                 }
+                refresh();
                 for (Expense expense : expenses) {
-                    server.addExpenseToEvent(addedEvent.getId(), expense);
+                    Expense e = new Expense(expense.getTitle(),expense.getAmount(),expense.getDate()
+                            ,expense.getPayer(),expense.getOwers(),expense.getTag());
+                    server.addExpenseToEvent(addedEvent.getId(),e);
                 }
 
                 // Refresh the table view
