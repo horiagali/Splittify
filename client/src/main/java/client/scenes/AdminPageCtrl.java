@@ -373,7 +373,13 @@ public class AdminPageCtrl implements Initializable {
      * @param id
      */
     private void addTags(List<Tag> tags, Long id) {
-        List<String> predefinedNames = Arrays.asList("no tag", "gifting money", "food", "travel", "entrance fees");
+        List<String> predefinedNames = Arrays.asList(
+                "no tag",
+                "gifting money",
+                "food",
+                "travel",
+                "entrance fees"
+        );
         for (Tag tag : tags) {
             if (!predefinedNames.contains(tag.getName())) {
                 server.addTag(id, tag);
