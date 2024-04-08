@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -72,7 +73,7 @@ public class SettleDebtsCtrl implements Initializable {
      * back to the overview page
      */
     public void back() {
-        mainCtrl.showOverview();
+        mainCtrl.showEventOverview(event);
     }
 
     /**
@@ -130,7 +131,6 @@ public class SettleDebtsCtrl implements Initializable {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-
                 if (empty || item == null) {
                     setGraphic(null);
                     setText(null);
@@ -208,7 +208,6 @@ public class SettleDebtsCtrl implements Initializable {
             }
 
         });
-        tableView.getColumns().add(reminderColumn);
         actionColumn.setCellFactory(col -> new TableCell<Expense, Void>() {
             private final Button actionButton = new Button
                     (MainCtrl.resourceBundle.getString("button.markReceived"));
@@ -230,6 +229,11 @@ public class SettleDebtsCtrl implements Initializable {
                             server.deleteExpenseDebt(event.getId(), currentExpense);
                             currentExpense.setTitle("Received debt");
                             server.addExpenseToEventDebt(event.getId(), currentExpense);
+
+                            //Update last activiy date of event
+                            event.setDate(new Date());
+                            server.updateEvent(event);
+
                             refresh();
                         } else {
                             System.out.println("Settling of debts canceled.");
@@ -255,8 +259,6 @@ public class SettleDebtsCtrl implements Initializable {
                 }
             }
         });
-        tableView.getColumns().add(actionColumn);
-
     }
 
     /**
@@ -316,9 +318,9 @@ public class SettleDebtsCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
         //display();
     }
 
@@ -326,6 +328,7 @@ public class SettleDebtsCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.settleDebts"));
         openDebtsText.setText(MainCtrl.resourceBundle.getString("Text.openDebts"));
         currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
         statisticsButton.setText(MainCtrl.resourceBundle.getString("button.seeStatistics"));

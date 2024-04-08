@@ -152,6 +152,8 @@ public class EditExpenseCtrl implements Initializable {
      * Updates the page.
      */
     protected void display() {
+        participantCheckboxes.clear();
+        participantsVBox.getChildren().clear();
         addKeyboardNavigationHandlers();
         currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
         datePicker.setValue(null);
@@ -181,9 +183,12 @@ public class EditExpenseCtrl implements Initializable {
         allParticipants.addAll(participants);
         populateParticipantCheckboxes(participants);
         configurePayerComboBox(participants);
-        for (CheckBox checkBox : participantCheckboxes)
+        for (CheckBox checkBox : participantCheckboxes) {
             checkBox.setSelected(expense.getOwers().stream().map
                     (Participant::getNickname).toList().contains(checkBox.getText()));
+            System.out.println(checkBox.focusedProperty());
+        }
+        System.out.println();
     }
 
     /**
@@ -310,9 +315,10 @@ public class EditExpenseCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
@@ -339,6 +345,8 @@ public class EditExpenseCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.editExpense"));
         editExpenseText.setText(MainCtrl.resourceBundle.getString("Text.editExpense"));
         whoPaidText.setText(MainCtrl.resourceBundle.getString("Text.whoPaid"));
         whatForText.setText(MainCtrl.resourceBundle.getString("Text.whatFor"));
@@ -497,7 +505,9 @@ public class EditExpenseCtrl implements Initializable {
 
         // Capture the state of each field
         clearFieldsAndShowOverview(event);
-    }
+
+        //Updates most recent change in event
+        event.setDate(new Date());}
 
 
     /**
@@ -534,6 +544,9 @@ public class EditExpenseCtrl implements Initializable {
                 // Delete the expense from the server
                 server.deleteExpense(event.getId(), expense);
 
+                event.setDate(new Date());
+                server.updateEvent(event);
+
                 // Show confirmation message
                 Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
                 deleteConfirmation.setTitle("Expense Deleted");
@@ -552,6 +565,9 @@ public class EditExpenseCtrl implements Initializable {
         server.updateExpense(event.getId(), expense);
         refreshParticipants();
         refreshUI();
+
+        event.setDate(new Date());
+        server.updateEvent(event);
     }
 
     /**
@@ -568,7 +584,8 @@ public class EditExpenseCtrl implements Initializable {
      * Refreshes the UI after adding an expense.
      */
     private void refreshUI() {
-        loadParticipants();
+        participantCheckboxes.clear();
+        participantsVBox.getChildren().clear();
         purposeTextField.clear();
         amountTextField.clear();
         equallyCheckbox.setSelected(false);

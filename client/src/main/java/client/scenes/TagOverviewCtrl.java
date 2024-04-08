@@ -30,6 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -65,6 +66,8 @@ public class TagOverviewCtrl implements Initializable {
 
     @FXML
     private VBox tagInfo;
+    @FXML
+    private VBox vbox;
 
     TextField name;
     @FXML
@@ -96,7 +99,7 @@ public class TagOverviewCtrl implements Initializable {
     public void refresh() {
         tagInfo.getChildren().clear();
         loadTags();
-
+        addKeyboardNavigationHandlers();
     }
 
     /**
@@ -116,9 +119,10 @@ public class TagOverviewCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
         refresh();
     }
 
@@ -126,6 +130,7 @@ public class TagOverviewCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.tagManager"));
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         String stageTitleString = "title.statistics";
         if (event != null)
@@ -203,6 +208,7 @@ public class TagOverviewCtrl implements Initializable {
         button.setStyle(style);
         tagInfo.getChildren().add(button);
         ColorPicker colorPicker = new ColorPicker();
+        colorPicker.setId("colorpickerCreate");
         colorPickerCreateTag(newTag, button, colorPicker);
         tagInfo.getChildren().add(colorPicker);
         name = new TextField("new tag");
@@ -224,6 +230,11 @@ public class TagOverviewCtrl implements Initializable {
                     .map(Tag::getName).toList().contains(name.getText())) {
                 newTag.setName(name.getText());
                 server.addTag(TagOverviewCtrl.event.getId(), newTag);
+
+                // Update last change date
+                TagOverviewCtrl.event.setDate(new Date());
+                server.updateEvent(TagOverviewCtrl.event);
+
                 refresh();
             } else {
                 Text text = new Text(MainCtrl.resourceBundle.getString("Text.tagAlreadyExists"));
@@ -232,7 +243,6 @@ public class TagOverviewCtrl implements Initializable {
             }
         });
         tagInfo.getChildren().add(createButton);
-
 
     }
 
@@ -273,9 +283,14 @@ public class TagOverviewCtrl implements Initializable {
                 for (Expense expense : list) {
                     expense.setTag(server.getTags(this.event.getId()).get(0));
                     server.updateExpense(this.event.getId(), expense);
-
                 }
+
                 server.deleteTag(event.getId(), tag.getId());
+
+                // Update last change date
+                event.setDate(new Date());
+                server.updateEvent(event);
+
                 refresh();
 
                 // Show confirmation message
@@ -416,6 +431,11 @@ public class TagOverviewCtrl implements Initializable {
             {
                 newTag.setName(name.getText());
                 server.updateTag(newTag, this.event.getId());
+
+                // Update last change date
+                TagOverviewCtrl.event.setDate(new Date());
+                server.updateEvent(TagOverviewCtrl.event);
+
                 refresh();
             } else {
                 Text text = new Text(MainCtrl.resourceBundle.getString("Text.tagNameExists"));
@@ -502,13 +522,11 @@ public class TagOverviewCtrl implements Initializable {
             public void run() {
                 Platform.runLater(() -> {
                     handlePropagation();
-
                 });
-
             }
         }, 0, 1000);
     }
-
+    
     private void handlePropagation() {
         if (isActive) {
             if (event != null && tags == null) {
@@ -528,6 +546,25 @@ public class TagOverviewCtrl implements Initializable {
         }
     }
 
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        vbox.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.R) {
+                refresh();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.N) {
+                createNewTag();
+            }
+        });
+    }
 }
 
 

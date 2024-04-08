@@ -19,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -110,9 +111,10 @@ public class MainPageCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
+
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
     }
 
 
@@ -255,7 +257,28 @@ public class MainPageCtrl implements Initializable {
             if (event.getCode() == KeyCode.ENTER) {
                 handleTableItemKeyPress();
             }
+            handleAdditionalKeyEvents(event);
+
         });
+    }
+
+    /**
+     * Add keyboard navigation
+     * @param event to link to other method
+     */
+    private void handleAdditionalKeyEvents(KeyEvent event) {
+        if (event.isControlDown() && event.getCode() == KeyCode.D) {
+            disconnect();
+        }
+        if (event.isControlDown() && event.getCode() == KeyCode.L) {
+            languageMenu.show();
+        }
+        if (event.isControlDown() && event.getCode() == KeyCode.M) {
+            currencyMenu.show();
+        }
+        if (event.isControlDown() && event.getCode() == KeyCode.R) {
+            refresh();
+        }
     }
 
     /**
@@ -280,18 +303,12 @@ public class MainPageCtrl implements Initializable {
             if (selectedEvent != null) {
                 try {
                     selectedEvent.getId();
+                    OverviewCtrl.setSelectedEvent(selectedEvent);
+                    mainCtrl.showEventOverview(selectedEvent);
                 } catch (NullPointerException e) {
                     System.out.println("Something went wrong. Please try again.");
                     refresh();
                     return;
-                }
-                OverviewCtrl.setSelectedEvent(selectedEvent);
-                if (!selectedEvent.isClosed())
-                    mainCtrl.showEventOverview(selectedEvent);
-                else
-                {
-                    mainCtrl.goToSettleDebts(selectedEvent,
-                            server.getExpensesByEventId(selectedEvent.getId()));
                 }
 
             }

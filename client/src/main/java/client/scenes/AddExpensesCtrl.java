@@ -125,11 +125,13 @@ public class AddExpensesCtrl implements Initializable {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         if (selectedEvent == null) {
             showErrorDialog("No event selected.");
+            mainCtrl.goToOverview();
             return;
         }
         List<Participant> participants = server.getParticipants(selectedEvent.getId());
         if (participants == null || participants.isEmpty()) {
             showErrorDialog(MainCtrl.resourceBundle.getString("Text.noParticipantsFound"));
+            mainCtrl.showEventOverview(selectedEvent);
             return;
         }
         allParticipants.addAll(participants);
@@ -396,6 +398,10 @@ public class AddExpensesCtrl implements Initializable {
 
         saveExpense(selectedEvent, expense);
         clearFieldsAndShowOverview(selectedEvent);
+
+        //Updates most recent change
+        selectedEvent.setDate(new Date());
+        OverviewCtrl.setSelectedEvent(selectedEvent);
     }
 
     /**
@@ -493,6 +499,9 @@ public class AddExpensesCtrl implements Initializable {
     private void saveExpense(Event selectedEvent, Expense expense) {
         System.out.println(expense);
         server.addExpenseToEvent(selectedEvent.getId(), expense);
+        selectedEvent.setDate(new Date());
+        server.updateEvent(selectedEvent);
+        System.out.println(server.getEvent(selectedEvent.getId()).getDate());
         selectedParticipants.clear();
     }
 
@@ -510,7 +519,8 @@ public class AddExpensesCtrl implements Initializable {
      * Refreshes the UI after adding an expense.
      */
     private void refreshUI() {
-        loadParticipants();
+        participantsVBox.getChildren().clear();
+        participantCheckboxes.clear();
         purposeTextField.clear();
         amountTextField.clear();
         equallyCheckbox.setSelected(false);
@@ -533,16 +543,17 @@ public class AddExpensesCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.addExpense"));
         addExpenseText.setText(MainCtrl.resourceBundle.getString("Text.addExpense"));
         whoPaidText.setText(MainCtrl.resourceBundle.getString("Text.whoPaid"));
         whatForText.setText(MainCtrl.resourceBundle.getString("Text.whatFor"));

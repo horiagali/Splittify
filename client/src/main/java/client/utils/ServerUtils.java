@@ -97,7 +97,7 @@ public class ServerUtils {
 	 */
 	public void checkConnectionForWebsockets() {
 		if(Main.checkConnection())
-		session = connect("ws://"+ serverPort + "websocket");
+			session = connect("ws://"+ serverPort + "websocket");
 	}
 
 	/**
@@ -255,22 +255,11 @@ public class ServerUtils {
 	 * @return The added event
 	 */
 	public Event addEvent(Event event) {
-		String url = server + "api/events";
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		HttpEntity<Event> requestEntity = new HttpEntity<>(event, headers);
-
-		ResponseEntity<Event> responseEntity =
-				restTemplate.postForEntity(url, requestEntity, Event.class);
-
-		if (responseEntity.getStatusCode() == HttpStatus.CREATED) {
-			return responseEntity.getBody();
-		} else {
-			throw new RuntimeException("Failed to add event. Status code: "
-					+ responseEntity.getStatusCodeValue());
-		}
+		return ClientBuilder.newClient(new ClientConfig()) //
+				.target(server).path("api/events") //
+				.request(APPLICATION_JSON)
+				.accept(APPLICATION_JSON)
+				.post(Entity.entity(event, APPLICATION_JSON), Event.class);
 	}
 
 

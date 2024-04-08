@@ -24,6 +24,8 @@ import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class StatisticsCtrl implements Initializable {
@@ -42,6 +44,8 @@ public class StatisticsCtrl implements Initializable {
 
     @FXML
     private Menu languageMenu;
+    @FXML
+    private Menu currencyMenu;
 
     @FXML
     private ToggleGroup currencyGroup;
@@ -57,7 +61,7 @@ public class StatisticsCtrl implements Initializable {
     @FXML
     private Button refresh;
     @FXML
-    private Menu currencyMenu;
+    private VBox vbox;
 
     /**
      * @param server
@@ -97,6 +101,7 @@ public class StatisticsCtrl implements Initializable {
 
         //     data.getNode().setStyle("-fx-pie-color: " + tag.get().getColor());
         // }
+        addKeyboardNavigationHandlers();
 
     }
 
@@ -161,9 +166,10 @@ public class StatisticsCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
@@ -187,6 +193,7 @@ public class StatisticsCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.statistics"));
         String piechartString = "Text.statisticsTitle";
         if (event != null) {
             pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString) + event.getTitle());
@@ -246,6 +253,27 @@ public class StatisticsCtrl implements Initializable {
             mainCtrl.goToOverview();
         else
             mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
+
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        vbox.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.R) {
+                refresh();
+            }
+        });
     }
 
     @Override
