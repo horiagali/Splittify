@@ -60,6 +60,7 @@ public class OverviewCtrl implements Initializable {
     private Label myLabel2;
     @FXML
     private Menu languageMenu;
+    @FXML
     private Button balances;
 
     @FXML
