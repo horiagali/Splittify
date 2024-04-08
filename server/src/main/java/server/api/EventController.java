@@ -16,10 +16,14 @@
 package server.api;
 
 import commons.Event;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.service.EventService;
@@ -37,12 +41,15 @@ public class EventController {
 
     private final EventService eventService;
     private Map<Object, Consumer<Event>> listeners = new HashMap<>();
+    @Autowired
+    private SimpMessagingTemplate template;
 
     /**
      * Constructor for the eventController
      *
      * @param eventService an EventService
      */
+
     public EventController(EventService eventService) {
         this.eventService = eventService;
     }
@@ -140,7 +147,12 @@ public class EventController {
     @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Event> deleteEvent(@PathVariable("id") Long id) {
-        return eventService.deleteEvent(id);
+        ResponseEntity<Event> deleted = eventService.deleteEvent(id);
+        if (deleted.getStatusCode().equals(HttpStatus.OK)) {
+            template.convertAndSend("/topic/events", deleted.getBody());
+        }
+
+        return deleted;
     }
 
     /**
@@ -154,7 +166,11 @@ public class EventController {
     @ResponseBody
     public ResponseEntity<Event> updateEvent(@RequestBody Event event,
                                              @PathVariable("id") Long id) {
-        return eventService.updateEvent(event, id);
+        ResponseEntity<Event> updated = eventService.updateEvent(event, id);
+        if (updated.getStatusCode().equals(HttpStatus.OK)) {
+            template.convertAndSend("/topic/events", updated.getBody());
+        }
+        return updated;
     }
 
 }

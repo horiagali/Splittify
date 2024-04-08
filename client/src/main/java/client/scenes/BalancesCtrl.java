@@ -148,7 +148,6 @@ public class BalancesCtrl implements Initializable {
 
                 participants = newParticipants;
                 expenses = newExpenses;
-                System.out.println("Initialized data");
 
             }
 
@@ -163,7 +162,6 @@ public class BalancesCtrl implements Initializable {
                     expenses = newExpenses;
 
                     refresh();
-                    System.out.println("Refreshed balances");
 
                 }
             }
