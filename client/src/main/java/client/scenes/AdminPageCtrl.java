@@ -329,26 +329,58 @@ public class AdminPageCtrl implements Initializable {
                     alert.setContentText(e.getMessage());
                     alert.showAndWait();
                 }
-                for (Tag tag : tags) {
-                    server.addTag(addedEvent.getId(), tag);
-                }
-                for (Participant participant : participants) {
-                    Participant p = new Participant(participant.getNickname(),
-                            participant.getEmail(),participant.getBic(),
-                            participant.getIban(),participant.getBalance());
-                    server.addParticipant(addedEvent.getId(), p);
-                }
+                addTags(tags,addedEvent.getId());
+                addParticipants(participants,addedEvent.getId());
+                addExpenses(expenses,addedEvent.getId());
+
                 refresh();
-                for (Expense expense : expenses) {
-                    Expense e = new Expense(expense.getTitle(),expense.getAmount(),expense.getDate()
-                            ,expense.getPayer(),expense.getOwers(),expense.getTag());
-                    server.addExpenseToEvent(addedEvent.getId(),e);
-                } refresh();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    /**
+     * adds epenses to the event
+     * @param expenses
+     * @param id
+     */
+    private void addExpenses(List<Expense> expenses, Long id) {
+        for (Expense expense : expenses) {
+            Expense e = new Expense(expense.getTitle(),expense.getAmount(),expense.getDate()
+                    ,expense.getPayer(),expense.getOwers(),expense.getTag());
+            server.addExpenseToEvent(id,e);
+        }
+    }
+
+    /**
+     * adds participants to the event
+     * @param participants
+     * @param id
+     */
+    private void addParticipants(List<Participant> participants, Long id) {
+        for (Participant participant : participants) {
+            Participant p = new Participant(participant.getNickname(),
+                    participant.getEmail(),participant.getBic(),
+                    participant.getIban(),participant.getBalance());
+            server.addParticipant(id, p);
+        }
+    }
+
+    /**
+     * adds the non default tags to the event
+     * @param tags
+     * @param id
+     */
+    private void addTags(List<Tag> tags, Long id) {
+        List<String> predefinedNames = Arrays.asList("no tag", "gifting money", "food", "travel", "entrance fees");
+        for (Tag tag : tags) {
+            if (!predefinedNames.contains(tag.getName())) {
+                server.addTag(id, tag);
+            }
+        }
+    }
+
 
 
     @FXML
