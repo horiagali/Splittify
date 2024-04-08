@@ -141,10 +141,11 @@ public class Main extends Application {
                 "AddPartialDebt.fxml");
         var editPartial = FXML.load(EditPartialDebtCtrl.class, "client", "scenes",
                 "EditPartialDebt.fxml");
+        var editEvent = FXML.load(EditEventCtrl.class, "client", "scenes", "EditEvent.fxml");
         mainCtrl.initialize(primaryStage, overview, add, page, addExpense, editExpense,
         contactDetails, overviewApp, invite, adminPage, adminPass, addEvent, balances, 
         serverSetter, config.getLanguage(),  statistics, debts, tagOverview, partial,
-                editPartial, this);
+                editPartial, editEvent, this);
 
         primaryStage.setOnCloseRequest(e -> {
             adminPage.getKey().stop();

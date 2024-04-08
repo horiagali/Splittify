@@ -130,7 +130,7 @@ public class MainPageCtrl implements Initializable {
         refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
         adminButton.setText(MainCtrl.resourceBundle.getString("button.admin"));
         yourEventsText.setText(MainCtrl.resourceBundle.getString("Text.yourEvents"));
-        colDate.setText(MainCtrl.resourceBundle.getString("TableColumn.colDate"));
+        colDate.setText(MainCtrl.resourceBundle.getString("TableColumn.colDescription"));
         colName.setText(MainCtrl.resourceBundle.getString("TableColumn.colName"));
         colLocation.setText(MainCtrl.resourceBundle.getString("TableColumn.colLocation"));
         currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
@@ -335,6 +335,7 @@ public class MainPageCtrl implements Initializable {
     public void refresh() {
         var events = server.getEvents();
         data = FXCollections.observableList(events);
+        table.getItems().clear();
         table.setItems(data);
     }
 
