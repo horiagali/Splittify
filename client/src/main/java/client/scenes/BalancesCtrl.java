@@ -9,6 +9,7 @@ import commons.Expense;
 import commons.Participant;
 import commons.Tag;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,6 +48,8 @@ public class BalancesCtrl implements Initializable {
     @FXML
     private ObservableList<Expense> data2;
     private List<Expense> expenses;
+    private List<Participant> participants;
+    private static boolean isActive;
     private Event event;
     @FXML
     private Menu languageMenu;
@@ -94,7 +97,8 @@ public class BalancesCtrl implements Initializable {
         });
 
         colSettles.setCellValueFactory(q ->
-                new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gave " +
+                new SimpleStringProperty(q.getValue().getPayer().
+                        getNickname() + " gave " +
                         q.getValue().getAmount() + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
 
@@ -122,10 +126,64 @@ public class BalancesCtrl implements Initializable {
             return cell;
         });
         addKeyboardNavigationHandlers();
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    handlePropagation();
+                });
+            }
+        }, 0, 1000);
 
     }
 
+    private void handlePropagation() {
+        if (isActive) {
+            if ((participants == null ||
+                    expenses == null) &&
+                    event != null) {
+
+                List<Participant> newParticipants = server.getParticipants(event.getId());
+                List<Expense> newExpenses = server.getExpensesByEventId(event.getId());
+
+                participants = newParticipants;
+                expenses = newExpenses;
+                System.out.println("Initialized data");
+
+            }
+
+            if (event != null) {
+                List<Participant> newParticipants = server.getParticipants(event.getId());
+                List<Expense> newExpenses = server.getExpensesByEventId(event.getId());
+
+                if (!participants.equals(newParticipants)
+                        || !expenses.equals(newExpenses)) {
+
+                    participants = newParticipants;
+                    expenses = newExpenses;
+
+                    refresh();
+                    System.out.println("Refreshed balances");
+
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets is active to true. You want is to be true if the page is being viewed
+     * @param bool
+     */
+    public static void setIsActive(boolean bool) {
+        isActive = bool;
+    }
+
+    /**
+     * Forgotten javadoc by author
+     * @param expense expense
+     */
     private void handleExpenseClick(Expense expense) {
+        setIsActive(false);
         mainCtrl.goToEditPartialDebt(event, expense);
     }
 
@@ -195,6 +253,7 @@ public class BalancesCtrl implements Initializable {
      * back button
      */
     public void back() {
+        setIsActive(false);
         mainCtrl.goToOverview();
     }
 
@@ -389,6 +448,7 @@ public class BalancesCtrl implements Initializable {
      * add partial debt
      */
     public void addPartial() {
+        setIsActive(false);
         mainCtrl.goToPartial();
     }
 }

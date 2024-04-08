@@ -526,7 +526,7 @@ public class TagOverviewCtrl implements Initializable {
             }
         }, 0, 1000);
     }
-    
+
     private void handlePropagation() {
         if (isActive) {
             if (event != null && tags == null) {

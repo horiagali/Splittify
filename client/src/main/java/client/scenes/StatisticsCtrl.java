@@ -291,7 +291,6 @@ public class StatisticsCtrl implements Initializable {
 
     private void handlePropagation() {
         if (isActive) {
-            System.out.println("StatisticCtrl is active");
             if (event != null && (tags == null || expenses == null)) {
                 tags = server.getTags(OverviewCtrl.getSelectedEvent().getId());
                 expenses = server.getExpensesByEventId(OverviewCtrl.getSelectedEvent().getId());
