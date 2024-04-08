@@ -134,7 +134,13 @@
                            <font>
                               <Font size="24.0" />
                            </font></Text>
-                        <Button mnemonicParsing="false" onAction="#editEvent" text="Edit" />
+                        <Button fx:id="editButton" mnemonicParsing="false" onAction="#editEvent" prefHeight="38.0" prefWidth="38.0">
+                        <graphic>
+                           <ImageView>
+                              <Image url="@/client/scenes/images/edit_pencil_icon.png" />
+                           </ImageView>
+                        </graphic>
+                        </Button>
                         
                      </children>
                   </HBox>

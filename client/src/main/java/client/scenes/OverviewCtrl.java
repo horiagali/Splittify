@@ -146,6 +146,8 @@ public class OverviewCtrl implements Initializable {
     private Button deleteEventButton;
     @FXML
     private Text EventName;
+    @FXML
+    private Button editButton;
 
 
     /**
@@ -354,9 +356,7 @@ public class OverviewCtrl implements Initializable {
 
                 Platform.runLater(() -> {
                     handleDataPropagation();
-
                 });
-
             }
         }, 0, 1000);
         if (selectedEvent != null && selectedEvent.isClosed()){
@@ -376,6 +376,13 @@ public class OverviewCtrl implements Initializable {
             tagButton.setDisable(false);
             sendInvitesButton.setDisable(false);
         }
+        Image image = new Image(getClass()
+        .getResourceAsStream("/client/scenes/images/edit_pencil_icon.png"));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(25);
+        imageView.setFitHeight(25);
+        editButton.setGraphic(imageView);
+        editButton.setBackground(null);
     }
 
     private void handleDataPropagation() {
