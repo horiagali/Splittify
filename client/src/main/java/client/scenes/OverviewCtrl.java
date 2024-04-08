@@ -29,7 +29,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -75,21 +74,12 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private Label eventLocation;
     @FXML
-    private Label eventDate;
-    @FXML
     private Label eventDescription;
     @FXML
     private Button backButton;
 
     @FXML
     private TextField eventNameTextField;
-    @FXML
-    private DatePicker eventDatePicker;
-
-    @FXML
-    private TextField eventLocationTextField;
-    @FXML 
-    private TextField eventDescriptionTextField;
     @FXML
     private ScrollPane participantsScrollPane;
     @FXML
