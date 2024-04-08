@@ -505,7 +505,9 @@ public class EditExpenseCtrl implements Initializable {
 
         // Capture the state of each field
         clearFieldsAndShowOverview(event);
-    }
+
+        //Updates most recent change in event
+        event.setDate(new Date());}
 
 
     /**
@@ -542,6 +544,9 @@ public class EditExpenseCtrl implements Initializable {
                 // Delete the expense from the server
                 server.deleteExpense(event.getId(), expense);
 
+                event.setDate(new Date());
+                server.updateEvent(event);
+
                 // Show confirmation message
                 Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
                 deleteConfirmation.setTitle("Expense Deleted");
@@ -560,6 +565,9 @@ public class EditExpenseCtrl implements Initializable {
         server.updateExpense(event.getId(), expense);
         refreshParticipants();
         refreshUI();
+
+        event.setDate(new Date());
+        server.updateEvent(event);
     }
 
     /**

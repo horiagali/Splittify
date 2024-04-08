@@ -52,6 +52,8 @@ public class AdminPageCtrl implements Initializable {
     @FXML
     private TableColumn<Event, String> colDate;
     @FXML
+    private TableColumn<Event, String> colLastChange;
+    @FXML
     private ComboBox<String> sortingComboBox;
     @FXML
     private Menu languageMenu;
@@ -100,6 +102,8 @@ public class AdminPageCtrl implements Initializable {
                 new SimpleStringProperty(q.getValue().getId().toString()));
         colDate.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getCreationDate().toString()));
+        colLastChange.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getDate().toString()));
 
         refresh();
 
@@ -108,6 +112,8 @@ public class AdminPageCtrl implements Initializable {
         sortingOptions.add("Z-A");
         sortingOptions.add("New-Old");
         sortingOptions.add("Old-New");
+        sortingOptions.add("Most Recent Change");
+        sortingOptions.add("Least Recent Change");
 
         sortingComboBox.setItems(FXCollections.observableList(sortingOptions));
         sortingComboBox.setValue("Old-New");
@@ -151,21 +157,27 @@ public class AdminPageCtrl implements Initializable {
             getTranslations();
         }
 
-        switch (sortingComboBox.getValue()) {
+        else
+            switch (sortingComboBox.getValue()) {
             case "A-Z" -> sortAlphabetically();
             case "Z-A" -> sortAlphabeticallyReverse();
             case "New-Old" -> sortNewToOld();
             case "Old-New" -> sortOldToNew();
+            case "Most Recent Change" -> sortMostRecentChange();
+            case "Least Recent Change" -> sortLeastRecentChange();
         }
 
 
     }
 
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
     private void getTranslations() {
         String newString = MainCtrl.resourceBundle.getString("Text.new");
         String oldString = MainCtrl.resourceBundle.getString("Text.old");
         String oldToNew = oldString + "-" + newString;
         String newToOld = newString + "-" + oldString;
+        String mostRecentChange = MainCtrl.resourceBundle.getString("Text.mostRecentChange");
+        String leastRecentChange = MainCtrl.resourceBundle.getString("Text.leastRecentChange");
         String value = sortingComboBox.getValue();
 
         if (value == null)
@@ -178,6 +190,10 @@ public class AdminPageCtrl implements Initializable {
             sortOldToNew();
         if (value.equals(newToOld))
             sortNewToOld();
+        if (value.equals(mostRecentChange))
+            sortMostRecentChange();
+        if (value.equals(leastRecentChange))
+            sortLeastRecentChange();
     }
 
 
@@ -208,6 +224,17 @@ public class AdminPageCtrl implements Initializable {
      */
     private void sortOldToNew() {
         data.sort(Comparator.comparing(Event::getCreationDate));
+    }
+
+    /**
+     * Sort data from most recent change to oldest.
+     */
+    private void sortMostRecentChange() {
+        data.sort(Comparator.comparing(Event::getDate).reversed());
+    }
+
+    private void sortLeastRecentChange() {
+        data.sort(Comparator.comparing(Event::getDate));
     }
 
     /**
@@ -263,6 +290,7 @@ public class AdminPageCtrl implements Initializable {
         colName.setText(MainCtrl.resourceBundle.getString("Text.eventName"));
         colId.setText(MainCtrl.resourceBundle.getString("Text.eventLocation"));
         colDate.setText(MainCtrl.resourceBundle.getString("Text.eventDate"));
+        colLastChange.setText(MainCtrl.resourceBundle.getString("Text.lastChange"));
 
         int num = sortingComboBox.getSelectionModel().getSelectedIndex();
         List<String> sortingOptions = new ArrayList<>();
@@ -272,6 +300,8 @@ public class AdminPageCtrl implements Initializable {
         sortingOptions.add("Z-A");
         sortingOptions.add(newString + "-" + oldString);
         sortingOptions.add(oldString + "-" + newString);
+        sortingOptions.add(MainCtrl.resourceBundle.getString("Text.mostRecentChange"));
+        sortingOptions.add(MainCtrl.resourceBundle.getString("Text.leastRecentChange"));
 
         sortingComboBox.setItems(FXCollections.observableList(sortingOptions));
         sortingComboBox.setPromptText(MainCtrl.resourceBundle.getString("Text.sortBy"));

@@ -97,7 +97,7 @@ public class ServerUtils {
 	 */
 	public void checkConnectionForWebsockets() {
 		if(Main.checkConnection())
-		session = connect("ws://"+ serverPort + "websocket");
+			session = connect("ws://"+ serverPort + "websocket");
 	}
 
 	/**
