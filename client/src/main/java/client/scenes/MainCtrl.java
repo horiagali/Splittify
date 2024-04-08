@@ -260,6 +260,7 @@ public class MainCtrl {
         primaryStage.setTitle(resourceBundle.getString("title.mainPage"));
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
+        overviewAppCtrl.refresh();
     }
 
     /**
@@ -356,10 +357,9 @@ public class MainCtrl {
     public void goToOverview() {
         primaryStage.setTitle(resourceBundle.getString("title.overview"));
         overviewAppCtrl.resetComboBoxes();
-        primaryStage.setScene(overviewApp);
         overviewAppCtrl.refresh();
-
-
+        primaryStage.setScene(overviewApp);
+        //overviewAppCtrl.refresh();
     }
 
     /**
@@ -384,11 +384,9 @@ public class MainCtrl {
     public void showEventOverview(Event selectedEvent) {
         primaryStage.setTitle(selectedEvent.getTitle());
         primaryStage.setScene(overviewApp);
+        overviewAppCtrl.refresh();
         overviewAppCtrl.resetComboBoxes();
         overviewAppCtrl.displayEvent(selectedEvent);
-
-        overviewAppCtrl.refresh();
-
     }
 
     /**

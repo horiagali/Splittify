@@ -152,6 +152,8 @@ public class EditExpenseCtrl implements Initializable {
      * Updates the page.
      */
     protected void display() {
+        participantCheckboxes.clear();
+        participantsVBox.getChildren().clear();
         addKeyboardNavigationHandlers();
         currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
         datePicker.setValue(null);
@@ -181,9 +183,12 @@ public class EditExpenseCtrl implements Initializable {
         allParticipants.addAll(participants);
         populateParticipantCheckboxes(participants);
         configurePayerComboBox(participants);
-        for (CheckBox checkBox : participantCheckboxes)
+        for (CheckBox checkBox : participantCheckboxes) {
             checkBox.setSelected(expense.getOwers().stream().map
                     (Participant::getNickname).toList().contains(checkBox.getText()));
+            System.out.println(checkBox.focusedProperty());
+        }
+        System.out.println();
     }
 
     /**
@@ -571,7 +576,8 @@ public class EditExpenseCtrl implements Initializable {
      * Refreshes the UI after adding an expense.
      */
     private void refreshUI() {
-        loadParticipants();
+        participantCheckboxes.clear();
+        participantsVBox.getChildren().clear();
         purposeTextField.clear();
         amountTextField.clear();
         equallyCheckbox.setSelected(false);
