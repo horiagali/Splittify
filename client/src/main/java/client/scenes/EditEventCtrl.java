@@ -127,13 +127,27 @@ public class EditEventCtrl implements Initializable {
      * edits event 
      */
     public void editEvent() {
-        if(!titleField.getText().equals(""))
-        event.setTitle(titleField.getText());
-        if(!descriptionField.getText().equals(""))
-        event.setDescription(descriptionField.getText());
-        if(!locationField.getText().equals(""))
-        event.setLocation(locationField.getText());
+        String eventTitle = event.getTitle();
+        if(!titleField.getText().equals("")) {
+            eventTitle = titleField.getText();
+        }
+        
+        String eventDescription = event.getDescription();
+        if(!descriptionField.getText().equals("")) {
+            eventDescription = descriptionField.getText();
+        }
 
+        String eventLocation = event.getLocation();
+        if(!locationField.getText().equals("")) {
+            eventLocation = locationField.getText();
+        }
+        // event.setTitle("resetting purposes");
+        // event.setDescription("resetting purposes");
+        // event.setLocation("resetting purposes");
+        server.updateEvent(event);
+        event.setTitle(eventTitle);
+        event.setDescription(eventDescription);
+        event.setLocation(eventLocation);
         server.updateEvent(event);
         mainCtrl.showEventOverview(event);
 
