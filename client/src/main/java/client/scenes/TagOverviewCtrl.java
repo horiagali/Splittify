@@ -119,9 +119,10 @@ public class TagOverviewCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
         refresh();
     }
 
@@ -129,6 +130,7 @@ public class TagOverviewCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.tagManager"));
         back.setText(MainCtrl.resourceBundle.getString("button.back"));
         String stageTitleString = "title.statistics";
         if (event != null)
@@ -228,6 +230,11 @@ public class TagOverviewCtrl implements Initializable {
                     .map(Tag::getName).toList().contains(name.getText())) {
                 newTag.setName(name.getText());
                 server.addTag(TagOverviewCtrl.event.getId(), newTag);
+
+                // Update last change date
+                TagOverviewCtrl.event.setDate(new Date());
+                server.updateEvent(TagOverviewCtrl.event);
+
                 refresh();
             } else {
                 Text text = new Text(MainCtrl.resourceBundle.getString("Text.tagAlreadyExists"));
@@ -236,7 +243,6 @@ public class TagOverviewCtrl implements Initializable {
             }
         });
         tagInfo.getChildren().add(createButton);
-
 
     }
 
@@ -277,9 +283,14 @@ public class TagOverviewCtrl implements Initializable {
                 for (Expense expense : list) {
                     expense.setTag(server.getTags(this.event.getId()).get(0));
                     server.updateExpense(this.event.getId(), expense);
-
                 }
+
                 server.deleteTag(event.getId(), tag.getId());
+
+                // Update last change date
+                event.setDate(new Date());
+                server.updateEvent(event);
+
                 refresh();
 
                 // Show confirmation message
@@ -420,6 +431,11 @@ public class TagOverviewCtrl implements Initializable {
             {
                 newTag.setName(name.getText());
                 server.updateTag(newTag, this.event.getId());
+
+                // Update last change date
+                TagOverviewCtrl.event.setDate(new Date());
+                server.updateEvent(TagOverviewCtrl.event);
+
                 refresh();
             } else {
                 Text text = new Text(MainCtrl.resourceBundle.getString("Text.tagNameExists"));
@@ -518,13 +534,10 @@ public class TagOverviewCtrl implements Initializable {
                                 tags = newTags;
                                 loadTags();
                             }
-
                         }
                         loadTags();
                     }
-
                 });
-
             }
         }, 0, 1000);
     }

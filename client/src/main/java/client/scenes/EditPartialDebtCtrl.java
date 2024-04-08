@@ -9,7 +9,6 @@ import commons.Participant;
 import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,8 +50,6 @@ public class EditPartialDebtCtrl implements Initializable {
     private ComboBox<Participant> payerComboBox;
     @FXML
     private ComboBox<Participant> giftComboBox;
-    @FXML
-    private ComboBox<Tag> tagComboBox;
     @FXML
     private Menu languageMenu;
     @FXML
@@ -104,7 +101,6 @@ public class EditPartialDebtCtrl implements Initializable {
         selectedParticipants.clear();
         payerComboBox.getSelectionModel().select(expense.getPayer());
         giftComboBox.getSelectionModel().select(expense.getOwers().get(0));
-        tagComboBox.getSelectionModel().select(expense.getTag());
         amountTextField.setText(String.valueOf(expense.getAmount()));
         Date dateDate = expense.getDate();
         SimpleDateFormat ft = new SimpleDateFormat("yyyy.MM.dd");
@@ -136,7 +132,6 @@ public class EditPartialDebtCtrl implements Initializable {
 
         if (event != null) {
             loadParticipants();
-            loadTags();
         }
 
         // Populate currency ComboBox
@@ -211,49 +206,8 @@ public class EditPartialDebtCtrl implements Initializable {
      */
     public void refreshParticipants() {
         loadParticipants();
-        loadTags();
     }
 
-    /**
-     * Loads the tags associated with the selected event from the
-     * server and populates the tagComboBox.
-     * If no event is selected or no tags are found for
-     * the selected event, the tagComboBox will remain empty.
-     */
-    private void loadTags() {
-        List<Tag> tags = server.getTags(event.getId());
-        if (tags != null && !tags.isEmpty()) {
-            tags = tags.stream()
-                    .filter(tag -> "gifting money".equalsIgnoreCase(tag.getName()))
-                    .collect(Collectors.toList());
-            ObservableList<Tag> tagList = FXCollections.observableArrayList(tags);
-            tagComboBox.setItems(tagList);
-            tagComboBox.setCellFactory(param -> new ListCell<>() {
-                @Override
-                protected void updateItem(Tag item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item.getName());
-                        setStyle("-fx-background-color: " + item.getColor());
-                    }
-                }
-            });
-            tagComboBox.setButtonCell(new ListCell<>() {
-                @Override
-                protected void updateItem(Tag item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                    } else {
-                        setText(item.getName());
-                        setStyle("-fx-background-color: " + item.getColor());
-                    }
-                }
-            });
-        }
-    }
 
     /**
      * Changes the language of the site
@@ -279,6 +233,7 @@ public class EditPartialDebtCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.editPartialDebt"));
         languageMenu.setText(MainCtrl.resourceBundle.getString("menu.languageMenu"));
     }
 
@@ -375,7 +330,7 @@ public class EditPartialDebtCtrl implements Initializable {
     /**
      * Handles the action when the user adds an expense.
      */
-    @SuppressWarnings("checkstyle:CyclomaticComplexity")
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MethodLength"})
     @FXML
     private void editExpense() {
 
@@ -399,7 +354,11 @@ public class EditPartialDebtCtrl implements Initializable {
         }
         Participant gift = giftComboBox.getValue();
 
-        Tag selectedTag = tagComboBox.getValue();
+        List<Tag> tags = server.getTags(event.getId());
+        tags = tags.stream()
+                .filter(tag -> "gifting money".equalsIgnoreCase(tag.getName()))
+                .collect(Collectors.toList());
+        Tag selectedTag = tags.get(0);
         if (selectedTag == null) {
             showErrorDialog("Please select a tag.");
             return;
@@ -420,6 +379,11 @@ public class EditPartialDebtCtrl implements Initializable {
         setExpense("Gifting Money", amount, date, payer, selectedParticipants, selectedTag);
         System.out.println(expense);
         saveExpense();
+
+        //Update last activiy date of event
+        event.setDate(new Date());
+        server.updateEvent(event);
+
         clearFieldsAndShowOverview(event);
     }
 
@@ -457,6 +421,10 @@ public class EditPartialDebtCtrl implements Initializable {
             if (response == javafx.scene.control.ButtonType.OK) {
                 // Delete the expense from the server
                 server.deleteExpense(event.getId(), expense);
+
+                //Update last activiy date of event
+                event.setDate(new Date());
+                server.updateEvent(event);
 
                 // Show confirmation message
                 Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);

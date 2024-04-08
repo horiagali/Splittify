@@ -101,6 +101,7 @@ public class Main extends Application {
             e.printStackTrace();}
         if(checkConnection()) {
             loadScenes();
+            mainCtrl.updateLanguage(config.getLanguage());
         }else{
             var serverSetter = FXML.load(ServerSetterCtrl.class, 
             "client", "scenes", "ServerSetter.fxml");

@@ -164,9 +164,10 @@ public class AddEventCtrl implements Initializable {
         mainCtrl.updateLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
         updateFlagImageURL(language);
+        updateUIWithNewLanguage();
+
     }
 
     /**
@@ -194,7 +195,6 @@ public class AddEventCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
-
         mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.addEvent"));
         currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
         eventNameLabel.setText(MainCtrl.resourceBundle.getString("Text.eventName"));
