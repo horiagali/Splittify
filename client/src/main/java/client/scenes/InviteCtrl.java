@@ -28,6 +28,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -66,6 +67,8 @@ public class InviteCtrl implements Initializable {
     private ToggleGroup currencyGroup;
     @FXML
     private ImageView languageFlagImageView;
+    @FXML
+    private Menu languageMenu;
 
     @FXML
     private ToggleGroup languageGroup;
@@ -140,7 +143,22 @@ public class InviteCtrl implements Initializable {
             if (event.isControlDown() && event.getCode() == KeyCode.S) {
                 sendInvitationsByEmail();
             }
+            handleAdditionalKeyEvents(event);
+
         });
+    }
+
+    /**
+     * Add keyboard navigation
+     * @param event to link to other method
+     */
+    private void handleAdditionalKeyEvents(KeyEvent event) {
+        if (event.isControlDown() && event.getCode() == KeyCode.L) {
+            languageMenu.show();
+        }
+        if (event.isControlDown() && event.getCode() == KeyCode.M) {
+            currencyMenu.show();
+        }
     }
 
     /**

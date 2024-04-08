@@ -51,6 +51,8 @@ public class BalancesCtrl implements Initializable {
     @FXML
     private Menu languageMenu;
     @FXML
+    private Menu currencyMenu;
+    @FXML
     private ToggleGroup currencyGroup;
     @FXML
     private ImageView languageFlagImageView;
@@ -64,8 +66,6 @@ public class BalancesCtrl implements Initializable {
     private Button refreshButton;
     @FXML
     private Button backButton;
-    @FXML
-    private Menu currencyMenu;
     @FXML
     private Button addPartialButton;
 
@@ -158,6 +158,7 @@ public class BalancesCtrl implements Initializable {
     /**
      * Add keyboard navigation
      */
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity"})
     private void addKeyboardNavigationHandlers() {
         anchorPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -165,6 +166,18 @@ public class BalancesCtrl implements Initializable {
             }
             if (event.isControlDown() && event.getCode() == KeyCode.R) {
                 refresh();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.P) {
+                addPartial();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.D) {
+                settleDebts();
             }
         });
     }
