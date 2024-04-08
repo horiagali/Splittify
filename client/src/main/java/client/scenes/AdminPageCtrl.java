@@ -319,12 +319,10 @@ public class AdminPageCtrl implements Initializable {
                         importedEvent.getTitle(),
                         importedEvent.getDescription(),
                         importedEvent.getDescription(),
-                        new Date()
-                );
+                        new Date());
                 Event addedEvent = new Event();
                 try {
                     addedEvent = server.addEvent(newEvent);
-
                 } catch (WebApplicationException e) {
                     var alert = new Alert(Alert.AlertType.ERROR);
                     alert.initModality(Modality.APPLICATION_MODAL);
@@ -345,10 +343,7 @@ public class AdminPageCtrl implements Initializable {
                     Expense e = new Expense(expense.getTitle(),expense.getAmount(),expense.getDate()
                             ,expense.getPayer(),expense.getOwers(),expense.getTag());
                     server.addExpenseToEvent(addedEvent.getId(),e);
-                }
-
-                // Refresh the table view
-                refresh();
+                } refresh();
             } catch (IOException e) {
                 e.printStackTrace();
             }
