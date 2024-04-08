@@ -82,10 +82,14 @@ public class EditEventCtrl implements Initializable {
     /**
      * loads the info of the event
      *
-     * @param event
      */
-    public void loadInfo(Event event){
-        
+    public void loadInfo(){
+        titleField.clear();
+        locationField.clear();
+        descriptionField.clear();
+        titleLabel.setText("Title: " + event.getTitle() + " → ");
+        descriptionLabel.setText("Description: " + event.getDescription() + " → ");
+        locationLabel.setText("Location: " + event.getLocation() + " → ");
 
     }
 
@@ -102,6 +106,7 @@ public class EditEventCtrl implements Initializable {
      */
     public void setEvent(Event event) {
         this.event = event;
+        loadInfo();
     }
 
     /**
@@ -122,6 +127,15 @@ public class EditEventCtrl implements Initializable {
      * edits event 
      */
     public void editEvent() {
+        if(!titleField.getText().equals(""))
+        event.setTitle(titleField.getText());
+        if(!descriptionField.getText().equals(""))
+        event.setDescription(descriptionField.getText());
+        if(!locationField.getText().equals(""))
+        event.setLocation(locationField.getText());
+
+        server.updateEvent(event);
+        mainCtrl.showEventOverview(event);
 
     }
 

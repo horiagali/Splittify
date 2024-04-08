@@ -91,7 +91,7 @@
                   <HBox fx:id="iban" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                      <children>
                         <Text fx:id="descriptionLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" />
-                        <TextField fx:id="descriptionField" alignment="CENTER" prefHeight="67.0" prefWidth="150.0" promptText="Enter new Description" />
+                        <TextField fx:id="descriptionField" prefHeight="24.0" prefWidth="150.0" promptText="Enter new Description" />
                      </children>
                   </HBox>
                   <HBox fx:id="email" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">

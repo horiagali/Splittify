@@ -128,17 +128,13 @@
             <Text fx:id="payerText" layoutX="546.0" layoutY="290.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Payer" />
             <VBox alignment="CENTER" layoutX="200.0" layoutY="44.0" prefHeight="127.0" prefWidth="334.0">
                <children>
-                  <HBox alignment="CENTER" prefHeight="46.0" prefWidth="338.0">
+                  <HBox alignment="CENTER" prefHeight="46.0" prefWidth="338.0" spacing="10.0">
                      <children>
                         <Text fx:id="EventName" strokeType="OUTSIDE" strokeWidth="0.0" text="Event Title">
                            <font>
                               <Font size="24.0" />
                            </font></Text>
-                        <ImageView fitHeight="25" fitWidth="25.0" focusTraversable="true" onMouseClicked="#editEvent">
-                           <image>
-                              <Image url="@/client/scenes/images/edit_pencil_icon.png" />
-                           </image>
-                        </ImageView>
+                        <Button mnemonicParsing="false" onAction="#editEvent" text="Edit" />
                         
                      </children>
                   </HBox>
