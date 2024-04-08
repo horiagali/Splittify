@@ -30,6 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -65,6 +66,8 @@ public class TagOverviewCtrl implements Initializable {
 
     @FXML
     private VBox tagInfo;
+    @FXML
+    private VBox vbox;
 
     TextField name;
     @FXML
@@ -96,7 +99,7 @@ public class TagOverviewCtrl implements Initializable {
     public void refresh() {
         tagInfo.getChildren().clear();
         loadTags();
-
+        addKeyboardNavigationHandlers();
     }
 
     /**
@@ -205,6 +208,7 @@ public class TagOverviewCtrl implements Initializable {
         button.setStyle(style);
         tagInfo.getChildren().add(button);
         ColorPicker colorPicker = new ColorPicker();
+        colorPicker.setId("colorpickerCreate");
         colorPickerCreateTag(newTag, button, colorPicker);
         tagInfo.getChildren().add(colorPicker);
         name = new TextField("new tag");
@@ -536,6 +540,26 @@ public class TagOverviewCtrl implements Initializable {
                 });
             }
         }, 0, 1000);
+    }
+
+    /**
+     * Add keyboard navigation
+     */
+    private void addKeyboardNavigationHandlers() {
+        vbox.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                back();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.R) {
+                refresh();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.N) {
+                createNewTag();
+            }
+        });
     }
 }
 

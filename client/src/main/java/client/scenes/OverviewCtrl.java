@@ -20,8 +20,9 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -58,11 +59,12 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private Label myLabel2;
     @FXML
+    private Menu languageMenu;
+    @FXML
     private Button balances;
 
     @FXML
     private Button giftMoney;
-
     @FXML
     private ChoiceBox<String> myChoiceBox;
     @FXML
@@ -94,8 +96,6 @@ public class OverviewCtrl implements Initializable {
     private ScrollPane participantsScrollPane;
     @FXML
     private VBox participantsVBox;
-    @FXML
-    private ListView<Expense> expensesListView;
     @FXML
     private ToggleGroup currencyGroup;
 
@@ -689,6 +689,7 @@ public class OverviewCtrl implements Initializable {
     /**
      * Add keyboard navigation
      */
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity"})
     private void addKeyboardNavigationHandlers() {
         anchorPane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -707,7 +708,132 @@ public class OverviewCtrl implements Initializable {
                 ActionEvent dummyEvent = new ActionEvent();
                 goToAreYouSure(dummyEvent);
             }
+            if (event.isAltDown() && event.getCode() == KeyCode.E){
+                promptForItemIndex();
+            }
+            if (event.isAltDown() && event.getCode() == KeyCode.P){
+                promptForParticipantIndex();
+            }
+            handleAdditionalKeyEvents(event);
         });
+    }
+
+    /**
+     * Add keyboard navigation to select an expense
+     */
+    private void promptForItemIndex() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Select Item");
+        dialog.setHeaderText("Enter number of the expense you want to select");
+        dialog.setContentText("Index:");
+
+        // Show the dialog and wait for user input
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(indexStr -> {
+            try {
+                int index = Integer.parseInt(indexStr)-1;
+                if (index >= 0 && index < expenses.size()) {
+                    goToEditExpense(expenses.get(index));
+                } else {
+                    showErrorDialog("Invalid Index",
+                            "Index must be between 1 and " +
+                            expenses.size());
+                }
+            } catch (NumberFormatException e) {
+                showErrorDialog("Invalid Input",
+                        "Please enter a valid number.");
+            }
+        });
+    }
+
+    /**
+     * Add keyboard navigation to select a participant
+     */
+    private void promptForParticipantIndex() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Select Participant");
+        dialog.setHeaderText("Enter the number of the participant you want to select:");
+        dialog.setContentText("Index:");
+
+        // Show the dialog and wait for user input
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(indexStr -> {
+            try {
+                int index = Integer.parseInt(indexStr) - 1;
+                if (index >= 0 && index < participants.size()) {
+                    mainCtrl.goToContact(participants.get(index));
+                } else {
+                    showErrorDialog("Invalid Index",
+                            "Index must be between 1 and " + participants.size());
+                }
+            } catch (NumberFormatException e) {
+                showErrorDialog("Invalid Input",
+                        "Please enter a valid number.");
+            }
+        });
+    }
+
+    /**
+     * Shows error dialog
+     * @param title title of pop up
+     * @param message content
+     */
+    private void showErrorDialog(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    /**
+     * Add keyboard navigation
+     * @param event link to other method
+     */
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity"})
+    private void handleAdditionalKeyEvents(KeyEvent event) {
+        if (event.isControlDown() && event.getCode() == KeyCode.L) {
+            languageMenu.show();
+        }
+        if (event.isControlDown() && event.getCode() == KeyCode.R) {
+            refresh();
+        }
+        if(event.isControlDown() && event.getCode() == KeyCode.P){
+            goToContact();
+        }
+        if(event.isAltDown() && event.getCode() == KeyCode.S){
+            showStatistics();
+        }
+        if(event.isAltDown() && event.getCode() == KeyCode.T){
+            goToTagOverview();
+        }
+        handleMoreAdditionalKeyEvents(event);
+    }
+
+    /**
+     * Add keyboard navigation
+     * @param event The KeyEvent triggering the navigation
+     */
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity"})
+    private void handleMoreAdditionalKeyEvents(KeyEvent event) {
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.P){
+            payer.show();
+        }
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.T){
+            ower.show();
+        }
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.O){
+            tag.show();
+        }
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.N){
+            switchToNameTextField();
+        }
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.D){
+            switchToDateTextField();
+        }
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.W){
+            switchToDescriptionTextField();
+        }
     }
 
     /**
@@ -912,24 +1038,6 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
-     * Deletes an expense.
-     */
-    public void deleteExpense() {
-        try {
-            Expense expense = expensesListView.getSelectionModel().getSelectedItem();
-            selectedEvent.getExpenses().remove(expense);
-            server.deleteExpense(selectedEvent.getId(), expense);
-            refresh();
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Delete expense");
-            alert.setHeaderText("Error deleting");
-            alert.setContentText("Please choose an expense!");
-            alert.showAndWait();
-        }
-    }
-
-    /**
      * debts button
      */
     public void checkDebts(){
@@ -946,6 +1054,7 @@ public class OverviewCtrl implements Initializable {
         }
     }
     /**
+>>>>>>> 14a3bd9ac08ecd37c47ff3c7f975f96dfea4fd91
      * Goes to edit expense.
      *
      * @param selectedExpense the expense to edit
