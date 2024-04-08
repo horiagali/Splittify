@@ -349,7 +349,9 @@ public class AdminPageCtrl implements Initializable {
         for (Expense expense : expenses) {
             Expense e = new Expense(expense.getTitle(),expense.getAmount(),expense.getDate()
                     ,expense.getPayer(),expense.getOwers(),expense.getTag());
-            server.addExpenseToEvent(id,e);
+            Expense added = server.addExpenseToEvent(id,e);
+            added.settleBalance();
+
         }
     }
 
