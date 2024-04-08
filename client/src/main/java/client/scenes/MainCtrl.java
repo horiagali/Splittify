@@ -559,4 +559,5 @@ public class MainCtrl {
         primaryStage.setScene(editPartialDebt);
         editPartialDebtCtrl.display();
     }
+
 }

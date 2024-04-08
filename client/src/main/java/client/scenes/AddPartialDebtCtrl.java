@@ -10,7 +10,6 @@ import commons.Participant;
 import commons.Tag;
 import jakarta.inject.Inject;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -51,8 +50,6 @@ public class AddPartialDebtCtrl implements Initializable {
     @FXML
     private ComboBox<Participant> giftComboBox;
     @FXML
-    private ComboBox<Tag> tagComboBox;
-    @FXML
     private Menu languageMenu;
     @FXML
     private ImageView languageFlagImageView;
@@ -83,7 +80,6 @@ public class AddPartialDebtCtrl implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addKeyboardNavigationHandlers();
-        loadTags();
         currencyComboBox.setOnKeyPressed(this::handleCurrencySwitch);
         datePicker.setValue(null);
 
@@ -183,59 +179,6 @@ public class AddPartialDebtCtrl implements Initializable {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         if (selectedEvent != null) {
             loadParticipants();
-            loadTags();
-        }
-    }
-
-    /**
-     * Loads the tags associated with the selected event from the
-     * server and populates the tagComboBox.
-     * If no event is selected or no tags are found for
-     * the selected event, the tagComboBox will remain empty.
-     */
-    private void loadTags() {
-        Event selectedEvent = OverviewCtrl.getSelectedEvent();
-        if (selectedEvent != null) {
-            List<Tag> tags = server.getTags(selectedEvent.getId());
-            for(Tag tag : tags) {
-                tag.setEvent(selectedEvent);
-            }
-            if (tags != null && !tags.isEmpty()) {
-                tags = tags.stream()
-                        .filter(tag -> "gifting money".equalsIgnoreCase(tag.getName()))
-                        .collect(Collectors.toList());
-                ObservableList<Tag> tagList = FXCollections.observableArrayList(tags);
-                tagComboBox.setItems(tagList);
-                // Customize the appearance of the ComboBox items to display only tag names
-                tagComboBox.setCellFactory(param -> new ListCell<>() {
-                    @Override
-                    protected void updateItem(Tag item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setText(null);
-                        } else {
-                            setText(item.getName());
-                            setStyle("-fx-background-color: " + item.getColor());
-                        }
-                    }
-                });
-                tagComboBox.setButtonCell(new ListCell<>() {
-                    @Override
-                    protected void updateItem(Tag item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setText(null);
-                        } else {
-                            setText(item.getName());
-                            setStyle("-fx-background-color: " + item.getColor());
-                        }
-                    }
-                });
-            } else {
-                tagComboBox.getItems().clear();
-            }
-        } else {
-            tagComboBox.getItems().clear();
         }
     }
 
@@ -333,16 +276,16 @@ public class AddPartialDebtCtrl implements Initializable {
             return;
         }
 
-        Tag selectedTag = tagComboBox.getValue();
-        if (selectedTag == null) {
-            showErrorDialog("Please select a tag.");
-            return;
-        }
         Date date = getDate();
         if (date == null) {
             showErrorDialog("Please select a date.");
             return;
         }
+        List<Tag> tags = server.getTags(selectedEvent.getId());
+        tags = tags.stream()
+                .filter(tag -> "gifting money".equalsIgnoreCase(tag.getName()))
+                .collect(Collectors.toList());
+        Tag selectedTag = tags.get(0);
         selectedParticipants = new ArrayList<>();
         selectedParticipants.add(gift);
         Expense expense = createExpense("Gifting money", amount,

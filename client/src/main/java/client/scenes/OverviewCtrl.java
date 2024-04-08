@@ -57,6 +57,11 @@ public class OverviewCtrl implements Initializable {
     private Label myLabel;
     @FXML
     private Label myLabel2;
+    @FXML
+    private Button balances;
+
+    @FXML
+    private Button giftMoney;
 
     @FXML
     private ChoiceBox<String> myChoiceBox;
@@ -108,6 +113,8 @@ public class OverviewCtrl implements Initializable {
     private Menu currencyMenu;
     @FXML
     private Button tagButton;
+    @FXML
+    private Button undoButton;
     @FXML
     private Text expensesText;
     @FXML
@@ -345,6 +352,23 @@ public class OverviewCtrl implements Initializable {
 
             }
         }, 0, 1000);
+        if (selectedEvent != null && selectedEvent.isClosed()){
+            addParticipantsButton.setDisable(true);
+            undoButton.setDisable(true);
+            giftMoney.setDisable(true);
+            balances.setDisable(true);
+            addExpenseButton.setDisable(true);
+            tagButton.setDisable(true);
+            sendInvitesButton.setDisable(true);
+        }else {
+            addParticipantsButton.setDisable(false);
+            giftMoney.setDisable(false);
+            balances.setDisable(false);
+            addExpenseButton.setDisable(false);
+            undoButton.setDisable(false);
+            tagButton.setDisable(false);
+            sendInvitesButton.setDisable(false);
+        }
     }
 
     private void handleDataPropagation() {
@@ -391,8 +415,28 @@ public class OverviewCtrl implements Initializable {
      * refreshed the page, with the event data
      */
     public void refresh() {
+        if (selectedEvent != null && selectedEvent.isClosed()){
+            addParticipantsButton.setDisable(true);
+            giftMoney.setDisable(true);
+            balances.setDisable(true);
+            addExpenseButton.setDisable(true);
+            undoButton.setDisable(true);
+            tagButton.setDisable(true);
+            sendInvitesButton.setDisable(true);
+            return;
+        }
+        else {
+            addParticipantsButton.setDisable(false);
+            giftMoney.setDisable(false);
+            balances.setDisable(false);
+            addExpenseButton.setDisable(false);
+            undoButton.setDisable(false);
+            tagButton.setDisable(false);
+            sendInvitesButton.setDisable(false);
+        }
         if (selectedEvent != null) {
             loadEventInfo();
+            
         }
 
         int payerIndex = Math.max(payer.getSelectionModel().getSelectedIndex(), 0);
@@ -439,8 +483,8 @@ public class OverviewCtrl implements Initializable {
         List<String> tags = new ArrayList<>();
         tags.add(MainCtrl.resourceBundle.getString("Text.anyTag"));
         tags.addAll(server.getTags(selectedEvent.getId()).stream()
-                .map(Tag::getName).filter(x -> !x.equals("gifting money")).toList());
-
+        .map(Tag::getName).filter(x -> !x.equals("gifting money") && !x.equals("debt")).toList());
+        
         payer.setItems(FXCollections.observableArrayList(participants));
         ower.setItems(FXCollections.observableArrayList(participants));
         tag.setItems(FXCollections.observableArrayList(tags));
@@ -526,7 +570,8 @@ public class OverviewCtrl implements Initializable {
         if (selectedEvent == null) return;
         List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId())
                 .stream().filter(x ->
-                        !"gifting money".equalsIgnoreCase(x.getTag().getName())).toList();
+                        !"gifting money".equalsIgnoreCase(x.getTag().getName()) &&
+                                !"debt".equalsIgnoreCase(x.getTag().getName())).toList();
         expenses = applyFilters(expenses);
         if (expenses.isEmpty()) {
             expensesBox.getChildren()
@@ -885,6 +930,22 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
+     * debts button
+     */
+    public void checkDebts(){
+        if(selectedEvent == null) return;
+        if (!selectedEvent.isClosed()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Event not closed");
+            alert.setHeaderText("Debts are not settled");
+            alert.setContentText("To settle the debts, go to Balances.");
+            alert.showAndWait();
+        } else{
+            mainCtrl.goToSettleDebts(selectedEvent,
+                    server.getExpensesByEventId(selectedEvent.getId()));
+        }
+    }
+    /**
      * Goes to edit expense.
      *
      * @param selectedExpense the expense to edit
@@ -896,7 +957,15 @@ public class OverviewCtrl implements Initializable {
             alert.setHeaderText("Error loading page");
             alert.setContentText("Please choose an expense!");
             alert.showAndWait();
-        } else
+        }
+        else if(selectedEvent == null) return; else if (selectedEvent.isClosed()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Edit expense");
+            alert.setHeaderText("The event is closed");
+            alert.setContentText("You cannot edit expenses!");
+            alert.showAndWait();
+        }
+        else
             mainCtrl.goToEditExpense(selectedEvent, selectedExpense);
     }
 
@@ -960,6 +1029,7 @@ public class OverviewCtrl implements Initializable {
                 List<Expense> expenses = server.getExpensesByEventId(selectedEvent.getId())
                         .stream()
                         .filter(expense -> !"gifting money".
+                                equalsIgnoreCase(expense.getTag().getName()) && !"debt".
                                 equalsIgnoreCase(expense.getTag().getName()))
                         .collect(Collectors.toList());
 
