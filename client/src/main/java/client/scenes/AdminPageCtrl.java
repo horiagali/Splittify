@@ -349,36 +349,76 @@ public class AdminPageCtrl implements Initializable {
                         importedEvent.getTitle(),
                         importedEvent.getDescription(),
                         importedEvent.getDescription(),
-                        new Date()
-                );
+                        new Date());
                 Event addedEvent = new Event();
                 try {
-                    server.sendEvent("/app/events", newEvent);
-                    List<Event> events = server.getEvents();
-                    addedEvent = events.getLast();
+                    addedEvent = server.addEvent(newEvent);
                 } catch (WebApplicationException e) {
                     var alert = new Alert(Alert.AlertType.ERROR);
                     alert.initModality(Modality.APPLICATION_MODAL);
                     alert.setContentText(e.getMessage());
                     alert.showAndWait();
                 }
-                for (Tag tag : tags) {
-                    server.addTag(addedEvent.getId(), tag);
-                }
-                for (Participant participant : participants) {
-                    server.addParticipant(addedEvent.getId(), participant);
-                }
-                for (Expense expense : expenses) {
-                    server.addExpenseToEvent(addedEvent.getId(), expense);
-                }
+                addTags(tags,addedEvent.getId());
+                addParticipants(participants,addedEvent.getId());
+                addExpenses(expenses,addedEvent.getId());
 
-                // Refresh the table view
                 refresh();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    /**
+     * adds epenses to the event
+     * @param expenses
+     * @param id
+     */
+    private void addExpenses(List<Expense> expenses, Long id) {
+        for (Expense expense : expenses) {
+            Expense e = new Expense(expense.getTitle(),expense.getAmount(),expense.getDate()
+                    ,expense.getPayer(),expense.getOwers(),expense.getTag());
+            Expense added = server.addExpenseToEvent(id,e);
+            added.settleBalance();
+
+        }
+    }
+
+    /**
+     * adds participants to the event
+     * @param participants
+     * @param id
+     */
+    private void addParticipants(List<Participant> participants, Long id) {
+        for (Participant participant : participants) {
+            Participant p = new Participant(participant.getNickname(),
+                    participant.getEmail(),participant.getBic(),
+                    participant.getIban(),participant.getBalance());
+            server.addParticipant(id, p);
+        }
+    }
+
+    /**
+     * adds the non default tags to the event
+     * @param tags
+     * @param id
+     */
+    private void addTags(List<Tag> tags, Long id) {
+        List<String> predefinedNames = Arrays.asList(
+                "no tag",
+                "gifting money",
+                "food",
+                "travel",
+                "entrance fees"
+        );
+        for (Tag tag : tags) {
+            if (!predefinedNames.contains(tag.getName())) {
+                server.addTag(id, tag);
+            }
+        }
+    }
+
 
 
     @FXML

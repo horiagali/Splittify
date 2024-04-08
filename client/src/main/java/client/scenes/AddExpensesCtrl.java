@@ -125,11 +125,13 @@ public class AddExpensesCtrl implements Initializable {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         if (selectedEvent == null) {
             showErrorDialog("No event selected.");
+            mainCtrl.goToOverview();
             return;
         }
         List<Participant> participants = server.getParticipants(selectedEvent.getId());
         if (participants == null || participants.isEmpty()) {
             showErrorDialog(MainCtrl.resourceBundle.getString("Text.noParticipantsFound"));
+            mainCtrl.showEventOverview(selectedEvent);
             return;
         }
         allParticipants.addAll(participants);
@@ -517,7 +519,8 @@ public class AddExpensesCtrl implements Initializable {
      * Refreshes the UI after adding an expense.
      */
     private void refreshUI() {
-        loadParticipants();
+        participantsVBox.getChildren().clear();
+        participantCheckboxes.clear();
         purposeTextField.clear();
         amountTextField.clear();
         equallyCheckbox.setSelected(false);
