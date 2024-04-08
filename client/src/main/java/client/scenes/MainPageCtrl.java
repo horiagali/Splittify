@@ -281,18 +281,12 @@ public class MainPageCtrl implements Initializable {
             if (selectedEvent != null) {
                 try {
                     selectedEvent.getId();
+                    OverviewCtrl.setSelectedEvent(selectedEvent);
+                    mainCtrl.showEventOverview(selectedEvent);
                 } catch (NullPointerException e) {
                     System.out.println("Something went wrong. Please try again.");
                     refresh();
                     return;
-                }
-                OverviewCtrl.setSelectedEvent(selectedEvent);
-                if (!selectedEvent.isClosed())
-                    mainCtrl.showEventOverview(selectedEvent);
-                else
-                {
-                    mainCtrl.goToSettleDebts(selectedEvent,
-                            server.getExpensesByEventId(selectedEvent.getId()));
                 }
 
             }
