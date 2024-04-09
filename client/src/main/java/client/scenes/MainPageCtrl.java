@@ -405,9 +405,17 @@ public class MainPageCtrl implements Initializable {
 
     public void refresh() {
         List<Event> events = new ArrayList<>();
+        List<Long> eventsFromServer = server.getEvents().stream()
+        .map(x-> x.getId()).toList();
+
         for(Long id : Main.config.getEventIds()) {
+            if(!eventsFromServer.contains(id)) {
+                Main.config.removeId(id);
+                continue;
+            }
             events.add(server.getEvent(id));
         }
+
         data = FXCollections.observableList(events);
         table.getItems().clear();
         table.setItems(data);
