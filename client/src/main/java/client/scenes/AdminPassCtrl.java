@@ -12,9 +12,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.net.URL;
-import java.security.SecureRandom;
-import java.util.Base64;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -69,11 +68,13 @@ public class AdminPassCtrl implements Initializable {
      *
      * @return   returns a random 8 character password
      */
-    public static String generatePassword() {
-        SecureRandom secureRandom = new SecureRandom();
-        byte[] randomBytes = new byte[8];
-        secureRandom.nextBytes(randomBytes);
-        return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
+    public String generatePassword() {
+        try {
+            return server.getPassword();
+        } catch (IOException e) {
+            System.out.println("Error in password");
+            return null;
+        }
     }
 
     /**

@@ -413,8 +413,8 @@ public class MainCtrl {
     public void goToAdminPass() {
         primaryStage.setTitle(resourceBundle.getString("title.adminPassword"));
         primaryStage.setScene(adminPass);
-        String pass = AdminPassCtrl.generatePassword();
-        System.out.println("The password is " + pass);
+        String pass = adminPassCtrl.generatePassword();
+        //System.out.println("The password is " + pass);
         AdminPassCtrl.setPass(pass);
     }
 

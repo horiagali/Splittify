@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
@@ -114,6 +115,17 @@ public class ServerUtils {
 		while ((line = br.readLine()) != null) {
 			System.out.println(line);
 		}
+	}
+
+	/**
+	 * Password getter for admin.
+	 * @return the password.
+	 */
+	public String getPassword() throws IOException {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("/admin")
+				.request()
+				.get(new GenericType<>() {});
 	}
 
 
