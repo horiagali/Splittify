@@ -27,7 +27,7 @@ import commons.Participant;
 import commons.Expense;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -49,6 +49,9 @@ public class MainCtrl {
 
     private Scene adminPass;
     private AdminPassCtrl adminPassCtrl;
+
+    private Scene editEvent;
+    private EditEventCtrl editEventCtrl;
 
     private AddExpensesCtrl addExpensesCtrl;
     private Scene addExpenses;
@@ -92,27 +95,30 @@ public class MainCtrl {
 
 
     /**
-     * @param primaryStage .
-     * @param overview .
-     * @param add .
-     * @param page .
-     * @param addExpense .
-     * @param editExpense .
-     * @param contactDetails .
-     * @param overviewApp .
-     * @param invite .
-     * @param adminPage .
-     * @param adminPass .
-     * @param language .
-     * @param addEvent .
-     * @param balances .
-     * @param serverSetter2 .
-     * @param statistics .
-     * @param debtsCtrlParentPair .
-     * @param tagOverview .
-     * @param partialDebtCtrlParentPair .
-     * @param editPartialDebtCtrlParentPair .
-     * @param main .
+     *
+     * @param primaryStage
+     * @param overview
+     * @param add
+     * @param page
+     * @param addExpense
+     * @param editExpense
+     * @param contactDetails
+     * @param overviewApp
+     * @param invite
+     * @param adminPage
+     * @param adminPass
+     * @param language
+     * @param addEvent
+     * @param balances
+     * @param serverSetter2
+     * @param statistics
+     * @param debtsCtrlParentPair
+     * @param tagOverview
+     * @param partialDebtCtrlParentPair
+     * @param editPartialDebtCtrlParentPair
+     * @param editEvent 
+     * @param main
+     *
      */
 
     @SuppressWarnings({"ParameterNumber", "checkstyle:MethodLength"})
@@ -133,7 +139,7 @@ public class MainCtrl {
                            Pair<TagOverviewCtrl, Parent> tagOverview,
                            Pair<AddPartialDebtCtrl, Parent> partialDebtCtrlParentPair,
                            Pair<EditPartialDebtCtrl, Parent> editPartialDebtCtrlParentPair,
-                           Main main) {
+                           Pair<EditEventCtrl, Parent> editEvent, Main main) {
 
         this.primaryStage = primaryStage;
         this.main = main;
@@ -155,6 +161,9 @@ public class MainCtrl {
 
         this.pageCtrl = page.getKey();
         this.page = new Scene(page.getValue());
+
+        this.editEventCtrl = editEvent.getKey();
+        this.editEvent = new Scene(editEvent.getValue());
 
         this.addEventCtrl = addEvent.getKey();
         this.addEvent = new Scene(addEvent.getValue());
@@ -311,6 +320,16 @@ public class MainCtrl {
         TagOverviewCtrl.setIsActive(true);
     }
 
+    /**
+     * show edit event page
+     * @param event
+     */
+    public void showEditEvent(Event event) {
+        primaryStage.setTitle("Edit Event");
+        editEventCtrl.setEvent(event);
+        primaryStage.setScene(editEvent);
+    }
+
 
     /**
      *
@@ -370,11 +389,10 @@ public class MainCtrl {
      * @param eventName eventname
      * @param event     event
      */
-    public void sendInvites(Label eventName, Event event) {
+    public void sendInvites(Text eventName, Event event) {
         primaryStage.setTitle(resourceBundle.getString("title.sendInvites"));
         inviteCtrl.setEvent(event);
 
-        //inviteCtrl.setName(eventName);
         primaryStage.setScene(invite);
         inviteCtrl.refresh();
 

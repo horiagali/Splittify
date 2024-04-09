@@ -146,7 +146,7 @@
                 <columns>
                     <TableColumn fx:id="colName" prefWidth="113.0" text="Event name" />
                     <TableColumn fx:id="colLocation" prefWidth="114.0" text="Event location" />
-                    <TableColumn fx:id="colDate" prefWidth="344.0" text="Event date" />
+                    <TableColumn fx:id="colDate" prefWidth="344.0" text="Description" />
                 </columns>
             </TableView>
              <Button fx:id="adminButton" layoutX="274.0" layoutY="240.0" mnemonicParsing="false" onAction="#goToAdminPass" text="Admin" />

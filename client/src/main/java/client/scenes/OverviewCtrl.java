@@ -1,10 +1,19 @@
 package client.scenes;
 
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
+import com.google.inject.Inject;
+
 import client.Main;
 import client.UndoManager;
 import client.utils.Currency;
 import client.utils.ServerUtils;
-import com.google.inject.Inject;
 import commons.Event;
 import commons.Expense;
 import commons.Participant;
@@ -17,7 +26,19 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.Menu;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -31,11 +52,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -74,11 +90,7 @@ public class OverviewCtrl implements Initializable {
     private ImageView languageFlagImageView;
 
     @FXML
-    private Label eventName;
-    @FXML
     private Label eventLocation;
-    @FXML
-    private Label eventDate;
     @FXML
     private Label eventDescription;
     @FXML
@@ -86,13 +98,6 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     private TextField eventNameTextField;
-    @FXML
-    private DatePicker eventDatePicker;
-
-    @FXML
-    private TextField eventLocationTextField;
-    @FXML
-    private TextField eventDescriptionTextField;
     @FXML
     private ScrollPane participantsScrollPane;
     @FXML
@@ -140,6 +145,10 @@ public class OverviewCtrl implements Initializable {
     private Text tagText;
     @FXML
     private Button deleteEventButton;
+    @FXML
+    private Text EventName;
+    @FXML
+    private Button editButton;
 
 
     /**
@@ -157,16 +166,9 @@ public class OverviewCtrl implements Initializable {
      * @param selectedEvent displays an event
      */
     public void displayEvent(Event selectedEvent) {
-        eventName.setText(selectedEvent.getTitle());
+        EventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
-        eventDate.setText("");
         eventDescription.setText(selectedEvent.getDescription());
-
-        if (!(selectedEvent.getDate() == null)) {
-            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
-            String dateInString = ft.format(selectedEvent.getDate());
-            eventDate.setText(dateInString);
-        }
         setSelectedEvent(selectedEvent);
         setIsActive(true);
     }
@@ -324,11 +326,18 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
+     * goes to edit event info scene
+     */
+    public void editEvent() {
+        mainCtrl.showEditEvent(selectedEvent);
+    }
+
+    /**
      *
      */
     public void sendInvites() {
         setIsActive(false);
-        mainCtrl.sendInvites(eventName, selectedEvent);
+        mainCtrl.sendInvites(EventName, selectedEvent);
     }
 
     /**
@@ -360,9 +369,7 @@ public class OverviewCtrl implements Initializable {
 
                 Platform.runLater(() -> {
                     handleDataPropagation();
-
                 });
-
             }
         }, 0, 1000);
         if (selectedEvent != null && selectedEvent.isClosed()){
@@ -382,6 +389,13 @@ public class OverviewCtrl implements Initializable {
             tagButton.setDisable(false);
             sendInvitesButton.setDisable(false);
         }
+        Image image = new Image(getClass()
+        .getResourceAsStream("/client/scenes/images/edit_pencil_icon.png"));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(25);
+        imageView.setFitHeight(25);
+        editButton.setGraphic(imageView);
+        editButton.setBackground(null);
     }
 
     private void handleDataPropagation() {
@@ -482,11 +496,8 @@ public class OverviewCtrl implements Initializable {
     }
 
     private void loadEventInfo() {
-        eventName.setText(selectedEvent.getTitle());
+        EventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
-        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
-        String dateInString = ft.format(selectedEvent.getDate());
-        eventDate.setText(dateInString);
         eventDescription.setText(selectedEvent.getDescription());
     }
 
@@ -841,14 +852,8 @@ public class OverviewCtrl implements Initializable {
         if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.O){
             tag.show();
         }
-        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.N){
-            switchToNameTextField();
-        }
-        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.D){
-            switchToDateTextField();
-        }
-        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.W){
-            switchToDescriptionTextField();
+        if(event.isControlDown() && event.isShiftDown() && event.getCode() == KeyCode.E){
+            editEvent();
         }
     }
 
@@ -910,148 +915,6 @@ public class OverviewCtrl implements Initializable {
                 System.out.println(MainCtrl.resourceBundle.getString("Text.eventDeleteCanceled"));
             }
         });
-    }
-
-    /**
-     * switches to text field for name
-     */
-    public void switchToNameTextField() {
-        eventNameTextField.setVisible(true);
-        eventNameTextField.requestFocus();
-        eventName.setVisible(false);
-    }
-
-    /**
-     * swithces back to label
-     */
-
-    public void switchToNameLabel() {
-        eventNameTextField.setVisible(false);
-        eventName.setVisible(true);
-    }
-
-    /**
-     * updated the name in the db
-     *
-     * @param event
-     */
-    public void updateEventName(ActionEvent event) {
-        String name = eventNameTextField.getText();
-        selectedEvent.setTitle(name);
-        server.updateEvent(selectedEvent);
-
-        switchToNameLabel();
-        refresh();
-
-    }
-
-    /**
-     * switches to text field for the date
-     */
-
-    public void switchToDateTextField() {
-        eventDatePicker.setVisible(true);
-        eventDatePicker.requestFocus();
-        eventDate.setVisible(false);
-    }
-
-    /**
-     * switches to text field for the location
-     */
-    public void switchToLocTextField() {
-        eventLocationTextField.setVisible(true);
-        eventLocationTextField.requestFocus();
-        eventLocation.setVisible(false);
-    }
-
-    /**
-     * switches to label field for the date
-     */
-
-    public void switchToDateLabel() {
-        eventDatePicker.setVisible(false);
-        SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
-        String dateInString = eventDatePicker.getValue().getDayOfMonth() + "/" +
-                eventDatePicker.getValue().getMonthValue() + "/" +
-                eventDatePicker.getValue().getYear();
-        eventDate.setText(dateInString);
-        eventDate.setVisible(true);
-    }
-
-    /**
-     * updates the event s date in the db
-     *
-     * @param event
-     */
-    public void updateEventDate(ActionEvent event) {
-
-        try {
-            LocalDate newDate = eventDatePicker.getValue();
-            Date date = Date.from(newDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            selectedEvent.setDate(date);
-            server.updateEvent(selectedEvent);
-            SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyyy");
-            String dateInString = ft.format(selectedEvent.getDate());
-            eventDate.setText(dateInString);
-            switchToDateLabel();
-        } catch (DateTimeParseException e) {
-            System.err.println("Error parsing date: " + e.getMessage());
-        }
-    }
-
-    /**
-     * switches to the location label
-     */
-    public void switchToLocationLabel() {
-        eventLocationTextField.setVisible(false);
-        eventLocation.setText(eventLocationTextField.getText());
-        eventLocation.setVisible(true);
-    }
-
-    /**
-     * updates the event s location in the db
-     *
-     * @param event
-     */
-    public void updateEventLocation(ActionEvent event) {
-        String location = eventLocationTextField.getText();
-        selectedEvent.setLocation(location);
-        switchToLocationLabel();
-        server.updateEvent(selectedEvent);
-
-    }
-
-    /**
-     * switches to text field for description
-     */
-    public void switchToDescriptionTextField() {
-        eventDescriptionTextField.setVisible(true);
-        eventDescriptionTextField.requestFocus();
-        eventDescription.setVisible(false);
-    }
-
-    /**
-     * switchces back to label
-     */
-
-    public void switchToDescriptionLabel() {
-        eventDescriptionTextField.setVisible(false);
-        eventDescription.setVisible(true);
-    }
-
-    /**
-     * updated the description in the db
-     *
-     * @param event
-     */
-    public void updateEventDescription(ActionEvent event) {
-        String description = eventDescriptionTextField.getText();
-        selectedEvent.setDescription(description);
-        server.updateEvent(selectedEvent);
-
-        switchToDescriptionLabel();
-        refresh();
-
     }
 
     /**
