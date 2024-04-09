@@ -1,7 +1,11 @@
 package server.api;
 
+import commons.Event;
 import commons.Participant;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.service.ParticipantService;
 
@@ -11,6 +15,8 @@ import java.util.List;
 @RequestMapping("/api/events/{event_id}/participants")
 public class ParticipantController {
     private final ParticipantService participantService;
+    @Autowired
+    private SimpMessagingTemplate template;
 
     /**
      * Constructor for this service class
@@ -54,7 +60,11 @@ public class ParticipantController {
     public ResponseEntity<Participant> createParticipant(@PathVariable(name = "event_id")
                                                              Long eventId,
                                                          @RequestBody Participant participant) {
-        return participantService.createParticipant(eventId, participant);
+        ResponseEntity<Participant> created = participantService.createParticipant(eventId, participant);
+        if (created.getStatusCode().equals(HttpStatus.OK)) {
+            template.convertAndSend("/topic/participants", created.getBody());
+        }
+        return created;
     }
 
     /**
@@ -70,7 +80,11 @@ public class ParticipantController {
                                               @PathVariable(name = "participant_id")
                                               Long participantId,
                                               @RequestBody Participant participant) {
-        return participantService.updateParticipant(eventId, participantId, participant);
+        ResponseEntity<Participant> updated = participantService.updateParticipant(eventId, participantId, participant);
+        if (updated.getStatusCode().equals(HttpStatus.OK)) {
+            template.convertAndSend("/topic/participants", updated.getBody());
+        }
+        return updated;
     }
 
     /**
@@ -83,7 +97,11 @@ public class ParticipantController {
     public ResponseEntity<Participant> delete(@PathVariable(name = "event_id") Long eventId,
                                               @PathVariable(name = "participant_id")
                                               Long participantId) {
-        return participantService.deleteParticipant(eventId, participantId);
+        ResponseEntity<Participant> deleted = participantService.deleteParticipant(eventId, participantId);
+        if (deleted.getStatusCode().equals(HttpStatus.OK)) {
+            template.convertAndSend("/topic/participants", deleted.getBody());
+        }
+        return deleted;
     }
 
 }
