@@ -226,6 +226,60 @@ public class ServerUtils {
 			}
 		});
 	}
+	/**
+	 * Subscribe to topic
+	 * @param dest url to topic endpoint
+	 * @param consumer consumer
+	 */
+	public void registerForExpenses(String dest, Consumer<Expense> consumer) {
+		session.subscribe(dest, new StompFrameHandler() {
+			@Override
+			public Type getPayloadType(StompHeaders headers) {
+				return Expense.class;
+			}
+
+			@Override
+			public void handleFrame(StompHeaders headers, Object payload) {
+				consumer.accept((Expense) payload);
+			}
+		});
+	}
+	/**
+	 * Subscribe to topic
+	 * @param dest url to topic endpoint
+	 * @param consumer consumer
+	 */
+	public void registerForParticipants(String dest, Consumer<Participant> consumer) {
+		session.subscribe(dest, new StompFrameHandler() {
+			@Override
+			public Type getPayloadType(StompHeaders headers) {
+				return Participant.class;
+			}
+
+			@Override
+			public void handleFrame(StompHeaders headers, Object payload) {
+				consumer.accept((Participant) payload);
+			}
+		});
+	}
+	/**
+	 * Subscribe to topic
+	 * @param dest url to topic endpoint
+	 * @param consumer consumer
+	 */
+	public void registerForTags(String dest, Consumer<Tag> consumer) {
+		session.subscribe(dest, new StompFrameHandler() {
+			@Override
+			public Type getPayloadType(StompHeaders headers) {
+				return Tag.class;
+			}
+
+			@Override
+			public void handleFrame(StompHeaders headers, Object payload) {
+				consumer.accept((Tag) payload);
+			}
+		});
+	}
 
 	/**
 	 * Use this to add an event to the database using websockets
