@@ -213,6 +213,7 @@ public class OverviewCtrl implements Initializable {
      *
      */
     public void addExpense() {
+        setIsActive(false);
         mainCtrl.showAddExpenses();
     }
 
@@ -329,6 +330,7 @@ public class OverviewCtrl implements Initializable {
      * goes to edit event info scene
      */
     public void editEvent() {
+        setIsActive(false);
         mainCtrl.showEditEvent(selectedEvent);
     }
 

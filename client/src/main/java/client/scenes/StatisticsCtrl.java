@@ -260,6 +260,9 @@ public class StatisticsCtrl implements Initializable {
      * Add keyboard navigation
      */
     private void addKeyboardNavigationHandlers() {
+        if (vbox == null) {
+            return;
+        }
         vbox.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 back();

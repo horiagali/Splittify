@@ -465,7 +465,6 @@ public class MainCtrl {
      * @param title title
      */
     public void setStageTitle(String title) {
-        StatisticsCtrl.setIsActive(true);
         primaryStage.setTitle(title);
     }
 
