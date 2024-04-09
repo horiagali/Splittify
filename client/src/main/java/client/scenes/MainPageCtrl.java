@@ -238,16 +238,6 @@ public class MainPageCtrl implements Initializable {
 
     private void handlePropagation(Event event) {
         refresh();
-        /*List<Long> ids = data.stream().map(Event::getId).toList();
-        if (!ids.contains(event.getId())) {
-            data.add(event);
-        } else if (data.stream().toList().contains(event)) {
-            data.remove(event);
-        } else {
-            int index = ids.indexOf(event.getId());
-            data.remove(index);
-            data.add(index, event);
-        }*/
     }
 
     /**

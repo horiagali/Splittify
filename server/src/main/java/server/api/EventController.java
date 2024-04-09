@@ -123,7 +123,11 @@ public class EventController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
-        return eventService.createEvent(event);
+        ResponseEntity<Event> created = eventService.createEvent(event);
+        if (created.getStatusCode().equals(HttpStatus.OK)) {
+            template.convertAndSend("/topic/events", created.getBody());
+        }
+        return created;
     }
 
     /**
