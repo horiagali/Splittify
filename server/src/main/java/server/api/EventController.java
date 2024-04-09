@@ -126,6 +126,7 @@ public class EventController {
         ResponseEntity<Event> created = eventService.createEvent(event);
         if (created.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/events", created.getBody());
+            listeners.forEach((k, l) -> l.accept(created.getBody()));
         }
         return created;
     }
@@ -152,6 +153,7 @@ public class EventController {
         ResponseEntity<Event> deleted = eventService.deleteEvent(id);
         if (deleted.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/events", deleted.getBody());
+            listeners.forEach((k, l) -> l.accept(deleted.getBody()));
         }
 
         return deleted;
@@ -171,6 +173,7 @@ public class EventController {
         ResponseEntity<Event> updated = eventService.updateEvent(event, id);
         if (updated.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/events", updated.getBody());
+            listeners.forEach((k, l) -> l.accept(updated.getBody()));
         }
         return updated;
     }

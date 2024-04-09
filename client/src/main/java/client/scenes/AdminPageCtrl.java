@@ -132,8 +132,7 @@ public class AdminPageCtrl implements Initializable {
      * @param e event
      */
     private void addData(Event e) {
-        this.data.add(e);
-        table.setItems(data);
+        refresh();
         handleSort();
     }
 
