@@ -18,7 +18,7 @@ import client.utils.ServerUtils;
 public class Config {
     private String serverUrl = "http://localhost:8080/";
     private String language = "english";
-    private ArrayList<Long> eventIds;
+    private ArrayList<Long> eventIds = new ArrayList<>();
 
     private String username;
 
@@ -98,6 +98,7 @@ public class Config {
     public void addId(Long id) {
         if(!eventIds.contains((Object) id))
         eventIds.add(id);
+        saveConfig(this, serverUrl);
     }
 
     /**

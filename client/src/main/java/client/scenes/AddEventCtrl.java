@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
 
+import client.Main;
 import client.utils.Currency;
 import client.utils.ServerUtils;
 import commons.Event;
@@ -118,16 +119,19 @@ public class AddEventCtrl implements Initializable {
         );
 
         try {
+            newEvent = server.addEvent(newEvent);
             server.sendEvent("/app/events", newEvent);
-            //server.addEvent(newEvent);
+            Main.config.addId(newEvent.getId());
+            mainCtrl.showEventOverview(newEvent);
+            
         } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
+            mainCtrl.showOverview();
         }
         clearFields();
-        mainCtrl.showOverview();
     }
 
     /**

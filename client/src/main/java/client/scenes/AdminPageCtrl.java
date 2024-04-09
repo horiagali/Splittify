@@ -486,6 +486,7 @@ public class AdminPageCtrl implements Initializable {
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 server.deleteEvent(selectedEvent);
+                Main.config.removeId(selectedEvent.getId());
                 refresh();
             } else {
                 System.out.println(MainCtrl.resourceBundle.getString("Text.eventDeleteCanceled"));
