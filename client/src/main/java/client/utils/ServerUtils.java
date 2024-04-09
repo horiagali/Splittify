@@ -116,6 +116,17 @@ public class ServerUtils {
 		}
 	}
 
+	/**
+	 * Password getter for admin.
+	 * @return the password.
+	 */
+	public String getPassword() throws IOException {
+		return ClientBuilder.newClient(new ClientConfig())
+				.target(server).path("/admin")
+				.request()
+				.get(new GenericType<>() {});
+	}
+
 
 	/**
 	 * 
