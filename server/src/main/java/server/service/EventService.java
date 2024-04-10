@@ -79,8 +79,8 @@ public class EventService {
             return ResponseEntity.notFound().build();
         }
         Event found = eventRepository.findById(id).get();
-        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                .log(Level.INFO, "Event requested: "+found);
+        //Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+        //       .log(Level.INFO, "Event requested");
         return ResponseEntity.ok(found);
     }
 

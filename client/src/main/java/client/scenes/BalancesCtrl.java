@@ -126,48 +126,34 @@ public class BalancesCtrl implements Initializable {
             return cell;
         });
         addKeyboardNavigationHandlers();
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    handlePropagation();
-                });
-            }
-        }, 0, 1000);
-
-    }
-
-    private void handlePropagation() {
-        if (isActive) {
-            if ((participants == null ||
-                    expenses == null) &&
-                    event != null) {
-
-                List<Participant> newParticipants = server.getParticipants(event.getId());
-                List<Expense> newExpenses = server.getExpensesByEventId(event.getId());
-
-                participants = newParticipants;
-                expenses = newExpenses;
-
-            }
-
-            if (event != null) {
-                List<Participant> newParticipants = server.getParticipants(event.getId());
-                List<Expense> newExpenses = server.getExpensesByEventId(event.getId());
-
-                if (!participants.equals(newParticipants)
-                        || !expenses.equals(newExpenses)) {
-
-                    participants = newParticipants;
-                    expenses = newExpenses;
-
-                    refresh();
-
+        server.registerForParticipants("/topic/participants", p -> {
+            Platform.runLater(() -> {
+                if (event == null) {
+                    return;
                 }
-            }
-        }
-    }
+                System.out.println(p);
 
+                refresh();
+                System.out.println("refresh cause participant change");
+
+
+            });
+        });
+
+        server.registerForExpenses("/topic/expenses", e -> {
+            Platform.runLater(() -> {
+                if (event == null) {
+                    return;
+                }
+                System.out.println(e);
+
+                refresh();
+                System.out.println("refresh cause expense change");
+
+            });
+        });
+    }
+    
     /**
      * Sets is active to true. You want is to be true if the page is being viewed
      * @param bool
