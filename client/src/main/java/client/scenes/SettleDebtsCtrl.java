@@ -175,7 +175,13 @@ public class SettleDebtsCtrl implements Initializable {
                             + event.getTitle() + " " +
                                     MainCtrl.resourceBundle.getString("Text.on")
                                     + " " + ServerUtils.getServer());
+
                     EmailUtils.sendEmail(mail);
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Email sent successfully");
+                    alert.setHeaderText("Sent Email");
+                    alert.setContentText("The email was sent to " + participant.getEmail());
+                    alert.showAndWait();
                 });
             }
             @Override
