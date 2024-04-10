@@ -127,33 +127,23 @@ public class BalancesCtrl implements Initializable {
         });
         addKeyboardNavigationHandlers();
         server.registerForParticipants("/topic/participants", p -> {
-            Platform.runLater(() -> {
-                if (event == null) {
-                    return;
-                }
-                System.out.println(p);
-
-                refresh();
-                System.out.println("refresh cause participant change");
-
-
-            });
+            handlePropagation();
         });
 
         server.registerForExpenses("/topic/expenses", e -> {
-            Platform.runLater(() -> {
-                if (event == null) {
-                    return;
-                }
-                System.out.println(e);
-
-                refresh();
-                System.out.println("refresh cause expense change");
-
-            });
+            handlePropagation();
         });
     }
-    
+
+    private void handlePropagation() {
+        Platform.runLater(() -> {
+            if (event == null) {
+                return;
+            }
+            refresh();
+        });
+    }
+
     /**
      * Sets is active to true. You want is to be true if the page is being viewed
      * @param bool
