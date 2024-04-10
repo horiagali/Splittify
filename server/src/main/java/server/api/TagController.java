@@ -5,6 +5,7 @@ import java.util.List;
 import commons.Tag;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -63,9 +64,9 @@ public class TagController {
     public ResponseEntity<Tag> createTag(@RequestBody Tag tag, 
     @PathVariable(name = "event_id") Long eventId) {
         ResponseEntity<Tag> created = tagService.createTag(tag, eventId);
-        /*if (created.getStatusCode().equals(HttpStatus.OK)) {
+        if (created.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/tags", created.getBody());
-        }*/
+        }
         return created;
     }
 
@@ -80,9 +81,9 @@ public class TagController {
     public ResponseEntity<Tag> deleteTag(@PathVariable(name = "event_id") Long eventId,
                          @PathVariable(name = "id") Long tagId){
         ResponseEntity<Tag> deleted = tagService.deleteTag(eventId, tagId);
-        /*if (deleted.getStatusCode().equals(HttpStatus.OK)) {
+        if (deleted.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/tags", deleted.getBody());
-        }*/
+        }
         return deleted;
     }
 
@@ -99,9 +100,9 @@ public class TagController {
     (@PathVariable(name = "event_id") Long eventId, @RequestBody Tag tag,
                          @PathVariable(name = "id") Long id){
         ResponseEntity<Tag> updated = tagService.updateTag(eventId, tag, id);
-        /*if (updated.getStatusCode().equals(HttpStatus.OK)) {
+        if (updated.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/tags", updated.getBody());
-        }*/
+        }
         return updated;
     }
 
