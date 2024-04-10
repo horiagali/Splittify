@@ -91,6 +91,8 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private Label eventLocation;
     @FXML
+    private Text eventCode;
+    @FXML
     private Label eventDescription;
     @FXML
     private Button backButton;
@@ -167,6 +169,7 @@ public class OverviewCtrl implements Initializable {
     public void displayEvent(Event selectedEvent) {
         EventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
+        eventCode.setText("The event code is: " + selectedEvent.getId());
         eventDescription.setText(selectedEvent.getDescription());
         setSelectedEvent(selectedEvent);
     }
@@ -482,6 +485,7 @@ public class OverviewCtrl implements Initializable {
     private void loadEventInfo() {
         EventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
+        eventCode.setText("The event code is: " + selectedEvent.getId());
         eventDescription.setText(selectedEvent.getDescription());
     }
 
