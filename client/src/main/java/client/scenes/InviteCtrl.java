@@ -348,11 +348,39 @@ public class InviteCtrl implements Initializable {
         if (!sendingInProgress) {
             sendingInProgress = true;
             sendButton.setDisable(true);
+            List<String> invalid = new ArrayList<>();
             for (String email : emailList){
-                Mail mail = new Mail(email,event.getTitle(), "The invite code is: " +
-                        event.getId().toString());
-                server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
-                executor.execute(() -> EmailUtils.sendEmail(mail));
+                if (!isValidEmail(email))
+                    invalid.add(email);
+            }
+            if (invalid.size() == 0) {
+                List<String> allEmails = new ArrayList<>();
+                for (String email : emailList) {
+                    allEmails.add(email);
+                    Mail mail = new Mail(email, event.getTitle(), "The invite code is: " +
+                            event.getId().toString());
+                    server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
+                    executor.execute(() -> EmailUtils.sendEmail(mail));
+                }
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Email sent successfully");
+                alert.setHeaderText("The email was sent");
+                String s = "The email was sent to:";
+                for (String email : emailList){
+                    s  = s + " " + email;
+                }
+                alert.setContentText(s);
+                alert.showAndWait();
+            }
+            else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Email not sent");
+                alert.setHeaderText("The email was not sent");
+                String s = "There are invalid email addresses:";
+                for (String email : invalid){
+                    s  = s + " " + email;
+                }
+                alert.setContentText(s);
             }
 
             // Update last change date

@@ -179,7 +179,7 @@ public class SettleDebtsCtrl implements Initializable {
                     EmailUtils.sendEmail(mail);
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Email sent successfully");
-                    alert.setHeaderText("Sent Email");
+                    alert.setHeaderText("The email was sent");
                     alert.setContentText("The email was sent to " + participant.getEmail());
                     alert.showAndWait();
                 });
