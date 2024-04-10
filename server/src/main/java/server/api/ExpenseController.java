@@ -3,6 +3,7 @@ package server.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -87,9 +88,9 @@ public class ExpenseController {
     public ResponseEntity<Expense> createExpense(@PathVariable(name = "event_id")Long eventId, 
     @RequestBody Expense expense) {
         ResponseEntity<Expense> created = expenseService.createExpense(eventId, expense);
-        /*if (created.getStatusCode().equals(HttpStatus.OK)) {
+        if (created.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/expenses", created.getBody());
-        }*/
+        }
         return created;
     }
 
@@ -104,9 +105,9 @@ public class ExpenseController {
     public ResponseEntity<Expense> createExpenseDebt(@PathVariable(name = "event_id")Long eventId,
                                                  @RequestBody Expense expense) {
         ResponseEntity<Expense> created = expenseService.createExpenseDebt(eventId, expense);
-        /*if (created.getStatusCode().equals(HttpStatus.OK)) {
+        if (created.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/expenses", created.getBody());
-        }*/
+        }
         return created;
     }
 
@@ -122,9 +123,9 @@ public class ExpenseController {
     @PathVariable(name = "expense_id") Long expenseId, @RequestBody Expense expense) {
 
         ResponseEntity<Expense> updated = expenseService.updateExpense(eventId, expenseId, expense);
-        /*if (updated.getStatusCode().equals(HttpStatus.OK)) {
+        if (updated.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/expenses", updated.getBody());
-        }*/
+        }
         return updated;
     }
 
@@ -138,9 +139,9 @@ public class ExpenseController {
     public ResponseEntity<Expense> delete(@PathVariable(name = "event_id") Long eventId, 
     @PathVariable(name = "expense_id") Long expenseId) {
         ResponseEntity<Expense> deleted = expenseService.deleteExpense(eventId, expenseId);
-        /*if (deleted.getStatusCode().equals(HttpStatus.OK)) {
+        if (deleted.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/expenses", deleted.getBody());
-        }*/
+        }
         return deleted;
     }
 
@@ -154,9 +155,9 @@ public class ExpenseController {
     public ResponseEntity<Expense> deleteDebt(@PathVariable(name = "event_id") Long eventId,
                                           @PathVariable(name = "expense_id") Long expenseId) {
         ResponseEntity<Expense> deleted = expenseService.deleteExpenseDebt(eventId, expenseId);
-        /*if (deleted.getStatusCode().equals(HttpStatus.OK)) {
+        if (deleted.getStatusCode().equals(HttpStatus.OK)) {
             template.convertAndSend("/topic/expenses", deleted.getBody());
-        }*/
+        }
         return deleted;
     }
 }
