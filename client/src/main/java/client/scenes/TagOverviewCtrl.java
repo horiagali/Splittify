@@ -517,30 +517,13 @@ public class TagOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                Platform.runLater(() -> {
-                    if (isActive) {
-                        if (event != null && tags == null) {
-                            tags = server.getTags(OverviewCtrl.getSelectedEvent().getId());
-                        }
-
-                        if (event != null) {
-                            List<Tag> newTags = server.
-                                    getTags(OverviewCtrl.getSelectedEvent().getId());
-
-                            if (!tags.equals(newTags)) {
-                                tags = newTags;
-                                loadTags();
-                            }
-                        }
-                        loadTags();
-                    }
-                });
-            }
-        }, 0, 1000);
+        server.registerForTags("/topic/tags", t -> {
+            Platform.runLater(() -> {
+                loadTags();
+            });
+        });
     }
+
 
     /**
      * Add keyboard navigation

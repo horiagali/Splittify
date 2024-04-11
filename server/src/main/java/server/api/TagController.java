@@ -4,7 +4,10 @@ import java.util.List;
 
 import commons.Tag;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import server.service.TagService;
@@ -14,6 +17,8 @@ import server.service.TagService;
 public class TagController {
 
     private final TagService tagService;
+    @Autowired
+    private SimpMessagingTemplate template;
 
     /**
      * Constructor for the TagController
@@ -58,7 +63,11 @@ public class TagController {
     @ResponseBody
     public ResponseEntity<Tag> createTag(@RequestBody Tag tag, 
     @PathVariable(name = "event_id") Long eventId) {
-        return tagService.createTag(tag, eventId);
+        ResponseEntity<Tag> created = tagService.createTag(tag, eventId);
+        if (created.getStatusCode().equals(HttpStatus.OK)) {
+            template.convertAndSend("/topic/tags", created.getBody());
+        }
+        return created;
     }
 
     /**
@@ -71,7 +80,11 @@ public class TagController {
     @ResponseBody
     public ResponseEntity<Tag> deleteTag(@PathVariable(name = "event_id") Long eventId,
                          @PathVariable(name = "id") Long tagId){
-        return tagService.deleteTag(eventId, tagId);
+        ResponseEntity<Tag> deleted = tagService.deleteTag(eventId, tagId);
+        if (deleted.getStatusCode().equals(HttpStatus.OK)) {
+            template.convertAndSend("/topic/tags", deleted.getBody());
+        }
+        return deleted;
     }
 
     /**
@@ -86,7 +99,11 @@ public class TagController {
     public ResponseEntity<Tag> updateTag
     (@PathVariable(name = "event_id") Long eventId, @RequestBody Tag tag,
                          @PathVariable(name = "id") Long id){
-        return tagService.updateTag(eventId, tag, id);
+        ResponseEntity<Tag> updated = tagService.updateTag(eventId, tag, id);
+        if (updated.getStatusCode().equals(HttpStatus.OK)) {
+            template.convertAndSend("/topic/tags", updated.getBody());
+        }
+        return updated;
     }
 
 }
