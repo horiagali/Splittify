@@ -3,6 +3,7 @@ package client;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import client.utils.ServerUtils;
 public class Config {
     private String serverUrl = "http://localhost:8080/";
     private String language = "english";
+    private ArrayList<Long> eventIds = new ArrayList<>();
 
     private String username;
 
@@ -70,6 +72,33 @@ public class Config {
      */
     public String getServerUrl() {
         return serverUrl;
+    }
+
+    /**
+     * getter for event Ids;
+     * @return and arraylist of ids
+     */
+    public ArrayList<Long> getEventIds() {
+        return eventIds;
+    }
+
+    /**
+     * removes an id from the list
+     * @param id to remove
+     */
+    public void removeId(Long id) {
+        eventIds.remove(id);
+        saveConfig(this, serverUrl);
+    }
+
+    /**
+     * adds id to list
+     * @param id to add
+     */
+    public void addId(Long id) {
+        if(!eventIds.contains((Object) id))
+        eventIds.add(id);
+        saveConfig(this, serverUrl);
     }
 
     /**
