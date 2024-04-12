@@ -79,6 +79,7 @@ public class StatisticsCtrl implements Initializable {
      * uses rounding to ensure percentages round to 100%
      */
     public void refresh() {
+        pieChart.getData().clear();
         totalAmount = 0; //reset total amount every refresh (else it becomes more and mroe)
         if (!(this.pieChartData == null))
             pieChartData.clear();
@@ -88,6 +89,7 @@ public class StatisticsCtrl implements Initializable {
         createData(expenses, tags);
         pieChart.setData(pieChartData);
         eventTotalAmount.setText("" + totalAmount);
+        pieChart.setTitle("Statistics of this event");
         updateUIWithNewLanguage();
 
         //giving the pie chart the correct colors.
@@ -194,7 +196,7 @@ public class StatisticsCtrl implements Initializable {
     public void updateUIWithNewLanguage() {
         mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.statistics"));
         String piechartString = "Text.statisticsTitle";
-        if (event != null) {
+        if (event != null && event.getTitle() != null) {
             pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString) + event.getTitle());
         } else {
             pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString));
@@ -239,8 +241,8 @@ public class StatisticsCtrl implements Initializable {
      *
      * @param selectedEvent
      */
-    public static void setEvent(Event selectedEvent) {
-        StatisticsCtrl.event = selectedEvent;
+    public void setEvent(Event selectedEvent) {
+        StatisticsCtrl.event = server.getEvent(selectedEvent.getId());
     }
 
     /**
