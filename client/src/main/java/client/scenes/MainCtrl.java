@@ -317,6 +317,7 @@ public class MainCtrl {
         TagOverviewCtrl.setEvent(event);
         primaryStage.setScene(tagOverview);
         tagOverviewCtrl.refresh();
+        TagOverviewCtrl.setIsActive(true);
     }
 
     /**
@@ -378,6 +379,7 @@ public class MainCtrl {
         overviewAppCtrl.resetComboBoxes();
         overviewAppCtrl.refresh();
         primaryStage.setScene(overviewApp);
+        OverviewCtrl.setIsActive(true);
         //overviewAppCtrl.refresh();
     }
 
@@ -405,6 +407,7 @@ public class MainCtrl {
         overviewAppCtrl.refresh();
         overviewAppCtrl.resetComboBoxes();
         overviewAppCtrl.displayEvent(selectedEvent);
+        OverviewCtrl.setIsActive(true);
     }
 
     /**
@@ -413,8 +416,8 @@ public class MainCtrl {
     public void goToAdminPass() {
         primaryStage.setTitle(resourceBundle.getString("title.adminPassword"));
         primaryStage.setScene(adminPass);
-        String pass = AdminPassCtrl.generatePassword();
-        System.out.println("The password is " + pass);
+        String pass = adminPassCtrl.generatePassword();
+        //System.out.println("The password is " + pass);
         AdminPassCtrl.setPass(pass);
     }
 
@@ -438,6 +441,7 @@ public class MainCtrl {
         balancesCtrl.setEvent(event);
         primaryStage.setScene(balances);
         balancesCtrl.refresh();
+        BalancesCtrl.setIsActive(true);
     }
 
     /**
@@ -451,6 +455,7 @@ public class MainCtrl {
         StatisticsCtrl.setEvent(event);
         primaryStage.setScene(statistics);
         statisticsCtrl.refresh();
+        StatisticsCtrl.setIsActive(true);
 
     }
 

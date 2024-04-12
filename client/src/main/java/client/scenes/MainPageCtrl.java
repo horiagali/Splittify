@@ -28,6 +28,7 @@ import client.utils.ServerUtils;
 import commons.Event;
 import commons.Mail;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -263,7 +264,11 @@ public class MainPageCtrl implements Initializable {
         table.setOnMouseClicked(this::handleTableItemClick);
         addKeyboardNavigationHandlers();
 
-        server.registerForEvents("/topic/events", e -> data.add(e));
+        server.registerForEvents("/topic/events", e -> {
+            Platform.runLater(() -> {
+                refresh();
+            });
+        });
     }
 
     /**
