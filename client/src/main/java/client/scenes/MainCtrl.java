@@ -452,11 +452,11 @@ public class MainCtrl {
     public void goToStatistics(Event event) {
         primaryStage.setTitle(resourceBundle.getString
                 ("title.statisticsOf") + " " + event.getTitle());
-        StatisticsCtrl.setEvent(event);
+        statisticsCtrl.setEvent(event);
+        statisticsCtrl.refresh();
         primaryStage.setScene(statistics);
         statisticsCtrl.refresh();
         StatisticsCtrl.setIsActive(true);
-
     }
 
     /**

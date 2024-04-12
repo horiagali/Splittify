@@ -603,10 +603,15 @@ public class OverviewCtrl implements Initializable {
                                 !"debt".equalsIgnoreCase(x.getTag().getName())).toList();
         expenses = applyFilters(expenses);
         if (expenses.isEmpty()) {
+            statisticsButton.setDisable(true);
             expensesBox.getChildren()
                     .add(new Text(MainCtrl.resourceBundle.getString("Text.noExpensesFiltered")));
             return;
+        } else {
+            statisticsButton.setDisable(false);
         }
+        
+        
         for (Expense expense : expenses) {
             VBox vbox = new VBox();
             vbox.setMinWidth(300);
