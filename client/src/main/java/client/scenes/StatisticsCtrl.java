@@ -79,6 +79,7 @@ public class StatisticsCtrl implements Initializable {
      * uses rounding to ensure percentages round to 100%
      */
     public void refresh() {
+        pieChart.getData().clear();
         totalAmount = 0; //reset total amount every refresh (else it becomes more and mroe)
         if (!(this.pieChartData == null))
             pieChartData.clear();
@@ -88,19 +89,19 @@ public class StatisticsCtrl implements Initializable {
         createData(expenses, tags);
         pieChart.setData(pieChartData);
         eventTotalAmount.setText("" + totalAmount);
+        pieChart.setTitle("Statistics of this event");
         updateUIWithNewLanguage();
 
-        //giving the pie chart the correct colors. Cant get the legend to have the correct colors,
-        //so i also wont change to colors in the pie chart itself.
-        // for(var data : pieChartData) {
-        //     var tag = expenses.stream().map(x -> x.getTag())
-        //     .filter(x -> data.getName().substring(0, data.getName().indexOf(':'))
-        //     .equals(x.getName()))
-        //     .findFirst();
-        //     if(tag.isEmpty()) continue;
+        //giving the pie chart the correct colors.
+        for(var data : pieChartData) {
+            var tag = expenses.stream().map(x -> x.getTag())
+            .filter(x -> data.getName().substring(0, data.getName().indexOf(':'))
+            .equals(x.getName()))
+            .findFirst();
+            if(tag.isEmpty()) continue;
 
-        //     data.getNode().setStyle("-fx-pie-color: " + tag.get().getColor());
-        // }
+            data.getNode().setStyle("-fx-pie-color: " + tag.get().getColor());
+        }
         addKeyboardNavigationHandlers();
 
     }
@@ -195,7 +196,7 @@ public class StatisticsCtrl implements Initializable {
     public void updateUIWithNewLanguage() {
         mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString("title.statistics"));
         String piechartString = "Text.statisticsTitle";
-        if (event != null) {
+        if (event != null && event.getTitle() != null) {
             pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString) + event.getTitle());
         } else {
             pieChart.setTitle(MainCtrl.resourceBundle.getString(piechartString));
@@ -240,14 +241,15 @@ public class StatisticsCtrl implements Initializable {
      *
      * @param selectedEvent
      */
-    public static void setEvent(Event selectedEvent) {
-        StatisticsCtrl.event = selectedEvent;
+    public void setEvent(Event selectedEvent) {
+        StatisticsCtrl.event = server.getEvent(selectedEvent.getId());
     }
 
     /**
      * back button
      */
     public void back() {
+        pieChart.getData().clear();
         setIsActive(false);
         if (!event.isClosed())
             mainCtrl.goToOverview();

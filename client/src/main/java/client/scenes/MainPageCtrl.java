@@ -546,5 +546,10 @@ public class MainPageCtrl implements Initializable {
     public void testEmail(){
         Mail mail = new Mail(EmailUtils.getUsername(),"Test Email", "This is a default email.");
         EmailUtils.sendEmail(mail);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Email sent successfully");
+        alert.setHeaderText("The email was sent");
+        alert.setContentText("The email was sent to " + EmailUtils.getUsername());
+        alert.showAndWait();
     }
 }

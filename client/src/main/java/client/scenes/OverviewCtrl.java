@@ -92,6 +92,8 @@ public class OverviewCtrl implements Initializable {
     @FXML
     private Label eventLocation;
     @FXML
+    private Text eventCode;
+    @FXML
     private Label eventDescription;
     @FXML
     private Button backButton;
@@ -168,6 +170,7 @@ public class OverviewCtrl implements Initializable {
     public void displayEvent(Event selectedEvent) {
         EventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
+        eventCode.setText("The event code is: " + selectedEvent.getId());
         eventDescription.setText(selectedEvent.getDescription());
         setSelectedEvent(selectedEvent);
         setIsActive(true);
@@ -500,6 +503,7 @@ public class OverviewCtrl implements Initializable {
     private void loadEventInfo() {
         EventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
+        eventCode.setText("The event code is: " + selectedEvent.getId());
         eventDescription.setText(selectedEvent.getDescription());
     }
 
@@ -603,10 +607,15 @@ public class OverviewCtrl implements Initializable {
                                 !"debt".equalsIgnoreCase(x.getTag().getName())).toList();
         expenses = applyFilters(expenses);
         if (expenses.isEmpty()) {
+            statisticsButton.setDisable(true);
             expensesBox.getChildren()
                     .add(new Text(MainCtrl.resourceBundle.getString("Text.noExpensesFiltered")));
             return;
+        } else {
+            statisticsButton.setDisable(false);
         }
+        
+        
         for (Expense expense : expenses) {
             VBox vbox = new VBox();
             vbox.setMinWidth(300);
