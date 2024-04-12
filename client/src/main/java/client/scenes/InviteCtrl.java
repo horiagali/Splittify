@@ -114,11 +114,13 @@ public class InviteCtrl implements Initializable {
             sendButton.setStyle("--body-background-color: grey;");
         }
     }
+
     /**
      * good credentials
+     *
      * @return true if good, false otherwise
      */
-    private boolean goodCredentials(){
+    private boolean goodCredentials() {
         if (EmailUtils.getHost() == null || EmailUtils.getPort() == null ||
                 EmailUtils.getPassword() == null || EmailUtils.getUsername() == null)
             return false;
@@ -150,6 +152,7 @@ public class InviteCtrl implements Initializable {
 
     /**
      * Add keyboard navigation
+     *
      * @param event to link to other method
      */
     private void handleAdditionalKeyEvents(KeyEvent event) {
@@ -173,14 +176,14 @@ public class InviteCtrl implements Initializable {
 
     /**
      * Generates a unique invite code.
+     *
      * @return the invitation code
      */
     private String getInviteCode() {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         if (selectedEvent != null) {
             return selectedEvent.getId().toString();
-        }
-        else return null;
+        } else return null;
     }
 
     /**
@@ -246,6 +249,7 @@ public class InviteCtrl implements Initializable {
 
     /**
      * Changes the language of the site
+     *
      * @param event
      */
     @FXML
@@ -306,7 +310,8 @@ public class InviteCtrl implements Initializable {
 
     /**
      * Get button
-     * @param email email
+     *
+     * @param email       email
      * @param removeImage the x
      * @return button
      */
@@ -330,8 +335,9 @@ public class InviteCtrl implements Initializable {
     }
 
     /**
-     *  Method to remove an email address
-     *  @param  email address to be removed
+     * Method to remove an email address
+     *
+     * @param email address to be removed
      */
     private void removeEmail(String email) {
         uniqueEmails.remove(email);
@@ -343,16 +349,44 @@ public class InviteCtrl implements Initializable {
     /**
      * Sends invitations to the entered email addresses.
      */
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MethodLength"})
     @FXML
     private void sendInvitationsByEmail() {
         if (!sendingInProgress) {
             sendingInProgress = true;
             sendButton.setDisable(true);
-            for (String email : emailList){
-                Mail mail = new Mail(email,event.getTitle(), "The invite code is: " +
-                        event.getId().toString());
-                server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
-                executor.execute(() -> EmailUtils.sendEmail(mail));
+            List<String> invalid = new ArrayList<>();
+            for (String email : emailList) {
+                if (!isValidEmail(email))
+                    invalid.add(email);
+            }
+            if (invalid.size() == 0) {
+                List<String> allEmails = new ArrayList<>();
+                for (String email : emailList) {
+                    allEmails.add(email);
+                    Mail mail = new Mail(email, event.getTitle(), "The invite code is: " +
+                            event.getId().toString());
+                    server.addParticipant(event.getId(), new Participant(email, email, "", "", 0));
+                    executor.execute(() -> EmailUtils.sendEmail(mail));
+                }
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Email sent successfully");
+                alert.setHeaderText("The email was sent");
+                String s = "The email was sent to:";
+                for (String email : emailList) {
+                    s = s + " " + email;
+                }
+                alert.setContentText(s);
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Email not sent");
+                alert.setHeaderText("The email was not sent");
+                String s = "There are invalid email addresses:";
+                for (String email : invalid) {
+                    s = s + " " + email;
+                }
+                alert.setContentText(s);
             }
 
             // Update last change date
@@ -371,6 +405,7 @@ public class InviteCtrl implements Initializable {
 
     /**
      * Checks whether email is valid
+     *
      * @param email email to check
      * @return true iff valid
      */
@@ -392,6 +427,7 @@ public class InviteCtrl implements Initializable {
 
     /**
      * setter for the event
+     *
      * @param event an Event
      */
     public void setEvent(Event event) {
@@ -413,6 +449,7 @@ public class InviteCtrl implements Initializable {
 
     /**
      * changes the currency to whatever is selected
+     *
      * @param event
      */
     @FXML
