@@ -83,7 +83,7 @@
    </MenuBar>
    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="705.0" prefWidth="882.0">
       <children>
-         <PieChart fx:id="pieChart" layoutX="107.0" layoutY="27.0" prefHeight="544.0" prefWidth="667.0" title="Statistics" />
+         <PieChart fx:id="pieChart" layoutX="107.0" layoutY="27.0" legendVisible="false" prefHeight="544.0" prefWidth="667.0" title="Statistics" />
          <Button fx:id="refresh" layoutX="760.0" layoutY="51.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
          <Button fx:id="back" layoutX="768.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" text="Back" />
          <Text fx:id="eventTotalAmount" layoutX="310.0" layoutY="584.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total cost of event: " wrappingWidth="262.13671875" />
