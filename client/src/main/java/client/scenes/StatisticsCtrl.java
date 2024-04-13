@@ -78,7 +78,6 @@ public class StatisticsCtrl implements Initializable {
      * uses rounding to ensure percentages round to 100%
      */
     public void refresh() {
-        pieChart.getData().clear();
         totalAmount = 0; //reset total amount every refresh (else it becomes more and mroe)
         if (!(this.pieChartData == null))
             pieChartData.clear();
@@ -111,7 +110,9 @@ public class StatisticsCtrl implements Initializable {
      *
      * @param expenses list of expenses of this event.
      * @param tags     list of tags of this event.
+     * @param showByTag boolean to know which piechart to show
      */
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MethodLength"})
     private void createData(List<Expense> expenses, List<Tag> tags, boolean showByTag) {
         if (showByTag) {
             // Clear existing data
@@ -134,7 +135,8 @@ public class StatisticsCtrl implements Initializable {
                 double amount = tagExpenses.get(tag);
                 amount = Currency.round(amount * Currency.getRate());
                 if (amount != 0) {
-                    pieChartData.add(new PieChart.Data(tag.getName() + ": " + amount + " " + Currency.getCurrencyUsed(), amount));
+                    pieChartData.add(new PieChart.Data(tag.getName() + ": "
+                            + amount + " " + Currency.getCurrencyUsed(), amount));
                     totalAmount += amount;
                 }
             }
@@ -149,7 +151,7 @@ public class StatisticsCtrl implements Initializable {
             pieChart.setData(pieChartData);
             eventTotalAmount.setText("" + totalAmount + " " + Currency.getCurrencyUsed());
             pieChart.setTitle("Expenses by Tag");
-            toggleViewButton.setText("View Expenses per Participant");
+            toggleViewButton.setText("View Expenses per Payer");
         } else {
             // Clear existing data
             pieChartData.clear();
@@ -172,7 +174,8 @@ public class StatisticsCtrl implements Initializable {
                 double amount = entry.getValue();
                 amount = Currency.round(amount * Currency.getRate());
                 if (amount != 0) {
-                    pieChartData.add(new PieChart.Data(participantName + ": " + amount + " " + Currency.getCurrencyUsed(), amount));
+                    pieChartData.add(new PieChart.Data(participantName + ": "
+                            + amount + " " + Currency.getCurrencyUsed(), amount));
                     totalAmount += amount;
                 }
             }
@@ -295,6 +298,7 @@ public class StatisticsCtrl implements Initializable {
     public void back() {
         pieChart.getData().clear();
         setIsActive(false);
+        toggleViewButton.setSelected(true);
         if (!event.isClosed())
             mainCtrl.goToOverview();
         else
