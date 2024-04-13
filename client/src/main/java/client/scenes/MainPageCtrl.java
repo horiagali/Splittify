@@ -1,41 +1,58 @@
 package client.scenes;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.google.inject.Inject;
+
 import client.Main;
 import client.utils.Currency;
 import client.utils.EmailUtils;
 import client.utils.ServerUtils;
-
-import com.google.inject.Inject;
 import commons.Event;
 import commons.Mail;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Menu;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.FileChooser;
-
-import java.io.*;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javafx.stage.Modality;
 
 
 public class MainPageCtrl implements Initializable {
@@ -56,6 +73,10 @@ public class MainPageCtrl implements Initializable {
     private TableColumn<Event, String> colLocation;
     @FXML
     private TableColumn<Event, String> colDate;
+    @FXML
+    private TableColumn<Event, Number> colVisible;
+
+
     @FXML
     private ToggleGroup languageGroup;
     @FXML
@@ -196,11 +217,17 @@ public class MainPageCtrl implements Initializable {
         try {
             Long eventCode = Long.parseLong(joinEventCode.getText());
             try {
-                if (!server.getEvent(eventCode).isClosed())
+                if (!server.getEvent(eventCode).isClosed()) {
                     mainCtrl.showEventOverview(server.getEvent(eventCode));
-                else
+                    Main.config.addId(eventCode);
+                }
+
+                else {
                     mainCtrl.goToSettleDebts(server.getEvent(eventCode),
                             server.getExpensesByEventId(eventCode));
+                    Main.config.addId(eventCode);
+                }
+                    
             } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -231,6 +258,9 @@ public class MainPageCtrl implements Initializable {
         colLocation.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getLocation()));
         colDate.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getDescription()));
+        colVisible.setCellValueFactory(q -> q.getValue() != null ? 
+            new SimpleLongProperty(q.getValue().getId().longValue()) : null);
+        colVisible.setCellFactory(this::constructButtonCell);
         table.setOnMouseClicked(this::handleTableItemClick);
         addKeyboardNavigationHandlers();
 
@@ -239,6 +269,47 @@ public class MainPageCtrl implements Initializable {
                 refresh();
             });
         });
+    }
+
+    /**
+     * this is the factory for a button cell in a table
+     * @param q just 'q' you know :D 
+     * @return the value to show..
+     */
+    private TableCell<Event, Number> constructButtonCell(TableColumn<Event, Number> q) {
+        var cell = new TableCell<Event, Number>() {
+            @Override
+            protected void updateItem(Number item, boolean empty) {
+                if(item == null || item.doubleValue() == 0) {
+                    setText(null);
+                    return;
+                }
+
+                var id = item.longValue();
+
+                var btn = new Button();
+                btn.setMinWidth(50);
+                Image image = new Image(
+                        getClass().getResourceAsStream("/client/scenes/images/hide_event.png"));
+                ImageView view = new ImageView(image);
+                view.fitHeightProperty().set(24);
+                view.fitWidthProperty().set(24);
+                btn.graphicProperty().set(view);
+                btn.setOnAction(event -> {
+                    Main.config.removeId(id);
+                    colVisible.setCellValueFactory(q -> q.getValue() != null ? 
+                        new SimpleLongProperty(q.getValue().getId().longValue()) : null);
+
+                    refresh();
+                });
+
+
+                setGraphic(btn);
+                setText(null);
+            }
+        };
+
+        return cell;
     }
 
     /**
@@ -338,10 +409,22 @@ public class MainPageCtrl implements Initializable {
      */
 
     public void refresh() {
-        var events = server.getEvents();
+        List<Event> events = new ArrayList<>();
+        List<Long> eventsFromServer = server.getEvents().stream()
+        .map(x-> x.getId()).toList();
+
+        for(Long id : Main.config.getEventIds()) {
+            if(!eventsFromServer.contains(id)) {
+                Main.config.removeId(id);
+                continue;
+            }
+            events.add(server.getEvent(id));
+        }
+
         data = FXCollections.observableList(events);
         table.getItems().clear();
         table.setItems(data);
+        table.refresh();
     }
 
     /**
