@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="vbox" prefHeight="393.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPageCtrl">
+<VBox fx:id="vbox" alignment="TOP_CENTER" prefHeight="454.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminPageCtrl">
     <children>
         <MenuBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="41.0" prefWidth="640.0" VBox.vgrow="NEVER">
             <menus>
@@ -76,7 +76,7 @@
                 <Tooltip text="Empty Tooltip" />
             </tooltip>
         </MenuBar>
-        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="878.0" VBox.vgrow="ALWAYS">
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="435.0" prefWidth="832.0" VBox.vgrow="ALWAYS">
             <VBox layoutX="346.0" layoutY="360.0" spacing="10">
                 <HBox spacing="10">
                     <Button fx:id="backButton" mnemonicParsing="false" onAction="#goBack" text="Back" />
