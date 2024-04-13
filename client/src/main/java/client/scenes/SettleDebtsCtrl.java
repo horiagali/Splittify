@@ -9,6 +9,7 @@ import commons.Event;
 import commons.Expense;
 import commons.Mail;
 import commons.Participant;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -178,7 +179,13 @@ public class SettleDebtsCtrl implements Initializable {
                             + event.getTitle() + " " +
                                     MainCtrl.resourceBundle.getString("Text.on")
                                     + " " + ServerUtils.getServer());
+
                     EmailUtils.sendEmail(mail);
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Email sent successfully");
+                    alert.setHeaderText("The email was sent");
+                    alert.setContentText("The email was sent to " + participant.getEmail());
+                    alert.showAndWait();
                 });
             }
             @Override
@@ -261,6 +268,12 @@ public class SettleDebtsCtrl implements Initializable {
                     setGraphic(null);
                 }
             }
+        });
+
+        server.registerForExpenses("/topic/expenses", e -> {
+            Platform.runLater(() -> {
+                refresh();
+            });
         });
     }
 

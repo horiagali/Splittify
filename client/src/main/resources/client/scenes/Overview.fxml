@@ -168,6 +168,7 @@
             <Button fx:id="undoButton" layoutX="435.0" layoutY="573.0" mnemonicParsing="false" onAction="#undoAction" prefHeight="25.0" prefWidth="101.0" text="Undo Changes" />
             <Button fx:id="giftMoney" layoutX="72.0" layoutY="208.0" mnemonicParsing="false" onAction="#goToBalances" text="Gift Money" />
             <Button layoutX="592.0" layoutY="191.0" mnemonicParsing="false" onAction="#checkDebts" prefHeight="26.0" prefWidth="139.0" text="Debts" />
+            <Text fx:id="eventCode" layoutX="32.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="68.07281494140625" />
          </children>
       </AnchorPane>
    </children>

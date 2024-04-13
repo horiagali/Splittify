@@ -67,6 +67,7 @@ public class OverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;
     private static Event selectedEvent;
     private static boolean isAdmin;
+    private static boolean isActive;
     private UndoManager undoManager = UndoManager.getInstance();
 
     @FXML
@@ -91,6 +92,8 @@ public class OverviewCtrl implements Initializable {
 
     @FXML
     private Label eventLocation;
+    @FXML
+    private Text eventCode;
     @FXML
     private Label eventDescription;
     @FXML
@@ -168,8 +171,10 @@ public class OverviewCtrl implements Initializable {
     public void displayEvent(Event selectedEvent) {
         EventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
+        eventCode.setText("The event code is: " + selectedEvent.getId());
         eventDescription.setText(selectedEvent.getDescription());
         setSelectedEvent(selectedEvent);
+        setIsActive(true);
     }
 
     /**
@@ -181,9 +186,18 @@ public class OverviewCtrl implements Initializable {
     }
 
     /**
+     * Sets isActive field, should be true is this page is being viewed
+     * @param bool
+     */
+    public static void setIsActive(boolean bool) {
+        isActive = bool;
+    }
+
+    /**
      *
      */
     public void back() {
+        setIsActive(false);
         if (isAdmin) {
             mainCtrl.goToAdminPage();
         }
@@ -203,6 +217,7 @@ public class OverviewCtrl implements Initializable {
      *
      */
     public void addExpense() {
+        setIsActive(false);
         mainCtrl.showAddExpenses();
     }
 
@@ -210,6 +225,7 @@ public class OverviewCtrl implements Initializable {
      *
      */
     public void goToContact() {
+        setIsActive(false);
         mainCtrl.goToContact();
     }
 
@@ -217,7 +233,7 @@ public class OverviewCtrl implements Initializable {
      * go to tag overview of specific event
      */
     public void goToTagOverview() {
-        TagOverviewCtrl.setIsActive(true);
+        setIsActive(false);
         mainCtrl.goToTagOverview(selectedEvent);
     }
 
@@ -318,6 +334,7 @@ public class OverviewCtrl implements Initializable {
      * goes to edit event info scene
      */
     public void editEvent() {
+        setIsActive(false);
         mainCtrl.showEditEvent(selectedEvent);
     }
 
@@ -325,6 +342,7 @@ public class OverviewCtrl implements Initializable {
      *
      */
     public void sendInvites() {
+        setIsActive(false);
         mainCtrl.sendInvites(EventName, selectedEvent);
     }
 
@@ -387,42 +405,45 @@ public class OverviewCtrl implements Initializable {
     }
 
     private void handleDataPropagation() {
-        if ((participants == null ||
-                expenses == null ||
-                tags == null) &&
-                selectedEvent != null) {
+        if (isActive) {
 
-            List<Participant> newParticipants = server.getParticipants(selectedEvent.getId());
-            List<Expense> newExpenses = server.getExpensesByEventId(selectedEvent.getId());
-            List<Tag> newTags = server.getTags(selectedEvent.getId());
+            if ((participants == null ||
+                    expenses == null ||
+                    tags == null) &&
+                    selectedEvent != null) {
 
-            participants = newParticipants;
-            expenses = newExpenses;
-            tags = newTags;
-
-        }
-        if (selectedEvent != null) {
-            List<Participant> newParticipants = server.getParticipants(selectedEvent.getId());
-            List<Expense> newExpenses = server.getExpensesByEventId(selectedEvent.getId());
-            List<Tag> newTags = server.getTags(selectedEvent.getId());
-            Event newSelectedEvent = server.getEvent(selectedEvent.getId());
-
-            if (!participants.equals(newParticipants)
-                    || !expenses.equals(newExpenses)
-                    || !tags.equals(newTags)
-                    || !selectedEvent.equals(newSelectedEvent)){
+                List<Participant> newParticipants = server.getParticipants(selectedEvent.getId());
+                List<Expense> newExpenses = server.getExpensesByEventId(selectedEvent.getId());
+                List<Tag> newTags = server.getTags(selectedEvent.getId());
 
                 participants = newParticipants;
                 expenses = newExpenses;
                 tags = newTags;
-                selectedEvent = newSelectedEvent;
 
-                loadParticipants();
-                loadExpenses();
-                loadComboBoxes();
-                loadUpdatedEventInfo();
             }
+            if (selectedEvent != null) {
+                List<Participant> newParticipants = server.getParticipants(selectedEvent.getId());
+                List<Expense> newExpenses = server.getExpensesByEventId(selectedEvent.getId());
+                List<Tag> newTags = server.getTags(selectedEvent.getId());
+                Event newSelectedEvent = server.getEvent(selectedEvent.getId());
 
+                if (!participants.equals(newParticipants)
+                        || !expenses.equals(newExpenses)
+                        || !tags.equals(newTags)
+                        || !selectedEvent.equals(newSelectedEvent)){
+
+                    participants = newParticipants;
+                    expenses = newExpenses;
+                    tags = newTags;
+                    selectedEvent = newSelectedEvent;
+
+                    loadParticipants();
+                    loadExpenses();
+                    loadComboBoxes();
+                    loadUpdatedEventInfo();
+                }
+
+            }
         }
     }
 
@@ -483,6 +504,7 @@ public class OverviewCtrl implements Initializable {
     private void loadEventInfo() {
         EventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
+        eventCode.setText("The event code is: " + selectedEvent.getId());
         eventDescription.setText(selectedEvent.getDescription());
     }
 
@@ -586,10 +608,15 @@ public class OverviewCtrl implements Initializable {
                                 !"debt".equalsIgnoreCase(x.getTag().getName())).toList();
         expenses = applyFilters(expenses);
         if (expenses.isEmpty()) {
+            statisticsButton.setDisable(true);
             expensesBox.getChildren()
                     .add(new Text(MainCtrl.resourceBundle.getString("Text.noExpensesFiltered")));
             return;
+        } else {
+            statisticsButton.setDisable(false);
         }
+        
+        
         for (Expense expense : expenses) {
             VBox vbox = new VBox();
             vbox.setMinWidth(300);
@@ -879,6 +906,7 @@ public class OverviewCtrl implements Initializable {
      *
      */
     public void showStatistics() {
+        setIsActive(false);
         mainCtrl.goToStatistics(selectedEvent);
     }
 
@@ -897,6 +925,7 @@ public class OverviewCtrl implements Initializable {
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 server.deleteEvent(selectedEvent);
+                Main.config.removeId(selectedEvent.getId());
                 back();
             } else {
                 System.out.println(MainCtrl.resourceBundle.getString("Text.eventDeleteCanceled"));
@@ -927,6 +956,7 @@ public class OverviewCtrl implements Initializable {
      * @param selectedExpense the expense to edit
      */
     public void goToEditExpense(Expense selectedExpense) {
+        setIsActive(false);
         if (selectedExpense == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Edit expense");
@@ -951,6 +981,7 @@ public class OverviewCtrl implements Initializable {
      * @param actionEvent
      */
     public void goToBalances(ActionEvent actionEvent) {
+        setIsActive(false);
         mainCtrl.goToBalances(selectedEvent);
     }
 
@@ -958,6 +989,7 @@ public class OverviewCtrl implements Initializable {
      * For keyboard press
      */
     public void goToBalance() {
+        setIsActive(false);
         mainCtrl.goToBalances(selectedEvent);
     }
 

@@ -132,8 +132,7 @@ public class AdminPageCtrl implements Initializable {
      * @param e event
      */
     private void addData(Event e) {
-        this.data.add(e);
-        table.setItems(data);
+        refresh();
         handleSort();
     }
 
@@ -486,6 +485,7 @@ public class AdminPageCtrl implements Initializable {
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 server.deleteEvent(selectedEvent);
+                Main.config.removeId(selectedEvent.getId());
                 refresh();
             } else {
                 System.out.println(MainCtrl.resourceBundle.getString("Text.eventDeleteCanceled"));

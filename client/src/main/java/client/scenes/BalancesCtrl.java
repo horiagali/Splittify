@@ -9,6 +9,7 @@ import commons.Expense;
 import commons.Participant;
 import commons.Tag;
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -48,6 +49,8 @@ public class BalancesCtrl implements Initializable {
     @FXML
     private ObservableList<Expense> data2;
     private List<Expense> expenses;
+    private List<Participant> participants;
+    private static boolean isActive;
     private Event event;
     @FXML
     private Menu languageMenu;
@@ -95,7 +98,8 @@ public class BalancesCtrl implements Initializable {
         });
 
         colSettles.setCellValueFactory(q ->
-                new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gave " +
+                new SimpleStringProperty(q.getValue().getPayer().
+                        getNickname() + " gave " +
                         q.getValue().getAmount() + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
 
@@ -123,10 +127,38 @@ public class BalancesCtrl implements Initializable {
             return cell;
         });
         addKeyboardNavigationHandlers();
+        server.registerForParticipants("/topic/participants", p -> {
+            handlePropagation();
+        });
 
+        server.registerForExpenses("/topic/expenses", e -> {
+            handlePropagation();
+        });
     }
 
+    private void handlePropagation() {
+        Platform.runLater(() -> {
+            if (event == null) {
+                return;
+            }
+            refresh();
+        });
+    }
+
+    /**
+     * Sets is active to true. You want is to be true if the page is being viewed
+     * @param bool
+     */
+    public static void setIsActive(boolean bool) {
+        isActive = bool;
+    }
+
+    /**
+     * Forgotten javadoc by author
+     * @param expense expense
+     */
     private void handleExpenseClick(Expense expense) {
+        setIsActive(false);
         mainCtrl.goToEditPartialDebt(event, expense);
     }
 
@@ -196,6 +228,7 @@ public class BalancesCtrl implements Initializable {
      * back button
      */
     public void back() {
+        setIsActive(false);
         mainCtrl.goToOverview();
     }
 
@@ -390,6 +423,7 @@ public class BalancesCtrl implements Initializable {
      * add partial debt
      */
     public void addPartial() {
+        setIsActive(false);
         mainCtrl.goToPartial();
     }
 }
