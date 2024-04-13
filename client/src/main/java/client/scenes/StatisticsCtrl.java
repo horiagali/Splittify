@@ -110,11 +110,11 @@ public class StatisticsCtrl implements Initializable {
      *
      * @param expenses list of expenses of this event.
      * @param tags     list of tags of this event.
-     * @param showByTag boolean to know which piechart to show
+     * @param showByPayer boolean to know which piechart to show
      */
     @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MethodLength"})
-    private void createData(List<Expense> expenses, List<Tag> tags, boolean showByTag) {
-        if (showByTag) {
+    private void createData(List<Expense> expenses, List<Tag> tags, boolean showByPayer) {
+        if (!showByPayer) {
             // Clear existing data
             pieChartData.clear();
             totalAmount = 0;
@@ -298,7 +298,7 @@ public class StatisticsCtrl implements Initializable {
     public void back() {
         pieChart.getData().clear();
         setIsActive(false);
-        toggleViewButton.setSelected(true);
+        toggleViewButton.setSelected(false);
         if (!event.isClosed())
             mainCtrl.goToOverview();
         else
