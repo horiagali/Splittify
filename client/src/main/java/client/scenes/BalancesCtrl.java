@@ -133,7 +133,6 @@ public class BalancesCtrl implements Initializable {
         if (event != null && e.getId().equals(event.getId())) {
             Platform.runLater(() -> {
                 refresh();
-                System.out.println("Refreshed balances");
             });
         }
     }

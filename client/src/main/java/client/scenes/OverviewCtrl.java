@@ -402,50 +402,8 @@ public class OverviewCtrl implements Initializable {
                 refresh();
                 loadUpdatedEventInfo();
                 loadComboBoxes();
-                System.out.println("refreshed");
             });
         }
-
-        /*if (isActive) {
-
-            if ((participants == null ||
-                    expenses == null ||
-                    tags == null) &&
-                    selectedEvent != null) {
-
-                List<Participant> newParticipants = server.getParticipants(selectedEvent.getId());
-                List<Expense> newExpenses = server.getExpensesByEventId(selectedEvent.getId());
-                List<Tag> newTags = server.getTags(selectedEvent.getId());
-
-                participants = newParticipants;
-                expenses = newExpenses;
-                tags = newTags;
-
-            }
-            if (selectedEvent != null) {
-                List<Participant> newParticipants = server.getParticipants(selectedEvent.getId());
-                List<Expense> newExpenses = server.getExpensesByEventId(selectedEvent.getId());
-                List<Tag> newTags = server.getTags(selectedEvent.getId());
-                Event newSelectedEvent = server.getEvent(selectedEvent.getId());
-
-                if (!participants.equals(newParticipants)
-                        || !expenses.equals(newExpenses)
-                        || !tags.equals(newTags)
-                        || !selectedEvent.equals(newSelectedEvent)){
-
-                    participants = newParticipants;
-                    expenses = newExpenses;
-                    tags = newTags;
-                    selectedEvent = newSelectedEvent;
-
-                    loadParticipants();
-                    loadExpenses();
-                    loadComboBoxes();
-                    loadUpdatedEventInfo();
-                }
-
-            }
-        }*/
     }
 
     /**
