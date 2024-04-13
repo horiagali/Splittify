@@ -166,6 +166,12 @@ public class StatisticsCtrl implements Initializable {
             Map<String, Double> participantExpenses = new HashMap<>();
             for (Expense expense : expenses) {
                 String participantName = expense.getPayer().getNickname();
+                Tag expenseTag = expense.getTag();
+                String tagName = expenseTag.getName();
+
+                if (tagName.equals("gifting money") || tagName.equals("debt")) {
+                    continue; // Skip this expense if the tag is excluded
+                }
                 if (!participantExpenses.containsKey(participantName)) {
                     participantExpenses.put(participantName, 0.0);
                 }
