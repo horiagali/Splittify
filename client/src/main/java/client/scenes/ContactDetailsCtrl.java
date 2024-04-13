@@ -235,7 +235,7 @@ public class ContactDetailsCtrl implements Initializable {
                 server.deleteParticipant(eventId, participant);
 
                 // Update last change date
-                Event event = OverviewCtrl.getSelectedEvent();
+                Event event = server.getEvent(eventId);
                 event.setDate(new Date());
                 server.updateEvent(event);
 

@@ -517,10 +517,15 @@ public class TagOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        server.registerForTags("/topic/tags", t -> {
-            Platform.runLater(() -> {
-                loadTags();
-            });
+        server.registerForEvents("/topic/events", e -> {
+            if (event != null && e.getId().equals(event.getId())) {
+
+                Platform.runLater(() -> {
+                    refresh();
+                    System.out.println("Refreshed tags");
+
+                });
+            }
         });
     }
 

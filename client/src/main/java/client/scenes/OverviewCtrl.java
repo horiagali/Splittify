@@ -368,15 +368,8 @@ public class OverviewCtrl implements Initializable {
         payer.setCellFactory(param -> createStringListCell());
         payer.setButtonCell(createStringListCell());
         isAdmin = false;
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
 
-                Platform.runLater(() -> {
-                    handleDataPropagation();
-                });
-            }
-        }, 0, 1000);
+        server.registerForEvents("/topic/events", e -> handleDataPropagation(e));
         if (selectedEvent != null && selectedEvent.isClosed()){
             addParticipantsButton.setDisable(true);
             undoButton.setDisable(true);
@@ -403,8 +396,17 @@ public class OverviewCtrl implements Initializable {
         editButton.setBackground(null);
     }
 
-    private void handleDataPropagation() {
-        if (isActive) {
+    private void handleDataPropagation(Event e) {
+        if (selectedEvent != null && e.getId().equals(selectedEvent.getId())) {
+            Platform.runLater(() -> {
+                refresh();
+                loadUpdatedEventInfo();
+                loadComboBoxes();
+                System.out.println("refreshed");
+            });
+        }
+
+        /*if (isActive) {
 
             if ((participants == null ||
                     expenses == null ||
@@ -443,7 +445,7 @@ public class OverviewCtrl implements Initializable {
                 }
 
             }
-        }
+        }*/
     }
 
     /**
@@ -470,7 +472,7 @@ public class OverviewCtrl implements Initializable {
             sendInvitesButton.setDisable(false);
         }
         if (selectedEvent != null) {
-            loadEventInfo();
+            loadUpdatedEventInfo();
             
         }
 

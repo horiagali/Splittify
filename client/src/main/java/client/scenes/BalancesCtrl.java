@@ -126,22 +126,16 @@ public class BalancesCtrl implements Initializable {
             return cell;
         });
         addKeyboardNavigationHandlers();
-        server.registerForParticipants("/topic/participants", p -> {
-            handlePropagation();
-        });
-
-        server.registerForExpenses("/topic/expenses", e -> {
-            handlePropagation();
-        });
+        server.registerForEvents("/topic/events", e -> handlePropagation(e));
     }
-
-    private void handlePropagation() {
-        Platform.runLater(() -> {
-            if (event == null) {
-                return;
-            }
-            refresh();
-        });
+    // There is some race condition I think, that makes the propagation sometimes not work
+    private void handlePropagation(Event e) {
+        if (event != null && e.getId().equals(event.getId())) {
+            Platform.runLater(() -> {
+                refresh();
+                System.out.println("Refreshed balances");
+            });
+        }
     }
 
     /**

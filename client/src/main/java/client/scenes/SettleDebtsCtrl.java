@@ -267,10 +267,13 @@ public class SettleDebtsCtrl implements Initializable {
             }
         });
 
-        server.registerForExpenses("/topic/expenses", e -> {
-            Platform.runLater(() -> {
-                refresh();
-            });
+        server.registerForEvents("/topic/events", e -> {
+            if (event != null & e.getId().equals(event.getId())) {
+                Platform.runLater(() -> {
+                    refresh();
+                    System.out.println("Refreshed balances");
+                });
+            }
         });
     }
 
