@@ -358,6 +358,8 @@ public class AdminPageCtrl implements Initializable {
                     alert.setContentText(e.getMessage());
                     alert.showAndWait();
                 }
+                ArrayList<Tag> emptyTagList = new ArrayList();
+                addedEvent.setTags(emptyTagList);
                 
                 List<Tag> addedTags = addTags(tags,addedEvent.getId());
                 List<Participant> addedParticipants = 
@@ -436,17 +438,8 @@ public class AdminPageCtrl implements Initializable {
      */
     private List<Tag> addTags(List<Tag> tags, Long id) {
         List<Tag> updatedTags = new ArrayList();
-        List<String> predefinedNames = Arrays.asList(
-                "no tag",
-                "gifting money",
-                "food",
-                "travel",
-                "entrance fees"
-        );
         for (Tag tag : tags) {
-            if (!predefinedNames.contains(tag.getName())) {
-                updatedTags.add(server.addTag(id, tag));
-            }
+            updatedTags.add(server.addTag(id, tag));
         }
         return updatedTags;
     }
