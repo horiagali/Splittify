@@ -651,7 +651,9 @@ public class OverviewCtrl implements Initializable {
         Label text = new Label(
                 payed +
                         Currency.round(expense.getAmount() *
-                                Currency.getRate(expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))
+                                Currency.getRate(expense.
+                                        getDate().toInstant().
+                                        atZone(ZoneId.systemDefault()).toLocalDate()))
                         + " " + Currency.getCurrencyUsed() + " " + forString);
         String owers = "";
         if (expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())

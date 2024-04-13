@@ -123,7 +123,8 @@ public class SettleDebtsCtrl implements Initializable {
         });
         debtColumn.setCellValueFactory(q -> {
             double amount =q.getValue().getAmount() *
-                    Currency.getRate(q.getValue().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()) ;
+                    Currency.getRate(q.getValue().getDate().
+                            toInstant().atZone(ZoneId.systemDefault()).toLocalDate()) ;
             return new SimpleStringProperty(q.getValue().getPayer().getNickname() + " gives " +
                     Currency.round(amount)  + " " + Currency.getCurrencyUsed() + " to " +
                     q.getValue().getOwers().get(0).getNickname());
@@ -277,7 +278,9 @@ public class SettleDebtsCtrl implements Initializable {
         System.out.println(mata);
         // Update the currency-related information in the table columns
         debtColumn.setCellValueFactory(q -> {
-            double amount = q.getValue().getAmount() * Currency.getRate(q.getValue().getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+            double amount = q.getValue().getAmount() *
+                    Currency.getRate(q.getValue().getDate().
+                            toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
             String gives = MainCtrl.resourceBundle.getString("Text.gives");
             String to = MainCtrl.resourceBundle.getString("Text.to");
             return new SimpleStringProperty(q.getValue().getPayer().getNickname()

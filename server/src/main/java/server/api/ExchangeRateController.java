@@ -34,7 +34,8 @@ public class ExchangeRateController {
     /**
      * generates a fake rate from euro to symbol
      * @param symbols
-     * @return
+     * @param currentDate the date of the rate
+     * @return returns the map with the rates
      */
     private Map<String, Double> generatePseudoRates(String symbols, LocalDate currentDate) {
         Map<String, Double> baseRates = new HashMap<>();

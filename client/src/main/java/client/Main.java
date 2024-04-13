@@ -29,7 +29,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import client.scenes.*;
-import client.utils.Currency;
 import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 import jakarta.ws.rs.BadRequestException;

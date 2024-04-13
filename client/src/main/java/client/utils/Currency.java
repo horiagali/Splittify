@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,7 +12,8 @@ import java.util.Map;
 public class Currency {
     private static String currencyUsed = "EUR";
     private static final RestTemplate restTemplate = new RestTemplate();
-    private static final String EXCHANGE_RATES_URL = "http://localhost:8080/api/exchange-rates/pseudo";
+    private static final String
+            EXCHANGE_RATES_URL = "http://localhost:8080/api/exchange-rates/pseudo";
 
 
     /**
@@ -35,6 +35,12 @@ public class Currency {
         return currencyUsed;
     }
 
+    /***
+     * gets the hash map with currencies after adding a new key with the params
+     * @param symbols
+     * @param date
+     * @return returns the map
+     */
     public static Map<String, Double> getCurrencies(String symbols, LocalDate date) {
         String url = EXCHANGE_RATES_URL + "?symbols=" + symbols + "&date=" + date.toString();
 
@@ -46,7 +52,8 @@ public class Currency {
                 System.out.println("Received exchange rates: " + exchangeRates);
                 return exchangeRates;
             } else {
-                throw new RuntimeException("Failed to fetch currencies and exchange rates. Status code: " + responseEntity.getStatusCodeValue());
+                throw new RuntimeException("Failed to fetch currencies and exchange rates." +
+                        " Status code: " + responseEntity.getStatusCodeValue());
             }
 
         } catch (Exception e) {
@@ -58,7 +65,7 @@ public class Currency {
 
     /**
      * Get the exchange rate from Euro to the current currency.
-     *
+     * @param date the date of the rate
      * @return The exchange rate from Euro to the specified currency.
      * @throws RateFetchException if an error occurs while fetching the exchange rate
      */
@@ -67,7 +74,8 @@ public class Currency {
         System.out.println("this are the rates" + map.toString());
         Double rate = map.getOrDefault(date + currencyUsed,null);
         if (rate == null) {
-            throw new RateFetchException("Exchange rate not available for " + currencyUsed + " on " + date);
+            throw new RateFetchException("Exchange rate not available for "
+                    + currencyUsed + " on " + date);
         }
         return rate;
     }
@@ -85,6 +93,10 @@ public class Currency {
      * Custom unchecked exception for rate fetching errors.
      */
     public static class RateFetchException extends RuntimeException {
+        /**
+         * the exception
+         * @param message
+         */
         public RateFetchException(String message) {
             super(message);
         }
