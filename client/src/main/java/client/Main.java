@@ -69,7 +69,6 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Currency.scheduleDailyUpdate();
         this.primaryStage = primaryStage;
         var mapper = new ObjectMapper();
         FileInputStream stream;

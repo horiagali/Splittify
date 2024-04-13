@@ -1,5 +1,6 @@
 package client.scenes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -114,7 +115,7 @@ public class StatisticsCtrl {
                 continue;
             double amount = expenses.stream().filter(x -> x.getTag().equals(tag))
                     .mapToDouble(x -> (int) x.getAmount()).sum();
-            amount = Currency.round(amount * Currency.getRate());
+            amount = Currency.round(amount * Currency.getRate(LocalDate.now()));
             if (amount != 0)
                 pieChartData.add(new PieChart.Data(tag.getName()
                         + ": " + amount + " " + Currency.getCurrencyUsed(), amount));

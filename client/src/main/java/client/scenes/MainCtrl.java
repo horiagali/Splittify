@@ -437,7 +437,7 @@ public class MainCtrl {
         primaryStage.setTitle(resourceBundle.getString("title.balances"));
         balancesCtrl.setEvent(event);
         primaryStage.setScene(balances);
-        balancesCtrl.refresh();
+         balancesCtrl.refresh();
     }
 
     /**

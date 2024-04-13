@@ -1,109 +1,92 @@
 package client.utils;
 
-import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Currency class holds exchange rates from Euro to other currencies.
  */
 public class Currency {
-    private static String currencyUsed = "EUR";   /// either EUR RON USD or CHF
-    private static double EUR_TO_USD = 1.18;
-    private static double EUR_TO_CHF = 1.10;
-    private static double EUR_TO_RON = 4.95;
+    private static String currencyUsed = "EUR";
+    private static final RestTemplate restTemplate = new RestTemplate();
+    private static final String EXCHANGE_RATES_URL = "http://localhost:8080/api/exchange-rates/pseudo";
+
 
     /**
-     * rounds up to 2 decimals
-     * @param x
-     * @return returs the rounded number
+     * Rounds up to 2 decimals.
+     *
+     * @param x the number to round
+     * @return the rounded number
      */
-    public static double round(double x){
+    public static double round(double x) {
         return Math.round(x * 100.0) / 100.0;
-
-    }    /**
-     * Get the exchange rate from Euro to USD.
-     *
-     * @return The exchange rate from Euro to USD.
-     */
-    public static double getRateUSD() {
-        return EUR_TO_USD;
     }
 
     /**
-     * Get the exchange rate from Euro to CHF.
+     * Gets the used currency.
      *
-     * @return The exchange rate from Euro to CHF.
-     */
-    public static double getRateCHF() {
-        return EUR_TO_CHF;
-    }
-
-    /**
-     * Get the exchange rate from Euro to RON.
-     *
-     * @return The exchange rate from Euro to RON.
-     */
-    public static double getRateRON() {
-        return EUR_TO_RON;
-    }
-
-    /**
-     * gets the used currency
-     * @return returns the used currency
+     * @return the used currency
      */
     public static String getCurrencyUsed() {
         return currencyUsed;
     }
 
+    public static Map<String, Double> getCurrencies(String symbols, LocalDate date) {
+        String url = EXCHANGE_RATES_URL + "?symbols=" + symbols + "&date=" + date.toString();
+
+        try {
+            ResponseEntity<Map> responseEntity = restTemplate.getForEntity(url, Map.class);
+
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                Map<String, Double> exchangeRates = responseEntity.getBody();
+                System.out.println("Received exchange rates: " + exchangeRates);
+                return exchangeRates;
+            } else {
+                throw new RuntimeException("Failed to fetch currencies and exchange rates. Status code: " + responseEntity.getStatusCodeValue());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching exchange rates: " + e.getMessage(), e);
+        }
+    }
+
+
+
     /**
      * Get the exchange rate from Euro to the current currency.
      *
      * @return The exchange rate from Euro to the specified currency.
+     * @throws RateFetchException if an error occurs while fetching the exchange rate
      */
-    public static double getRate() {
-        switch (currencyUsed) {
-            case "EUR","EURO":
-                return 1.00;
-            case "USD":
-                return EUR_TO_USD;
-            case "CHF":
-                return EUR_TO_CHF;
-            case "RON":
-                return EUR_TO_RON;
-            default:
-                throw new IllegalArgumentException("Unsupported currency code: " + currencyUsed);
+    public static double getRate(LocalDate date) {
+        Map<String, Double> map = getCurrencies(currencyUsed,date);
+        System.out.println("this are the rates" + map.toString());
+        Double rate = map.getOrDefault(date + currencyUsed,null);
+        if (rate == null) {
+            throw new RateFetchException("Exchange rate not available for " + currencyUsed + " on " + date);
         }
+        return rate;
     }
 
     /**
+     * Sets the currency used.
      *
-     * @param currencyUsed
-     * sets the currency used
+     * @param currencyUsed the currency to set
      */
     public static void setCurrencyUsed(String currencyUsed) {
         Currency.currencyUsed = currencyUsed;
     }
 
     /**
-     * Update the currency exchange rates with a daily fluctuation of ±10%.
+     * Custom unchecked exception for rate fetching errors.
      */
-    public static void updateExchangeRates() {
-        Random random = new Random();
-        double fluctuation = random.nextDouble() * 0.2 - 0.1;
-        EUR_TO_USD *= (1 + fluctuation);
-        fluctuation = random.nextDouble() * 0.2 - 0.1;
-        EUR_TO_CHF *= (1 + fluctuation);
-        fluctuation = random.nextDouble() * 0.2 - 0.1;
-        EUR_TO_RON *= (1 + fluctuation);
-    }
-
-    /**
-     * Schedule daily update of currency exchange rates.
-     */
-    public static void scheduleDailyUpdate() {
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(Currency::updateExchangeRates, 0, 1, TimeUnit.DAYS);
+    public static class RateFetchException extends RuntimeException {
+        public RateFetchException(String message) {
+            super(message);
+        }
     }
 }

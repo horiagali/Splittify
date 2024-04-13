@@ -71,7 +71,7 @@
          </Menu>
          <Menu fx:id="currencyMenu" mnemonicParsing="false" text="Currency">
             <items>
-               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="Euro">
+               <RadioMenuItem mnemonicParsing="false" onAction="#changeCurrency" text="EUR">
                   <toggleGroup>
                      <ToggleGroup fx:id="currencyGroup" />
                   </toggleGroup>

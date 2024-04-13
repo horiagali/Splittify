@@ -25,6 +25,7 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.*;
 
 public class BalancesCtrl implements Initializable {
@@ -88,7 +89,7 @@ public class BalancesCtrl implements Initializable {
                 new SimpleStringProperty(q.getValue().getNickname()));
 
         colBalance.setCellValueFactory(q -> {
-            double balance = q.getValue().getBalance() * Currency.getRate() / 100.0;
+            double balance = q.getValue().getBalance() * Currency.getRate(LocalDate.now()) / 100.0;
             return new SimpleStringProperty(String.valueOf(Currency.round(balance)) +
                     " " + Currency.getCurrencyUsed());
         });
@@ -148,7 +149,7 @@ public class BalancesCtrl implements Initializable {
 
         // Update currency for balances
         colBalance.setCellValueFactory(q -> {
-            double balance = q.getValue().getBalance() * Currency.getRate() / 100;
+            double balance = q.getValue().getBalance() * Currency.getRate(LocalDate.now()) / 100;
             return new SimpleStringProperty(String.valueOf
                     (Currency.round(balance)) + " " + Currency.getCurrencyUsed());
         });

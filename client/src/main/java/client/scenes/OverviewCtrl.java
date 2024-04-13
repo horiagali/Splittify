@@ -2,6 +2,7 @@ package client.scenes;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -649,7 +650,8 @@ public class OverviewCtrl implements Initializable {
         String forString = MainCtrl.resourceBundle.getString("Text.for");
         Label text = new Label(
                 payed +
-                        Currency.round(expense.getAmount() * Currency.getRate())
+                        Currency.round(expense.getAmount() *
+                                Currency.getRate(expense.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()))
                         + " " + Currency.getCurrencyUsed() + " " + forString);
         String owers = "";
         if (expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())
