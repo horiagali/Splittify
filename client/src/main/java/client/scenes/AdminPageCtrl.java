@@ -523,6 +523,7 @@ public class AdminPageCtrl implements Initializable {
         if (event.getClickCount() == 2) {
             Event selectedEvent = table.getSelectionModel().getSelectedItem();
             if (selectedEvent != null) {
+                OverviewCtrl.setSelectedEvent(selectedEvent);
                 mainCtrl.showEventOverview(selectedEvent);
             }
         }
