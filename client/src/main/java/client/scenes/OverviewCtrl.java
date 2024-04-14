@@ -880,8 +880,15 @@ public class OverviewCtrl implements Initializable {
 
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                server.deleteEvent(selectedEvent);
-                Main.config.removeId(selectedEvent.getId());
+
+                // Prevents 404 errors
+                Event deleted = selectedEvent;
+                OverviewCtrl.setSelectedEvent(null);
+
+                Main.config.removeId(deleted.getId());
+                server.deleteEvent(deleted);
+
+
                 back();
             } else {
                 System.out.println(MainCtrl.resourceBundle.getString("Text.eventDeleteCanceled"));

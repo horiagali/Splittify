@@ -238,6 +238,7 @@ public class SettleDebtsCtrl implements Initializable {
                             server.addExpenseToEventDebt(event.getId(), currentExpense);
 
                             //Update last activiy date of event
+                            event = server.getEvent(event.getId());
                             event.setDate(new Date());
                             server.updateEvent(event);
 
