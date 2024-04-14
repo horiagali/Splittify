@@ -52,6 +52,8 @@ public class AddPartialDebtCtrl implements Initializable {
     @FXML
     private Menu languageMenu;
     @FXML
+    private Menu currencyMenu;
+    @FXML
     private ImageView languageFlagImageView;
     @FXML
     private Button back;
@@ -235,6 +237,12 @@ public class AddPartialDebtCtrl implements Initializable {
             }
             if (event.isControlDown() && event.getCode() == KeyCode.E) {
                 addExpense();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
             }
         });
     }

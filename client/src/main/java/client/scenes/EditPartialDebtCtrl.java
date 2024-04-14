@@ -313,6 +313,12 @@ public class EditPartialDebtCtrl implements Initializable {
             if (event.isControlDown() && event.getCode() == KeyCode.E) {
                 editExpense();
             }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
+            }
         });
     }
 
@@ -326,12 +332,6 @@ public class EditPartialDebtCtrl implements Initializable {
             currencyComboBox.getSelectionModel().selectNext();
         } else if (event.getCode() == KeyCode.UP) {
             currencyComboBox.getSelectionModel().selectPrevious();
-        }
-        if (event.isControlDown() && event.getCode() == KeyCode.L) {
-            languageMenu.show();
-        }
-        if (event.isControlDown() && event.getCode() == KeyCode.M) {
-            currencyMenu.show();
         }
     }
 

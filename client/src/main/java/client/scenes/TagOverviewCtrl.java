@@ -49,6 +49,8 @@ public class TagOverviewCtrl implements Initializable {
 
     @FXML
     private Menu languageMenu;
+    @FXML
+    private Menu currencyMenu;
 
     @FXML
     private Button back;
@@ -547,6 +549,9 @@ public class TagOverviewCtrl implements Initializable {
             }
             if (event.isControlDown() && event.getCode() == KeyCode.L) {
                 languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
             }
             if (event.isControlDown() && event.getCode() == KeyCode.R) {
                 refresh();
