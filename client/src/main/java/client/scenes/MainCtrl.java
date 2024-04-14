@@ -536,6 +536,7 @@ public class MainCtrl {
         editExpenseCtrl.updateFlagImageURL(language);
         balancesCtrl.updateFlagImageURL(language);
         debtsCtrl.updateFlagImageURL(language);
+        editEventCtrl.updateFlagImageURL(language);
     }
 
 
@@ -559,6 +560,7 @@ public class MainCtrl {
         editExpenseCtrl.updateUIWithNewLanguage();
         balancesCtrl.updateUIWithNewLanguage();
         debtsCtrl.updateUIWithNewLanguage();
+        editEventCtrl.updateUIWithNewLanguage();
     }
 
     /**

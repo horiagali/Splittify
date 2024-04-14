@@ -300,7 +300,7 @@ public class AdminPageCtrl implements Initializable {
         importJsonButton.setText(MainCtrl.resourceBundle.getString("button.importJson"));
         refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
         colName.setText(MainCtrl.resourceBundle.getString("Text.eventName"));
-        colId.setText(MainCtrl.resourceBundle.getString("Text.eventLocation"));
+        colId.setText(MainCtrl.resourceBundle.getString("Text.eventID"));
         colDate.setText(MainCtrl.resourceBundle.getString("Text.eventDate"));
         colLastChange.setText(MainCtrl.resourceBundle.getString("Text.lastChange"));
 

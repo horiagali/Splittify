@@ -17,7 +17,7 @@ public class PasswordService {
         byte[] randomBytes = new byte[8];
         secureRandom.nextBytes(randomBytes);
         String password = Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
-        System.out.println(password);
+        System.out.println("Admin password: " + password);
         return password;
     }
 }

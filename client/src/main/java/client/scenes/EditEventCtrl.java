@@ -57,6 +57,8 @@ public class EditEventCtrl implements Initializable {
     private Menu currencyMenu;
     @FXML
     Button editButton;
+    @FXML
+    private Text title;
 
     Event event;
 
@@ -89,10 +91,7 @@ public class EditEventCtrl implements Initializable {
         titleField.clear();
         locationField.clear();
         descriptionField.clear();
-        titleLabel.setText("Title: " + event.getTitle() + " → ");
-        descriptionLabel.setText("Description: " + event.getDescription() + " → ");
-        locationLabel.setText("Location: " + event.getLocation() + " → ");
-
+        updateUIWithNewLanguage();
     }
 
     /**
@@ -202,8 +201,8 @@ public class EditEventCtrl implements Initializable {
         Main.config.setLanguage(language);
 
         // Update UI elements with the new resource bundle
-        updateUIWithNewLanguage();
         mainCtrl.updateLanguage(language);
+        updateUIWithNewLanguage();
         updateFlagImageURL(language);
     }
 
@@ -232,16 +231,17 @@ public class EditEventCtrl implements Initializable {
      * Method to update UI elements with the new language from the resource bundle
      */
     public void updateUIWithNewLanguage() {
+        title.setText(MainCtrl.resourceBundle.getString("Text.editEvent"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
-        titleField.setText(MainCtrl.resourceBundle.getString("Text.name") + ": ");
-        titleField.setText("Email:");
-        titleField.setText("IBAN:");
-        titleField.setText("BIC:");
-        titleField.setPromptText(MainCtrl.resourceBundle.getString("Text.enter")
-                + " " + MainCtrl.resourceBundle.getString("Text.name"));
-        titleField.setPromptText(MainCtrl.resourceBundle.getString("Text.enter") + " Email");
-                titleField.setPromptText(MainCtrl.resourceBundle.getString("Text.enter") + " IBAN");
-                titleField.setPromptText(MainCtrl.resourceBundle.getString("Text.enter") + " BIC");
+        editButton.setText(MainCtrl.resourceBundle.getString("Text.editEvent"));
+
+        titleLabel.setText(MainCtrl.resourceBundle.getString("Text.title"));
+        descriptionLabel.setText(MainCtrl.resourceBundle.getString("TableColumn.colDescription"));
+        locationLabel.setText(MainCtrl.resourceBundle.getString("TableColumn.colLocation"));
+
+        titleField.setPromptText(MainCtrl.resourceBundle.getString("Text.newTitle"));
+        descriptionField.setPromptText(MainCtrl.resourceBundle.getString("Text.newDescription"));
+        locationField.setPromptText(MainCtrl.resourceBundle.getString("Text.newLocation"));
     }
 
     /**
