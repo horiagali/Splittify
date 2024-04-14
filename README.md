@@ -104,8 +104,8 @@ When this url is set as the serverURL in the config file of the client, the clie
   - Informative feedback
   - Confirmation for Key Actions
       - Influential ones that adjust a lot in the DB: deleting participants or tags, for example.
-- Long polling in (location long polling)
-- Web sockets in (location web sockets)
+- Long polling in the admin page
+- Web sockets in the main overview, event overview, tag overview, balance overview, statistics page and settling debts page.
 - updating after every second in all other parts of the app.
 
 
