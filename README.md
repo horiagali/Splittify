@@ -3,14 +3,14 @@ Made by Amanda Andree, Horia Găliţianu, Martijn van Leest, Iulia Slănină, Fa
 
 Welcome to Splittify! Here are a few things to note when using this project:
 
-**Executing the project** <br>
-- 
-You can run the client at any time by executing "command line name" in the console. When starting the client, it looks for the serverURL that is configured in the config file of the client. If it cannot find said server, it will show a scene to connect to a running server.
+**Executing the project**
 
-You can run the server by executing "command line name" in the console. This will start a server at localhost:8080.
+You can run the server by executing `./gradlew bootRun` in the console. This will start a server at localhost:8080.
 When this url is set as the serverURL in the config file of the client, the client will connect to this server.
 
-**All the features, so you do not miss them** <br>
+You can run the client at any time by executing `./gradlew run` in the console. When starting the client, it looks for the serverURL that is configured in the config file of the client. If it cannot find said server, it will show a scene to connect to a running server.
+
+**All the features, so you do not miss them**
 -
 - You can switch between Spittify servers by clicking on the disconnect button in the mainPage of the app. Entering a serverURL of a server that is active will allow you to connect to the corresponding server.
 - You can edit or remove expenses and participants by clicking on them in the Event Overview.
