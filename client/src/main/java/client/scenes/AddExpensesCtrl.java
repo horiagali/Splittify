@@ -77,6 +77,8 @@ public class AddExpensesCtrl implements Initializable {
     private Button cancelButton;
     @FXML
     private Button addButton;
+    @FXML
+    private Menu currencyMenu;
 
 
 
@@ -336,6 +338,12 @@ public class AddExpensesCtrl implements Initializable {
             }
             if (event.isControlDown() && event.getCode() == KeyCode.E) {
                 addExpense();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
             }
         });
     }

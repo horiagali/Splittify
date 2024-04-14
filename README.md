@@ -29,7 +29,35 @@ When this url is set as the serverURL in the config file of the client, the clie
 - For HCI, the app is developed with the following aspects in mind:
     - Color contrast
     - Keyboard shortcuts, namely:
-        - (insert keyboard shortcuts here)
+        - For AddEvent/EditEvent:   
+          - Escape Key (KeyCode.ESCAPE):
+            Triggers the cancel button. This action could be used to cancel creating a new event 
+          - Control + N (KeyCode.N):
+            Triggers the addEvent action. This action lets you create a new event.
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+        - For AddExpenses/EditExpenses: 
+          - Escape Key (ESC): Pressing ESC navigates back to the overview screen (mainCtrl.goToOverview()). 
+          - Control + E (Ctrl + E): Pressing Ctrl + E triggers the addition of a new expense 
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+          - Arrow Keys (UP and DOWN): The currency selection dropdown responds to UP and DOWN arrow key presses. This feature allows users to navigate through currency options without using the mouse.
+        - For Adminpage: 
+          - Escape Key (ESC): Pressing ESC key navigates back to the previous screen. 
+          - Control + D (Ctrl + D): Holding down Ctrl key and pressing D triggers the deletion of the currently selected event (if any).
+        - For AdminPass:
+          - Escape Key (ESC): Pressing ESC key navigates back to the previous screen.
+          - Enter Key (ENTER): Pressing ENTER key triggers an attempting to fill in the password.
+        - For Balances:
+          - Escape Key (ESC): Pressing ESC key triggers the back() method, navigating the user back to the previous screen.
+          - Control + R (CTRL+R): Holding CTRL key and pressing R refreshes the current page.
+          - Control + P (CTRL+P): Using CTRL + P takes you to add a partial debt.
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+          - Control + D (CTRL+D): Pressing CTRL + D initiates the process to settle debts.
+        - For addParticipant/ContactDetails: 
+          - Escape Key (ESC): Pressing ESC key triggers the back() method, navigating the user back to the previous screen.
+          - Control + P (CTRL+P): Holding CTRL key and pressing P lets you add your participant.
     - Undo actions for updating expenses
     - Error messages
     - Informative feedback
