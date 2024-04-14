@@ -55,6 +55,8 @@ public class AddEventCtrl implements Initializable {
     private javafx.scene.control.Label eventLocationLabel;
     @FXML
     private javafx.scene.control.Label eventDescriptionLabel;
+    @FXML
+    private Menu languageMenu;
 
     /**
      * Constructor for the controller
@@ -94,6 +96,12 @@ public class AddEventCtrl implements Initializable {
             if (event.isControlDown() && event.getCode() == KeyCode.N) {
                 ActionEvent dummyEvent = new ActionEvent();
                 addEvent(dummyEvent);
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
             }
         });
     }

@@ -56,6 +56,8 @@ public class EditPartialDebtCtrl implements Initializable {
     private ToggleGroup currencyGroup;
     @FXML
     private DatePicker datePicker;
+    @FXML
+    private Menu currencyMenu;
 
     /**
      * Constructs an instance of AddExpensesCtrl.
@@ -310,6 +312,12 @@ public class EditPartialDebtCtrl implements Initializable {
             }
             if (event.isControlDown() && event.getCode() == KeyCode.E) {
                 editExpense();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
             }
         });
     }

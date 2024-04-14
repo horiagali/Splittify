@@ -136,13 +136,13 @@ public class InviteCtrl implements Initializable {
             if (event.getCode() == KeyCode.ESCAPE) {
                 back();
             }
-            if (event.isControlDown() && event.getCode() == KeyCode.Q) {
+            if (event.isAltDown() && event.getCode() == KeyCode.C) {
                 copyInviteCode();
             }
-            if (event.isControlDown() && event.getCode() == KeyCode.W) {
+            if (event.isControlDown() && event.getCode() == KeyCode.N) {
                 addEmail();
             }
-            if (event.isControlDown() && event.getCode() == KeyCode.S) {
+            if (event.isAltDown() && event.getCode() == KeyCode.S) {
                 sendInvitationsByEmail();
             }
             handleAdditionalKeyEvents(event);

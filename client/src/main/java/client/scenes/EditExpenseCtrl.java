@@ -59,6 +59,8 @@ public class EditExpenseCtrl implements Initializable {
     @FXML
     private Menu languageMenu;
     @FXML
+    private Menu currencyMenu;
+    @FXML
     private ToggleGroup currencyGroup;
     @FXML
     private DatePicker datePicker;
@@ -436,6 +438,12 @@ public class EditExpenseCtrl implements Initializable {
             }
             if (event.isControlDown() && event.getCode() == KeyCode.E) {
                 editExpense();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
             }
         });
     }

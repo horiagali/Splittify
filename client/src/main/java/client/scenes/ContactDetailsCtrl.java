@@ -49,6 +49,8 @@ public class ContactDetailsCtrl implements Initializable {
     @FXML
     private Menu languageMenu;
     @FXML
+    private Menu currencyMenu;
+    @FXML
     private ImageView languageFlagImageView;
     @FXML
     private ToggleGroup currencyGroup;
@@ -304,6 +306,12 @@ public class ContactDetailsCtrl implements Initializable {
             }
             if (event.isControlDown() && event.getCode() == KeyCode.P) {
                 ok();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
             }
         });
     }

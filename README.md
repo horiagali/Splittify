@@ -29,12 +29,81 @@ When this url is set as the serverURL in the config file of the client, the clie
 - For HCI, the app is developed with the following aspects in mind:
     - Color contrast
     - Keyboard shortcuts, namely:
-        - (insert keyboard shortcuts here)
-    - Undo actions for updating expenses
-    - Error messages
-    - Informative feedback
-    - Confirmation for Key Actions
-        - Influential ones that adjust a lot in the DB: deleting participants or tags, for example.
+        - For AddEvent/EditEvent:   
+          - Escape Key (KeyCode.ESCAPE):
+            Triggers the cancel button. This action could be used to cancel creating a new event 
+          - Control + N (KeyCode.N):
+            Triggers the addEvent action. This action lets you create a new event.
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+        - For AddExpenses/EditExpenses/addPartialDebt/editPartialDebt: 
+          - Escape Key (ESC): Pressing ESC navigates back to the overview screen (mainCtrl.goToOverview()). 
+          - Control + E (Ctrl + E): Pressing Ctrl + E triggers the addition of a new expense 
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+          - Arrow Keys (UP and DOWN): The currency selection dropdown responds to UP and DOWN arrow key presses. This feature allows users to navigate through currency options without using the mouse.
+        - For Adminpage: 
+          - Escape Key (ESC): Pressing ESC key navigates back to the previous screen. 
+          - Control + D (Ctrl + D): Holding down Ctrl key and pressing D triggers the deletion of the currently selected event (if any).
+        - For AdminPass:
+          - Escape Key (ESC): Pressing ESC key navigates back to the previous screen.
+          - Enter Key (ENTER): Pressing ENTER key triggers an attempting to fill in the password.
+        - For Balances:
+          - Escape Key (ESC): Pressing ESC key triggers the back() method, navigating the user back to the previous screen.
+          - Control + R (CTRL+R): Holding CTRL key and pressing R refreshes the current page.
+          - Control + P (CTRL+P): Using CTRL + P takes you to add a partial debt.
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+          - Control + D (CTRL+D): Pressing CTRL + D initiates the process to settle debts.
+        - For addParticipant/ContactDetails: 
+          - Escape Key (ESC): Pressing ESC key triggers the back() method, navigating the user back to the previous screen.
+          - Control + P (CTRL+P): Holding CTRL key and pressing P lets you add your participant.
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+        - For Invite:
+          - Escape Key (ESC): Pressing ESC navigates the user back to the previous screen.
+          - Alt + C (ALT+Q): Using ALT + C performs an action to copy an invite code.
+          - Control + N (CTRL+N): Pressing CTRL + N triggers an action to add an email.
+          - Control + S (CTRL+S): Using CTRL + S initiates an action to send invitations by email.
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+        - For the MainPage:
+          - Control + D (CTRL+D): Mimics pressing the disconnect button.
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency. 
+          - Control + R (CTRL+R): Using CTRL + R triggers an action to refresh the page. 
+        - For the overview page:
+          - Escape Key (ESC): Pressing ESC key triggers the back() method, navigating the user back to the previous screen.
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+          - Control + E (CTRL+E): Using CTRL + E takes you to the addExpenses page. 
+          - Control + S (CTRL+S): Takes you to the invite page. 
+          - Control + B (CTRL+B): Takes you to the balances page. 
+          - Control + D (CTRL+D): Triggers the action to delete an event, you first get a confirmation pop-up.
+          - Alt + E (ALT+E): Prompts the user to pick the number (from the top) of the expense they want to edit. 
+          - Alt + P (ALT+P): Prompts the user to pick the number (from the top) of the participant they want to edit.
+          - Control + R (CTRL+R): Refreshes the current page. 
+          - Control + P (CTRL+P): Navigates the user to the addParticipant page. 
+          - Alt + S (ALT+S): Navigates the user to the statistics page. 
+          - Alt + T (ALT+T): Navigates the user to the tagOverview page. 
+      - For Statistics:
+          - Escape Key (KeyCode.ESCAPE):
+            Triggers the cancel button. This action could be used to cancel creating a new event
+          - Control + R (KeyCode.N): Refreshes the current page. 
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+      - For TagOverview:
+          - Escape Key (KeyCode.ESCAPE):
+            Triggers the cancel button. This action could be used to cancel creating a new event
+          - Control + R (KeyCode.N): Refreshes the current page.
+          - Control + L (CTRL+L): Pressing CTRL + L displays the language menu, allowing users to switch the application's language.
+          - Control + M (CTRL+M): Using CTRL + M displays the currency menu, enabling users to select a different currency.
+          - Control + N (CTRL+N): Lets you add a new Tag. 
+  - Undo actions for updating expenses
+  - Error messages
+  - Informative feedback
+  - Confirmation for Key Actions
+      - Influential ones that adjust a lot in the DB: deleting participants or tags, for example.
 - Long polling in (location long polling)
 - Web sockets in (location web sockets)
 - updating after every second in all other parts of the app.

@@ -54,6 +54,8 @@ public class EditEventCtrl implements Initializable {
     @FXML
     private Text locationLabel;
     @FXML
+    private Menu currencyMenu;
+    @FXML
     Button editButton;
 
     Event event;
@@ -117,8 +119,14 @@ public class EditEventCtrl implements Initializable {
             if (event.getCode() == KeyCode.ESCAPE) {
                 goToEventOverview();
             }
-            if (event.isControlDown() && event.getCode() == KeyCode.P) {
+            if (event.isControlDown() && event.getCode() == KeyCode.N) {
                 editEvent();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.L) {
+                languageMenu.show();
+            }
+            if (event.isControlDown() && event.getCode() == KeyCode.M) {
+                currencyMenu.show();
             }
         });
     }
