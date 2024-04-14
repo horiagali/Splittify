@@ -424,7 +424,7 @@ public class EditPartialDebtCtrl implements Initializable {
 
                 //Update last activiy date of event
                 event.setDate(new Date());
-                server.updateEvent(event);
+                server.updateEvent(server.getEvent(event.getId()));
 
                 // Show confirmation message
                 Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);
