@@ -170,7 +170,19 @@ public class TagOverviewCtrl implements Initializable {
         if (event != null) {
             List<Tag> tags =
                     server.getTags(OverviewCtrl.getSelectedEvent().getId());
-            tags.remove(1);
+            ArrayList<String> visited = new ArrayList();
+            for(int i = tags.size() - 1; i >= 0; i--) {
+                if(!visited.contains(tags.get(i).getName())) {
+                    visited.add(tags.get(i).getName());
+                } else {
+                    server.deleteTag(event.getId(), tags.get(i).getId());
+                }
+            }
+            tags = server.getTags(event.getId());
+
+            Tag toRemove = tags.stream().filter(x -> x.getName()
+            .equals("gifting money")).toList().get(0);
+            tags.remove(toRemove);
             flowPane.getChildren().clear();
             for (Tag tag : tags) {
                 Button tagButton = setStyle(tag);

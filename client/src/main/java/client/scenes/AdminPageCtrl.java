@@ -358,14 +358,43 @@ public class AdminPageCtrl implements Initializable {
                     alert.setContentText(e.getMessage());
                     alert.showAndWait();
                 }
-                addTags(tags,addedEvent.getId());
+                ArrayList<Tag> emptyTagList = new ArrayList();
+                addedEvent.setTags(emptyTagList);
+                
+                List<Tag> addedTags = addTags(tags,addedEvent.getId());
+                List<Participant> addedParticipants = 
                 addParticipants(participants,addedEvent.getId());
+                updateExpenseReferenceIds(expenses, addedTags, addedParticipants);
                 addExpenses(expenses,addedEvent.getId());
 
                 refresh();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void updateExpenseReferenceIds(List<Expense> expenses, List<Tag> addedTags,
+            List<Participant> addedParticipants) {
+        HashMap<String, Tag> nameToTag = new HashMap();
+        for(Tag t : addedTags) {
+            nameToTag.put(t.getName(), t);
+        }
+
+        
+        HashMap<String, Participant> nameToParticipant = new HashMap();
+        for(Participant p : addedParticipants) {
+            nameToParticipant.put(p.getNickname(), p);
+        }
+        for(Expense e : expenses) {
+            e.setPayer(nameToParticipant.get(e.getPayer().getNickname()));
+            List<Participant> newOwers = new ArrayList();
+            for(Participant ower : e.getOwers()) {
+                newOwers.add(nameToParticipant.get(ower.getNickname()));
+            }
+            e.setOwers(newOwers);
+
+            e.setTag(nameToTag.get(e.getTag().getName()));
         }
     }
 
@@ -388,34 +417,31 @@ public class AdminPageCtrl implements Initializable {
      * adds participants to the event
      * @param participants
      * @param id
+     * @return a list of participants with their new ID's
      */
-    private void addParticipants(List<Participant> participants, Long id) {
+    private List<Participant> addParticipants(List<Participant> participants, Long id) {
+        List<Participant> results = new ArrayList();
         for (Participant participant : participants) {
             Participant p = new Participant(participant.getNickname(),
                     participant.getEmail(),participant.getBic(),
                     participant.getIban(),participant.getBalance());
-            server.addParticipant(id, p);
+            results.add(server.addParticipant(id, p));
         }
+        return results;
     }
 
     /**
      * adds the non default tags to the event
      * @param tags
      * @param id
+     * @return list of updated tags with their id's
      */
-    private void addTags(List<Tag> tags, Long id) {
-        List<String> predefinedNames = Arrays.asList(
-                "no tag",
-                "gifting money",
-                "food",
-                "travel",
-                "entrance fees"
-        );
+    private List<Tag> addTags(List<Tag> tags, Long id) {
+        List<Tag> updatedTags = new ArrayList();
         for (Tag tag : tags) {
-            if (!predefinedNames.contains(tag.getName())) {
-                server.addTag(id, tag);
-            }
+            updatedTags.add(server.addTag(id, tag));
         }
+        return updatedTags;
     }
 
 
@@ -497,6 +523,7 @@ public class AdminPageCtrl implements Initializable {
         if (event.getClickCount() == 2) {
             Event selectedEvent = table.getSelectionModel().getSelectedItem();
             if (selectedEvent != null) {
+                OverviewCtrl.setSelectedEvent(selectedEvent);
                 mainCtrl.showEventOverview(selectedEvent);
             }
         }

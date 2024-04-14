@@ -196,6 +196,8 @@ public class OverviewCtrl implements Initializable {
      *
      */
     public void back() {
+        participantsVBox.getChildren().clear();
+        expensesBox.getChildren().clear();
         setIsActive(false);
         if (isAdmin) {
             mainCtrl.goToAdminPage();
