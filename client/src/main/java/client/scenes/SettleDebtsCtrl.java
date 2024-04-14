@@ -269,7 +269,7 @@ public class SettleDebtsCtrl implements Initializable {
         });
 
         server.registerForEvents("/topic/events", e -> {
-            if (event != null & e.getId().equals(event.getId())) {
+            if (event != null & e.equals(event.getId())) {
                 Platform.runLater(() -> {
                     refresh();
                 });

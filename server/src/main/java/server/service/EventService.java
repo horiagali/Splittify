@@ -98,7 +98,7 @@ public class EventService {
         Event toBeRemoved = eventRepository.findById(id).get();
         eventRepository.deleteById(id);
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                .log(Level.INFO, "Event deleted: "+toBeRemoved);
+                .log(Level.INFO, "Event deleted");
         return ResponseEntity.ok(toBeRemoved);
     }
 

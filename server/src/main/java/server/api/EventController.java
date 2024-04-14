@@ -125,7 +125,7 @@ public class EventController {
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         ResponseEntity<Event> created = eventService.createEvent(event);
         if (created.getStatusCode().equals(HttpStatus.OK)) {
-            template.convertAndSend("/topic/events", created.getBody());
+            template.convertAndSend("/topic/events", created.getBody().getId());
             listeners.forEach((k, l) -> l.accept(created.getBody()));
         }
         return created;
@@ -152,7 +152,7 @@ public class EventController {
     public ResponseEntity<Event> deleteEvent(@PathVariable("id") Long id) {
         ResponseEntity<Event> deleted = eventService.deleteEvent(id);
         if (deleted.getStatusCode().equals(HttpStatus.OK)) {
-            template.convertAndSend("/topic/events", deleted.getBody());
+            template.convertAndSend("/topic/events", id);
             listeners.forEach((k, l) -> l.accept(deleted.getBody()));
         }
 
@@ -172,7 +172,7 @@ public class EventController {
                                              @PathVariable("id") Long id) {
         ResponseEntity<Event> updated = eventService.updateEvent(event, id);
         if (updated.getStatusCode().equals(HttpStatus.OK)) {
-            template.convertAndSend("/topic/events", updated.getBody());
+            template.convertAndSend("/topic/events", id);
             listeners.forEach((k, l) -> l.accept(updated.getBody()));
         }
         return updated;

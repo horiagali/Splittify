@@ -129,8 +129,8 @@ public class BalancesCtrl implements Initializable {
         server.registerForEvents("/topic/events", e -> handlePropagation(e));
     }
     // There is some race condition I think, that makes the propagation sometimes not work
-    private void handlePropagation(Event e) {
-        if (event != null && e.getId().equals(event.getId())) {
+    private void handlePropagation(Long e) {
+        if (event != null && e.equals(event.getId())) {
             Platform.runLater(() -> {
                 refresh();
             });

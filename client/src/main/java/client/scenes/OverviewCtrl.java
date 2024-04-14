@@ -197,12 +197,12 @@ public class OverviewCtrl implements Initializable {
      */
     public void back() {
         setIsActive(false);
+        setSelectedEvent(null);
+
         if (isAdmin) {
             mainCtrl.goToAdminPage();
         }
-        else
-            mainCtrl.showOverview();
-        setSelectedEvent(null);
+        mainCtrl.showOverview();
     }
 
     /**
@@ -396,8 +396,8 @@ public class OverviewCtrl implements Initializable {
         editButton.setBackground(null);
     }
 
-    private void handleDataPropagation(Event e) {
-        if (selectedEvent != null && e.getId().equals(selectedEvent.getId())) {
+    private void handleDataPropagation(Long e) {
+        if (selectedEvent != null && e.equals(selectedEvent.getId())) {
             Platform.runLater(() -> {
                 refresh();
                 loadUpdatedEventInfo();
@@ -884,6 +884,7 @@ public class OverviewCtrl implements Initializable {
                 // Prevents 404 errors
                 Event deleted = selectedEvent;
                 OverviewCtrl.setSelectedEvent(null);
+                setIsActive(false);
 
                 Main.config.removeId(deleted.getId());
                 server.deleteEvent(deleted);
