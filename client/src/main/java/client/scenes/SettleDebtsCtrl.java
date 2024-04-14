@@ -10,7 +10,9 @@ import commons.Expense;
 import commons.Mail;
 import commons.Participant;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -59,6 +61,10 @@ public class SettleDebtsCtrl implements Initializable {
     @FXML
     private Button backButton;
 
+    private final StringProperty gives = new SimpleStringProperty();
+    private final StringProperty to = new SimpleStringProperty();
+    private final StringProperty markReceived = new SimpleStringProperty();
+    private final StringProperty remind = new SimpleStringProperty();
     /**
      * constructor for settle debts ctrl
      *
@@ -111,6 +117,8 @@ public class SettleDebtsCtrl implements Initializable {
     @SuppressWarnings("checkstyle:MethodLength")
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        gives.set("gives");
+        to.set("to");
         tableView.setRowFactory(tv -> {
             TableRow<Expense> row = new TableRow<>();
             row.itemProperty().addListener((obs, previousExpense, currentExpense) -> {
@@ -161,11 +169,11 @@ public class SettleDebtsCtrl implements Initializable {
             }
         });
         reminderColumn.setCellFactory(col -> new TableCell<Expense, Void>() {
-            private final Button reminderButton = new Button
-                    (MainCtrl.resourceBundle.getString("button.remind"));
+            private final Button reminderButton = new Button();
 
             // Initialization block for the TableCell instance
             {
+                reminderButton.textProperty().bind(remind);
                 reminderButton.setOnAction(myevent -> {
                     Participant participant = getTableView().getItems().get(getIndex()).getPayer();
                     Participant owed = getTableView().getItems().get(getIndex()).getOwers().get(0);
@@ -219,10 +227,10 @@ public class SettleDebtsCtrl implements Initializable {
 
         });
         actionColumn.setCellFactory(col -> new TableCell<Expense, Void>() {
-            private final Button actionButton = new Button
-                    (MainCtrl.resourceBundle.getString("button.markReceived"));
+            private final Button actionButton = new Button();
 
             {
+                actionButton.textProperty().bind(markReceived);
                 actionButton.setOnAction(myevent -> {
                     Alert confirmationDialog = new Alert(Alert.AlertType.CONFIRMATION);
                     confirmationDialog.setTitle(MainCtrl.resourceBundle.getString
@@ -272,10 +280,8 @@ public class SettleDebtsCtrl implements Initializable {
         });
 
         server.registerForEvents("/topic/events", e -> {
-            if (event != null & e.equals(event.getId())) {
-                Platform.runLater(() -> {
-                    refresh();
-                });
+            if (event != null && e.equals(event.getId())) {
+                Platform.runLater(this::refresh);
             }
         });
     }
@@ -290,19 +296,17 @@ public class SettleDebtsCtrl implements Initializable {
                         x.getTag().getName().equals("Received debt")).toList();
         data = FXCollections.observableList(expenses2);
         tableView.setItems(data);
-        String mata = Currency.getCurrencyUsed();
-        System.out.println(mata);
         // Update the currency-related information in the table columns
         debtColumn.setCellValueFactory(q -> {
             double amount = q.getValue().getAmount() *
                     Currency.getRate(q.getValue().getDate().
                             toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-            String gives = MainCtrl.resourceBundle.getString("Text.gives");
-            String to = MainCtrl.resourceBundle.getString("Text.to");
-            return new SimpleStringProperty(q.getValue().getPayer().getNickname()
-                    + " " +gives + " " +
-                    Currency.round(amount) + " " + Currency.getCurrencyUsed() + " " + to +" " +
-                    q.getValue().getOwers().get(0).getNickname());
+            return Bindings.createStringBinding(
+                    () -> q.getValue().getPayer().getNickname()
+                            + " " + gives.get() + " " +
+                            Currency.round(amount) + " " + Currency.getCurrencyUsed() + " " +
+                            to.get()
+                            + " " + q.getValue().getOwers().get(0).getNickname(), gives, to);
         });
     }
 
@@ -355,6 +359,10 @@ public class SettleDebtsCtrl implements Initializable {
         statisticsButton.setText(MainCtrl.resourceBundle.getString("button.seeStatistics"));
         backButton.setText(MainCtrl.resourceBundle.getString("button.back"));
         refreshButton.setText(MainCtrl.resourceBundle.getString("button.refresh"));
+        gives.set(MainCtrl.resourceBundle.getString("Text.gives"));
+        to.set(MainCtrl.resourceBundle.getString("Text.to"));
+        markReceived.set(MainCtrl.resourceBundle.getString("button.markReceived"));
+        remind.set(MainCtrl.resourceBundle.getString("button.remind"));
     }
 
     /**
