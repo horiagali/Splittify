@@ -172,7 +172,7 @@ public class ServerUtils {
 	 * Implementation for long polling
 	 * @param consumer consumer
 	 */
-	public void registerForUpdates(Consumer<Event> consumer) {
+	public void registerForUpdates(Consumer<Long> consumer) {
 		EXEC.submit(() -> {
 			while (!Thread.interrupted()) {
 				Response res = ClientBuilder.newClient(new ClientConfig())
@@ -184,7 +184,7 @@ public class ServerUtils {
 				if (res.getStatus() == 204) {
 					continue;
 				}
-				Event e = res.readEntity(Event.class);
+				Long e = res.readEntity(Long.class);
 				consumer.accept(e);
 			}
 		});

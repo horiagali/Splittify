@@ -269,9 +269,7 @@ public class MainPageCtrl implements Initializable {
         addKeyboardNavigationHandlers();
 
         server.registerForEvents("/topic/events", e -> {
-            Platform.runLater(() -> {
-                refresh();
-            });
+            refresh();
         });
     }
 
@@ -424,11 +422,13 @@ public class MainPageCtrl implements Initializable {
             }
             events.add(server.getEvent(id));
         }
+        Platform.runLater(() -> {
+            data = FXCollections.observableList(events);
+            table.getItems().clear();
+            table.setItems(data);
+            table.refresh();
+        });
 
-        data = FXCollections.observableList(events);
-        table.getItems().clear();
-        table.setItems(data);
-        table.refresh();
     }
 
     /**
