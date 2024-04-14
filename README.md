@@ -10,6 +10,8 @@ When this url is set as the serverURL in the config file of the client, the clie
 
 You can run the client at any time by executing `./gradlew run` in the console. When starting the client, it looks for the serverURL that is configured in the config file of the client. If it cannot find said server, it will show a scene to connect to a running server.
 
+You can find the `config.json` file in `client/build/classes/java/main/data/client/config.json` or a similar path.
+
 ## All the features, so you do not miss them
 - You can switch between Spittify servers by clicking on the disconnect button in the mainPage of the app. Entering a serverURL of a server that is active will allow you to connect to the corresponding server.
 - You can edit or remove expenses and participants by clicking on them in the Event Overview.
