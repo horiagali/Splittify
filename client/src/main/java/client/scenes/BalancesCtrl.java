@@ -91,20 +91,19 @@ public class BalancesCtrl implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         colName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getNickname()));
-
         colBalance.setCellValueFactory(q -> {
             double balance = q.getValue().getBalance() * Currency.getRate(LocalDate.now()) / 100.0;
             return new SimpleStringProperty(String.valueOf(Currency.round(balance)) +
                     " " + Currency.getCurrencyUsed());
         });
-
         colSettles.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getPayer().
                         getNickname() + " gave " +
                         Currency.round(q.getValue().getAmount() *
                         Currency.getRate(q.getValue().
                                 getDate().toInstant().
-                                atZone(ZoneId.systemDefault()).toLocalDate())) + Currency.getCurrencyUsed() + " to " +
+                                atZone(ZoneId.systemDefault())
+                                .toLocalDate())) + Currency.getCurrencyUsed() + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
 
         colSettles.setCellFactory(tc -> {
@@ -117,8 +116,7 @@ public class BalancesCtrl implements Initializable {
                         setGraphic(null);
                     } else {
                         setText(item);
-                    }
-                }
+                    }}
             };
 
             cell.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
@@ -189,7 +187,9 @@ public class BalancesCtrl implements Initializable {
                         Currency.round(q.getValue().getAmount() *
                                 Currency.getRate(q.getValue().
                                         getDate().toInstant().
-                                        atZone(ZoneId.systemDefault()).toLocalDate())) + Currency.getCurrencyUsed() + " to " +
+                                        atZone(ZoneId.
+                                                systemDefault()).toLocalDate()))
+                        + Currency.getCurrencyUsed() + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
     }
 
