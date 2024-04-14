@@ -128,7 +128,7 @@ public class TagService {
 
         tagRepository.deleteById(id);
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                .log(Level.INFO, "Tag deleted: "+tag);
+                .log(Level.INFO, "Tag deleted");
         return ResponseEntity.ok(tag);
     }
 

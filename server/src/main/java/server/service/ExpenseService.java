@@ -421,7 +421,7 @@ public class ExpenseService {
 
         expenseRepository.deleteById(expenseId);
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
-                .log(Level.INFO, "Expense deleted: "+expense);
+                .log(Level.INFO, "Expense deleted");
         return ResponseEntity.ok(expense);
     }
 }

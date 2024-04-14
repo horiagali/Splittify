@@ -561,7 +561,7 @@ public class EditExpenseCtrl implements Initializable {
                 server.deleteExpense(event.getId(), expense);
 
                 event.setDate(new Date());
-                server.updateEvent(event);
+                server.updateEvent(server.getEvent(event.getId()));
 
                 // Show confirmation message
                 Alert deleteConfirmation = new Alert(Alert.AlertType.INFORMATION);

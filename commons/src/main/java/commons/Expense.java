@@ -282,8 +282,5 @@ public class Expense {
                 "  tag=" + tag + "\n" +
                 "]";
     }
-
-
-
 }
 

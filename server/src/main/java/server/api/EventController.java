@@ -26,9 +26,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.service.EventService;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 public class EventController {
 
     private final EventService eventService;
-    private Map<Object, Consumer<Event>> listeners = new HashMap<>();
+    private Map<Object, Consumer<Long>> listeners = new ConcurrentHashMap<>();
     @Autowired
     private SimpMessagingTemplate template;
 
@@ -83,9 +83,9 @@ public class EventController {
      */
     @GetMapping("/updates")
     @ResponseBody
-    public DeferredResult<ResponseEntity<Event>> getUpdates() {
+    public DeferredResult<ResponseEntity<Long>> getUpdates() {
         var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        var res = new DeferredResult<ResponseEntity<Event>>(500L, noContent);
+        var res = new DeferredResult<ResponseEntity<Long>>(5000L, noContent);
 
         var key = new Object();
         listeners.put(key, e -> {
@@ -107,7 +107,7 @@ public class EventController {
     public Event addEvent(Event e) {
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).log(Level.INFO, "Websocket reached");
         // Event createdEvent = createEvent(e).getBody();
-        listeners.forEach((k, l) -> l.accept(e));
+        listeners.forEach((k, l) -> l.accept(e.getId()));
         return e;
     }
 
@@ -124,8 +124,8 @@ public class EventController {
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {
         ResponseEntity<Event> created = eventService.createEvent(event);
         if (created.getStatusCode().equals(HttpStatus.OK)) {
-            template.convertAndSend("/topic/events", created.getBody());
-            listeners.forEach((k, l) -> l.accept(created.getBody()));
+            template.convertAndSend("/topic/events", created.getBody().getId());
+            listeners.forEach((k, l) -> l.accept(created.getBody().getId()));
         }
         return created;
     }
@@ -151,8 +151,8 @@ public class EventController {
     public ResponseEntity<Event> deleteEvent(@PathVariable("id") Long id) {
         ResponseEntity<Event> deleted = eventService.deleteEvent(id);
         if (deleted.getStatusCode().equals(HttpStatus.OK)) {
-            template.convertAndSend("/topic/events", deleted.getBody());
-            listeners.forEach((k, l) -> l.accept(deleted.getBody()));
+            template.convertAndSend("/topic/events", id);
+            listeners.forEach((k, l) -> l.accept(id));
         }
 
         return deleted;
@@ -171,8 +171,8 @@ public class EventController {
                                              @PathVariable("id") Long id) {
         ResponseEntity<Event> updated = eventService.updateEvent(event, id);
         if (updated.getStatusCode().equals(HttpStatus.OK)) {
-            template.convertAndSend("/topic/events", updated.getBody());
-            listeners.forEach((k, l) -> l.accept(updated.getBody()));
+            template.convertAndSend("/topic/events", id);
+            listeners.forEach((k, l) -> l.accept(id));
         }
         return updated;
     }

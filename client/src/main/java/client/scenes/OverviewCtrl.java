@@ -169,12 +169,9 @@ public class OverviewCtrl implements Initializable {
      * @param selectedEvent displays an event
      */
     public void displayEvent(Event selectedEvent) {
-        EventName.setText(selectedEvent.getTitle());
-        eventLocation.setText(selectedEvent.getLocation());
-        eventCode.setText("The event code is: " + selectedEvent.getId());
-        eventDescription.setText(selectedEvent.getDescription());
         setSelectedEvent(selectedEvent);
         setIsActive(true);
+        refresh();
     }
 
     /**
@@ -200,12 +197,13 @@ public class OverviewCtrl implements Initializable {
         participantsVBox.getChildren().clear();
         expensesBox.getChildren().clear();
         setIsActive(false);
+        setSelectedEvent(null);
+
         if (isAdmin) {
             mainCtrl.goToAdminPage();
+            return;
         }
-        else
-            mainCtrl.showOverview();
-        setSelectedEvent(null);
+        mainCtrl.showOverview();
     }
 
     /**
@@ -373,15 +371,8 @@ public class OverviewCtrl implements Initializable {
         payer.setCellFactory(param -> createStringListCell());
         payer.setButtonCell(createStringListCell());
         isAdmin = false;
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
 
-                Platform.runLater(() -> {
-                    handleDataPropagation();
-                });
-            }
-        }, 0, 1000);
+        server.registerForEvents("/topic/events", e -> handleDataPropagation(e));
         if (selectedEvent != null && selectedEvent.isClosed()){
             addParticipantsButton.setDisable(true);
             undoButton.setDisable(true);
@@ -408,46 +399,12 @@ public class OverviewCtrl implements Initializable {
         editButton.setBackground(null);
     }
 
-    private void handleDataPropagation() {
-        if (isActive) {
-
-            if ((participants == null ||
-                    expenses == null ||
-                    tags == null) &&
-                    selectedEvent != null) {
-
-                List<Participant> newParticipants = server.getParticipants(selectedEvent.getId());
-                List<Expense> newExpenses = server.getExpensesByEventId(selectedEvent.getId());
-                List<Tag> newTags = server.getTags(selectedEvent.getId());
-
-                participants = newParticipants;
-                expenses = newExpenses;
-                tags = newTags;
-
-            }
-            if (selectedEvent != null) {
-                List<Participant> newParticipants = server.getParticipants(selectedEvent.getId());
-                List<Expense> newExpenses = server.getExpensesByEventId(selectedEvent.getId());
-                List<Tag> newTags = server.getTags(selectedEvent.getId());
-                Event newSelectedEvent = server.getEvent(selectedEvent.getId());
-
-                if (!participants.equals(newParticipants)
-                        || !expenses.equals(newExpenses)
-                        || !tags.equals(newTags)
-                        || !selectedEvent.equals(newSelectedEvent)){
-
-                    participants = newParticipants;
-                    expenses = newExpenses;
-                    tags = newTags;
-                    selectedEvent = newSelectedEvent;
-
-                    loadParticipants();
-                    loadExpenses();
-                    loadComboBoxes();
-                    loadUpdatedEventInfo();
-                }
-
-            }
+    private void handleDataPropagation(Long e) {
+        if (selectedEvent != null && e.equals(selectedEvent.getId())) {
+            Platform.runLater(() -> {
+                refresh();
+                loadUpdatedEventInfo();
+            });
         }
     }
 
@@ -463,7 +420,7 @@ public class OverviewCtrl implements Initializable {
             undoButton.setDisable(true);
             tagButton.setDisable(true);
             sendInvitesButton.setDisable(true);
-            return;
+
         }
         else {
             addParticipantsButton.setDisable(false);
@@ -475,7 +432,7 @@ public class OverviewCtrl implements Initializable {
             sendInvitesButton.setDisable(false);
         }
         if (selectedEvent != null) {
-            loadEventInfo();
+            loadUpdatedEventInfo();
             
         }
 
@@ -928,8 +885,16 @@ public class OverviewCtrl implements Initializable {
 
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-                server.deleteEvent(selectedEvent);
-                Main.config.removeId(selectedEvent.getId());
+
+                // Prevents 404 errors
+                Event deleted = selectedEvent;
+                OverviewCtrl.setSelectedEvent(null);
+                setIsActive(false);
+
+                Main.config.removeId(deleted.getId());
+                server.deleteEvent(deleted);
+
+
                 back();
             } else {
                 System.out.println(MainCtrl.resourceBundle.getString("Text.eventDeleteCanceled"));

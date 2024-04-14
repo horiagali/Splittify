@@ -172,7 +172,7 @@ public class ServerUtils {
 	 * Implementation for long polling
 	 * @param consumer consumer
 	 */
-	public void registerForUpdates(Consumer<Event> consumer) {
+	public void registerForUpdates(Consumer<Long> consumer) {
 		EXEC.submit(() -> {
 			while (!Thread.interrupted()) {
 				Response res = ClientBuilder.newClient(new ClientConfig())
@@ -184,7 +184,7 @@ public class ServerUtils {
 				if (res.getStatus() == 204) {
 					continue;
 				}
-				Event e = res.readEntity(Event.class);
+				Long e = res.readEntity(Long.class);
 				consumer.accept(e);
 			}
 		});
@@ -222,18 +222,18 @@ public class ServerUtils {
 	/**
 	 * Subscribe to topic
 	 * @param dest url to topic endpoint
-	 * @param consumer consumer
+	 * @param consumer consumer of type Long (affected event id)
 	 */
-	public void registerForEvents(String dest, Consumer<Event> consumer) {
+	public void registerForEvents(String dest, Consumer<Long> consumer) {
 		session.subscribe(dest, new StompFrameHandler() {
 			@Override
 			public Type getPayloadType(StompHeaders headers) {
-				return Event.class;
+				return Long.class;
 			}
 
 			@Override
 			public void handleFrame(StompHeaders headers, Object payload) {
-				consumer.accept((Event) payload);
+				consumer.accept((Long) payload);
 			}
 		});
 	}

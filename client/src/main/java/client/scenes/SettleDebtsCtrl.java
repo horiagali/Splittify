@@ -241,6 +241,7 @@ public class SettleDebtsCtrl implements Initializable {
                             server.addExpenseToEventDebt(event.getId(), currentExpense);
 
                             //Update last activiy date of event
+                            event = server.getEvent(event.getId());
                             event.setDate(new Date());
                             server.updateEvent(event);
 
@@ -270,10 +271,12 @@ public class SettleDebtsCtrl implements Initializable {
             }
         });
 
-        server.registerForExpenses("/topic/expenses", e -> {
-            Platform.runLater(() -> {
-                refresh();
-            });
+        server.registerForEvents("/topic/events", e -> {
+            if (event != null & e.equals(event.getId())) {
+                Platform.runLater(() -> {
+                    refresh();
+                });
+            }
         });
     }
 

@@ -13,6 +13,7 @@ import commons.Expense;
 import commons.Participant;
 import commons.Tag;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,7 +47,7 @@ public class AdminPageCtrl implements Initializable {
     @FXML
     private TableView<Event> table;
     @FXML
-    TableColumn<Event, String> colId;
+    private TableColumn<Event, String> colId;
     @FXML
     private TableColumn<Event, String> colName;
     @FXML
@@ -124,14 +125,14 @@ public class AdminPageCtrl implements Initializable {
 
         addKeyboardNavigationHandlers();
 
-        server.registerForUpdates(this::addData);
+        server.registerForUpdates(e -> addData(e));
     }
 
     /**
      * Handles data from long polling
      * @param e event
      */
-    private void addData(Event e) {
+    private void addData(Long e) {
         refresh();
         handleSort();
     }
@@ -151,7 +152,6 @@ public class AdminPageCtrl implements Initializable {
      * Handles sorting, not for javafx
      */
     private void handleSort() {
-        refresh();
         if (MainCtrl.resourceBundle != null) {
             getTranslations();
         }
@@ -200,40 +200,53 @@ public class AdminPageCtrl implements Initializable {
      * Sort data from a to z
      */
     public void sortAlphabetically() {
-        data.sort(Comparator.comparing(e -> e.getTitle().toLowerCase()));
+        Platform.runLater(() -> {
+            data.sort(Comparator.comparing(e -> e.getTitle().toLowerCase()));
+        });
     }
 
     /**
      * Sorts date from z to a
      */
     private void sortAlphabeticallyReverse() {
-        data.sort(Comparator.comparing(Event::getTitle,
-                Comparator.comparing(String::toLowerCase)).reversed());
+        Platform.runLater(() -> {
+            data.sort(Comparator.comparing(Event::getTitle,
+                    Comparator.comparing(String::toLowerCase)).reversed());
+        });
     }
 
     /**
      * Sort a date from new to old
      */
     private void sortNewToOld() {
-        data.sort(Comparator.comparing(Event::getCreationDate).reversed());
+        Platform.runLater(() -> {
+            data.sort(Comparator.comparing(Event::getCreationDate).reversed());
+        });
     }
 
     /**
      * Sort data from old to new
      */
     private void sortOldToNew() {
-        data.sort(Comparator.comparing(Event::getCreationDate));
+        Platform.runLater(() -> {
+            data.sort(Comparator.comparing(Event::getCreationDate));
+        });
     }
 
     /**
      * Sort data from most recent change to oldest.
      */
     private void sortMostRecentChange() {
-        data.sort(Comparator.comparing(Event::getDate).reversed());
+        Platform.runLater(() -> {
+            data.sort(Comparator.comparing(Event::getDate).reversed());
+        });
+
     }
 
     private void sortLeastRecentChange() {
-        data.sort(Comparator.comparing(Event::getDate));
+        Platform.runLater(() -> {
+            data.sort(Comparator.comparing(Event::getDate));
+        });
     }
 
     /**
@@ -535,6 +548,10 @@ public class AdminPageCtrl implements Initializable {
     public void refresh() {
         var events = server.getEvents();
         data = FXCollections.observableList(events);
-        table.setItems(data);
+
+        Platform.runLater(() -> {
+            table.setItems(data);
+        });
+
     }
 }

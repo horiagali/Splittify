@@ -129,22 +129,15 @@ public class BalancesCtrl implements Initializable {
             return cell;
         });
         addKeyboardNavigationHandlers();
-        server.registerForParticipants("/topic/participants", p -> {
-            handlePropagation();
-        });
-
-        server.registerForExpenses("/topic/expenses", e -> {
-            handlePropagation();
-        });
+        server.registerForEvents("/topic/events", e -> handlePropagation(e));
     }
-
-    private void handlePropagation() {
-        Platform.runLater(() -> {
-            if (event == null) {
-                return;
-            }
-            refresh();
-        });
+    // There is some race condition I think, that makes the propagation sometimes not work
+    private void handlePropagation(Long e) {
+        if (event != null && e.equals(event.getId())) {
+            Platform.runLater(() -> {
+                refresh();
+            });
+        }
     }
 
     /**
@@ -253,6 +246,7 @@ public class BalancesCtrl implements Initializable {
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 back();
+                event = server.getEvent(event.getId());
                 event.setClosed(true);
                 event.setDate(new Date());
                 server.updateEvent(event);
@@ -307,6 +301,7 @@ public class BalancesCtrl implements Initializable {
                 expenses.add(expense);
 
                 //Update last activiy date of event
+                event = server.getEvent(event.getId());
                 event.setDate(new Date());
                 server.updateEvent(event);
 
@@ -332,6 +327,7 @@ public class BalancesCtrl implements Initializable {
                 expenses.add(expense);
 
                 //Update last activiy date of event
+                event = server.getEvent(event.getId());
                 event.setDate(new Date());
                 server.updateEvent(event);
 

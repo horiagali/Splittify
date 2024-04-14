@@ -302,6 +302,7 @@ public class TagOverviewCtrl implements Initializable {
                 server.deleteTag(event.getId(), tag.getId());
 
                 // Update last change date
+                event = server.getEvent(event.getId());
                 event.setDate(new Date());
                 server.updateEvent(event);
 
@@ -531,10 +532,12 @@ public class TagOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        server.registerForTags("/topic/tags", t -> {
-            Platform.runLater(() -> {
-                loadTags();
-            });
+        server.registerForEvents("/topic/events", e -> {
+            if (event != null && e.equals(event.getId())) {
+                Platform.runLater(() -> {
+                    refresh();
+                });
+            }
         });
     }
 

@@ -206,7 +206,7 @@ public class ParticipantService {
         participantRepository.deleteById(participantId);
         Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
                 .log(Level.INFO,
-                        "Participant deleted: "+participant);
+                        "Participant deleted");
         return ResponseEntity.ok(participant);
     }
 
