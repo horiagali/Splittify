@@ -288,6 +288,7 @@ public class TagOverviewCtrl implements Initializable {
                 server.deleteTag(event.getId(), tag.getId());
 
                 // Update last change date
+                event = server.getEvent(event.getId());
                 event.setDate(new Date());
                 server.updateEvent(event);
 

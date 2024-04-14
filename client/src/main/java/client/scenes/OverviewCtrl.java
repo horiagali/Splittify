@@ -399,7 +399,6 @@ public class OverviewCtrl implements Initializable {
             Platform.runLater(() -> {
                 refresh();
                 loadUpdatedEventInfo();
-                loadComboBoxes();
             });
         }
     }
