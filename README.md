@@ -106,7 +106,6 @@ When this url is set as the serverURL in the config file of the client, the clie
       - Influential ones that adjust a lot in the DB: deleting participants or tags, for example.
 - Long polling in the admin page
 - Web sockets in the main overview, event overview, tag overview, balance overview, statistics page and settling debts page.
-- updating after every second in all other parts of the app.
 
 
 We hope you have fun using our app.
