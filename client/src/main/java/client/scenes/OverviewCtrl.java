@@ -417,7 +417,7 @@ public class OverviewCtrl implements Initializable {
             undoButton.setDisable(true);
             tagButton.setDisable(true);
             sendInvitesButton.setDisable(true);
-            return;
+
         }
         else {
             addParticipantsButton.setDisable(false);

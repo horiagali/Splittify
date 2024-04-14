@@ -239,6 +239,7 @@ public class BalancesCtrl implements Initializable {
         confirmationDialog.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
                 back();
+                event = server.getEvent(event.getId());
                 event.setClosed(true);
                 event.setDate(new Date());
                 server.updateEvent(event);
@@ -293,6 +294,7 @@ public class BalancesCtrl implements Initializable {
                 expenses.add(expense);
 
                 //Update last activiy date of event
+                event = server.getEvent(event.getId());
                 event.setDate(new Date());
                 server.updateEvent(event);
 
@@ -318,6 +320,7 @@ public class BalancesCtrl implements Initializable {
                 expenses.add(expense);
 
                 //Update last activiy date of event
+                event = server.getEvent(event.getId());
                 event.setDate(new Date());
                 server.updateEvent(event);
 
