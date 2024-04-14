@@ -276,6 +276,10 @@ public class StatisticsCtrl implements Initializable {
         } else {
             mainCtrl.setStageTitle(MainCtrl.resourceBundle.getString(stageTitleString));
         }
+        if (toggleViewButton.isSelected())
+            toggleViewButton.setText(MainCtrl.resourceBundle.getString("button.showByTag"));
+        else
+            toggleViewButton.setText(MainCtrl.resourceBundle.getString("button.showByPayer"));
     }
 
     /**
@@ -315,8 +319,9 @@ public class StatisticsCtrl implements Initializable {
         pieChart.getData().clear();
         setIsActive(false);
         toggleViewButton.setSelected(false);
-        if (!event.isClosed())
+        if (!event.isClosed()) {
             mainCtrl.goToOverview();
+        }
         else
             mainCtrl.goToSettleDebts(event, server.getExpensesByEventId(event.getId()));
 

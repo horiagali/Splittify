@@ -152,6 +152,8 @@ public class OverviewCtrl implements Initializable {
     private Text EventName;
     @FXML
     private Button editButton;
+    @FXML
+    private Button debtsButton;
 
 
     /**
@@ -258,13 +260,6 @@ public class OverviewCtrl implements Initializable {
         updateFlagImageURL(language);
         updateUIWithNewLanguage();
         refresh();
-
-        int payerIndex = Math.max(payer.getSelectionModel().getSelectedIndex(), 0);
-        int owerIndex = Math.max(ower.getSelectionModel().getSelectedIndex(), 0);
-        int tagIndex = Math.max(tag.getSelectionModel().getSelectedIndex(), 0);
-        payer.getSelectionModel().select(payerIndex);
-        ower.getSelectionModel().select(owerIndex);
-        tag.getSelectionModel().select(tagIndex);
     }
 
 
@@ -290,6 +285,9 @@ public class OverviewCtrl implements Initializable {
         tagText.setText(MainCtrl.resourceBundle.getString("Text.tag"));
         deleteEventButton.setText(MainCtrl.resourceBundle.getString("button.deleteEvent"));
         currencyMenu.setText(MainCtrl.resourceBundle.getString("menu.currencyMenu"));
+        debtsButton.setText(MainCtrl.resourceBundle.getString("button.debts"));
+        giftMoney.setText(MainCtrl.resourceBundle.getString("button.giftMoney"));
+        undoButton.setText(MainCtrl.resourceBundle.getString("button.undo"));
     }
 
     /**
@@ -420,7 +418,6 @@ public class OverviewCtrl implements Initializable {
             undoButton.setDisable(true);
             tagButton.setDisable(true);
             sendInvitesButton.setDisable(true);
-
         }
         else {
             addParticipantsButton.setDisable(false);
@@ -431,27 +428,32 @@ public class OverviewCtrl implements Initializable {
             tagButton.setDisable(false);
             sendInvitesButton.setDisable(false);
         }
-        if (selectedEvent != null) {
+        if (selectedEvent != null)
             loadUpdatedEventInfo();
-            
-        }
 
         int payerIndex = Math.max(payer.getSelectionModel().getSelectedIndex(), 0);
         int owerIndex = Math.max(ower.getSelectionModel().getSelectedIndex(), 0);
         int tagIndex = Math.max(tag.getSelectionModel().getSelectedIndex(), 0);
 
+        payer.getItems().clear();
+        ower.getItems().clear();
+        tag.getItems().clear();
+
         if (MainCtrl.resourceBundle != null) {
-            payer.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
-            ower.setValue(MainCtrl.resourceBundle.getString("Text.anyone"));
-            tag.setValue(MainCtrl.resourceBundle.getString("Text.anyTag"));
+            resetComboBoxes();
+        }
+        else {
+            payer.getItems().add("anyone");
+            ower.getItems().add("anyone");
+            tag.getItems().add("any tag");
         }
 
         loadParticipants();
         loadComboBoxes();
         loadExpenses();
+
         labels = new ArrayList<>();
         labels.addAll(names.stream().map(Label::new).toList());
-
         payer.getSelectionModel().select(payerIndex);
         ower.getSelectionModel().select(owerIndex);
         tag.getSelectionModel().select(tagIndex);
@@ -465,7 +467,11 @@ public class OverviewCtrl implements Initializable {
     private void loadEventInfo() {
         EventName.setText(selectedEvent.getTitle());
         eventLocation.setText(selectedEvent.getLocation());
-        eventCode.setText("The event code is: " + selectedEvent.getId());
+        if (MainCtrl.resourceBundle == null)
+            eventCode.setText("The event code is: " + selectedEvent.getId());
+        else
+            eventCode.setText(MainCtrl.resourceBundle.getString
+                    ("Text.eventCodeText") + " " + selectedEvent.getId());
         eventDescription.setText(selectedEvent.getDescription());
     }
 
@@ -919,7 +925,6 @@ public class OverviewCtrl implements Initializable {
         }
     }
     /**
->>>>>>> 14a3bd9ac08ecd37c47ff3c7f975f96dfea4fd91
      * Goes to edit expense.
      *
      * @param selectedExpense the expense to edit
@@ -975,7 +980,6 @@ public class OverviewCtrl implements Initializable {
             scaleTransition.setToY(node.getScaleY() * factor);
             scaleTransition.setToZ(node.getScaleZ() * factor);
             scaleTransition.play();
-
         });
         node.setOnMouseExited(event -> {
             ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.1), node);
@@ -986,7 +990,6 @@ public class OverviewCtrl implements Initializable {
             scaleTransition.setToY(startY);
             scaleTransition.setToZ(startZ);
             scaleTransition.play();
-
         });
     }
 
@@ -996,6 +999,7 @@ public class OverviewCtrl implements Initializable {
      * the undo stack and update the server.
      * Displays appropriate alert messages based on the outcome.
      */
+    @SuppressWarnings("checkstyle:MethodLength")
     @FXML
     public void undoAction() {
         UndoManager.ExpenseSnapshot previousExpenseState = undoManager.undo();
@@ -1020,28 +1024,37 @@ public class OverviewCtrl implements Initializable {
                 if (toUndo != null) {
                     server.updateExpense(selectedEvent.getId(), toUndo);
                     loadExpenses();
-                    showAlert(Alert.AlertType.INFORMATION, "Expense Undo Successful",
-                            "Restored Expense: " + toUndo);
+
+                    String succesfulTitle = MainCtrl.resourceBundle.getString("Text.undoSuccesful");
+                    String restoredExpense = MainCtrl.resourceBundle.getString
+                            ("Text.restoredExpense");
+                    showAlert(Alert.AlertType.INFORMATION, succesfulTitle,
+                            restoredExpense + toUndo);
 
                     // Update last change date
                     selectedEvent.setDate(new Date());
                     server.updateEvent(selectedEvent);
 
                 } else {
-                    showAlert(Alert.AlertType.WARNING, "Expense Not Found",
-                            "Unable to find Expense with ID: "
+                    String errorTitle = MainCtrl.resourceBundle.getString("Text.errorUndo");
+                    String body1 = MainCtrl.resourceBundle.getString("Text.noExpense");
+                    String body2 = MainCtrl.resourceBundle.getString("Text.inExpenseList");
+                    showAlert(Alert.AlertType.WARNING, errorTitle,
+                            body1 + " "
                                     + expenseIdToRestore
-                                    + " in the expenses list for the selected event.");
+                                    + body2);
                 }
             } catch (Exception e) {
-                showAlert(Alert.AlertType.ERROR, "Error",
-                        "Error while performing undo operation: " + e.getMessage());
+                String title= MainCtrl.resourceBundle.getString("Text.error");
+                String errorText  = MainCtrl.resourceBundle.getString("Text.errorText");
+                showAlert(Alert.AlertType.ERROR, title,
+                        errorText +  " " + e.getMessage());
                 e.printStackTrace();
             }
         } else {
-            showAlert(Alert.AlertType.WARNING, "Undo Failed",
-                    "Undo operation failed. " +
-                            "No previous expense state found in the undo stack.");
+            String title = MainCtrl.resourceBundle.getString("Text.undoFailed");
+            String body = MainCtrl.resourceBundle.getString("Text.failBody");
+            showAlert(Alert.AlertType.WARNING, title, body);
         }
     }
 
