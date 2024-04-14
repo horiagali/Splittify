@@ -1,5 +1,9 @@
 package client.scenes;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.net.URL;
 import java.util.*;
 
@@ -112,6 +116,7 @@ public class StatisticsCtrl implements Initializable {
      * @param tags     list of tags of this event.
      * @param showByPayer boolean to know which piechart to show
      */
+
     @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MethodLength"})
     private void createData(List<Expense> expenses, List<Tag> tags, boolean showByPayer) {
         if (!showByPayer) {
@@ -138,7 +143,7 @@ public class StatisticsCtrl implements Initializable {
             // Add data to pie chart
             for (Tag tag : tagExpenses.keySet()) {
                 double amount = tagExpenses.get(tag);
-                amount = Currency.round(amount * Currency.getRate());
+                amount = Currency.round(amount * Currency.getRate(LocalDate.now()));
                 if (amount != 0) {
                     pieChartData.add(new PieChart.Data(tag.getName() + ": "
                             + amount + " " + Currency.getCurrencyUsed(), amount));
@@ -183,7 +188,7 @@ public class StatisticsCtrl implements Initializable {
             for (Map.Entry<String, Double> entry : participantExpenses.entrySet()) {
                 String participantName = entry.getKey();
                 double amount = entry.getValue();
-                amount = Currency.round(amount * Currency.getRate());
+                amount = Currency.round(amount * Currency.getRate(LocalDate.now()));
                 if (amount != 0) {
                     pieChartData.add(new PieChart.Data(participantName + ": "
                             + amount + " " + Currency.getCurrencyUsed(), amount));
@@ -243,7 +248,7 @@ public class StatisticsCtrl implements Initializable {
 
         // Set the selected currency as the currency used for exchange rates
         Currency.setCurrencyUsed(currency.toUpperCase());
-
+        refresh();
         // Print confirmation message
         System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo") + currency);
     }

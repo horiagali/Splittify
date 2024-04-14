@@ -454,7 +454,7 @@ public class AdminPageCtrl implements Initializable {
                 EventExportData exportData = new
                         EventExportData(selectedEvent, selectedEvent.getTags(),
                         selectedEvent.getParticipants(), selectedEvent.getExpenses());
-
+                System.out.println(exportData + "mataatatata");
                 ObjectMapper objectMapper = new ObjectMapper();
                 objectMapper.registerModule(new JavaTimeModule());
                 objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);

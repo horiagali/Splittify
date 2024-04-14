@@ -112,7 +112,7 @@ public class AddExpensesCtrl implements Initializable {
         }
 
         // Populate currency ComboBox
-        currencyComboBox.setItems(FXCollections.observableArrayList("USD", "EUR", "GBP", "JPY"));
+        currencyComboBox.setItems(FXCollections.observableArrayList("USD", "EUR", "RON", "CHF"));
         currencyComboBox.getSelectionModel().select("EUR");
     }
 
@@ -373,12 +373,20 @@ public class AddExpensesCtrl implements Initializable {
             return;
         }
         String amountText = amountTextField.getText();
-
+        Date date = getDate();
+        if (date == null) {
+            showErrorDialog("Please select a date.");
+            return;
+        }
         double amount = parseAmount(amountText);
+        String aux = Currency.getCurrencyUsed();
+        Currency.setCurrencyUsed(currencyComboBox.getValue());
+        amount =amount *  1/Currency.getRate(date.toInstant().
+                atZone(ZoneId.systemDefault()).toLocalDate());
+        Currency.setCurrencyUsed(aux);
         if (selectedEvent == null || amount < 0 || validateAmount(amountText)) {
             return;
         }
-
         Participant payer = findPayer();
         if (payer == null) {
             return;
@@ -395,11 +403,7 @@ public class AddExpensesCtrl implements Initializable {
             showErrorDialog("Please select a tag.");
             return;
         }
-        Date date = getDate();
-        if (date == null) {
-            showErrorDialog("Please select a date.");
-            return;
-        }
+
 
         Expense expense = createExpense(title, amount,
                 date, payer, selectedParticipants, selectedTag);

@@ -29,7 +29,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import client.scenes.*;
-import client.utils.Currency;
 import client.utils.EmailUtils;
 import client.utils.ServerUtils;
 import jakarta.ws.rs.BadRequestException;
@@ -69,7 +68,6 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Currency.scheduleDailyUpdate();
         this.primaryStage = primaryStage;
         var mapper = new ObjectMapper();
         FileInputStream stream;

@@ -2,6 +2,7 @@ package client.scenes;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -326,6 +327,8 @@ public class OverviewCtrl implements Initializable {
 
         // Set the selected currency as the currency used for exchange rates
         Currency.setCurrencyUsed(currency.toUpperCase());
+
+        refresh();
 
         // Print confirmation message
         System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo") + currency);
@@ -678,7 +681,10 @@ public class OverviewCtrl implements Initializable {
         String forString = MainCtrl.resourceBundle.getString("Text.for");
         Label text = new Label(
                 payed +
-                        Currency.round(expense.getAmount() * Currency.getRate())
+                        Currency.round(expense.getAmount() *
+                                Currency.getRate(expense.
+                                        getDate().toInstant().
+                                        atZone(ZoneId.systemDefault()).toLocalDate()))
                         + " " + Currency.getCurrencyUsed() + " " + forString);
         String owers = "";
         if (expense.getOwers().size() == server.getParticipants(selectedEvent.getId()).size())

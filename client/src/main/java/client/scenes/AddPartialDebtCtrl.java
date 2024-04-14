@@ -268,7 +268,18 @@ public class AddPartialDebtCtrl implements Initializable {
         Event selectedEvent = OverviewCtrl.getSelectedEvent();
         String amountText = amountTextField.getText();
 
+        Date date = getDate();
+        if (date == null) {
+            showErrorDialog("Please select a date.");
+            return;
+        }
+
         double amount = parseAmount(amountText);
+        String aux = Currency.getCurrencyUsed();
+        Currency.setCurrencyUsed(currencyComboBox.getValue());
+        amount =amount *  1/Currency.getRate(date.toInstant().
+                atZone(ZoneId.systemDefault()).toLocalDate());
+        Currency.setCurrencyUsed(aux);
         if (selectedEvent == null || amount < 0 || validateAmount(amountText)) {
             return;
         }
@@ -284,11 +295,7 @@ public class AddPartialDebtCtrl implements Initializable {
             return;
         }
 
-        Date date = getDate();
-        if (date == null) {
-            showErrorDialog("Please select a date.");
-            return;
-        }
+
         List<Tag> tags = server.getTags(selectedEvent.getId());
         tags = tags.stream()
                 .filter(tag -> "gifting money".equalsIgnoreCase(tag.getName()))

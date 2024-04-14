@@ -77,7 +77,6 @@ public class EventController {
     }
 
 
-
     /**
      * Endpoint for long polling
      * @return Event
