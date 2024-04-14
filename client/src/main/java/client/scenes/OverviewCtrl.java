@@ -168,12 +168,9 @@ public class OverviewCtrl implements Initializable {
      * @param selectedEvent displays an event
      */
     public void displayEvent(Event selectedEvent) {
-        EventName.setText(selectedEvent.getTitle());
-        eventLocation.setText(selectedEvent.getLocation());
-        eventCode.setText("The event code is: " + selectedEvent.getId());
-        eventDescription.setText(selectedEvent.getDescription());
         setSelectedEvent(selectedEvent);
         setIsActive(true);
+        refresh();
     }
 
     /**
@@ -201,6 +198,7 @@ public class OverviewCtrl implements Initializable {
 
         if (isAdmin) {
             mainCtrl.goToAdminPage();
+            return;
         }
         mainCtrl.showOverview();
     }
