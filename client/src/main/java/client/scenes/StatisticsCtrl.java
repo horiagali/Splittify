@@ -18,10 +18,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -62,6 +59,8 @@ public class StatisticsCtrl implements Initializable {
     private Button refresh;
     @FXML
     private VBox vbox;
+    @FXML
+    private ToggleButton toggleViewButton;
 
     /**
      * @param server
@@ -79,14 +78,14 @@ public class StatisticsCtrl implements Initializable {
      * uses rounding to ensure percentages round to 100%
      */
     public void refresh() {
-        pieChart.getData().clear();
         totalAmount = 0; //reset total amount every refresh (else it becomes more and mroe)
         if (!(this.pieChartData == null))
             pieChartData.clear();
         var expenses = server.getExpensesByEventId(event.getId());
         var tags = server.getTags(event.getId());
+        var showByTag = toggleViewButton.isSelected();
         pieChartData = FXCollections.observableArrayList();
-        createData(expenses, tags);
+        createData(expenses, tags, showByTag);
         pieChart.setData(pieChartData);
         eventTotalAmount.setText("" + totalAmount);
         pieChart.setTitle("Statistics of this event");
@@ -111,43 +110,102 @@ public class StatisticsCtrl implements Initializable {
      *
      * @param expenses list of expenses of this event.
      * @param tags     list of tags of this event.
+     * @param showByPayer boolean to know which piechart to show
      */
-    private void createData(List<Expense> expenses, List<Tag> tags) {
-        //method to group all expenses on tag and get their total amount
-        for(Tag tag : tags) {
-            if(tag.getName().equals("gifting money") || tag.getName().equals("debt"))
-                continue;
-            double amount = expenses.stream().filter(x -> x.getTag().equals(tag))
-                    .mapToDouble(x -> (int) x.getAmount()).sum();
-            amount = Currency.round(amount * Currency.getRate());
-            if (amount != 0)
-                pieChartData.add(new PieChart.Data(tag.getName()
-                        + ": " + amount + " " + Currency.getCurrencyUsed(), amount));
-            totalAmount += amount;
-        }
-        //method to set the percentage per tag group
-        long remainingPercentage = 100;
-        String lastName = "";
-        for (PieChart.Data data : pieChartData) {
-            long percentage = Math.round((data.getPieValue() / totalAmount) * 100);
-            lastName = data.getName();
-            data.setName(data.getName() + " - " + percentage + "%");
-            remainingPercentage = remainingPercentage - percentage;
-        }
-        //if percentage does not match due to rounding,
-        //just add or substract the last 1 or 2 percent to the last tag
-        if (remainingPercentage != 0 && pieChartData != null && pieChartData.size() > 0) {
-            PieChart.Data dataToEdit = pieChartData.get(pieChartData.size() - 1);
-            long percentage = Math.round((dataToEdit.getPieValue() / totalAmount) * 100);
-            remainingPercentage = remainingPercentage + percentage;
-            dataToEdit.setName(lastName + " - " + remainingPercentage + "%");
-            remainingPercentage = 0;
+    @SuppressWarnings({"checkstyle:CyclomaticComplexity", "checkstyle:MethodLength"})
+    private void createData(List<Expense> expenses, List<Tag> tags, boolean showByPayer) {
+        if (!showByPayer) {
+            // Clear existing data
+            pieChartData.clear();
+            totalAmount = 0;
 
+            // Calculate total expenses per tag
+            Map<Tag, Double> tagExpenses = new HashMap<>();
+            for (Expense expense : expenses) {
+                Tag expenseTag = expense.getTag();
+                String tagName = expenseTag.getName();
+
+                if (tagName.equals("gifting money") || tagName.equals("debt")) {
+                    continue; // Skip this expense if the tag is excluded
+                }
+                if (!tagExpenses.containsKey(expenseTag)) {
+                    tagExpenses.put(expenseTag, 0.0);
+                }
+                double currentAmount = tagExpenses.get(expenseTag);
+                tagExpenses.put(expenseTag, currentAmount + expense.getAmount());
+            }
+
+            // Add data to pie chart
+            for (Tag tag : tagExpenses.keySet()) {
+                double amount = tagExpenses.get(tag);
+                amount = Currency.round(amount * Currency.getRate());
+                if (amount != 0) {
+                    pieChartData.add(new PieChart.Data(tag.getName() + ": "
+                            + amount + " " + Currency.getCurrencyUsed(), amount));
+                    totalAmount += amount;
+                }
+            }
+
+            // Set percentages for each tag
+            for (PieChart.Data data : pieChartData) {
+                long percentage = Math.round((data.getPieValue() / totalAmount) * 100);
+                data.setName(data.getName() + " - " + percentage + "%");
+            }
+
+            // Update pie chart and total amount display
+            pieChart.setData(pieChartData);
+            eventTotalAmount.setText("" + totalAmount + " " + Currency.getCurrencyUsed());
+            pieChart.setTitle("Expenses by Tag");
+            toggleViewButton.setText("View Expenses per Payer");
+        } else {
+            // Clear existing data
+            pieChartData.clear();
+            totalAmount = 0;
+
+            // Calculate total expenses per payer
+            Map<String, Double> participantExpenses = new HashMap<>();
+            for (Expense expense : expenses) {
+                String participantName = expense.getPayer().getNickname();
+                Tag expenseTag = expense.getTag();
+                String tagName = expenseTag.getName();
+
+                if (tagName.equals("gifting money") || tagName.equals("debt")) {
+                    continue; // Skip this expense if the tag is excluded
+                }
+                if (!participantExpenses.containsKey(participantName)) {
+                    participantExpenses.put(participantName, 0.0);
+                }
+                double currentAmount = participantExpenses.get(participantName);
+                participantExpenses.put(participantName, currentAmount + expense.getAmount());
+            }
+
+            // Add data to pie chart based on participant expenses
+            for (Map.Entry<String, Double> entry : participantExpenses.entrySet()) {
+                String participantName = entry.getKey();
+                double amount = entry.getValue();
+                amount = Currency.round(amount * Currency.getRate());
+                if (amount != 0) {
+                    pieChartData.add(new PieChart.Data(participantName + ": "
+                            + amount + " " + Currency.getCurrencyUsed(), amount));
+                    totalAmount += amount;
+                }
+            }
+
+            // Set percentages for each participant
+            for (PieChart.Data data : pieChartData) {
+                long percentage = Math.round((data.getPieValue() / totalAmount) * 100);
+                data.setName(data.getName() + " - " + percentage + "%");
+            }
+
+            // Update pie chart and total amount display
+            pieChart.setData(pieChartData);
+            eventTotalAmount.setText("" + totalAmount + " " + Currency.getCurrencyUsed());
+            pieChart.setTitle("Expenses per Participant");
+            toggleViewButton.setText("View Expenses by Tag");
         }
-        pieChart.setData(pieChartData);
-        eventTotalAmount.setText("" + totalAmount + " " + Currency.getCurrencyUsed());
+
+        // Update UI elements with new language settings
         updateUIWithNewLanguage();
-
     }
 
     /**
@@ -251,6 +309,7 @@ public class StatisticsCtrl implements Initializable {
     public void back() {
         pieChart.getData().clear();
         setIsActive(false);
+        toggleViewButton.setSelected(false);
         if (!event.isClosed())
             mainCtrl.goToOverview();
         else
@@ -324,5 +383,10 @@ public class StatisticsCtrl implements Initializable {
      */
     public static void setIsActive(boolean bool) {
         isActive = bool;
+    }
+
+    @FXML
+    private void toggleView(ActionEvent event) {
+        refresh();
     }
 }

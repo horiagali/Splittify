@@ -253,6 +253,10 @@ public class MainPageCtrl implements Initializable {
             testEmailButton.setDisable(true);
             testEmailButton.setStyle("-fx-background-color: grey;");
         }
+        colName.setStyle("-fx-alignment: CENTER;");
+        colDate.setStyle("-fx-alignment: CENTER;");
+        colVisible.setStyle("-fx-alignment: CENTER;");
+        colLocation.setStyle("-fx-alignment: CENTER;");
         colName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getTitle()));
         colLocation.setCellValueFactory(q ->
