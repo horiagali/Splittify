@@ -326,6 +326,8 @@ public class OverviewCtrl implements Initializable {
         // Set the selected currency as the currency used for exchange rates
         Currency.setCurrencyUsed(currency.toUpperCase());
 
+        refresh();
+
         // Print confirmation message
         System.out.println(MainCtrl.resourceBundle.getString("Text.currencyChangedTo") + currency);
     }

@@ -334,6 +334,15 @@ public class EditPartialDebtCtrl implements Initializable {
     @FXML
     private void editExpense() {
 
+        Date date = null;
+        try {
+            date = Date.from(datePicker.getValue().atStartOfDay
+                    (ZoneId.systemDefault()).toInstant());
+        } catch (Exception e) {
+            showErrorDialog("Please select a valid date!");
+            return;
+        }
+
         double amount;
         try {
             amount = Double.parseDouble(amountTextField.getText());
@@ -341,6 +350,12 @@ public class EditPartialDebtCtrl implements Initializable {
             showErrorDialog("Please enter a valid amount.");
             return;
         }
+        String aux = Currency.getCurrencyUsed();
+        Currency.setCurrencyUsed(currencyComboBox.getValue());
+        amount =amount *  1/Currency.getRate(date.toInstant().
+                atZone(ZoneId.systemDefault()).toLocalDate());
+        Currency.setCurrencyUsed(aux);
+
 
         if (payerComboBox.getSelectionModel().getSelectedItem() == null) {
             showErrorDialog("Please select a payer");
@@ -365,14 +380,7 @@ public class EditPartialDebtCtrl implements Initializable {
         }
 
 
-        Date date = null;
-        try {
-            date = Date.from(datePicker.getValue().atStartOfDay
-                    (ZoneId.systemDefault()).toInstant());
-        } catch (Exception e) {
-            showErrorDialog("Please select a valid date!");
-            return;
-        }
+
         selectedParticipants = new ArrayList<>();
         selectedParticipants.add(gift);
         System.out.println(expense);

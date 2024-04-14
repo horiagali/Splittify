@@ -27,6 +27,7 @@ import javafx.util.Duration;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class BalancesCtrl implements Initializable {
@@ -100,7 +101,10 @@ public class BalancesCtrl implements Initializable {
         colSettles.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getPayer().
                         getNickname() + " gave " +
-                        q.getValue().getAmount() + " to " +
+                        Currency.round(q.getValue().getAmount() *
+                        Currency.getRate(q.getValue().
+                                getDate().toInstant().
+                                atZone(ZoneId.systemDefault()).toLocalDate())) + Currency.getCurrencyUsed() + " to " +
                         q.getValue().getOwers().get(0).getNickname()));
 
         colSettles.setCellFactory(tc -> {
@@ -178,13 +182,15 @@ public class BalancesCtrl implements Initializable {
                 .toList();
         data2 = FXCollections.observableList(filteredExpenses);
         settles.setItems(data2);
-
         // Update currency for balances
-        colBalance.setCellValueFactory(q -> {
-            double balance = q.getValue().getBalance() * Currency.getRate(LocalDate.now()) / 100;
-            return new SimpleStringProperty(String.valueOf
-                    (Currency.round(balance)) + " " + Currency.getCurrencyUsed());
-        });
+        colSettles.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getPayer().
+                        getNickname() + " gave " +
+                        Currency.round(q.getValue().getAmount() *
+                                Currency.getRate(q.getValue().
+                                        getDate().toInstant().
+                                        atZone(ZoneId.systemDefault()).toLocalDate())) + Currency.getCurrencyUsed() + " to " +
+                        q.getValue().getOwers().get(0).getNickname()));
     }
 
 

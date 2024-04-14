@@ -164,7 +164,7 @@ public class EditExpenseCtrl implements Initializable {
         }
 
         // Populate currency ComboBox
-        currencyComboBox.setItems(FXCollections.observableArrayList("USD", "EUR", "GBP", "JPY"));
+        currencyComboBox.setItems(FXCollections.observableArrayList("USD", "EUR", "RON", "CHF"));
         currencyComboBox.getSelectionModel().select("EUR");
 
         if (expense != null)
@@ -474,6 +474,22 @@ public class EditExpenseCtrl implements Initializable {
             return;
         }
 
+
+        Date date = null;
+        try {
+            date = Date.from(datePicker.getValue().atStartOfDay
+                    (ZoneId.systemDefault()).toInstant());
+        } catch (Exception e) {
+            showErrorDialog("Please select a valid date!");
+            return;
+        }
+
+        String aux = Currency.getCurrencyUsed();
+        Currency.setCurrencyUsed(currencyComboBox.getValue());
+        amount =amount *  1/Currency.getRate(date.toInstant().
+                atZone(ZoneId.systemDefault()).toLocalDate());
+        Currency.setCurrencyUsed(aux);
+
         if (payerComboBox.getSelectionModel().getSelectedItem() == null) {
             showErrorDialog("Please select a payer");
             return;
@@ -492,14 +508,6 @@ public class EditExpenseCtrl implements Initializable {
             return;
         }
 
-        Date date = null;
-        try {
-            date = Date.from(datePicker.getValue().atStartOfDay
-                    (ZoneId.systemDefault()).toInstant());
-        } catch (Exception e) {
-            showErrorDialog("Please select a valid date!");
-            return;
-        }
         setExpense(title, amount, date, payer, selectedParticipants, selectedTag);
         saveExpense();
 
