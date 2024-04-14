@@ -269,7 +269,7 @@ public class MainPageCtrl implements Initializable {
         addKeyboardNavigationHandlers();
 
         server.registerForEvents("/topic/events", e -> {
-            refresh();
+                refresh();
         });
     }
 

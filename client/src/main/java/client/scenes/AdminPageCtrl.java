@@ -47,7 +47,7 @@ public class AdminPageCtrl implements Initializable {
     @FXML
     private TableView<Event> table;
     @FXML
-    TableColumn<Event, String> colId;
+    private TableColumn<Event, String> colId;
     @FXML
     private TableColumn<Event, String> colName;
     @FXML
